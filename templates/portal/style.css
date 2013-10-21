@@ -1,0 +1,158 @@
+#company_title{background-color:#00162C;color:#FFF;float:left;font-size:24px;line-height:60px;margin:0;padding:0;text-align:left;}
+#content_container{background:#FFF url(images/content_container_bg.gif) repeat-y;border:5px solid #258;color:#666;margin:20px auto 0;padding:0;text-align:left;width:950px;}
+#content_left{background-color:#FFF;float:left;margin:0;padding:15px;text-align:left;width:670px;}
+#side_menu{background-color:#EFF5FF;border-left:1px solid #CFE2FF;float:right;margin:0;padding:15px;text-align:left;width:219px;}
+#side_menu ul{list-style:none;margin:0 0 10px;padding:0;}
+#side_menu ul li{line-height:25px;margin:0;padding:0;}
+#top{background-color:#00162C;height:60px;margin:0 auto;padding:0;text-align:left;width:960px;}
+#top_container{background-color:#00162c;border-bottom:3px solid #036;color:#FFF;height:60px;margin:0;padding:0;text-align:center;}
+#top_menu{background:#F5F5F5 url(images/top_menu_bg.gif) repeat-x;height:30px;line-height:30px;margin:0;padding:0;text-align:left;}
+#top_menu ul{list-style:none;margin:0;padding:0;}
+#top_menu ul li{float:left;margin:0;padding:0;}
+#top_menu ul li a,#top_menu ul li a:visited{color:#666;display:block;height:30px;line-height:30px;padding:0;text-align:center;text-decoration:none;width:100px;}
+#top_menu ul li a.down,#top_menu ul li a.down:visited,#top_menu ul li a.down:hover{background-color:#FFF;border-right:1px solid #EBEBEB;color:#333;font-weight:700;width:99px;}
+#top_menu ul li a:hover{background-color:#EBEBEB;color:#333;}
+#welcome_box{background-color:#00162C;float:right;line-height:60px;margin:0;padding:0;text-align:right;}
+#welcome_box a,#welcome_box a:visited{color:#accbff;text-decoration:none;}
+#welcome_box a:hover{text-decoration:underline;}
+.absmiddle{vertical-align:middle;}
+.breadcrumb{background-color:#F5F5F5;margin:0 0 10px;padding:10px;}
+.clear{clear:both;}
+.green{color:#006F0F;}
+.header{color:#1a4d80;font-size:14px;font-weight:700;}
+.red{color:#BF0000;}
+.small{font-size:11px;}
+.warning{background-color:#FFFFDF;border:1px solid #FDFF3F;margin:0 0 10px;padding:10px;}
+.contentbox{padding:10px;margin:0 0 10px;text-align:center;}
+.errorbox{background-color:#FFBFBF;padding:10px;margin:0 0 10px;text-align:center;color:#7F0000;}
+.successbox {border: 1px solid #66CC00;font-weight: bold;background-color: #DDFFC6;text-align: center;padding: 10px;color: #009933;}
+.clientareatableactive{background-color:#DFFFE0}
+.clientareatablepending{background-color:#efefef}
+.clientareatablependingtransfer{background-color:#FFFAD9}
+.clientareatablesuspended{background-color:#FFF6CF}
+.clientareatableterminated,.clientareatableexpired,.clientareatablecancelled{background-color:#FFCFCF}
+.clientareatablefraud{background-color:#C3C3C3}
+.clientticketreplyheader{background-color:#EBEBEB;color:#333;border-top:1px solid #CCC;border-right:1px solid #CCC;border-bottom:1px solid #EBEBEB;border-left:1px solid #CCC;}
+.clientticketreply{background-color:#F5F5F5;margin:0 0 10px;padding:10px;border-right:1px solid #CCC;border-bottom:1px solid #CCC;border-left:1px solid #CCC;}
+.adminticketreplyheader{background-color:#CFE6FF;color:#333;border-top:1px solid #CAE6FF;border-right:1px solid #CAE6FF;border-bottom:1px solid #CAE6FF;border-left:1px solid #CAE6FF}
+.adminticketreply{background-color:#EEF6FF;padding:10px;margin:0 0 10px;border-right:1px solid #CAE6FF;border-bottom:1px solid #CAE6FF;border-left:1px solid #CAE6FF;}
+.networkissueaffected{background-color:#EFEFEF;padding:10px;margin: 0 0 10px;}
+.textgreen{color:#158F00;}
+.textred{color:#9F0000;}
+a,a:visited{color:#333;text-decoration:underline;}
+a:hover{color:#666;text-decoration:none;}
+body{background-color:#369;background-image:url(images/bg_background.gif);background-repeat:repeat-x;margin:0;padding:0;}
+body,td,th{color:#666;font-family:Lucida Sans Unicode, Lucida Grande, sans-serif;font-size:12px;}
+form{margin:0;padding:0;}
+h1{border-bottom:1px solid #EBEBEB;color:#1a4d80;font-size:24px;font-weight:400;margin:0 0 12px;padding:0 0 3px;}
+h2{border-bottom:1px solid #F5F5F5;color:#333;font-size:18px;font-weight:400;margin:0 0 5px;padding:10px 0 3px;}
+h3{color:#666;font-size:16px;font-weight:700;margin:0;padding:10px 0 5px;}
+hr{background-color:#EBEBEB;border:0;border-top:1px solid #EBEBEB;height:0;margin:10px 0;overflow:hidden;}
+input,select,textarea{color:#666;font-family:Lucida Sans Unicode, Lucida Grande, sans-serif;font-size:12px;margin:0;padding:2px;}
+p{margin:0;padding:3px 0 8px;}
+table.data{margin:0 0 10px;padding:0;}
+table.data td{background-color:#FFF;border-bottom:1px solid #EBEBEB;}
+table.data th{background-color:#888;border-bottom:1px solid #333;color:#FFF;font-weight:400;}
+table.data th a {color:#FFF;}
+table.data tr.clientareatableactive td{background-color:#DFFFE0 !important;}
+table.data tr.clientareatablepending td{background-color:#EFEFEF !important;}
+table.data tr.clientareatablependingtransfer td{background-color:#FFFAD9 !important;}
+table.data tr.clientareatablesuspended td{background-color:#FFF6CF !important;}
+table.data tr.clientareatableterminated td,table.data tr.clientareatableexpired td,table.data tr.clientareatablecancelled td{background-color:#FFCFCF !important;}
+table.data tr.clientareatablefraud td{background-color:#C3C3C3 !important;}
+table.frame{margin:0 0 10px;padding:0;border:1px solid #EBEBEB;border-bottom:0;}
+table.frame table td{background-color:#FFF;border-bottom:1px solid #EBEBEB;}
+table.frame table td.fieldarea{background-color:#F5F5F5;color:#333;text-align:right;border-right:1px solid #EBEBEB;}
+.kbarticle {padding: 2px 5px 5px 15px;}
+.kbviews {color:#A8A8A8;font-size:10px;}
+.kbalsoread {padding: 5px 5px 5px 15px;background-color: #F5F5F5;border-bottom: 1px solid #ccc;font-weight: bold;margin: 10px 0 10px 0;}
+.searchinput {font-size: 11px;padding:0;}
+#twitterfeed ul {list-style-type: none;padding: 0;margin: 15px 0 20px 0;}
+#twitterfeed li {background-image: url(../../images/twittericon.png);background-repeat: no-repeat;background-position: 0;margin: 0 20px 10px 20px;padding-left: 25px;}
+#twitterfeed p {text-align:center;margin:15px;}
+.tweetbutton {float: right;margin: 0 15px 15px 15px;}
+
+/* --------------------------------------------------------------
+   CHAT TRANSCRIPTS
+-------------------------------------------------------------- */
+
+div.chat div.visitor div.name, div.chat div.operator div.name {
+    font-weight: bold;
+}
+div.chat div.visitor div.message, div.chat div.operator div.message {
+    padding: 0 25px;
+}
+
+/* --------------------------------------------------------------
+   QUOTES
+-------------------------------------------------------------- */
+
+.quotecontainer {
+    border: 1px solid #ccc;
+    background-color: #fff;
+    background-image:url('../../images/quote.png');
+    background-repeat:no-repeat;
+    background-position: 10px 11px;
+    color: #666;
+    margin: 10px;
+}
+
+.quotecontainer:hover {
+    background-color: #efefef;
+    cursor: hand;
+    cursor: pointer;
+}
+
+.quotecontainer .quoteid {
+    float: left;
+    width: 80px;
+    padding: 13px 0 0 40px;
+    text-align: center;
+    font-size: 24px;
+}
+
+.quotecontainer .quoteleft {
+    float: left;
+    padding: 10px 0 10px 0;
+    font-size: 11px;
+}
+
+.quotecontainer .quoteleft .subject {
+    font-weight: bold;
+    font-size: 14px;
+    padding-bottom: 4px;
+    color: #000;
+    width: 350px;
+}
+
+.quotecontainer .quoteright {
+    float: right;
+    padding: 10px 15px 0 0;
+    text-align: right;
+}
+
+.quotecontainer .quoteright .stage {
+    font-weight: bold;
+    font-size: 12px;
+    padding-bottom: 4px;
+}
+
+/* Security */
+
+div#twofaactivation {
+    margin: 50px auto;
+    padding: 20px;
+    width: 75%;
+    min-height: 250px;
+    background-color: #fff;
+    border: 4px solid #efefef;
+    text-align: center;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -o-border-radius: 10px;
+    border-radius: 10px;
+}
+
+div#twofaactivation p {
+    margin: 15px 0;
+}

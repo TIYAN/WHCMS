@@ -1,0 +1,203 @@
+#order-web20cart {
+    margin: 0;
+    padding: 0 0 25px 0;
+}
+
+#order-web20cart h1 {
+    margin: 0 0 15px 0;
+    padding: 0;
+    font-size: 2em;
+}
+
+#order-web20cart h2 {
+    margin: 0 0 15px 0;
+    padding: 0;
+    font-size: 1.5em;
+}
+
+#order-web20cart h3 {
+    margin: 0 0 15px 0;
+    padding: 0;
+    font-size: 1.2em;
+}
+
+#order-web20cart .center90 {
+    margin: 0 auto;
+    padding: 0;
+    width: 90%;
+}
+
+#order-web20cart .textcenter {
+    text-align: center;
+}
+
+#order-web20cart .textright {
+    text-align: right;
+}
+
+#order-web20cart .textgreen {
+    color: #779500;
+}
+
+#order-web20cart .textred {
+    color: #cc0000;
+}
+
+#order-web20cart .errorbox {
+    margin: 0 0 10px;
+    padding: 10px 15px;
+    background-color: #F3D8D8;
+    border: 1px solid #CE0005;
+    color: #CE0005;
+    font-weight: bold;
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+    -o-border-radius: 6px;
+    border-radius: 6px;
+}
+#order-web20cart .errorbox p {
+    margin: 0;
+    padding: 0;
+    font-weight: bold;
+    text-align: left;
+}
+#order-web20cart .errorbox ul {
+    margin: 5px 20px;
+}
+#order-web20cart .errorbox ul li {
+    font-weight: normal;
+    text-align: left;
+    color:#000;
+}
+
+#order-web20cart .cartmenu {
+    margin: 0 auto 20px auto;
+    padding: 10px 20px;
+    width: 70%;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    font-size: 1.2em;
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+    -o-border-radius: 6px;
+    border-radius: 6px;
+}
+
+#order-web20cart .cartbox {
+    margin: 0 0 10px 0;
+    padding: 10px;
+    background-color: #F5F5F5;
+    border: 3px solid #EBEBEB;
+    line-height: 20px;
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+    -o-border-radius: 6px;
+    border-radius: 6px;
+}
+
+#order-web20cart .cartbox .pricing {
+    color:#9F0000;
+    font-size:0.9em;
+}
+
+#order-web20cart .domainoptions {
+    margin: 20px 40px;
+    padding: 0;
+}
+
+#order-web20cart .domainoptions div {
+    padding: 4px;
+}
+
+#order-web20cart table {
+    border-collapse: separate;
+    border-spacing: 2px;
+    width: 100%;
+}
+
+#order-web20cart table tr th {
+    margin: 0;
+    padding: 7px;
+    background-color: #666;
+    border-bottom: 3px solid #888;
+    color: #fff;
+    font-weight: bold;
+    text-align: center;
+}
+
+#order-web20cart table tr td {
+    margin: 0;
+    padding: 7px;
+    border-bottom: 1px solid #ebebeb;
+}
+
+#order-web20cart table tr td.fieldlabel {
+    width: 160px;
+    text-align: left;
+}
+
+#order-web20cart table.noborders tr td {
+    border: 0;
+}
+
+#order-web20cart table tr.config td{background-color:#F5F5F5;font-size:10px;padding:2px 25px;}
+#order-web20cart table tr.summary td{background-color:#F5F5F5 !important;color:#333;font-size:12px;font-weight:700;height:20px;}
+#order-web20cart table tr.promo td{background-color:#FFFFDA !important;color:#333;font-size:12px;font-weight:700;height:20px;}
+#order-web20cart table tr.due td{background-color:#E7FFDA !important;color:#333;font-size:12px;font-weight:700;height:20px;}
+#order-web20cart table tr.recurring td{background-color:#FFE1E1 !important;color:#333;font-size:12px;font-weight:700;height:20px;}
+
+#order-web20cart form .clearfix {
+    margin-bottom: 18px;
+    zoom: 1;
+}
+
+#order-web20cart .signupfields {
+    float: left;
+    margin: 0;
+    padding: 0;
+    width: 50%;
+}
+
+#order-web20cart .hidden {
+    display: none;
+}
+
+#order-web20cart .signupfields label {
+    padding-top: 6px;
+    font-size: 13px;
+    line-height: 18px;
+    float: left;
+    width: 130px;
+    text-align: right;
+    color: #404040;
+}
+
+#order-web20cart .signupfields .input {
+    margin-left: 150px;
+}
+
+#order-web20cart .signupfields .input input {
+    width: 80%;
+}
+
+#order-web20cart .signupfieldsextra label {
+    padding-top: 6px;
+    font-size: 13px;
+    line-height: 18px;
+    float: left;
+    width: 250px;
+    text-align: right;
+    color: #404040;
+}
+
+#order-web20cart .signupfieldsextra .input {
+    margin-left: 270px;
+}
+
+#order-web20cart .verttop {
+    vertical-align: top;
+}
+
+#order-web20cart .gateway {
+    margin: 20px 0 0 0;
+}

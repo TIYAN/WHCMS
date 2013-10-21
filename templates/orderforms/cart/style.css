@@ -1,0 +1,163 @@
+#order-cart {
+    margin: 0;
+    padding: 20px 0;
+}
+
+#order-cart h1 {
+    margin: 0 0 15px 0;
+    padding: 0;
+    text-align: center;
+}
+
+#order-cart .textcenter {
+    text-align: center;
+}
+
+#order-cart .textright {
+    text-align: right;
+}
+
+#order-cart .hidden {
+    display: none;
+}
+
+#order-cart .center90 {
+    margin: 0 auto;
+    width: 90%;
+}
+
+#order-cart .cartsubheading {
+    font-weight: bold;
+	font-size: 14px;
+	color: #000000;
+}
+
+#order-cart .cartbox {
+	width: 90%;
+	margin-left: auto;
+	margin-right: auto;
+	padding: 10px;
+	background-color: #f7f7f7;
+	border: 1px dashed #cccccc;
+}
+
+#order-cart .cartbox#catlinks {
+    font-weight: bold;
+}
+
+#order-cart .cartbox#catlinks a {
+    font-weight: normal;
+}
+
+#order-cart .cartbox .cartpricing {
+    margin: 5px;
+    padding: 2px;
+    color: #cc0000;
+}
+
+#order-cart .errorbox {
+    margin:0 auto 10px auto;
+    padding:10px;
+    width: 90%;
+    background-color:#FFBFBF;
+    border: 1px solid #cc0000;
+    text-align:center;
+    color:#7F0000;
+}
+
+#order-cart table {
+    width: 100%;
+    border: 0;
+    border-spacing: 1px;
+    border-collapse: separate;
+}
+
+#order-cart table {
+    width: 100%;
+    border: 0;
+    border-spacing: 1px;
+    border-collapse: separate;
+}
+
+#order-cart table tr th {
+    padding: 5px;
+    text-align: center;
+    font-weight: bold;
+	color: #444;
+}
+
+#order-cart table tr td {
+    padding: 3px;
+}
+
+#order-cart table tr td.fieldlabel {
+    width: 160px;
+}
+
+#order-cart table.domains {
+    background-color: #cccccc;
+}
+
+#order-cart table.domains tr th {
+    padding: 4px;
+    background-color: #efefef;
+    text-align: center;
+}
+
+#order-cart table.domains tr td {
+    padding: 4px;
+    background-color: #fff;
+    text-align: center;
+}
+
+#order-cart .textgreen {
+    color: #779500;
+}
+
+#order-cart .textred {
+    color: #cc0000;
+}
+
+#order-cart .domainops {
+    margin: 0 0 20px 50px;
+}
+
+#order-cart .domainops div {
+    padding-bottom: 5px;
+}
+
+#order-cart table.carttable {
+    background-color: #cccccc;
+}
+
+#order-cart table.carttable tr th {
+	background-color: #efefef;
+	color: #222222;
+	height: 20px;
+	font-weight: bold;
+	font-size: 12px;
+	text-align: center;
+}
+
+#order-cart table.carttable tr td {
+    padding: 3px 5px;
+    background-color: #fff;
+}
+
+#order-cart table.carttable tr.config td {
+	padding: 2px;
+    background-color: #efefef;
+	font-size: 9px;
+}
+
+#order-cart table.carttable tr.summary td {
+	background-color: #efefef;
+	color: #222222;
+	font-weight: bold;
+	font-size: 12px;
+}
+
+#order-cart table.carttable tr.addon td {
+	padding-left: 20px;
+	padding-right: 20px;
+}

@@ -1,0 +1,165 @@
+#order-verticalsteps {
+    margin: 0;
+    padding: 0 0 25px 0;
+    min-height: 280px;
+}
+
+#order-verticalsteps h1 {
+    font-size: 2em;
+}
+
+#order-verticalsteps h2 {
+    font-size: 1.5em;
+    color: #666;
+}
+
+#order-verticalsteps .textcenter {
+    text-align: center;
+}
+
+#order-verticalsteps .errorbox {
+	margin: 0 0 15px 0;
+    padding: 10px;
+    width: auto;
+	background-color: #FBEEEB;
+	border: 1px dashed #cc0000;
+	color: #cc0000;
+	font-weight: bold;
+	text-align: center;
+}
+
+#order-verticalsteps .stepsbar {
+    float: left;
+    width: 150px;
+}
+
+#order-verticalsteps .stepsbar .step {
+    margin: 0 0 5px 0;
+    padding: 5px;
+    width: 140px;
+    background-color: #efefef;
+    text-align: center;
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+    -o-border-radius: 6px;
+    border-radius: 6px;
+}
+
+#order-verticalsteps .stepsbar .step a {
+    color: #000;
+    text-decoration: underline;
+}
+
+#order-verticalsteps .stepsbar .step.active {
+    background-color: #A4C96E;
+    color: #fff;
+}
+
+#order-verticalsteps .stepsbar .step.active a {
+    color: #fff;
+}
+
+#order-verticalsteps .maincontent {
+    margin-left: 165px;
+}
+
+#order-verticalsteps .maincontent .orderbox {
+    margin: 0 0 5px 0;
+    padding: 10px;
+    background-color: #E6ECF8;
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+    -o-border-radius: 6px;
+    border-radius: 6px;
+}
+
+#order-verticalsteps .maincontent .orderbox.ordernum {
+    margin: 0 auto;
+    padding: 15px;
+    width: 60%;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+}
+
+#order-verticalsteps .maincontent .domainoptions {
+    margin: 20px 40px;
+    padding: 0;
+}
+
+#order-verticalsteps .maincontent .domainoptions div {
+    margin: 0;
+    padding: 2px;
+}
+
+#order-verticalsteps .maincontent table {
+    width: 100%;
+}
+
+#order-verticalsteps .maincontent table tr td {
+    padding: 3px 10px 5px 10px;
+}
+
+#order-verticalsteps .maincontent table.styled {
+    border-spacing: 3px;
+}
+
+#order-verticalsteps .maincontent table.styled tr th {
+    padding: 5px;
+    background-color: #E6ECF8;
+    font-weight: bold;
+    color: #000;
+    text-align: center;
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+    -o-border-radius: 6px;
+    border-radius: 6px;
+}
+
+#order-verticalsteps .maincontent table.styled tr td {
+    border-bottom: 1px solid #ccc;
+}
+
+#order-verticalsteps .maincontent .ordertotal {
+    float: right;
+    margin: 25px 0 0 0;
+    padding: 8px 20px;
+    background-color: #efefef;
+    text-align: right;
+    font-size: 1.5em;
+    color: #666;
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+    -o-border-radius: 6px;
+    border-radius: 6px;
+}
+
+#order-verticalsteps .maincontent .gateway {
+    margin: 0;
+    padding: 5px;
+    border: 0;
+    text-align: center;
+}
+
+#order-verticalsteps .textgreen {
+    color: #3EB504;
+}
+
+#order-verticalsteps .textred {
+    color: #cc0000;
+}
+
+#order-verticalsteps .hidden {
+    display: none;
+}
+
+#order-verticalsteps div.left {
+    float: left;
+	margin: 0;
+	padding: 0;
+}
+#order-verticalsteps div.right {
+    float: right;
+	margin: 0;
+	padding: 0;
+}

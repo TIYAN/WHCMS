@@ -1,0 +1,114 @@
+#order-boxes {
+    margin: 0;
+    padding: 20px 0;
+}
+
+#order-boxes h1 {
+    font-size: 1.4em;
+    color: #666;
+}
+
+#order-boxes .textcenter {
+    text-align: center;
+}
+
+#order-boxes .errorbox {
+    margin:0 0 10px;
+    padding:10px;
+    background-color:#FFBFBF;
+    border: 1px solid #cc0000;
+    text-align:center;
+    color:#7F0000;
+}
+
+#order-boxes table {
+    width: 100%;
+}
+
+#order-boxes table tr td {
+    padding: 5px;
+}
+
+#order-boxes table tr.orderheadingrow {
+	background-color: #5AB9F1;
+	color: #ffffff;
+}
+
+#order-boxes table tr.orderrow1 {
+	background-color: #E8F0F9;
+	color: #000000;
+}
+
+#order-boxes table tr.orderrow2 {
+	background-color: #D6E4F6;
+	color: #000000;
+}
+
+#order-boxes table tr td.leftcol {
+    padding: 5px 15px;
+    width: 30%;
+}
+
+#order-boxes .center90 {
+    margin: 0 auto;
+    width: 90%;
+}
+
+#order-boxes table.styled tr th {
+    background-color: #5AB9F1;
+    color: #fff;
+    font-weight: bold;
+    text-align: center;
+    padding: 5px;
+}
+
+#order-boxes table.styled tr td {
+    padding: 5px;
+    text-align: center;
+    border-bottom: 1px solid #ccc;
+}
+
+#order-boxes table tr.carttableconfig td {
+	background-color: #efefef;
+	font-size: 10px;
+	padding: 2px;
+}
+
+#order-boxes table tr.carttablesummary td {
+	background-color: #E8F0F9;
+	color: #222222;
+	height: 20px;
+	font-size: 12px;
+	font-weight: bold;
+}
+
+#order-boxes table tr.carttablesummary td.left {
+	padding: 5px 15px;
+    text-align: right;
+}
+
+#order-boxes .textgreen {
+    color: #779500;
+}
+
+#order-boxes .textred {
+    color: #cc0000;
+}
+
+#order-boxes div.left {
+    float:left;
+	margin: 0 0 20px 0;
+	padding: 0;
+}
+#order-boxes div.right {
+    float:right;
+	margin: 0 0 20px 0;
+	padding: 0;
+}
+#order-boxes div.clear {
+    clear:both;
+}
+
+#order-boxes .hidden {
+    display: none;
+}

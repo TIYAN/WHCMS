@@ -1,0 +1,1 @@
+UPDATE tblconfiguration SET value='3.8.1' WHERE setting='Version';

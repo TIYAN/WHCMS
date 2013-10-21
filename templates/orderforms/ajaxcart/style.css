@@ -1,0 +1,325 @@
+html {
+	overflow-y: scroll;
+}
+
+#order-ajaxcart {
+    margin: 0 0 50px 0;
+    padding: 0;
+}
+
+#order-ajaxcart h2 {
+    font-weight: normal;
+    margin: 0;
+    margin-top: 10px;
+    padding:5px 10px 10px;
+    border-bottom: 1px dashed #ccc;
+}
+
+#order-ajaxcart .loading {
+    display: none;
+    margin: 20px;
+    text-align:center;
+}
+
+#order-ajaxcart .clear {
+    clear: both;
+}
+
+#order-ajaxcart .errorbox {
+    margin: 10px auto 10px auto;
+    padding: 10px 15px;
+	background-color: #FBEEEB;
+	border: 1px dashed #cc0000;
+    width: 90%;
+	font-weight: bold;
+	color: #cc0000;
+	text-align: center;
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+    -o-border-radius: 6px;
+    border-radius: 6px;
+}
+#order-ajaxcart .errorbox.hidden {
+    display: none;
+}
+#order-ajaxcart .errorbox p {
+    margin: 0;
+    padding: 0;
+    font-weight: bold;
+    text-align: left;
+}
+#order-ajaxcart .errorbox li {
+    list-style-type: none;
+    font-weight: normal;
+    text-align: left;
+    color:#000;
+}
+
+#order-ajaxcart table.ajaxcart {
+    width: 100%;
+    min-height: 400px;
+}
+
+#order-ajaxcart .rowcolor1 td {
+    padding: 4px;
+    border-bottom: 1px dashed #ccc;
+    background-color: #f8f8f8;
+}
+#order-ajaxcart .rowcolor2 td {
+    padding: 4px;
+    border-bottom: 1px dashed #ccc;
+    background-color: #f3f3f3;
+}
+#order-ajaxcart .topborder td {
+    border-bottom: 1px dashed #ccc;
+    height: 1px;
+}
+
+#order-ajaxcart #configcontainer1, #order-ajaxcart #configcontainer2, #order-ajaxcart #configcontainer3, #order-ajaxcart #signupcontainer {
+    display: none;
+}
+
+/*
+Domain Registrations
+*/
+
+#order-ajaxcart .domainreginput {
+    border: 1px dashed #ccc;
+    width: 340px;
+    margin: 10px auto 20px auto;
+    font-size: 14px;
+    text-align: center;
+    padding: 10px;
+}
+
+#order-ajaxcart .domainreginput input {
+    font-size: 14px;
+    padding: 3px;
+    border: 1px solid #ccc;
+}
+
+#order-ajaxcart .domainreginput select, .domainregperiod select {
+    font-size: 13px;
+    padding: 3px;
+    border: 1px solid #ccc;
+}
+
+#order-ajaxcart .domainavailable {
+    color: #9AC003;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+}
+
+#order-ajaxcart .domainunavailable {
+    color: #cc0000;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+}
+
+#order-ajaxcart .domaininvalid {
+    color: #cc0000;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+}
+
+#order-ajaxcart .domainregperiod {
+    font-size: 12px;
+    text-align: center;
+    padding-bottom: 20px;
+}
+
+#order-ajaxcart table.domainsuggestions {
+    width: 100%;
+}
+#order-ajaxcart table.domainsuggestions th {
+	background-color: #f8f8f8;
+    font-size: 12px;
+	font-weight: bold;
+	text-align: center;
+	border-bottom: 1px dashed #ccc;
+    padding: 1px;
+    line-height: 20px;
+    color: #000;
+}
+#order-ajaxcart table.domainsuggestions td {
+	background-color: #f3f3f3;
+    text-align: center;
+	border-bottom: 1px dashed #ccc;
+	font-size: 12px;
+}
+
+/*
+Product Config
+*/
+
+#order-ajaxcart .fieldlabel {
+    width: 100px;
+    text-align: left;
+}
+#order-ajaxcart .fieldarea {
+    text-align: left;
+}
+#order-ajaxcart .configoplabel {
+    font-weight: bold;
+    text-align:center
+}
+#order-ajaxcart .hiddenns {
+    display: none;
+}
+
+/*
+Other
+*/
+
+#order-ajaxcart .domainconfigtitle {
+    margin: 15px 0 0 0;
+    padding: 0;
+    border-bottom: 1px dashed #ccc;
+}
+
+#order-ajaxcart .addoncontainer {
+    margin: 0 auto 10px auto;
+    padding: 10px;
+    width: 90%;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    text-align: center;
+}
+
+#order-ajaxcart .addoncontainer .title {
+    float: left;
+    font-size: 12px;
+    font-weight: bold;
+    margin: 0 0 5px 0;
+}
+
+#order-ajaxcart .addoncontainer .pricing {
+    float: right;
+    font-size: 16px;
+    margin: 0 0 5px 0;
+}
+
+#order-ajaxcart .addoncontainer .product {
+    margin: 5px 0 0 0;
+}
+
+#order-ajaxcart .addoncontainer select {
+    max-width: 60%;
+}
+
+#order-ajaxcart .cartwarningbox {
+    margin: 20px 0 20px 0;
+    padding: 7px;
+    border: 1px solid #EBE8CD;
+    border-left: 0;
+    border-right: 0;
+    background-color: #F1EFDC;
+    text-align: center;
+    color: #000;
+}
+
+/*
+Checkout
+*/
+
+#order-ajaxcart #checkoutbtn {
+    margin: 20px;
+    text-align: center;
+}
+
+#order-ajaxcart .loginfields, #order-ajaxcart #domaincontactfields {
+    display: none;
+}
+
+/*
+Cart Summary
+*/
+
+#order-ajaxcart #cartsummary {
+    background-color: #f8f8f8;
+    color: #000000;
+    width: 200px;
+    font-size: 11px;
+    border: 1px solid #ccc;
+}
+#order-ajaxcart #cartsummary div.currency {
+    text-align: right;
+    margin: 0;
+    padding: 4px 4px 4px 0;
+    font-size: 9px;
+    border-bottom: 1px dashed #ccc;
+}
+#order-ajaxcart #cartsummary div.currency select {
+    font-size: 9px;
+}
+#order-ajaxcart #cartsummary div.heading {
+    background-color: #f2f2f2;
+    text-align: center;
+    border-bottom:1px solid #ccc;
+    color: #333;
+    font-size: 16px;
+    font-weight: bold;
+    padding:5px 10px 5px;
+}
+#order-ajaxcart #cartsummary div.heading div.text {
+    float: left;
+    text-align: center;
+    width: 140px;
+    padding-left: 20px;
+}
+#order-ajaxcart #cartsummary #loader {
+    float: right;
+    width: 20px;
+    padding-top: 2px;
+    display: none;
+}
+#order-ajaxcart #cartsummary div.overflow {
+    max-height: 300px;
+    overflow: auto;
+}
+#order-ajaxcart #cartsummary div.itemdesc {
+    margin: 10px 0 0 0;
+    padding: 0 5px 0 5px;
+    text-align: left;
+}
+#order-ajaxcart #cartsummary div.itemmanage {
+    float: left;
+    margin: 0;
+    padding: 0;
+    padding-left: 5px;
+}
+#order-ajaxcart #cartsummary div.itemprice {
+    float: right;
+    margin: 0;
+    padding: 0;
+    padding-right: 5px;
+    text-align: right;
+    font-weight: bold;
+    color: #888;
+}
+#order-ajaxcart #cartsummary div.itemend {
+    clear: both;
+    padding: 0 0 10px 0;
+    border-bottom: 1px dashed #ccc;
+}
+#order-ajaxcart #cartsummary div.subtotals {
+    text-align: right;
+    padding: 0 10px 10px 0;
+    margin: 0;
+}
+#order-ajaxcart #cartsummary div.totalduelabel {
+    text-align: right;
+    padding: 0 10px 0 0;
+    margin: 5px 0 0 0;
+}
+#order-ajaxcart #cartsummary div.totaldue {
+    font-family: Tahoma;
+    font-size: 26px;
+    text-align: right;
+    padding: 0 5px 5px 5px;
+    border-bottom: 1px dashed #ccc;
+    margin: 0 0 10px 0;
+}

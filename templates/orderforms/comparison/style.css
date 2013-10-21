@@ -1,0 +1,654 @@
+/*
+Global
+*/
+
+#order-comparison {
+    margin: 0;
+    padding: 20px 0;
+}
+
+#order-comparison h1 {
+    margin: 0 0 20px;
+    text-align: center;
+}
+
+#order-comparison h2 {
+    font-weight: normal;
+    border: 0;
+    margin: 0;
+}
+
+#order-comparison .center80 {
+    margin: 0 auto;
+    width: 80%;
+}
+
+#order-comparison .textcenter {
+    text-align: center;
+}
+
+#order-comparison .textright {
+    text-align: right;
+}
+
+#order-comparison .clear {
+    clear: both;
+}
+
+#order-comparison .errorbox {
+    margin:0 0 10px;
+    padding:10px;
+    font-weight: bold;
+    background-color:#FFB0B0;
+    color:#fff;
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+    -o-border-radius: 6px;
+    border-radius: 6px;
+}
+#order-comparison .errorbox ul {
+    margin: 5px 20px;
+}
+#order-comparison .errorbox ul li {
+    font-weight: normal;
+    text-align: left;
+    color:#7F0000;
+}
+
+#order-comparison table tr th {
+    padding: 5px;
+	background-color: #efefef;
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+	color: #222222;
+	font-weight: bold;
+	text-align: center;
+}
+
+#order-comparison table tr td {
+    padding: 3px;
+    border-bottom: 1px solid #ccc;
+}
+
+#order-comparison .cartcontainer {
+    border: 2px solid #efefef;
+    background-color: #fff;
+    background-image: url('images/bg.png');
+    background-repeat:repeat-x;
+    width: 600px;
+    padding: 15px;
+    margin: 0 auto;
+}
+
+#order-comparison .cartcontainer table tr td {
+    padding: 2px;
+    border-bottom: 0;
+}
+
+#order-comparison table.centertext tr td {
+    text-align: center;
+}
+
+#order-comparison .domainoptions div {
+    margin: 2px 20px;
+}
+
+#order-comparison table.carttable tr.summary td {
+	background-color: #efefef;
+    border-bottom: 1px solid #ccc;
+	color: #222222;
+	height: 20px;
+	font-size: 12px;
+	font-weight: bold;
+}
+
+#order-comparison table.carttable {
+	background-color: #fff;
+	width: 100%;
+    padding-bottom: 10px;
+}
+
+#order-comparison table.carttable tr td {
+	background-color: #ffffff;
+    border-bottom: 1px solid #ccc;
+	padding: 4px;
+}
+
+#order-comparison .textgreen {
+    color: #779500;
+}
+#order-comparison .textred {
+    color: #cc0000;
+}
+
+#order-comparison .cartbutton.green {
+    color:#529214;
+}
+#order-comparison .cartbutton.red {
+    color:#d12f19;
+}
+
+
+
+
+
+
+.loading {
+    display: none;
+    padding-top: 20px;
+    text-align: center;
+}
+
+#orderfrm input,#orderfrm select,#ccinputform input,#ccinputform select {
+    border: 1px solid #ccc;
+    padding: 4px;
+}
+
+.errorbox {
+    text-align: left;
+    list-style-type: none;
+}
+
+
+
+/*
+Steps
+*/
+
+#order-comparison .stepscontainer {
+    width: 630px;
+    border: 1px solid #000;
+    background-image: url('images/stepsbg.png');
+    font-size: 11px;
+    margin: 15px auto 10px auto;
+}
+
+#order-comparison .stepscontainer .arrow {
+    float: left;
+    width: 33px;
+    height: 35px;
+    background-image: url('images/stepsarrow.png');
+}
+
+#order-comparison .stepscontainer .arrowactiveleft {
+    float: left;
+    width: 33px;
+    height: 35px;
+    background-image: url('images/stepsarrowactiveleft.png');
+}
+
+#order-comparison .stepscontainer .arrowactiveright {
+    float: left;
+    width: 33px;
+    height: 35px;
+    background-image: url('images/stepsarrowactiveright.png');
+}
+
+#order-comparison .stepscontainer .stepactive {
+    float: left;
+    background-image: url('images/activestep.png');
+    width: 188px;
+    line-height: 34px;
+    text-align: center;
+    color: #fff;
+}
+
+#order-comparison .stepscontainer .step {
+    float: left;
+    width: 188px;
+    line-height: 34px;
+    text-align: center;
+    color: #000;
+}
+
+#order-comparison .stepscontainer .title {
+    font-size: 14px;
+    font-weight: bold;
+    padding-right: 5px;
+}
+
+/*
+Categories
+*/
+
+#order-comparison .cartcats {
+    background-color: #f2f2f2;
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    margin: 0 0 20px 0;
+    padding: 10px 25px 10px 25px;
+    text-align: center;
+    font-size: 14px;
+    color: #666;
+}
+
+#order-comparison .cartcats a {
+    color: #000;
+}
+
+#order-comparison .domainregtitle {
+    font-size: 14px;
+}
+
+/*
+Product Listing
+*/
+
+#order-comparison .currencychooser {
+    float: right;
+    margin: 0 20px 10px 0;
+    padding: 5px 5px 5px 10px;
+    background-color: #F8F7ED;
+    border: 1px solid #F4E3A2;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -o-border-radius: 5px;
+    border-radius: 5px;
+    font-size: 12px;
+    font-family: Verdana;
+}
+
+#order-comparison .currencychooser a {
+    text-decoration: none;
+    padding-right: 5px;
+    color: #000;
+}
+
+#order-comparison .currencychooser a:hover {
+    color: #0066CC;
+}
+
+#order-comparison .prodtablecol {
+    float: left;
+    width: 20%;
+    font-size: 14px;
+    text-align: center;
+}
+
+#order-comparison .prodtablecol .title {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+#order-comparison .prodtablecol .divider {
+    height: 1px;
+    background-color: #fff;
+}
+
+#order-comparison .prodtablecol div.featureheader {
+    padding: 10px 0 10px 0;
+    height: 34px;
+    border-right: 1px solid #fff;
+    border-bottom: 1px solid #fff;
+}
+
+#order-comparison .prodtablecol div.feature {
+    background-color: #666;
+    line-height: 30px;
+    font-size: 12px;
+    color: #fff;
+    border-bottom: 1px solid #fff;
+}
+
+#order-comparison .prodtablecol div.aheader {
+    background-color: #204791;
+    padding: 10px 0 10px 0;
+    color: #fff;
+    font-size: 12px;
+    height: 34px;
+    border-right: 1px solid #fff;
+    border-bottom: 1px solid #fff;
+}
+
+#order-comparison .prodtablecol div.aheaderexpandable {
+    background-color: #204791;
+    padding: 10px 0 10px 0;
+    color: #fff;
+    font-size: 12px;
+    min-height: 55px;
+    border-right: 1px solid #fff;
+    border-bottom: 1px solid #fff;
+}
+
+#order-comparison .prodtablecol div.afeaturedesc1 {
+    padding: 5px;
+    background-color: #EAF2F7;
+    min-height: 140px;
+    line-height: 20px;
+    color: #204791;
+    border-right: 1px solid #fff;
+    border-bottom: 1px solid #fff;
+}
+
+#order-comparison .prodtablecol div.afeature1 {
+    background-color: #EAF2F7;
+    line-height: 30px;
+    color: #204791;
+    border-right: 1px solid #fff;
+    border-bottom: 1px solid #fff;
+}
+
+#order-comparison .prodtablecol div.afeature2 {
+    background-color: #CEE1EC;
+    line-height: 30px;
+    color: #204791;
+    border-right: 1px solid #fff;
+    border-bottom: 1px solid #fff;
+}
+
+#order-comparison .prodtablecol div.bheader {
+    background-color: #7BAA24;
+    padding: 10px 0 10px 0;
+    color: #fff;
+    font-size: 12px;
+    height: 34px;
+    border-right: 1px solid #fff;
+    border-bottom: 1px solid #fff;
+}
+
+#order-comparison .prodtablecol div.bheaderexpandable {
+    background-color: #7BAA24;
+    padding: 10px 0 10px 0;
+    color: #fff;
+    font-size: 12px;
+    min-height: 55px;
+    border-right: 1px solid #fff;
+    border-bottom: 1px solid #fff;
+}
+
+#order-comparison .prodtablecol div.bfeaturedesc1 {
+    padding: 5px;
+    background-color: #F0F7EA;
+    min-height: 140px;
+    line-height: 20px;
+    color: #668C1E;
+    border-right: 1px solid #fff;
+    border-bottom: 1px solid #fff;
+}
+
+#order-comparison .prodtablecol div.bfeature1 {
+    background-color: #F0F7EA;
+    line-height: 30px;
+    color: #668C1E;
+    border-right: 1px solid #fff;
+    border-bottom: 1px solid #fff;
+}
+
+#order-comparison .prodtablecol div.bfeature2 {
+    background-color: #DFEED2;
+    line-height: 30px;
+    color: #668C1E;
+    border-right: 1px solid #fff;
+    border-bottom: 1px solid #fff;
+}
+
+/*
+Addons
+*/
+
+#order-comparison .addoncontainer {
+    float: left;
+    width: 50%;
+}
+
+#order-comparison .addon {
+    margin: 5px;
+    border: 1px solid #ccc;
+    padding: 10px;
+}
+
+#order-comparison .addon:hover {
+    background-color: #FFF9E6;
+}
+
+#order-comparison .addon .title {
+    float: left;
+    padding: 0 0 6px 0;
+    font-size: 16px;
+    color: #555;
+}
+
+#order-comparison .addon .pricing {
+    float: right;
+    padding: 0 0 6px 0;
+    text-align: right;
+    font-size: 14px;
+    color: #cc0000;
+}
+
+#order-comparison .addon .setup {
+    font-size: 12px;
+}
+
+#order-comparison .addon .product {
+    padding-top: 6px;
+    text-align: right;
+}
+
+#order-comparison .addon select {
+    padding: 3px;
+    border: 1px solid #ccc;
+    width: 180px;
+}
+
+/*
+Domain Registration
+*/
+
+#order-comparison .domainreginput {
+    margin-top: 15px;
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    font-size: 14px;
+    text-align: center;
+    padding: 10px;
+}
+
+#order-comparison .domainreginput input {
+    font-size: 14px;
+    padding: 3px;
+    border: 1px solid #ccc;
+}
+
+#order-comparison .domainreginput select, .domainregperiod select {
+    font-size: 13px;
+    padding: 3px;
+    border: 1px solid #ccc;
+}
+
+#order-comparison .domainavailable {
+    color: #9AC003;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 25px;
+}
+
+#order-comparison .domainunavailable {
+    color: #cc0000;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 25px;
+}
+
+#order-comparison .domaininvalid {
+    color: #cc0000;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 25px;
+}
+
+#order-comparison .domainregperiod {
+    font-size: 12px;
+    text-align: center;
+    padding-bottom: 20px;
+}
+
+#order-comparison div.domainsuggestions {
+    font-size: 18px;
+    font-weight: normal;
+    padding-bottom: 5px;
+    margin-top: 15px;
+}
+
+/*
+Product Config
+*/
+
+#order-comparison .billingcycle {
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    padding: 2px;
+    margin-bottom: 20px;
+}
+
+#order-comparison .serverconfig {
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    padding: 2px;
+    margin-bottom: 20px;
+}
+
+#order-comparison .configoptions {
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    padding: 2px;
+    margin-bottom: 20px;
+}
+
+#order-comparison .addons {
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    padding: 2px;
+    margin-bottom: 20px;
+}
+
+#order-comparison .customfields {
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    padding: 2px;
+    margin-bottom: 20px;
+}
+
+/*
+Domain Config
+*/
+
+#order-comparison .domainconfig {
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    padding: 2px;
+    margin-bottom: 20px;
+}
+
+#order-comparison .nameservers {
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    padding: 2px;
+    margin-bottom: 20px;
+}
+
+/*
+Config Tables
+*/
+
+#order-comparison .configtable td {
+    padding: 2px 5px 2px 5px;
+}
+
+#order-comparison .configtable td.fieldlabel {
+    width: 150px;
+    text-align: right;
+}
+
+#order-comparison .configtable td.radiofield {
+    width: 30px;
+    text-align: right;
+}
+
+#order-comparison .configtable td.fieldarea {
+    background-color: #f2f2f2;
+    border-bottom: 1px solid #fff;
+    text-align: left;
+}
+
+#order-comparison .configoplabel {
+    color: #ff6600;
+    font-weight: bold;
+    text-align: center;
+    font-size: 14px;
+}
+
+/*
+Order Summary
+*/
+
+#order-comparison .ordersummary {
+    margin: 15px;
+}
+
+#order-comparison .totalduetoday {
+    text-align: right;
+    font-size: 20px;
+    color: #cc0000;
+}
+
+#order-comparison .totalrecurring {
+    text-align: right;
+    font-size: 14px;
+    color: #000066;
+}
+
+#order-comparison .checkoutbuttonsleft {
+    float: left;
+    margin: 5px 0 0 0;
+}
+
+#order-comparison .checkoutbuttonsright {
+    float: right;
+    margin: 5px 0 0 0;
+}
+
+/*
+Checkout
+*/
+
+#order-comparison .promo {
+    text-align: right;
+}
+
+#order-comparison .promo input {
+    font-size: 11px;
+}
+
+#order-comparison .gatewaycheckout {
+    margin: 10px 0 0 0;
+    text-align: center;
+}
+
+#order-comparison .viewcartcol1 {
+    float: left;
+    margin-top: 10px;
+    width: 55%;
+}
+
+#order-comparison .viewcartcol2 {
+    float: left;
+    margin-top: 10px;
+    width: 45%;
+}
+
+#order-comparison .paymentmethods {
+    padding-left: 20px;
+}
+
+#order-comparison .checkoutsecure {
+    text-align: left;
+    margin: 20px 0 10px 0;
+}
+
+#order-comparison #domaincontactfields {
+    display: none;
+}
