@@ -4,7 +4,9 @@
 
 5.2.10 官方原版：http://pan.baidu.com/s/1ehDha
 
-破解补丁[覆盖官方文件]：
+5.2.10 破解补丁[覆盖官方文件]：http://pan.baidu.com/s/1oXgRv
+
+提取码：hcux
 
 完整解码版打包[仅供开发者参考]：http://pan.baidu.com/s/1mVbil
 
