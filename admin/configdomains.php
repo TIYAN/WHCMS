@@ -430,7 +430,7 @@ if ($action == "editpricing") {
 
 		while ($years <= 10) {
 			echo "<tr bgcolor=\"#ffffff\" style=\"text-align:center;\"><td rowspan=\"" . $totalcurrencies . "\" bgcolor=\"#efefef\"><b>" . $years . " " . $aInt->lang("domains", "years") . "</b></td>";
-			$i = 34;
+			$i = 0;
 			foreach ($currenciesarray as $curr_id => $curr_code) {
 				$result2_baseslab = select_query("tblpricing", "", array("type" => "domainregister", "tsetupfee" => $selectedcugroupid, "currency" => $curr_id, "relid" => $id));
 				$regdata_baseslab = mysql_fetch_array($result2_baseslab);
