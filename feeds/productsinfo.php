@@ -15,13 +15,27 @@ require("../init.php");
 
 */
 
-$result = select_query("tblproducts","",array("id"=>$pid));
-$data = mysql_fetch_array($result);
-$pid = $data['id'];
-$name = $data['name'];
-$description = $data['description'];
+$whmcs = WHMCS_Application::getInstance();
+$pid = $whmcs->get_req_var('pid');
+$currencyid = $whmcs->get_req_var('currency');
+$get = $whmcs->get_req_var('get');
+$billingcycle = $whmcs->get_req_var('billingcycle');
+$configoptionnum = $whmcs->get_req_var('configoptionnum');
 
-if (!$pid) widgetoutput('Product ID Not Found');
+// Verify user input for pid exists, is numeric, and as is a valid id
+if (is_numeric($pid)) {
+    $result = select_query("tblproducts", "", array("id" => $pid));
+    $data = mysql_fetch_array($result);
+    $pid = $data['id'];
+    $name = $data['name'];
+    $description = $data['description'];
+} else {
+    $pid = '';
+}
+
+if (!$pid || !is_numeric($pid)) {
+    widgetoutput('Product ID Not Found');
+}
 
 if ($get=="name") widgetoutput($name);
 
@@ -30,7 +44,7 @@ if ($get=="description") {
     widgetoutput($description);
 }
 
-if ($get=="configoption") widgetoutput($data['configoption'].$configoptionnum);
+if ($get=="configoption") widgetoutput($data['configoption']. (int) $configoptionnum);
 
 if ($get=="orderurl") {
     $systemurl = ($CONFIG['SystemSSLURL']) ? $CONFIG['SystemSSLURL'].'/' : $CONFIG['SystemURL'].'/';
@@ -42,8 +56,19 @@ if ($get=="orderurl") {
 }
 
 if ($get=="price") {
-    $currency = ($currency) ? getCurrency('',$currency) : getCurrency();
-    $result = select_query("tblpricing","",array("type"=>"product","currency"=>$currency['id'],"relid"=>$pid));
+    // Verify user input for currency exists, is numeric, and as is a valid id
+    if (!is_numeric($currencyid)) {
+        $currency = array();
+    } else {
+        $currency = getCurrency('', $currencyid);
+    }
+
+    if (!$currency || !is_array($currency) || !isset($currency['id'])) {
+        $currency = getCurrency();
+    }
+    $currencyid = $currency['id'];
+
+    $result = select_query("tblpricing","",array("type" => "product", "currency" => $currencyid, "relid" => $pid));
     $data = mysql_fetch_array($result);
     $price = $data[$billingcycle];
     $price = formatCurrency($price);

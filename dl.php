@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.10
+ * @ Version  : 5.2.12
  * @ Author   : MTIMER
- * @ Release on : 2013-10-20
+ * @ Release on : 2013-10-25
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -30,7 +30,9 @@ require "init.php";
 $type = $whmcs->get_req_var("type");
 $viewpdf = $whmcs->get_req_var("viewpdf");
 $i = (int)$whmcs->get_req_var("i");
-$fileurl = $allowedtodownload = "";
+$id = (int)$whmcs->get_req_var("id");
+$folder_path = $file_name = $display_name = "";
+$allowedtodownload = "";
 
 if ($type == "i") {
 	$result = select_query("tblinvoices", "", array("id" => $id));
@@ -79,11 +81,11 @@ if ($type == "a") {
 	$result = select_query("tbltickets", "userid,attachment", array("id" => $id));
 	$data = mysql_fetch_array($result);
 	$userid = $data['userid'];
-	$filename = $data['attachment'];
-	$file = explode("|", $filename);
-	$filename = $file[$i];
-	$fileurl = $attachments_dir . $filename;
-	$filename = substr($filename, 7);
+	$attachments = $data['attachment'];
+	$folder_path = $attachments_dir;
+	$files = explode("|", $attachment);
+	$file_name = $files[$i];
+	$display_name = substr($file_name, 7);
 
 	if ($userid && ($userid != $_SESSION['uid'] && !$_SESSION['adminid'])) {
 		downloadLogin();
@@ -94,11 +96,11 @@ else {
 		$result = select_query("tblticketreplies", "userid,attachment", array("id" => $id));
 		$data = mysql_fetch_array($result);
 		$userid = $data['userid'];
-		$filename = $data['attachment'];
-		$file = explode("|", $filename);
-		$filename = $file[$i];
-		$fileurl = $attachments_dir . $filename;
-		$filename = substr($filename, 7);
+		$attachments = $data['attachment'];
+		$folder_path = $attachments_dir;
+		$files = explode("|", $attachments);
+		$file_name = $files[$i];
+		$display_name = substr($file_name, 7);
 
 		if ($userid && ($userid != $_SESSION['uid'] && !$_SESSION['adminid'])) {
 			downloadLogin();
@@ -258,7 +260,9 @@ You will need to renew your support & updates before you can download the latest
 				exit();
 			}
 			else {
-				$fileurl = $downloads_dir . $filename;
+				$folder_path = $downloads_dir;
+				$file_name = $filename;
+				$display_name = $filename;
 			}
 		}
 		else {
@@ -266,10 +270,10 @@ You will need to renew your support & updates before you can download the latest
 				$result = select_query("tblclientsfiles", "userid,filename,adminonly", array("id" => $id));
 				$data = mysql_fetch_array($result);
 				$userid = $data['userid'];
-				$filename = $data['filename'];
+				$file_name = $data['filename'];
 				$adminonly = $data['adminonly'];
-				$fileurl = $attachments_dir . $filename;
-				$filename = substr($filename, 11);
+				$folder_path = $attachments_dir;
+				$display_name = substr($file_name, 11);
 
 				if ($userid != $_SESSION['uid'] && !$_SESSION['adminid']) {
 					downloadLogin();
@@ -316,7 +320,15 @@ You will need to renew your support & updates before you can download the latest
 }
 
 
-if (!$filename || !is_file($fileurl)) {
+if (!trim($folder_path) || !trim($file_name)) {
+	redir("", "index.php");
+}
+
+$folder_path_real = realpath($folder_path);
+$file_path = $folder_path . $file_name;
+$file_path_real = realpath($file_path);
+
+if ($file_path_real === false || strpos($file_path_real, $folder_path_real) !== 0) {
 	exit("File not found. Please contact support.");
 }
 
@@ -326,8 +338,8 @@ header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
 header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
 header("Cache-Control: must-revalidate, post-check=0, pre-check=0, private");
 header("Content-Type: application/octet-stream");
-header("Content-Disposition: attachment; filename=\"" . $filename . "\"");
+header("Content-Disposition: attachment; filename=\"" . $display_name . "\"");
 header("Content-Transfer-Encoding: binary");
-header("Content-Length: " . filesize($fileurl) . "");
-readfile($fileurl);
+header("Content-Length: " . filesize($file_path_real));
+readfile($file_path_real);
 ?>

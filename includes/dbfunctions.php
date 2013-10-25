@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.10
+ * @ Version  : 5.2.12
  * @ Author   : MTIMER
- * @ Release on : 2013-10-20
+ * @ Release on : 2013-10-25
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -499,7 +499,7 @@ function db_make_safe_human_date($date) {
 }
 
 function db_is_valid_amount($amount) {
-	return preg_match("/^[0-9\.]+$/", $amount) === 1 ? true : false;
+	return preg_match("/^-?[0-9\.]+$/", $amount) === 1 ? true : false;
 }
 
 $query_count = 0;

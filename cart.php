@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.10
+ * @ Version  : 5.2.12
  * @ Author   : MTIMER
- * @ Release on : 2013-10-20
+ * @ Release on : 2013-10-25
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -849,18 +849,49 @@ if ($a == "add") {
 	}
 	else {
 		if ($aid) {
-			if (!$_POST['productid']) {
-				exit("Addon Parent Product ID Not Present");
+			$requestAddonID = (int)$whmcs->get_req_var("aid");
+			$requestServiceID = (int)$whmcs->get_req_var("serviceid");
+			$requestProductID = (int)$whmcs->get_req_var("productid");
+
+			if (!$requestServiceID && $requestProductID) {
+				$requestServiceID = $requestProductID;
 			}
 
-			$_SESSION['cart']['addons'][] = array("id" => $_POST['aid'], "productid" => $_POST['productid']);
+
+			if (!$requestAddonID || !$requestServiceID) {
+				redir("gid=addons");
+			}
+
+			$data = get_query_vals("tblhosting", "id,packageid", array("id" => $requestServiceID, "userid" => WHMCS_Session::get("uid"), "domainstatus" => "Active"));
+			$serviceid = $data['id'];
+			$pid = $data['packageid'];
+
+			if (!$serviceid) {
+				redir("gid=addons");
+			}
+
+			$data = get_query_vals("tbladdons", "id,packages", array("id" => $requestAddonID));
+			$aid = $data['id'];
+			$packages = $data['packages'];
+
+			if (!$aid) {
+				redir("gid=addons");
+			}
+
+			$packages = explode(",", $packages);
+
+			if (!in_array($pid, $packages)) {
+				redir("gid=addons");
+			}
+
+			$_SESSION['cart']['addons'][] = array("id" => $aid, "productid" => $serviceid);
 
 			if ($ajax) {
 				exit();
 			}
-
-			header("Location: cart.php?a=view");
-			exit();
+			else {
+				redir("a=view");
+			}
 		}
 		else {
 			if ($domain) {
@@ -995,7 +1026,7 @@ if ($a == "add") {
 
 
 					if ($CONFIG['AllowDomainsTwice']) {
-						$result = select_query("tbldomains", "COUNT(*)", "domain='" . $sld . $tld . "' AND (status!='Expired' AND status!='Cancelled')");
+						$result = select_query("tbldomains", "COUNT(*)", "domain='" . db_escape_string($sld . $tld) . "' AND (status!='Expired' AND status!='Cancelled')");
 						$data = mysql_fetch_array($result);
 						$domaincheck = $data[0];
 
@@ -1331,7 +1362,7 @@ if ($a == "confproduct") {
 					$opid2 = (int)$opid2;
 
 					if ($opid2 < 0) {
-						$opid2 = 53;
+						$opid2 = 0;
 					}
 
 
@@ -1342,7 +1373,7 @@ if ($a == "confproduct") {
 						}
 
 						$errormessage .= "<li>" . sprintf($_LANG['configoptionqtyminmax'], $optionname, $qtyminimum, $qtymaximum);
-						$opid2 = 53;
+						$opid2 = 0;
 					}
 				}
 
@@ -1419,7 +1450,7 @@ if ($a == "confproduct") {
 	$configurableoptions = getCartConfigOptions($pid, $configoptions, $billingcycle, "", true);
 	$customfields = getCustomFields("product", $pid, "", "", "on", $customfields);
 	$addonsarray = getAddons($pid, $addons);
-	$recurringcycles = 53;
+	$recurringcycles = 0;
 
 	if ($pricing['type'] == "recurring") {
 		if (0 <= $pricing['rawpricing']['monthly']) {

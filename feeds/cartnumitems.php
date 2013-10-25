@@ -8,10 +8,14 @@ require("../init.php");
 <script language="javascript" src="feeds/cartnumitems.php"></script>
 
 */
+$products = (isset($_SESSION["cart"]["products"]) && is_array($_SESSION["cart"]["products"])) ? $_SESSION["cart"]["products"] : array();
+$addons = (isset($_SESSION["cart"]["addons"]) && is_array($_SESSION["cart"]["addons"])) ? $_SESSION["cart"]["addons"] : array();
+$domains = (isset($_SESSION["cart"]["domains"]) && is_array($_SESSION["cart"]["domains"])) ? $_SESSION["cart"]["domains"] : array();
+$renewals = (isset($_SESSION["cart"]["renewals"]) && is_array($_SESSION["cart"]["renewals"])) ? $_SESSION["cart"]["renewals"] : array();
 
-$cartitems = count($_SESSION["cart"]["products"])+count($_SESSION["cart"]["addons"])+count($_SESSION["cart"]["domains"])+count($_SESSION["cart"]["renewals"]);
+$cartitems = count($products) + count($addons) + count($domains) + count($renewals);
 
-$items = ($cartitems==1) ? 'item' : 'items';
+$items = ($cartitems == 1) ? 'item' : 'items';
 
 widgetoutput('You have <b>'.$cartitems.'</b> '.$items.' in your basket');
 

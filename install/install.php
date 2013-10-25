@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.10
+ * @ Version  : 5.2.12
  * @ Author   : MTIMER
- * @ Release on : 2013-10-20
+ * @ Release on : 2013-10-25
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -13,8 +13,8 @@
 error_reporting(0);
 @set_time_limit(0);
 define("ROOTDIR", dirname(__FILE__) . "/../");
-$latestversion = "5.2.10";
-echo "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\n\t<html xmlns=\"http://www.w3.org/1999/xhtml\">\n<head>\n<title>WHMCS 5.2.10 时光人破解版 安装/升级</title>\n<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">\n<meta name=\"description\" content=\"WHMCS 5.2.10 完全解码破解 \" />\n<meta name=\"keywords\" content=\"whmcs,破解,解码,解密,时光人,系统,免费,安装,下载,5.2.10,中文版\" />\n<meta name=\"generator\" content=\"Mtimer CMS (http://www.mtimer.cn)\" />\n<script type=\"text/javascript\" src=\"../includes/jscript/jquery.js\"></script>\n<script>\nfunction showloading() {\n    \$(\"#submitbtn\").attr(\"disabled\",\"disabled\");\n    \$(\".loading\").fadeIn();\n}\n</script>\n<style>\nbody {\n    background-color: #efefef;\n    margin: 25px;\n}\na {\n    color: #0000ff;\n}\nbody,td {\n    font-family: Tahoma;\n    font-size: 12px;\n}\ninput {\n    font-family: Tahoma;\n    font-size: 16px;\n    padding: 2px 10px;\n}\nh1 {\n    font-size: 18px;\n    font-family: Arial;\n    color: #294A87;\n    padding-bottom: 10px;\n    border-bottom: 1px dashed #ccc;\n    margin-bottom: 30px;\n}\nh2 {\n    font-size: 16px;\n    font-family: Arial;\n    color: #000;\n}\n.wrapper {\n    margin: 0 auto;\n    background-color: #fff;\n    width: 740px;\n    padding: 10px 30px 30px 30px;\n    -moz-border-radius: 10px;\n    -webkit-border-radius: 10px;\n    -o-border-radius: 10px;\n    border-radius: 10px;\n}\n.version {\n    float: right;\n    margin: 30px 10px;\n    padding: 10px 20px;\n    background-color: #294A87;\n    color: #fff;\n    font-family: Verdana;\n    font-size: 40px;\n    -moz-border-radius: 10px;\n    -webkit-border-radius: 10px;\n    -o-border-radius: 10px;\n    border-radius: 10px;\n}\n.errorbox {\n\tmargin: 15px auto 0 auto;\n\tpadding: 10px;\n    width: 90%;\n\tborder: 1px solid #A89824;\n    font-size: 14px;\n\tbackground-color: #EEE7B0;\n\ttext-align: left;\n\tcolor: #706518;\n}\n.loading {\n    display: none;\n    margin: 0 auto;\n    padding: 20px;\n    width: 400px;\n    font-size: 18px;\n    text-align: center;\n}\n</style>\n</head>\n<body>\n\n<div class=\"wrapper\">\n\n<div class=\"version\">V";
+$latestversion = "5.2.12";
+echo "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\n\t<html xmlns=\"http://www.w3.org/1999/xhtml\">\n<head>\n<title>WHMCS 5.2.12 时光人破解版 安装/升级</title>\n<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">\n<meta name=\"description\" content=\"WHMCS 5.2.12 完全解码破解 \" />\n<meta name=\"keywords\" content=\"whmcs,破解,解码,解密,时光人,系统,免费,安装,下载,5.2.12,中文版\" />\n<meta name=\"generator\" content=\"Mtimer CMS (http://www.mtimer.cn)\" />\n<script type=\"text/javascript\" src=\"../includes/jscript/jquery.js\"></script>\n<script>\nfunction showloading() {\n    \$(\"#submitbtn\").attr(\"disabled\",\"disabled\");\n    \$(\".loading\").fadeIn();\n}\n</script>\n<style>\nbody {\n    background-color: #efefef;\n    margin: 25px;\n}\na {\n    color: #0000ff;\n}\nbody,td {\n    font-family: Tahoma;\n    font-size: 12px;\n}\ninput {\n    font-family: Tahoma;\n    font-size: 16px;\n    padding: 2px 10px;\n}\nh1 {\n    font-size: 18px;\n    font-family: Arial;\n    color: #294A87;\n    padding-bottom: 10px;\n    border-bottom: 1px dashed #ccc;\n    margin-bottom: 30px;\n}\nh2 {\n    font-size: 16px;\n    font-family: Arial;\n    color: #000;\n}\n.wrapper {\n    margin: 0 auto;\n    background-color: #fff;\n    width: 740px;\n    padding: 10px 30px 30px 30px;\n    -moz-border-radius: 10px;\n    -webkit-border-radius: 10px;\n    -o-border-radius: 10px;\n    border-radius: 10px;\n}\n.version {\n    float: right;\n    margin: 30px 10px;\n    padding: 10px 20px;\n    background-color: #294A87;\n    color: #fff;\n    font-family: Verdana;\n    font-size: 40px;\n    -moz-border-radius: 10px;\n    -webkit-border-radius: 10px;\n    -o-border-radius: 10px;\n    border-radius: 10px;\n}\n.errorbox {\n\tmargin: 15px auto 0 auto;\n\tpadding: 10px;\n    width: 90%;\n\tborder: 1px solid #A89824;\n    font-size: 14px;\n\tbackground-color: #EEE7B0;\n\ttext-align: left;\n\tcolor: #706518;\n}\n.loading {\n    display: none;\n    margin: 0 auto;\n    padding: 20px;\n    width: 400px;\n    font-size: 18px;\n    text-align: center;\n}\n</style>\n</head>\n<body>\n\n<div class=\"wrapper\">\n\n<div class=\"version\">V";
 echo substr($latestversion, 0, 0 - 2);
 echo "</div>\n\n<div style=\"margin:30px;\"><a href=\"http://www.mtimer.cn/\" target=\"_blank\"><img src=\"http://api.mtimer.cn/whmcs/images/logo.png\" alt=\"WHMCS - The Complete Client Management, Billing & Support Solution\" border=\"0\" /></a></div>\n\n<br />\n\n";
 $step = $_REQUEST["step"];
@@ -65,7 +65,7 @@ if( $step == "5" )
 
 if( $step == "" ) 
 {
-    echo "\n<h1>用户许可协议</h1>\n<p>本系统由 <a href=\"http://www.mtimer.cn/\" target=\"_blank\">时光人社区</a> 发布，与时光人代表的时光人无关。 捐助方式：<a href=\"http://me.alipay.com/whmcs5\" target=\"_blank\">点此捐助</a> 通过邮件获得今后更新，金额不限。</p>\n<p align=\"center\"><textarea style=\"width:700px;font-family:Tahoma;font-size:10px;color:#666666\" rows=\"25\" readonly>\n为什么要用WHMCS时光人破解版?\n\n如果你曾用过官方版本或者其他破解版的话你肯定知道什么叫 ( \"痛苦\")\n\n1.价格贵\n\n一次去版权的费用是324.95$,是美刀！坑爹的是只有1年的免费更新！1年后想用新版本还得年付45刀！\n\n2. 代码加密,用的是Ioncube加密,服务器没装Ioncube就没法用。而且想改文件是非常不容易。\n\n3. 前后台速度缓慢:\n\n因为是国外的系统，开发时就使用了谷歌的JS库,谷歌的字体库，但是因为代码加密了 你没办法修改这些地址，导致在天朝使用非常缓慢。\n\n4. 无法完全汉化\n\n因为代码加密所有你没办法修改php文件，自然也无法完全汉化。\n\n5. 安全性:\n\n代卖加密谈何安全？\n\n网上泛滥的其他所谓破解版 没有完全解码文件，你能保证没有后门？\n\n6. 怎么办？\n\nWHMCS 5.2.10 时光人完全解码破解版助你解脱！\n\n7. 捐助的朋友：\n\n感谢：*学英 捐款 1 元\n\n</textarea></p>\n\n<p align=center><input type=\"submit\" value=\"我同意\" class=\"button\" onClick=\"window.location='install.php?step=2'\"> <input type=\"button\" value=\"我反对\" class=\"button\" onClick=\"window.location='install.php'\">\n\n";
+    echo "\n<h1>用户许可协议</h1>\n<p>本系统由 <a href=\"http://www.mtimer.cn/\" target=\"_blank\">时光人社区</a> 发布，与时光人代表的时光人无关。 捐助方式：<a href=\"http://me.alipay.com/whmcs5\" target=\"_blank\">点此捐助</a> 通过邮件获得今后更新，金额不限。</p>\n<p align=\"center\"><textarea style=\"width:700px;font-family:Tahoma;font-size:10px;color:#666666\" rows=\"25\" readonly>\n为什么要用WHMCS时光人破解版?\n\n如果你曾用过官方版本或者其他破解版的话你肯定知道什么叫 ( \"痛苦\")\n\n1.价格贵\n\n一次去版权的费用是324.95$,是美刀！坑爹的是只有1年的免费更新！1年后想用新版本还得年付45刀！\n\n2. 代码加密,用的是Ioncube加密,服务器没装Ioncube就没法用。而且想改文件是非常不容易。\n\n3. 前后台速度缓慢:\n\n因为是国外的系统，开发时就使用了谷歌的JS库,谷歌的字体库，但是因为代码加密了 你没办法修改这些地址，导致在天朝使用非常缓慢。\n\n4. 无法完全汉化\n\n因为代码加密所有你没办法修改php文件，自然也无法完全汉化。\n\n5. 安全性:\n\n代卖加密谈何安全？\n\n网上泛滥的其他所谓破解版 没有完全解码文件，你能保证没有后门？\n\n6. 怎么办？\n\nWHMCS 5.2.12 时光人完全解码破解版助你解脱！\n\n7. 捐助的朋友：\n\n感谢：*学英 捐款 1 元\n\n</textarea></p>\n\n<p align=center><input type=\"submit\" value=\"我同意\" class=\"button\" onClick=\"window.location='install.php?step=2'\"> <input type=\"button\" value=\"我反对\" class=\"button\" onClick=\"window.location='install.php'\">\n\n";
 }
 else
 {
@@ -334,7 +334,7 @@ else
                     $link = mysql_connect($db_host, $db_username, $db_password);
                     mysql_select_db($db_name) or exit( "无法连接数据库 - 请检查输入是否有误。" );
                     mysql_query("SET NAMES 'utf8'");
-                    $result = mysql_query("INSERT INTO `tbladmins` ( `username` , `password` , `firstname` , `lastname` , `email` , `userlevel` , `signature` , `notes` , `supportdepts` ) VALUES ('" . $_REQUEST["username"] . "', '" . md5($_REQUEST["password"]) . "', '" . $_REQUEST["firstname"] . "', '" . $_REQUEST["lastname"] . "', '" . $_REQUEST["email"] . "', '3', '', '欢迎来到 WHMCS 5.2.10 时光人破解版!  安装后请在cPanel建立定时任务(cron job)。', ',')");
+                    $result = mysql_query("INSERT INTO `tbladmins` ( `username` , `password` , `firstname` , `lastname` , `email` , `userlevel` , `signature` , `notes` , `supportdepts` ) VALUES ('" . $_REQUEST["username"] . "', '" . md5($_REQUEST["password"]) . "', '" . $_REQUEST["firstname"] . "', '" . $_REQUEST["lastname"] . "', '" . $_REQUEST["email"] . "', '3', '', '欢迎来到 WHMCS 5.2.12 时光人破解版!  安装后请在cPanel建立定时任务(cron job)。', ',')");
                     echo "<h1>安装完成</h1>";
                     v321Upgrade();
                     v322Upgrade();
@@ -386,6 +386,8 @@ else
                     v528Upgrade();
                     v529Upgrade();
                     v5210Upgrade();
+                    v5211Upgrade();
+                    v5212Upgrade();
                     echo "\n<p>你现在要做的:</p>\n\n<p><b>1. 删除安装目录</b></p>\n<p>你需要从你服务器上删除 <b><i>install</i></b> 目录。</p>\n\n<p><b>2. 移动可写文件夹</b></p>\n<p>建议您移动 attachments, downloads 和 templates_c 目录(必须可写) 到用户无法直接访问的位置。  请参考官方文档 @ <a href=\"http://docs.whmcs.com/Further_Security_Steps\" target=\"_blank\">进一步安全保障</a></p>\n\n<p><b>3. 设置每天定时任务(Cron Job)</b></p>\n<p>你可以在面板里设置每天执行一次下面的命令:<br>\n<div align=\"center\"><input type=\"text\" value=\"php -q ";
                     $pos = strrpos($_SERVER["SCRIPT_FILENAME"], "/");
                     $filename = substr($_SERVER["SCRIPT_FILENAME"], 0, $pos);
@@ -650,6 +652,8 @@ else
                                 v528Upgrade();
                                 v529Upgrade();
                                 v5210Upgrade();
+                                v5211Upgrade();
+                                v5212Upgrade();
                             }
                             else
                             {
@@ -703,6 +707,13 @@ else
                                         v5210Upgrade();
                                     }
 
+                                    if ($revision_version < 11) {
+                                        v5211Upgrade();
+                                    }
+
+                                    if ($revision_version < 12) {
+                                        v5212Upgrade();
+                                    }
                                 }
 
                             }
@@ -714,6 +725,8 @@ else
                                 v528Upgrade();
                                 v529Upgrade();
                                 v5210Upgrade();
+                                v5211Upgrade();
+                                v5212Upgrade();
                             }
 
                             echo "\n<p>你现在需要从你的服务器上删除install目录。</p>\n\n<p align=\"center\" style=\"font-size:16px;\"><a href=\"../";
@@ -733,7 +746,7 @@ else
 
 }
 
-echo "\n<br />\n<br />\n<br />\n\n<div align=\"center\">Copyright &copy; WHMCS 5.2.10 时光人破解版 ";
+echo "\n<br />\n<br />\n<br />\n\n<div align=\"center\">Copyright &copy; WHMCS 5.2.12 时光人破解版 ";
 echo date("Y");
 echo "<br /><a href=\"http://www.whmcs.com/\" target=\"_blank\">我要买正版</a></div>\n\n</div>\n\n</body>\n</html>\n";
 
@@ -1737,7 +1750,7 @@ function v526Upgrade()
 
 function v527Upgrade()
 {
-    $query = "UPDATE tblconfiguration SET value='5.2.10' WHERE setting='Version'";
+    $query = "UPDATE tblconfiguration SET value='5.2.12' WHERE setting='Version'";
     $result = mysql_query($query);
 }
 
@@ -1753,6 +1766,16 @@ function v529Upgrade() {
 
 function v5210Upgrade() {
     $query = "UPDATE tblconfiguration SET value='5.2.10' WHERE setting='Version'";
+    $result = mysql_query($query);
+}
+
+function v5211Upgrade() {
+    $query = "UPDATE tblconfiguration SET value='5.2.11' WHERE setting='Version'";
+    $result = mysql_query($query);
+}
+
+function v5212Upgrade() {
+    $query = "UPDATE tblconfiguration SET value='5.2.12' WHERE setting='Version'";
     $result = mysql_query($query);
 }
 

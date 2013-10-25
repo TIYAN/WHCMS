@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.10
+ * @ Version  : 5.2.12
  * @ Author   : MTIMER
- * @ Release on : 2013-10-20
+ * @ Release on : 2013-10-25
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -26,7 +26,7 @@ function updateCCDetails($userid, $cardtype, $cardnum, $cardcvv, $cardexp, $card
 	$cardstart = ccFormatNumbers($cardstart);
 	$cardissue = ccFormatNumbers($cardissue);
 	$cardexp = ccFormatDate($cardexp);
-	$cardstart = ccFormatDate($cardstart);
+	ccFormatDate($cardstart);
 	$cardcvv = ccFormatNumbers($cardcvv);
 
 	if ($cardtype) {
@@ -126,6 +126,7 @@ function updateCCDetails($userid, $cardtype, $cardnum, $cardcvv, $cardexp, $card
 	}
 
 	$cchash = md5($cc_encryption_hash . $userid);
+	$cardstart = "";
 	$cardlastfour = substr($cardnum, 0 - 4);
 
 	if ($remotestored) {
@@ -287,16 +288,15 @@ function captureCCPayment($invoiceid, $cccvv = "", $passedparams = false) {
 function ccProcessing() {
 	global $whmcs;
 	global $cron;
-	global $CONFIG;
 
-	$chargedates = array();
-	$chargedates[] = "tblinvoices.duedate='" . date("Ymd", mktime(0, 0, 0, date("m"), date("d") + $CONFIG['CCProcessDaysBefore'], date("Y"))) . "'";
+	$chargedate = "";
+	$chargedates[] = date("Ymd", mktime(0, 0, 0, date("m"), date("d") + $whmcs->get_config("CCProcessDaysBefore"), date("Y")));
 
-	if (!$CONFIG['CCAttemptOnlyOnce']) {
+	if (!$whmcs->get_config("CCAttemptOnlyOnce")) {
 		$i = 1;
 
-		while ($i <= $CONFIG['CCRetryEveryWeekFor']) {
-			$chargedates[] = "tblinvoices.duedate='" . date("Ymd", mktime(0, 0, 0, date("m"), date("d") - $i * 7 + $CONFIG['CCProcessDaysBefore'], date("Y"))) . "'";
+		while ($i <= $whmcs->get_config("CCRetryEveryWeekFor")) {
+			$chargedates[] = "tblinvoices.duedate='" . date("Ymd", mktime(0, 0, 0, date("m"), date("d") - $i * 7 + $whmcs->get_config("CCProcessDaysBefore"), date("Y"))) . "'";
 			++$i;
 		}
 	}
@@ -312,7 +312,20 @@ function ccProcessing() {
 
 	if (count($qrygateways)) {
 		$z = $y = 0;
-		$query = "SELECT tblinvoices.* FROM tblinvoices INNER JOIN tblclients ON tblclients.id=tblinvoices.userid WHERE (tblinvoices.status='Unpaid') AND (" . implode(" OR ", $qrygateways) . ") AND tblclients.disableautocc='' AND (" . implode(" OR ", $chargedates) . ")";
+		$query = "SELECT tblinvoices.* FROM tblinvoices INNER JOIN tblclients ON tblclients.id=tblinvoices.userid WHERE (tblinvoices.status='Unpaid') AND (" . implode(" OR ", $qrygateways) . ") AND tblclients.disableautocc='' AND (tblinvoices.duedate='" . $chargedate . "'";
+
+		if (!$whmcs->get_config("CCAttemptOnlyOnce")) {
+			if (0 < count($chargedates)) {
+				foreach ($chargedates as $value) {
+					$query .= " OR tblinvoices.duedate='" . $value . "'";
+				}
+			}
+			else {
+				$query .= " OR tblinvoices.duedate<'" . $chargedate . "'";
+			}
+		}
+
+		$query .= ")";
 		$result = full_query($query);
 
 		while ($data = mysql_fetch_array($result)) {

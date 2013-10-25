@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.10
+ * @ Version  : 5.2.12
  * @ Author   : MTIMER
- * @ Release on : 2013-10-20
+ * @ Release on : 2013-10-25
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -28,8 +28,7 @@ if (!defined("WHMCSDBCONNECT")) {
 
 error_reporting(0);
 
-class WHMCS_Init 
-{
+class WHMCS_Init {
 	private $input = array();
 	private $last_input = null;
 	private $config = array();
@@ -82,7 +81,7 @@ class WHMCS_Init
 		$this->register_globals();
 
 		if (!$this->load_config_file()) {
-			exit( "<head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" /><title>WHMCS 5.2.10 时光人破解版安装</title><meta name=\"description\" content=\"WHMCS 5.2.10 完全解码破解 \" /><meta name=\"keywords\" content=\"whmcs,破解,解码,解密,时光人,系统,免费,安装,下载,5.2.10,中文版\" /><meta name=\"generator\" content=\"Mtimer CMS (http://www.mtimer.cn)\" /></head><div style=\"border: 1px dashed #cc0000;font-family:Tahoma;background-color:#FBEEEB;width:100%;padding:10px;color:#cc0000;\"><strong>欢迎来到 WHMCS 5.2.10 时光人破解版!</strong> <a href=\"https://me.alipay.com/whmcs5\" target=\"_blank\">捐助</a> 并通过邮件获得今后更新。<br>安装后才能使用。 <a href=\"" . (file_exists( "install/install.php" ) ? "" : "../") . "install/install.php\" style=\"color:#000;\">点此开始安装 ...</a></div>" );
+			exit( "<head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" /><title>WHMCS 5.2.12 时光人破解版安装</title><meta name=\"description\" content=\"WHMCS 5.2.12 完全解码破解 \" /><meta name=\"keywords\" content=\"whmcs,破解,解码,解密,时光人,系统,免费,安装,下载,5.2.12,中文版\" /><meta name=\"generator\" content=\"Mtimer CMS (http://www.mtimer.cn)\" /></head><div style=\"border: 1px dashed #cc0000;font-family:Tahoma;background-color:#FBEEEB;width:100%;padding:10px;color:#cc0000;\"><strong>欢迎来到 WHMCS 5.2.12 时光人破解版!</strong> <a href=\"https://me.alipay.com/whmcs5\" target=\"_blank\">捐助</a> 并通过邮件获得今后更新。<br>安装后才能使用。 <a href=\"" . (file_exists( "install/install.php" ) ? "" : "../") . "install/install.php\" style=\"color:#000;\">点此开始安装 ...</a></div>" );
 		}
 
 
@@ -95,7 +94,7 @@ class WHMCS_Init
 		global $PHP_SELF;
 		global $remote_ip;
 
-		$PHP_SELF = $_SERVER['PHP_SELF'];
+		$PHP_SELF = $_SERVER['PHP_SELF'];;
 		$remote_ip = $this->remote_ip = $this->get_user_ip();
 		$CONFIG = $this->load_config_vars();
 
@@ -223,6 +222,7 @@ class WHMCS_Init
 						continue;
 					}
 
+					$val = str_replace(chr(0), "", $val);
 					$cleandata[$key] = htmlspecialchars($val);
 
 					if (@get_magic_quotes_gpc()) {
@@ -235,6 +235,7 @@ class WHMCS_Init
 			}
 		}
 		else {
+			$arr = str_replace(chr(0), "", $arr);
 			$cleandata = htmlspecialchars($arr);
 
 			if (@get_magic_quotes_gpc()) {
@@ -618,13 +619,13 @@ class WHMCS_Init
 
 	public function get_filename() {
 		$filename = $_SERVER['PHP_SELF'];
-		$filename = substr($filename, strrpos($filename, "/"));
-		$filename = str_replace(array("/", ".php"), "", $filename);
+		substr($filename, strrpos($filename, "/"));
+		$filename = $filename = str_replace(array("/", ".php"), "", $filename);
 		return $filename;
 	}
 
 	private function validate_client_auth() {
-		$haship = $this->get_config("DisableSessionIPCheck") ? "" : $this->get_user_ip();
+		$haship = ($this->get_config("DisableSessionIPCheck") ? "" : $this->get_user_ip());
 
 		if ((defined("CLIENTAREA") && !isset($_SESSION['uid'])) && isset($_COOKIE['WHMCSUser'])) {
 			$cookiedata = explode(":", $_COOKIE['WHMCSUser']);
@@ -799,8 +800,8 @@ class WHMCS_Init
 		$validlangs = $this->getValidLanguages($admin);
 
 		if (!in_array($lang, $validlangs)) {
-			if (in_array("chinese", $validlangs)) {
-				$lang = "chinese";
+			if (in_array("english", $validlangs)) {
+				$lang = "english";
 			}
 			else {
 				$lang = $validlangs[0];
