@@ -1,20 +1,17 @@
 <h1>WHMCS 5.2系列 完全解码破解版 —— 时光人破解版</h1>
 
+2013.10.25更新至5.2.12
 2013.10.21更新至5.2.10
 
-5.2.10 官方原版：http://pan.baidu.com/s/1ehDha
+5.2.12 官方原版：
 
-5.2.10 破解补丁[覆盖官方文件]：http://pan.baidu.com/s/1oXgRv
+5.2.12 破解补丁[覆盖官方文件]：
 
-提取码：hcux
-
-完整解码版打包[仅供开发者参考]：http://pan.baidu.com/s/1mVbil
-
-提取码：hoox
+完整解码版打包[仅供开发者参考]：
 
 <h2>演示</h2>
 
-http://1.whmcs5.sinaapp.com/whmcs_5.2.10_decoded_nulled_mtimer/
+http://1.whmcs5.sinaapp.com/whmcs_5.2.12_decoded_nulled_mtimer/
 
 微博@ http://weibo.com/u/3488979130
 
