@@ -4,11 +4,15 @@
 
 2013.10.21更新至5.2.10
 
-5.2.12 官方原版：
+5.2.12 官方原版：http://pan.baidu.com/s/1032aN
 
-5.2.12 破解补丁[覆盖官方文件]：
+5.2.12 破解补丁[覆盖官方文件]：http://pan.baidu.com/s/17paMr
 
-完整解码版打包[仅供开发者参考]：
+提取码：qfur
+
+完整解码版打包[仅供开发者参考]：http://www.mtimer.cn/
+
+
 
 <h2>演示</h2>
 
@@ -25,13 +29,13 @@ http://1.whmcs5.sinaapp.com/whmcs_5.2.12_decoded_nulled_mtimer/
 <strong>加载速度快:</strong> 更换了JS地址，内地用户前后台秒开。 </li>
 </ul>
 
-<h4>新浪SAE特别版</h4>
+<h4>新浪SAE特别版[2013.11.04更新]</h4>
 
 教程：http://www.mtimer.cn/lessons/28-jiang-whmcs-shi-guang-ren-po-jie-ban-bu-shu-dao-sae.html
 
-SAE特别版下载：http://pan.baidu.com/s/1uwDWH 
+SAE特别版下载：http://pan.baidu.com/s/1BYKLh
 
-提取码: jovh
+提取码: q6mv
 
 <h4>如何支持Https</h4>
 
