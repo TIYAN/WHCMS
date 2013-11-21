@@ -315,7 +315,7 @@ else {
 
 <table width=\"100%\"><tr>
 ";
-		$prodcount = 17;
+		$prodcount = 0;
 		$result = select_query("tblproducts", "tblproducts.id,tblproducts.name,tblproductgroups.name AS groupname", "", "tblproductgroups`.`order` ASC,`tblproducts`.`order` ASC,`name", "ASC", "", "tblproductgroups ON tblproducts.gid=tblproductgroups.id");
 
 		while ($data = mysql_fetch_array($result)) {
