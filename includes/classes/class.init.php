@@ -94,7 +94,7 @@ class WHMCS_Init {
 		global $PHP_SELF;
 		global $remote_ip;
 
-		$PHP_SELF = $_SERVER['PHP_SELF'];;
+		$PHP_SELF = $_SERVER['PHP_SELF'] = $_SERVER['SCRIPT_NAME'];
 		$remote_ip = $this->remote_ip = $this->get_user_ip();
 		$CONFIG = $this->load_config_vars();
 
@@ -619,8 +619,8 @@ class WHMCS_Init {
 
 	public function get_filename() {
 		$filename = $_SERVER['PHP_SELF'];
-		substr($filename, strrpos($filename, "/"));
-		$filename = $filename = str_replace(array("/", ".php"), "", $filename);
+		$filename = substr($filename, strrpos($filename, "/"));
+		$filename = str_replace(array("/", ".php"), "", $filename);
 		return $filename;
 	}
 
@@ -656,8 +656,8 @@ class WHMCS_Init {
 					$cid = "";
 
 					if (isset($_SESSION['cid']) && is_numeric($_SESSION['cid'])) {
-						$_SESSION['cid'];
-						$result = $cid = select_query("tblcontacts", "password", array("id" => $_SESSION['cid']));
+						$cid = $_SESSION['cid'];
+						$result = select_query("tblcontacts", "password", array("id" => $_SESSION['cid']));
 						$data = mysql_fetch_array($result);
 					}
 
