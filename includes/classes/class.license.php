@@ -78,13 +78,13 @@ class WHMCS_License {
 
 	public function checkLocalKeyExpiry() {
 		$originalcheckdate = $this->getKeyData("checkdate");
-		date("Ymd", mktime(0, 0, 0, date("m"), date("d") - $this->localkeydays, date("Y")));
+		$localexpirymax = date("Ymd", mktime(0, 0, 0, date("m"), date("d") - $this->localkeydays, date("Y")));
 
 		if ($originalcheckdate < $localexpirymax) {
 			return false;
 		}
 
-		$localmax = $localexpirymax = date("Ymd", mktime(0, 0, 0, date("m"), date("d") + 2, date("Y")));
+		$localmax = date("Ymd", mktime(0, 0, 0, date("m"), date("d") + 2, date("Y")));
 
 		if ($localmax < $originalcheckdate) {
 			return false;
