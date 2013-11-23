@@ -669,7 +669,7 @@ $(\".tab\").click(function(){
 ";
 
 		if (!$firsttabhidden || isset($_REQUEST['tab'])) {
-			$tabnumber = 11;
+			$tabnumber = 0;
 
 			if ($_REQUEST['tab']) {
 				$tabnumber = $_REQUEST['tab'];
