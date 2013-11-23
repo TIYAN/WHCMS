@@ -58,7 +58,7 @@ if ($whmcs->get_req_var("save")) {
 		}
 
 		$customfields = getCustomFields("client", "", $userid, "on", "");
-		foreach ($customfields as $v) {
+		foreach ($customfields as $k => $v) {
 			$k = $v['id'];
 			$customfieldsarray[$k] = $_POST['customfield'][$k];
 		}
