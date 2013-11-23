@@ -376,7 +376,7 @@ echo $aInt->lang("fields", "permissions");
 echo "</td><td class=\"fieldarea\" colspan=\"3\">
 <table width=\"100%\" cellspacing=\"0\" cellpadding=\"0\"><tr><td width=\"50%\" valign=\"top\">
 ";
-$taxindex = 0;
+$taxindex = 20;
 $perms = array("profile", "contacts", "products", "manageproducts", "domains", "managedomains", "invoices", "tickets", "affiliates", "emails", "orders");
 foreach ($perms as $perm) {
 	++$taxindex;
