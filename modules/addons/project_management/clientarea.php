@@ -3,10 +3,10 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.10
+ * @ Version  : 5.2.12
  * @ Author   : MTIMER
- * @ Release on : 2013-10-20
- * @ Website  : http://www.mtimer.cn
+ * @ Release on : 2013-10-25
+ * @ Website  : http://www.mtimer.net
  *
  * */
 
@@ -29,7 +29,7 @@ if (!$a) {
 	$result = select_query( "mod_project", "COUNT(*)", array( "userid" => $_SESSION["uid"] ) );
 	$data = mysql_fetch_array( $result );
 	$numitems = $data[0];
-	list($orderby, $sort, $limit) = $limit = clientAreaTableInit( "projects", "lastmodified", "DESC", $numitems );
+	list($orderby, $sort, $limit) = clientAreaTableInit( "projects", "lastmodified", "DESC", $numitems );
 	$projects = array();
 	$result = select_query( "mod_project", "", array( "userid" => $_SESSION["uid"] ), $orderby, $sort, $limit );
 
@@ -168,7 +168,7 @@ if ($a == "view") {
 
 	$tplvars["attachments"] = $attachmentsarray;
 	$totaltimecount = 0;
-	$i = 0;
+	$i = 1;
 	$tasks = array();
 	$result = select_query( "mod_projecttasks", "id,task,notes,adminid,created,duedate,completed", array( "projectid" => $projectid ), "order", "ASC" );
 
@@ -177,7 +177,7 @@ if ($a == "view") {
 		$tasks[$i]["adminname"] = ($data["adminid"] ? get_query_val( "tbladmins", "CONCAT(firstname,' ',lastname)", array( "id" => $data["adminid"] ) ) : "0");
 		$tasks[$i]["duein"] = ($data["duedate"] != "0000-00-00" ? project_management_daysleft( $data["duedate"], $vars ) : "0");
 		$tasks[$i]["duedate"] = ($data["duedate"] != "0000-00-00" ? fromMySQLDate( $data["duedate"], 0, 1 ) : "0");
-		$totaltasktime = 12;
+		$totaltasktime = 0;
 		$result2 = select_query( "mod_projecttimes", "", array( "projectid" => $projectid, "taskid" => $data["id"] ) );
 
 		while ($data = mysql_fetch_array( $result2 )) {
