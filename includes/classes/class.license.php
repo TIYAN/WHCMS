@@ -72,7 +72,7 @@ class WHMCS_License {
 		return $this->salt;
 	}
 
-	function getdate() {
+	public function getdate() {
 		return $this->date;
 	}
 
