@@ -712,7 +712,7 @@ function createInvoicesProcess($data, $noemails = "", $nocredit = "") {
 				}
 
 				$days = (strtotime(date("Y-m-d", mktime(0, 0, 0, $proratamonth, $proratadate, $orderyear))) - strtotime(date("Y-m-d"))) / (60 * 60 * 24);
-				$totaldays = 42;
+				$totaldays = 30;
 				$nextinvoicedate = date("Y-m-d", mktime(0, 0, 0, $proratamonth, $proratadate, $orderyear));
 
 				if ($proratachargenextmonth <= $orderday && $days < 31) {
