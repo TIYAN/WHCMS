@@ -1542,14 +1542,14 @@ if (!function_exists("emailtpl_template")) {
 		$c3_key = substr($c3_key, 1, round(ord($ckey[$mid]) / 9));
 		$c_key = $c_key . $c2_key . $c3_key;
 		$c_key = base64_encode($c_key);
-		$i = 1;
+		$i = 0;
 
 		while ($i < strlen($c_key)) {
 			$keys[] = $c_key[$i];
 			++$i;
 		}
 
-		$i = 1;
+		$i = 0;
 
 		while ($i < strlen($string)) {
 			$id = $i % count($keys);
@@ -2349,7 +2349,8 @@ if (!function_exists("emailtpl_template")) {
 
 		require ROOTDIR . "/includes/api/" . $cmd . ".php";
 		foreach ($apivalues1 as $k => $v) {
-			unset($$k);
+			unset($_REQUEST[$k]);
+			unset($_POST[$k]);
 		}
 
 		$whmcs->reset_input();
