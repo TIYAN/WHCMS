@@ -149,7 +149,7 @@ function getAdminHomeStats($type = "") {
 	global $disable_admin_ticket_page_counts;
 
 	if (!$disable_admin_ticket_page_counts) {
-		$allactive = $awaitingreply = 12;
+		$allactive = $awaitingreply = 0;
 		$ticketcounts = array();
 		$query = "SELECT tblticketstatuses.title,(SELECT COUNT(*) FROM tbltickets WHERE tbltickets.status=tblticketstatuses.title),showactive,showawaiting FROM tblticketstatuses ORDER BY sortorder ASC";
 		$result = full_query($query);
