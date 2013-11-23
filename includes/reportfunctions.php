@@ -41,7 +41,7 @@ class WHMCSChart {
 
 
 		if ($this->chartcount == 0) {
-			$aInt->headOutput[] = "<script type=\"text/javascript\" src=\"http://jsapi.u.qiniudn.com/jsapi.js\"></script>";
+			$aInt->headOutput[] = "<script type=\"text/javascript\" src=\"https://www.google.com.hk/jsapi\"></script>";
 		}
 
 		$this->chartcount++;

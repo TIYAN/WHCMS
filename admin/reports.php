@@ -50,7 +50,7 @@ if ($print) {
 	echo "\">
 ";
 	echo "<s";
-	echo "cript type=\"text/javascript\" src=\"http://jsapi.u.qiniudn.com/jsapi.js\"></script>
+	echo "cript type=\"text/javascript\" src=\"https://www.google.com.hk/jsapi\"></script>
 ";
 	echo "<s";
 	echo "tyle>

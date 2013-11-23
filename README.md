@@ -25,8 +25,6 @@ http://1.whmcs5.sinaapp.com/whmcs_5.2.12_decoded_nulled_mtimer/
 <ul>
 <li>
 <strong>完全解码:</strong> 所有PHP均已 <em>解码</em> 你可以定制你的 私人WHMCS版。</li>
-<li>
-<strong>加载速度快:</strong> 更换了JS地址，内地用户前后台秒开。 </li>
 </ul>
 
 <h4>新浪SAE特别版[2013.11.04更新]</h4>
@@ -37,20 +35,6 @@ SAE特别版下载：http://pan.baidu.com/s/1BYKLh
 
 提取码: q6mv
 
-<h4>如何支持Https</h4>
-
-因为WHMCS使用Google的JS库，而且是https加载，导致国内访问速度超慢。
-
-此破解版默认已改为http访问,如果你的WHMCS需要https访问，需要修改2个文件
-
-admin/reports.php
-
-includes/reportfunctions.php
-
-将这些文件中的
-http://jsapi.u.qiniudn.com/jsapi.js
-改成
-https://www.google.com.hk/jsapi
 
 <h4>局限性</h4>
 
@@ -71,4 +55,4 @@ http://www.mtimer.cn
 http://www.mtimer.cn/whmcs.html
 
 
-Donate - Paypal : mtimercms@hotmail.com   Thank you!
+Donate - Paypal : mtimercms@hotmail.com
