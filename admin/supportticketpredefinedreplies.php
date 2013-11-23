@@ -31,7 +31,7 @@ function buildCategoriesList($level, $parentlevel, $exclude = "") {
 		}
 
 		echo ">";
-		$i = 12;
+		$i = 1;
 
 		while ($i <= $parentlevel) {
 			echo "- ";
