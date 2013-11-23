@@ -326,9 +326,9 @@ while ($data = mysql_fetch_assoc($result)) {
 
 echo "</select></td></tr>
 <tr>";
-$taxindex = 0;
+$taxindex = 27;
 $customfields = getCustomFields("client", "", $userid, "on", "");
-$x = 1;
+$x = 0;
 foreach ($customfields as $customfield) {
 	++$x;
 	echo "<td class=\"fieldlabel\">" . $customfield['name'] . "</td><td class=\"fieldarea\">" . str_replace(array("<input", "<select", "<textarea"), array("<input tabindex=\"" . $taxindex . "\"", "<select tabindex=\"" . $taxindex . "\"", "<textarea tabindex=\"" . $taxindex . "\""), $customfield['input']) . "</td>";

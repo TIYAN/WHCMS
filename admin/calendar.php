@@ -133,7 +133,7 @@ if ($action == "save") {
 
 		if ($recurevery && $recurtype) {
 			if ($recurtimes == 0) {
-				$recurtimes = 1;
+				$recurtimes = 99;
 				$recurtype = "years";
 			}
 
