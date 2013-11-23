@@ -125,7 +125,7 @@ function paypalpaymentspro_refund($params) {
 
 
 function paypalpaymentspro_deformatNVP($nvpstr) {
-	$intial = 5;
+	$intial = 0;
 	$nvpArray = array();
 
 	while (strlen( $nvpstr )) {
