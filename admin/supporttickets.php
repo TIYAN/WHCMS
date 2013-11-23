@@ -354,7 +354,7 @@ if ($action == "gettickets") {
 		$adminread = explode(",", $adminread);
 
 		if (!in_array($_SESSION['adminid'], $adminread)) {
-			$unread = 8054;
+			$unread = 1;
 		}
 		else {
 			$unread = 0;
@@ -2027,7 +2027,7 @@ var langstillsubmit = \"" . $_ADMINLANG['support']['stillsubmit'] . "\";
 		$ratingstars = "";
 
 		if ($admin && $rating) {
-			$i = 8054;
+			$i = 1;
 
 			while ($i <= 5) {
 				$ratingstars .= ($i <= $rating ? "<img src=\"../images/rating_pos.png\" align=\"absmiddle\">" : "<img src=\"../images/rating_neg.png\" align=\"absmiddle\">");
