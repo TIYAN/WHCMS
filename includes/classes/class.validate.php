@@ -362,7 +362,7 @@ class WHMCS_Validate
 			$numsymbols = 3;
 		}
 
-		$numupper = preg_replace("/[^A-Z]/", "", $pw);
+		$numupper = preg_replace("/[A-Z]/", "", $pw);
 		$upper = $pwlength - strlen($numupper);
 
 		if ($upper < 0) {
