@@ -135,8 +135,7 @@ if (!$loginsuccess) {
 						exit("Link expired");
 					}
 
-					sha1($email . $timestamp . $autoauthkey);
-					$hashverify = "";
+					$hashverify = sha1($email . $timestamp . $autoauthkey);
 
 					if ($hashverify == $hash) {
 						$result = select_query("tblclients", "id,password,language", array("email" => $email, "status" => array("sqltype" => "NEQ", "value" => "Closed")));
