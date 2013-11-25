@@ -440,8 +440,7 @@ else {
 				}
 				else {
 					$timestamp = time();
-					md5($email . $timestamp . $adminid . $cc_encryption_hash);
-					$hash = "";
+					$hash = md5($email . $timestamp . $adminid . $cc_encryption_hash);
 					$url = ($CONFIG['SystemSSLURL'] ? $CONFIG['SystemSSLURL'] : $CONFIG['SystemURL']);
 					$url .= "/" . $adminfolder . "/login.php?action=reset&email=" . $email . "&timestamp=" . $timestamp . "&verify=" . $hash;
 					$message = ("Dear " . $firstname . ",
