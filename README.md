@@ -1,6 +1,8 @@
 <h1>WHMCS 5.2系列 完全解码破解版 —— 时光人破解版</h1>
 
-2013.11.25更新至5.2.13，官方更新了80%文件，提供了安全性，并修复大量解码错误，逐行校对，只提供捐助者。https://me.alipay.com/whmcs5 [联系邮箱：admin@mtimer.cn]
+2013.11.25更新至5.2.13，官方更新了80%文件，提供了安全性，并修复大量解码错误，逐行校对。
+
+只提供捐助者。https://me.alipay.com/whmcs5 [联系邮箱：admin@mtimer.cn]
 
 2013.10.25更新至5.2.12
 
@@ -46,10 +48,13 @@ SAE特别版下载：http://pan.baidu.com/s/1BYKLh
 
 <strong>捐助后将通过邮件获得今后更新</strong>
 
-2013-10-21 时光人社区 - Mtimer CMS
+时光人社区 - Mtimer CMS
+
 参考：
+
 http://www.mtimer.cn
+
 http://www.mtimer.cn/whmcs.html
 
 
-Donate - Paypal : mtimercms@hotmail.com
+Donate - Paypal : mtimercms@hotmail.com  & get updates lifetime via email ;)
