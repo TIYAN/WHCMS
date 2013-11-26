@@ -1,5 +1,7 @@
 <h1>WHMCS 5.2系列 完全解码破解版 —— 时光人破解版</h1>
 
+2013.11.25更新至5.2.13，官方更新了80%文件，提供了安全性，并修复大量解码错误，逐行校对，只提供捐助者。https://me.alipay.com/whmcs5 [联系邮箱：admin@mtimer.cn]
+
 2013.10.25更新至5.2.12
 
 2013.10.21更新至5.2.10
@@ -29,23 +31,18 @@ http://1.whmcs5.sinaapp.com/whmcs_5.2.12_decoded_nulled_mtimer/
 
 <h4>新浪SAE特别版[2013.11.04更新]</h4>
 
-教程：http://www.mtimer.cn/lessons/28-jiang-whmcs-shi-guang-ren-po-jie-ban-bu-shu-dao-sae.html
+教程：http://www.mtimer.cn/lessons/28-whmcs-sae.html
 
 SAE特别版下载：http://pan.baidu.com/s/1BYKLh
 
 提取码: q6mv
 
 
-<h4>局限性</h4>
-
-modules文件夹内的文件并未修正解码错误，请使用官方文件或自行Google解决!
-
-
 <h6>作者及捐助</h6>
 
 此破解版由 时光人社区 www.mtimer.cn 维护
 
-捐助 支付宝：https://me.alipay.com/whmcs5 金额不限！
+捐助 支付宝：https://me.alipay.com/whmcs5  10元起步价，35元终身价！
 
 <strong>捐助后将通过邮件获得今后更新</strong>
 
