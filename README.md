@@ -2,7 +2,12 @@
 
 2013.11.25更新至5.2.13，官方更新了80%文件，提供了安全性，并修复大量解码错误，逐行校对。
 
-只提供捐助者。https://me.alipay.com/whmcs5 [联系邮箱：admin@mtimer.cn]
+只提供捐助者。http://www.mtimer.cn/release/25-whmcs-5213-wan-quan-jie-ma-po-jie.html 
+
+无需登录，捐助后直接下载 v5.2.13 [联系邮箱：admin@mtimer.cn]
+
+
+<h2>更新记录</h2>
 
 2013.10.25更新至5.2.12
 
@@ -20,7 +25,7 @@
 
 <h2>演示</h2>
 
-http://1.whmcs5.sinaapp.com/whmcs_5.2.12_decoded_nulled_mtimer/
+http://1.whmcs5.sinaapp.com/whmcs_5.2.13_decoded_nulled_mtimer/
 
 微博@ http://weibo.com/u/3488979130
 
@@ -44,7 +49,7 @@ SAE特别版下载：http://pan.baidu.com/s/1BYKLh
 
 此破解版由 时光人社区 www.mtimer.cn 维护
 
-捐助 支付宝：https://me.alipay.com/whmcs5  10元起步价，35元终身价！
+捐助 支付宝：http://www.mtimer.cn/release/25-whmcs-5213-wan-quan-jie-ma-po-jie.html 
 
 <strong>捐助后将通过邮件获得今后更新</strong>
 
@@ -53,8 +58,6 @@ SAE特别版下载：http://pan.baidu.com/s/1BYKLh
 参考：
 
 http://www.mtimer.cn
-
-http://www.mtimer.cn/whmcs.html
 
 
 Donate - Paypal : mtimercms@hotmail.com  & get updates lifetime via email ;)
