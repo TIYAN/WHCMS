@@ -23,7 +23,7 @@
 
 <h2>演示</h2>
 
-http://1.whmcs5.sinaapp.com/whmcs_5.2.13_decoded_nulled_mtimer/
+http://1.whmcs5.sinaapp.com/whmcs_5.2.14_decoded_nulled_mtimer/
 
 微博@ http://weibo.com/u/3488979130
 
@@ -34,13 +34,11 @@ http://1.whmcs5.sinaapp.com/whmcs_5.2.13_decoded_nulled_mtimer/
 <strong>完全解码:</strong> 所有PHP均已 <em>解码</em> 你可以定制你的 私人WHMCS版。</li>
 </ul>
 
-<h4>新浪SAE特别版[2013.11.04更新]</h4>
+<h4>新浪SAE特别版[2013.11.28更新]</h4>
 
 教程：http://www.mtimer.cn/lessons/28-whmcs-sae.html
 
-SAE特别版下载：http://pan.baidu.com/s/1BYKLh
-
-提取码: q6mv
+SAE特别版下载：http://www.mtimer.cn/release/25-whmcs-5214-wan-quan-jie-ma-po-jie.html
 
 
 <h6>作者及捐助</h6>
