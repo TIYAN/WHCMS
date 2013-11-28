@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.12
+ * @ Version  : 5.2.13
  * @ Author   : MTIMER
- * @ Release on : 2013-10-25
+ * @ Release on : 2013-11-25
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -28,8 +28,12 @@ if ($twofa->isActiveAdmins() && isset($_SESSION['2faverify'])) {
 		WHMCS_Session::delete("2farememberme");
 
 		if (isset($_SESSION['admloginurlredirect'])) {
-			header("Location: " . $_SESSION['admloginurlredirect']);
+			$loginurlredirect = $_SESSION['admloginurlredirect'];
 			unset($_SESSION['admloginurlredirect']);
+			$urlparts = explode("?", $loginurlredirect, 2);
+			$filename = (!empty($urlparts[0]) ? $urlparts[0] : "");
+			$qry_string = (!empty($urlparts[1]) ? $urlparts[1] : "");
+			redir($qry_string, $filename);
 		}
 		else {
 			redir("", "index.php");
@@ -70,8 +74,12 @@ if ($twofa->isActiveAdmins() && isset($_SESSION['2faverify'])) {
 		WHMCS_Session::delete("2farememberme");
 
 		if (isset($_SESSION['admloginurlredirect'])) {
-			header("Location: " . $_SESSION['admloginurlredirect']);
+			$loginurlredirect = $_SESSION['admloginurlredirect'];
 			unset($_SESSION['admloginurlredirect']);
+			$urlparts = explode("?", $loginurlredirect, 2);
+			$filename = (!empty($urlparts[0]) ? $urlparts[0] : "");
+			$qry_string = (!empty($urlparts[1]) ? $urlparts[1] : "");
+			redir($qry_string, $filename);
 		}
 		else {
 			redir("", "index.php");
@@ -116,8 +124,12 @@ if ($adminfound) {
 		$auth->processLogin();
 
 		if (isset($_SESSION['admloginurlredirect'])) {
-			header("Location: " . $_SESSION['admloginurlredirect']);
+			$loginurlredirect = $_SESSION['admloginurlredirect'];
 			unset($_SESSION['admloginurlredirect']);
+			$urlparts = explode("?", $loginurlredirect, 2);
+			$filename = (!empty($urlparts[0]) ? $urlparts[0] : "");
+			$qry_string = (!empty($urlparts[1]) ? $urlparts[1] : "");
+			redir($qry_string, $filename);
 		}
 		else {
 			redir("", "index.php");

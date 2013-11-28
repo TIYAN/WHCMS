@@ -25,7 +25,7 @@ function widget_system_overview($vars) {
         echo '
 <table width="100%">
 <tr>
-    <td width="150">用户</td>
+    <td width="150">Clients</td>
     <td>
     <div class="percentbar">
     <div class="active" style="width:'.$clientsactive.'%">'.$clientsactive.'% Active</div>
@@ -34,7 +34,7 @@ function widget_system_overview($vars) {
     <td class="totals">'.$totalclients.'</td>
 </tr>
 <tr>
-    <td>服务</td>
+    <td>Services</td>
     <td>
     <div class="percentbar">
     <div class="active" style="width:'.$servicesactive.'%">'.$servicesactive.'% Active</div>
@@ -43,7 +43,7 @@ function widget_system_overview($vars) {
     <td class="totals">'.$totalservices.'</td>
 </tr>
 <tr>
-    <td>未支付订单</td>
+    <td>Unpaid Invoices</td>
     <td>
     <div class="percentbar">
     <div class="overdue" style="width:'.$overduestatus.'%">'.$overduestatus.'% Overdue</div>

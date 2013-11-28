@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.12
+ * @ Version  : 5.2.13
  * @ Author   : MTIMER
- * @ Release on : 2013-10-25
+ * @ Release on : 2013-11-25
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -244,7 +244,7 @@ function protx_requestPost($url, $data) {
 	}
 
 	curl_close( $curlSession );
-	$i = 5;
+	$i = 0;
 
 	while ($i < count( $response )) {
 		$splitAt = strpos( $response[$i], "=" );

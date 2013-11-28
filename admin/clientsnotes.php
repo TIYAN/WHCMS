@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.12
+ * @ Version  : 5.2.13
  * @ Author   : MTIMER
- * @ Release on : 2013-10-25
+ * @ Release on : 2013-11-25
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -30,7 +30,7 @@ if ($sub == "add") {
 	checkPermission("Add/Edit Client Notes");
 	insert_query("tblnotes", array("userid" => $userid, "adminid" => $_SESSION['adminid'], "created" => "now()", "modified" => "now()", "note" => $note, "sticky" => $sticky));
 	logActivity("Added Note - User ID: " . $userid);
-	header("Location: " . $_SERVER['PHP_SELF'] . ("?userid=" . $userid));
+	redir("userid=" . $userid);
 	exit();
 }
 else {
@@ -39,7 +39,7 @@ else {
 		checkPermission("Add/Edit Client Notes");
 		update_query("tblnotes", array("note" => $note, "sticky" => $sticky, "modified" => "now()"), array("id" => $id));
 		logActivity("Updated Note - User ID: " . $userid . " - ID: " . $id);
-		header("Location: " . $_SERVER['PHP_SELF'] . ("?userid=" . $userid));
+		redir("userid=" . $userid);
 		exit();
 	}
 	else {
@@ -48,7 +48,7 @@ else {
 			checkPermission("Delete Client Notes");
 			delete_query("tblnotes", array("id" => $id));
 			logActivity("Deleted Note - User ID: " . $userid . " - ID: " . $id);
-			header("Location: " . $_SERVER['PHP_SELF'] . ("?userid=" . $userid));
+			redir("userid=" . $userid);
 			exit();
 		}
 	}

@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.12
+ * @ Version  : 5.2.13
  * @ Author   : MTIMER
- * @ Release on : 2013-10-25
+ * @ Release on : 2013-11-25
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -132,8 +132,7 @@ else {
 		$deptid = $data['id'];
 
 		if (!$deptid) {
-			header("Location: submitticket.php");
-			exit();
+			redir();
 		}
 
 		$deptname = $data['name'];
@@ -240,8 +239,7 @@ IP Address: " . $remote_ip;
 			$ticketdetails = openNewTicket($_SESSION['uid'], $_SESSION['cid'], $deptid, $subject, $message, $urgency, $attachments, $from, $relatedservice, $cc);
 			saveCustomFields($ticketdetails['ID'], $customfield);
 			$_SESSION['tempticketdata'] = $ticketdetails;
-			header("Location: submitticket.php?step=4");
-			exit();
+			redir("step=4");
 		}
 		else {
 			if ($step == "4") {

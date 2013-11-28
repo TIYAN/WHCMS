@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.12
+ * @ Version  : 5.2.13
  * @ Author   : MTIMER
- * @ Release on : 2013-10-25
+ * @ Release on : 2013-11-25
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -33,12 +33,13 @@ if ($action == "new") {
 	check_token("WHMCS.admin.default");
 	checkPermission("Create/Edit Email Templates");
 	$emailid = insert_query("tblemailtemplates", array("type" => $type, "name" => $name, "language" => "", "custom" => "1"));
-	header("Location: configemailtemplates.php?action=edit&id=" . $emailid);
+	redir("action=edit&id=" . $emailid);
 	exit();
 }
 
 
 if ($action == "delatt") {
+	check_token("WHMCS.admin.default");
 	checkPermission("Create/Edit Email Templates");
 	$result = select_query("tblemailtemplates", "attachments", array("id" => $id));
 	$data = mysql_fetch_array($result);
@@ -46,10 +47,10 @@ if ($action == "delatt") {
 	$attachments = explode(",", $attachments);
 	$i = (int)$_GET['i'];
 	$attachment = $attachments[$i];
-	unlink($downloads_dir . $attachment);
+	deleteFile($downloads_dir, $attachment);
 	unset($attachments[$i]);
 	update_query("tblemailtemplates", array("attachments" => implode(",", $attachments)), array("id" => $id));
-	header("Location: configemailtemplates.php?action=edit&id=" . $id);
+	redir("action=edit&id=" . $id);
 	exit();
 }
 
@@ -129,6 +130,17 @@ if ($action == "") {
 
 		if ($_FILES['attachments']) {
 			foreach ($_FILES['attachments']['name'] as $num => $filename) {
+
+				if (empty($_FILES['attachments']['name']) || empty($_FILES['attachments']['name'][$num])) {
+					continue;
+				}
+
+
+				if (!isFileNameSafe($_FILES['attachments']['name'][$num])) {
+					$aInt->gracefulExit("Invalid upload filename.  Valid filenames contain only alpha-numeric, dot, hyphen and underscore characters.");
+					exit();
+				}
+
 				$filename = trim($filename);
 
 				if ($filename) {
@@ -179,10 +191,7 @@ if ($action == "") {
 	}
 
 	echo $infobox;
-	$jscode = "function doDelete(id) {
-if (confirm(\"" . $aInt->lang("emailtpls", "delsure") . "\")) {
-window.location='?delete=true&id='+id+'" . generate_token("link") . "';
-}}";
+	$aInt->deleteJSConfirm("doDelete", "emailtpls", "delsure", "?delete=true&id=");
 	echo "
 <p>";
 	echo $aInt->lang("emailtpls", "info");
@@ -356,10 +365,8 @@ else {
 
 		if ($plaintextchange) {
 			if ($plaintext) {
-				str_replace("
-
-", "</p><p>", $message);
-				$message = "";
+				
+				$message = str_replace("\r\n\r\n", "</p><p>", $message);
 				$message = str_replace("\r\n", "<br>", $message);
 
 				update_query("tblemailtemplates", array("message" => $message, "plaintext" => ""), array("id" => $id));
@@ -367,10 +374,7 @@ else {
 			}
 			else {
 				$message = str_replace("<p>", "", $message);
-				str_replace("</p>", "
-
-", $message);
-				$message = "";
+				$message = str_replace("</p>", "\r\n\r\n", $message);
 				$message = str_replace("<br>", "\r\n", $message);
 
 				$message = str_replace("<br />", "\r\n", $message);
@@ -434,7 +438,7 @@ else {
 			$attachments = explode(",", $attachments);
 			foreach ($attachments as $i => $attachment) {
 				$filename = substr($attachment, 7);
-				echo $i + 1 . (". " . $filename . " <a href=\"configemailtemplates.php?action=delatt&id=" . $id . "&i=" . $i . "\"><img src=\"images/icons/delete.png\" border=\"0\" align=\"middle\" /> ") . $aInt->lang("global", "delete") . "</a><br />";
+				echo $i + 1 . (". " . $filename . " <a href=\"configemailtemplates.php?action=delatt&id=" . $id . "&i=" . $i) . generate_token("link") . "\"><img src=\"images/icons/delete.png\" border=\"0\" align=\"middle\" /> " . $aInt->lang("global", "delete") . "</a><br />";
 			}
 		}
 

@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.12
+ * @ Version  : 5.2.13
  * @ Author   : MTIMER
- * @ Release on : 2013-10-25
+ * @ Release on : 2013-11-25
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -535,7 +535,7 @@ function processPipedTicket($to, $name, $email, $subject, $message, $attachment)
 
 			$attachment = explode("|", $attachment);
 			foreach ($attachment as $file) {
-				unlink($attachments_dir . $file);
+				deleteFile($attachments_dir, $file);
 			}
 		}
 	}
@@ -558,6 +558,16 @@ function uploadTicketAttachments($admin = false) {
 
 	if ($_FILES['attachments']) {
 		foreach ($_FILES['attachments']['name'] as $num => $filename) {
+
+			if (empty($_FILES['attachments']['name']) || empty($_FILES['attachments']['name'][$num])) {
+				continue;
+			}
+
+
+			if (!isFileNameSafe($_FILES['attachments']['name'][$num])) {
+				exit("Invalid upload filename.  Valid filenames contain only alpha-numeric, dot, hyphen and underscore characters.");
+			}
+
 			$filename = trim($filename);
 
 			if ($filename) {
@@ -618,7 +628,7 @@ function checkTicketAttachmentExtension($file_name) {
 
 function pipeDecodeString($string) {
 
-	if (($pos = strpos($string, "=?")) === false) {
+	if ($pos = strpos($string, "=?") === false) {
 		return $string;
 	}
 
@@ -722,7 +732,7 @@ function deleteTicket($ticketid, $replyid = "") {
 		if ($attachment) {
 			$attachment = explode("|", $attachment);
 			foreach ($attachment as $file) {
-				unlink($attachments_dir . $file);
+				deleteFile($attachments_dir, $file);
 			}
 		}
 	}
@@ -736,7 +746,7 @@ function deleteTicket($ticketid, $replyid = "") {
 		if ($attachment) {
 			$attachment = explode("|", $attachment);
 			foreach ($attachment as $file) {
-				unlink($attachments_dir . $file);
+				deleteFile($attachments_dir, $file);
 			}
 		}
 
@@ -751,7 +761,7 @@ function deleteTicket($ticketid, $replyid = "") {
 	logActivity("Deleted Ticket Reply - ID: " . $replyid);
 }
 
-function genTicketMask(&$id = "") {
+function genTicketMask($id = "") {
 	global $CONFIG;
 
 	$lowercase = "abcdefghijklmnopqrstuvwxyz";
@@ -825,14 +835,14 @@ function genTicketMask(&$id = "") {
 
 function ticketMessageFormat($message) {
 	$message = strip_tags($message);
-	$message = preg_replace("/\[div=\"(.*?)\"\]/", "<div class=\"\">", $message);
-	$replacetags = array("b" => "strong", "i" => "em", "u" => "ul", "div" => "div");
+	$message = preg_replace("/\[div=\"(.*?)\"\]/", "<div class=\"$1\">", $message);
 	foreach ($replacetags as $k => $v) {
 		$message = str_replace("[" . $k . "]", "<" . $k . ">", $message);
 		$message = str_replace("[/" . $k . "]", "</" . $k . ">", $message);
 	}
 
 	$message = nl2br($message);
+	$replacetags = array("b" => "strong", "i" => "em", "u" => "ul", "div" => "div");
 	$message = ticketAutoHyperlinks($message);
 	return $message;
 }
@@ -893,7 +903,7 @@ function getKBAutoSuggestionsQuery($field, $textparts, $limit, $existingkbarticl
 		$where = "(" . $where . ")";
 
 		if (0 < count($existingkbids)) {
-			$where .= " AND id NOT IN (" . implode(",", $existingkbids) . ")";
+			$where .= " AND id NOT IN (" . db_build_in_array($existingkbids) . ")";
 		}
 	}
 
@@ -976,11 +986,11 @@ function getTicketAttachmentsInfo($ticketid, $replyid, $attachment) {
 			$file = substr($file, 7);
 
 			if ($replyid) {
-				$attachments[] = array("filename" => $file, "dllink" => "dl.php?type=ar&id=" . $replyid . "&i=" . $num, "deletelink" => "" . $PHP_SELF . "?action=viewticket&id=" . $ticketid . "&removeattachment=true&type=r&idsd=" . $replyid . "&filecount=" . $num);
+				$attachments[] = array("filename" => $file, "dllink" => "dl.php?type=ar&id=" . $replyid . "&i=" . $num, "deletelink" => "" . $PHP_SELF . "?action=viewticket&id=" . $ticketid . "&removeattachment=true&type=r&idsd=" . $replyid . "&filecount=" . $num . generate_token("link"));
 				continue;
 			}
 
-			$attachments[] = array("filename" => $file, "dllink" => "dl.php?type=a&id=" . $ticketid . "&i=" . $num, "deletelink" => "" . $PHP_SELF . "?action=viewticket&id=" . $ticketid . "&removeattachment=true&idsd=" . $ticketid . "&filecount=" . $num);
+			$attachments[] = array("filename" => $file, "dllink" => "dl.php?type=a&id=" . $ticketid . "&i=" . $num, "deletelink" => "" . $PHP_SELF . "?action=viewticket&id=" . $ticketid . "&removeattachment=true&idsd=" . $ticketid . "&filecount=" . $num . generate_token("link"));
 		}
 	}
 

@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.12
+ * @ Version  : 5.2.13
  * @ Author   : MTIMER
- * @ Release on : 2013-10-25
+ * @ Release on : 2013-11-25
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -68,9 +68,9 @@ class WHMCS_Init {
 		$_REQUEST = $this->sanitize_input_vars($_REQUEST);
 		$_SERVER = $this->sanitize_input_vars($_SERVER);
 		$_COOKIE = $this->sanitize_input_vars($_COOKIE);
-
 		foreach ($this->danger_vars as $var) {
-			if (isset($_REQUEST[$var]) || isset($_FILES[$var] )) {
+
+			if (isset($_REQUEST[$var]) || isset($_FILES[$var])) {
 				exit("Unauthorized request");
 				continue;
 			}
@@ -81,15 +81,14 @@ class WHMCS_Init {
 		$this->register_globals();
 
 		if (!$this->load_config_file()) {
-			exit( "<head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" /><title>WHMCS 5.2.12 时光人破解版安装</title><meta name=\"description\" content=\"WHMCS 5.2.12 完全解码破解 \" /><meta name=\"keywords\" content=\"whmcs,破解,解码,解密,时光人,系统,免费,安装,下载,5.2.12,中文版\" /><meta name=\"generator\" content=\"Mtimer CMS (http://www.mtimer.cn)\" /></head><div style=\"border: 1px dashed #cc0000;font-family:Tahoma;background-color:#FBEEEB;width:100%;padding:10px;color:#cc0000;\"><strong>欢迎来到 WHMCS 5.2.12 时光人破解版!</strong> <a href=\"https://me.alipay.com/whmcs5\" target=\"_blank\">捐助</a> 并通过邮件获得今后更新。<br>安装后才能使用。 <a href=\"" . (file_exists( "install/install.php" ) ? "" : "../") . "install/install.php\" style=\"color:#000;\">点此开始安装 ...</a></div>" );
+			exit( "<head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" /><title>WHMCS 5.2.13 时光人破解版安装</title><meta name=\"description\" content=\"WHMCS 5.2.13 完全解码破解 \" /><meta name=\"keywords\" content=\"whmcs,破解,解码,解密,时光人,系统,免费,安装,下载,5.2.13,中文版\" /><meta name=\"generator\" content=\"Mtimer CMS (http://www.mtimer.cn)\" /></head><div style=\"border: 1px dashed #cc0000;font-family:Tahoma;background-color:#FBEEEB;width:100%;padding:10px;color:#cc0000;\"><strong>欢迎来到 WHMCS 5.2.13 时光人破解版!</strong> <a href=\"https://me.alipay.com/whmcs5\" target=\"_blank\">捐助</a> 并通过邮件获得今后更新。<br>安装后才能使用。 <a href=\"" . (file_exists( "install/install.php" ) ? "" : "../") . "install/install.php\" style=\"color:#000;\">点此开始安装 ...</a></div>" );
 		}
 
 
 		if (!$this->database_connect()) {
-			exit( "<div style=\"border: 1px dashed #cc0000;font-family:Tahoma;background-color:#FBEEEB;width:100%;padding:10px;color:#cc0000;\"><strong>发生错误</strong><br>无法连接数据库</div>" );
+			exit("<div style=\"border: 1px dashed #cc0000;font-family:Tahoma;background-color:#FBEEEB;width:100%;padding:10px;color:#cc0000;\"><strong>发生错误</strong><br>无法连接数据库</div>");
 		}
 
-		$this->sanitize_db_vars();
 		global $CONFIG;
 		global $PHP_SELF;
 		global $remote_ip;
@@ -99,8 +98,7 @@ class WHMCS_Init {
 		$CONFIG = $this->load_config_vars();
 
 		if ($this->enforce_ip_bans()) {
-			header("Location: " . $CONFIG['SystemURL'] . "/banned.php");
-			exit();
+			redir("", $CONFIG['SystemURL'] . "/banned.php");
 		}
 
 		$instanceid = $this->getWHMCSInstanceID();
@@ -110,6 +108,7 @@ class WHMCS_Init {
 		}
 
 		$session = new WHMCS_Session();
+		$this->sanitize_db_vars();
 		$session->create($instanceid);
 		$token_manager = &getTokenManager($this);
 
@@ -223,7 +222,7 @@ class WHMCS_Init {
 					}
 
 					$val = str_replace(chr(0), "", $val);
-					$cleandata[$key] = htmlspecialchars($val);
+					$cleandata[$key] = htmlspecialchars($val, ENT_QUOTES);
 
 					if (@get_magic_quotes_gpc()) {
 						$cleandata[$key] = stripslashes($cleandata[$key]);
@@ -236,7 +235,7 @@ class WHMCS_Init {
 		}
 		else {
 			$arr = str_replace(chr(0), "", $arr);
-			$cleandata = htmlspecialchars($arr);
+			$cleandata = htmlspecialchars($arr, ENT_QUOTES);
 
 			if (@get_magic_quotes_gpc()) {
 				$cleandata = stripslashes($cleandata);
@@ -800,8 +799,8 @@ class WHMCS_Init {
 		$validlangs = $this->getValidLanguages($admin);
 
 		if (!in_array($lang, $validlangs)) {
-			if (in_array("english", $validlangs)) {
-				$lang = "english";
+			if (in_array("chinese", $validlangs)) {
+				$lang = "chinese";
 			}
 			else {
 				$lang = $validlangs[0];
@@ -904,6 +903,19 @@ class WHMCS_Init {
 		}
 
 		return "default";
+	}
+
+	/**
+	 * Get current filename
+	 *
+	 * @return string The filename without extension
+	 */
+	public function getCurrentFilename() {
+		$filename = $_SERVER['PHP_SELF'];
+		$filename = substr($filename, strrpos($filename, "/"));
+		$filename = str_replace("/", "", $filename);
+		$filename = substr($filename, 0, strrpos($filename, "."));
+		return $filename;
 	}
 }
 

@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.12
+ * @ Version  : 5.2.13
  * @ Author   : MTIMER
- * @ Release on : 2013-10-25
+ * @ Release on : 2013-11-25
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -120,6 +120,7 @@ if ($action == "refresh") {
 
 
 if ($action == "save") {
+	check_token("WHMCS.admin.default");
 	$start = toMySQLDate($start);
 	$start = strtotime($start, time());
 	$end = toMySQLDate($end);
@@ -155,6 +156,8 @@ if ($action == "save") {
 
 
 if ($action == "update") {
+	check_token("WHMCS.admin.default");
+
 	if ($type == "move") {
 		$start = get_query_val("tblcalendar", "start", array("id" => $id));
 		$start = $start + $days * (24 * 60 * 60) + $minutes * 60;
@@ -181,12 +184,14 @@ if ($action == "update") {
 
 
 if ($action == "delete") {
+	check_token("WHMCS.admin.default");
 	delete_query("tblcalendar", array("id" => $id));
 	exit();
 }
 
 
 if ($action == "recurdelete") {
+	check_token("WHMCS.admin.default");
 	delete_query("tblcalendar", array("recurid" => $recurid));
 	redir();
 }
@@ -430,16 +435,19 @@ echo "\",
     eventDrop: function(calEvent,dayDelta,minuteD";
 echo "elta,allDay,revertFunc) {
 
-        $.post(\"calendar.php\", { action: \"update\", id: calEvent.id, type: \"move\", days: dayDelta, minutes: minuteDelta, allday: allDay });
+        $.post(\"calendar.php\", { action: \"update\", id: calEvent.id, type: \"move\", days: dayDelta, minutes: minuteDelta, allday: allDay, token: \"";
+echo generate_token("plain");
+echo "\" });
 
     },
     eventResize: function(calEvent,dayDelta,minuteDelta,revertFunc) {
 
-        $.post(\"calendar.php\", { action: \"update\", id: calEvent.id, type: \"resize\", days: dayDelta, minutes: minuteDelta });
+        $.post(\"calendar.php\", { action: \"update\", id: calEvent.id, type: \"resize\", days: dayDelta, minutes: minuteDelta, token: \"";
+echo generate_token("plain");
+echo "\" });
 
     },
-	eventSource";
-echo "s: [
+	eventSources: [
         ";
 $i = 0;
 foreach ($calevents as $calevent) {
@@ -460,7 +468,9 @@ echo "    ]
 
 function deleteEntry(id) {
     jQuery(\"#calendar\").fullCalendar('removeEvents',id);
-    $.post(\"calendar.php\", { action: \"delete\", id: id });
+    $.post(\"calendar.php\", { action: \"delete\", id: id, token: \"";
+echo generate_token("plain");
+echo "\" });
     jQuery(\"#caledit\").fadeOut();
 }
 

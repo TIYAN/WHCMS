@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.12
+ * @ Version  : 5.2.13
  * @ Author   : MTIMER
- * @ Release on : 2013-10-25
+ * @ Release on : 2013-11-25
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -108,6 +108,17 @@ if ($action == "send") {
 
 			if (is_array($_FILES['attachments'])) {
 				foreach ($_FILES['attachments']['name'] as $num => $displayname) {
+
+					if (empty($_FILES['attachments']['name']) || empty($_FILES['attachments']['name'][$num])) {
+						continue;
+					}
+
+
+					if (!isFileNameSafe($_FILES['attachments']['name'][$num])) {
+						$aInt->gracefulExit("Invalid upload filename.  Valid filenames contain only alpha-numeric, dot, hyphen and underscore characters.");
+						exit();
+					}
+
 					$filename = preg_replace("/[^a-zA-Z0-9-_. ]/", "", $displayname);
 
 					if ($filename) {
@@ -115,13 +126,21 @@ if ($action == "send") {
 						$rand = mt_rand(100000, 999999);
 						$filename = "attach" . $rand . "_" . $filename;
 						move_uploaded_file($_FILES['attachments']['tmp_name'][$num], $attachments_dir . $filename);
-						$_SESSION['massmail']['attachments'][$attachments_dir . $filename] = $displayname;
+						$_SESSION['massmail']['attachments'][] = $filename;
 						continue;
 					}
 				}
 			}
 
 			$step = 0;
+		}
+
+		$mail_attachments = array();
+
+		if (isset($_SESSION['massmail']['attachments'])) {
+			foreach ($_SESSION['massmail']['attachments'] as $filename) {
+				$mail_attachments[$attachments_dir . $filename] = $filename;
+			}
 		}
 
 
@@ -157,7 +176,7 @@ if ($action == "send") {
 
 			while ($data = mysql_fetch_array($result)) {
 				if ($sendforeach || (!$sendforeach && !in_array($data['userid'], $sentids))) {
-					sendMessage("Mass Mail Template", $data['id'], "", true, $_SESSION['massmail']['attachments']);
+					sendMessage("Mass Mail Template", $data['id'], "", true, $mail_attachments);
 					$sentids[] = $data['userid'];
 				}
 
@@ -209,14 +228,14 @@ if ($action == "send") {
 						echo "<p>Email Skipped for ID " . $selectedclient . " due to Marketing Email Opt-Out</p>";
 					}
 					else {
-						sendMessage("Mass Mail Template", $selectedclient, "", true, $_SESSION['massmail']['attachments']);
+						sendMessage("Mass Mail Template", $selectedclient, "", true, $mail_attachments);
 					}
 
 					$done = true;
 				}
 			}
 			else {
-				sendMessage("Mass Mail Template", $id, "", true, $_SESSION['massmail']['attachments']);
+				sendMessage("Mass Mail Template", $id, "", true, $mail_attachments);
 				$done = true;
 			}
 		}
@@ -225,8 +244,8 @@ if ($action == "send") {
 		if ($done) {
 			echo "<p><b>" . $aInt->lang("sendmessage", "sendingcompleted") . "</b></p>";
 			delete_query("tblemailtemplates", array("name" => "Mass Mail Template"));
-			foreach ($_SESSION['massmail']['attachments'] as $filename => $discard) {
-				unlink($filename);
+			foreach ($_SESSION['massmail']['attachments'] as $filename) {
+				deleteFile($attachments_dir, $filename);
 			}
 
 			unset($_SESSION['massmail']);

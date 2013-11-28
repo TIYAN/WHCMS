@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.12
+ * @ Version  : 5.2.13
  * @ Author   : MTIMER
- * @ Release on : 2013-10-25
+ * @ Release on : 2013-11-25
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -66,7 +66,7 @@ if ($action == "save") {
 
 	if ($id) {
 		update_query("tblpromotions", array("code" => $code, "type" => $type, "recurring" => $recurring, "value" => $pvalue, "cycles" => $cycles, "appliesto" => $appliesto, "requires" => $requires, "requiresexisting" => $requiresexisting, "startdate" => $startdate, "expirationdate" => $expirationdate, "maxuses" => $maxuses, "lifetimepromo" => $lifetimepromo, "applyonce" => $applyonce, "newsignups" => $newsignups, "existingclient" => $existingclient, "onceperclient" => $onceperclient, "recurfor" => $recurfor, "upgrades" => $upgrades, "upgradeconfig" => $upgradeconfig, "notes" => $notes), array("id" => $id));
-		header("Location: configpromotions.php?updated=true");
+		redir("updated=true");
 	}
 	else {
 		$result = select_query("tblpromotions", "COUNT(*)", array("code" => $code));
@@ -75,10 +75,10 @@ if ($action == "save") {
 		$newid = insert_query("tblpromotions", array("code" => $code, "type" => $type, "recurring" => $recurring, "value" => $pvalue, "cycles" => $cycles, "appliesto" => $appliesto, "requires" => $requires, "requiresexisting" => $requiresexisting, "startdate" => $startdate, "expirationdate" => $expirationdate, "maxuses" => $maxuses, "lifetimepromo" => $lifetimepromo, "applyonce" => $applyonce, "newsignups" => $newsignups, "existingclient" => $existingclient, "onceperclient" => $onceperclient, "recurfor" => $recurfor, "upgrades" => $upgrades, "upgradeconfig" => $upgradeconfig, "notes" => $notes));
 
 		if ($duplicates) {
-			header("Location: configpromotions.php?action=manage&id=" . $newid);
+			redir("action=manage&id=" . $newid);
 		}
 		else {
-			header("Location: configpromotions.php?created=true");
+			redir("created=true");
 		}
 	}
 
@@ -90,26 +90,23 @@ if ($action == "delete") {
 	check_token("WHMCS.admin.default");
 	checkPermission("Delete Promotions");
 	delete_query("tblpromotions", array("id" => $id));
-	header("Location: configpromotions.php?deleted=true");
+	redir("deleted=true");
 	exit();
 }
 
 
 if ($expire) {
+	check_token("WHMCS.admin.default");
 	checkPermission("Create/Edit Promotions");
 	update_query("tblpromotions", array("expirationdate" => date("Y-m-d", mktime(0, 0, 0, date("m"), date("d") - 1, date("Y")))), array("id" => $expire));
-	header("Location: configpromotions.php?expired=true");
+	redir("expired=true");
 	exit();
 }
 
 ob_start();
 
 if (!$action) {
-	$jscode = "function doDelete(id) {
-    if (confirm(\"" . $aInt->lang("promos", "deletesure", 1) . "\")) {
-        window.location='" . $PHP_SELF . "?action=delete&id='+id+'" . generate_token("link") . "';
-    }
-}";
+	$aInt->deleteJSConfirm("doDelete", "promos", "deletesure", "?action=delete&id=");
 
 	if ($deleted) {
 		infoBox($aInt->lang("global", "success"), $aInt->lang("promos", "deletesuccess"));
@@ -232,7 +229,7 @@ if (!$action) {
 			}
 		}
 
-		$tabledata[] = array($code, $type, $value, $recurring, $uses, $startdate, $expirationdate, "<a href=\"" . $PHP_SELF . "?action=manage&duplicate=" . $pid . "\"><img src=\"images/icons/add.png\" border=\"0\" align=\"absmiddle\" /> " . $aInt->lang("promos", "duplicatepromo") . "</a>", "<a href=\"" . $PHP_SELF . "?expire=" . $pid . "\"><img src=\"images/icons/expire.png\" border=\"0\" align=\"absmiddle\" /> " . $aInt->lang("promos", "expirenow") . "</a>", "<a href=\"" . $PHP_SELF . "?action=manage&id=" . $pid . "\"><img src=\"images/edit.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"" . $aInt->lang("global", "edit") . "\"></a>", "<a href=\"#\" onClick=\"doDelete('" . $pid . "');return false\"><img src=\"images/delete.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"" . $aInt->lang("global", "delete") . "\"></a>");
+		$tabledata[] = array($code, $type, $value, $recurring, $uses, $startdate, $expirationdate, "<a href=\"" . $PHP_SELF . "?action=manage&duplicate=" . $pid . "\"><img src=\"images/icons/add.png\" border=\"0\" align=\"absmiddle\" /> " . $aInt->lang("promos", "duplicatepromo") . "</a>", "<a href=\"" . $PHP_SELF . "?expire=" . $pid . generate_token("link") . "\"><img src=\"images/icons/expire.png\" border=\"0\" align=\"absmiddle\" /> " . $aInt->lang("promos", "expirenow") . "</a>", "<a href=\"" . $PHP_SELF . "?action=manage&id=" . $pid . "\"><img src=\"images/edit.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"" . $aInt->lang("global", "edit") . "\"></a>", "<a href=\"#\" onClick=\"doDelete('" . $pid . "');return false\"><img src=\"images/delete.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"" . $aInt->lang("global", "delete") . "\"></a>");
 	}
 
 	echo $aInt->sortableTable(array($aInt->lang("fields", "promocode"), $aInt->lang("fields", "type"), $aInt->lang("promos", "value"), $aInt->lang("promos", "recurring"), $aInt->lang("promos", "uses"), $aInt->lang("fields", "startdate"), $aInt->lang("fields", "expirydate"), "&nbsp;", "&nbsp;", "", ""), $tabledata);
@@ -363,11 +360,6 @@ else {
 				echo $infobox;
 			}
 
-			$jscode = "function autoGenPromo() {
-    $.post(\"configpromotions.php\", \"action=genpromo\", function(data) {
-        $(\"#promocode\").val(data);
-    });
-}";
 			echo "
 <form method=\"post\" action=\"";
 			echo $PHP_SELF;
@@ -451,7 +443,12 @@ else {
 			echo "<s";
 			echo "elect name=\"appliesto[]\" size=\"8\" style=\"width:90%\" multiple>
 ";
-			$result = select_query("tblproducts", "tblproducts.id,tblproducts.gid,tblproducts.name,tblproductgroups.name AS groupname", "", "tblproductgroups`.`order` ASC,`tblproducts`.`order` ASC,`name", "ASC", "", "tblproductgroups ON tblproducts.gid=tblproductgroups.id");
+			select_query("tblproducts", "tblproducts.id,tblproducts.gid,tblproducts.name,tblproductgroups.name AS groupname", "", "tblproductgroups`.`order` ASC,`tblproducts`.`order` ASC,`name", "ASC", "", "tblproductgroups ON tblproducts.gid=tblproductgroups.id");
+			$result = $jscode = "function autoGenPromo() {
+    $.post(\"configpromotions.php\", \"action=genpromo\", function(data) {
+        $(\"#promocode\").val(data);
+    });
+}";
 
 			while ($data = mysql_fetch_array($result)) {
 				$id = $data['id'];

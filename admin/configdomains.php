@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.12
+ * @ Version  : 5.2.13
  * @ Author   : MTIMER
- * @ Release on : 2013-10-25
+ * @ Release on : 2013-11-25
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -23,6 +23,7 @@ $action = $whmcs->get_req_var("action");
 $success = $whmcs->get_req_var("success");
 
 if ($action == "saveorder") {
+	check_token("WHMCS.admin.default");
 	$pricingarr = explode("&amp;", $pricingarr);
 	$dpnum = 0;
 	foreach ($pricingarr as $v) {
@@ -48,12 +49,13 @@ if ($action == "showduplicatetld") {
 		$tldoptions .= "<option value=\"" . $tldsdata['extension'] . "\">" . $tldsdata['extension'] . "</option>";
 	}
 
-	echo "<form method=\"post\" id=\"duplicatetldform\" action=\"" . $_SERVER['PHP_SELF'] . "\"><table><tr><td>Existing TLD:</td><td><input type=\"hidden\" name=\"action\" value=\"duplicatetld\" /><select name=\"tld\">" . $tldoptions . "</select></td></tr><tr><td>New TLD:</td><td><input type=\"text\" name=\"newtld\" size=\"6\" /></td></tr></table></form>";
+	echo "<form method=\"post\" id=\"duplicatetldform\" action=\"" . $_SERVER['PHP_SELF'] . "\">" . generate_token("form") . "<table><tr><td>Existing TLD:</td><td><input type=\"hidden\" name=\"action\" value=\"duplicatetld\" /><select name=\"tld\">" . $tldoptions . "</select></td></tr><tr><td>New TLD:</td><td><input type=\"text\" name=\"newtld\" size=\"6\" /></td></tr></table></form>";
 	exit();
 }
 
 
 if ($action == "duplicatetld") {
+	check_token("WHMCS.admin.default");
 	$newtld = trim($newtld);
 
 	if (substr($newtld, 0, 1) != ".") {
@@ -110,11 +112,12 @@ if ($action == "duplicatetld") {
 
 
 if ($action == "resetpricing") {
+	check_token("WHMCS.admin.default");
 	$id = $_GET['id'];
 	$cugroupid = $_GET['cugroupid'];
 
 	if (!$cugroupid) {
-		header("Location: " . $_SERVER['PHP_SELF'] . "?action=editpricing&id=" . $id);
+		redir("action=editpricing&id=" . $id);
 		exit();
 	}
 
@@ -139,23 +142,25 @@ if ($action == "resetpricing") {
 		update_query("tblpricing", array("msetupfee" => $renewvalues['msetupfee'], "qsetupfee" => $renewvalues['qsetupfee'], "ssetupfee" => $renewvalues['ssetupfee'], "asetupfee" => $renewvalues['asetupfee'], "bsetupfee" => $renewvalues['bsetupfee'], "monthly" => $renewvalues['monthly'], "quarterly" => $renewvalues['quarterly'], "semiannually" => $renewvalues['semiannually'], "annually" => $renewvalues['annually'], "biennially" => $renewvalues['biennially']), array("type" => "domainrenew", "tsetupfee" => $cugroupid, "currency" => $curr_id, "relid" => $id));
 	}
 
-	header("Location: " . $_SERVER['PHP_SELF'] . "?action=editpricing&id=" . $id . "&selectedcugroupid=" . $cugroupid . "&resetcomplete=true");
+	redir("action=editpricing&id=" . $id . "&selectedcugroupid=" . $cugroupid . "&resetcomplete=true");
 	exit();
 }
 
 
 if ($action == "deactivateslab") {
+	check_token("WHMCS.admin.default");
 	$id = $_GET['id'];
 	$cugroupid = $_GET['cugroupid'];
 	delete_query("tblpricing", array("type" => "domainregister", "tsetupfee" => $cugroupid, "relid" => $id));
 	delete_query("tblpricing", array("type" => "domaintransfer", "tsetupfee" => $cugroupid, "relid" => $id));
 	delete_query("tblpricing", array("type" => "domainrenew", "tsetupfee" => $cugroupid, "relid" => $id));
-	header("Location: " . $_SERVER['PHP_SELF'] . "?action=editpricing&id=" . $id . "&selectedcugroupid=" . $cugroupid . "&deactivated=true");
+	redir("action=editpricing&id=" . $id . "&selectedcugroupid=" . $cugroupid . "&deactivated=true");
 	exit();
 }
 
 
 if ($action == "activateslab") {
+	check_token("WHMCS.admin.default");
 	$id = $_GET['id'];
 	$cugroupid = $_GET['cugroupid'];
 	$result = select_query("tblcurrencies", "", "", "code", "ASC");
@@ -221,7 +226,7 @@ if ($action == "activateslab") {
 		}
 	}
 
-	header("Location: " . $_SERVER['PHP_SELF'] . "?action=editpricing&id=" . $id . "&selectedcugroupid=" . $cugroupid . "&activated=true");
+	redir("action=editpricing&id=" . $id . "&selectedcugroupid=" . $cugroupid . "&activated=true");
 	exit();
 }
 
@@ -238,6 +243,7 @@ if ($action == "editpricing") {
 
 
 	if ($register) {
+		check_token("WHMCS.admin.default");
 		foreach ($register as $cugroupid => $register_values) {
 			foreach ($register_values as $curr_id => $values) {
 				update_query("tblpricing", array("msetupfee" => $values[1], "qsetupfee" => $values[2], "ssetupfee" => $values[3], "asetupfee" => $values[4], "bsetupfee" => $values[5], "monthly" => $values[6], "quarterly" => $values[7], "semiannually" => $values[8], "annually" => $values[9], "biennially" => $values[10]), array("type" => "domainregister", "tsetupfee" => $selectedcugroupid, "currency" => $curr_id, "relid" => $id));
@@ -393,19 +399,19 @@ if ($action == "editpricing") {
 		echo "<p align=\"center\">";
 
 		if ($noslabpricing) {
-			echo "<a href=\"" . $_SERVER['PHP_SELF'] . "?action=activateslab&id=" . $id . "&cugroupid=" . $selectedcugroupid . "\" onclick=\"return confirm('" . $aInt->lang("domains", "activatepricingslabconfirm", 1) . "')\">";
+			echo "<a href=\"" . $_SERVER['PHP_SELF'] . "?action=activateslab&id=" . $id . "&cugroupid=" . $selectedcugroupid . generate_token("link") . "\" onclick=\"return confirm('" . $aInt->lang("domains", "activatepricingslabconfirm", 1) . "')\">";
 		}
 
 		echo $aInt->lang("domains", "activatepricingslab") . "</a> | ";
 
 		if (!$noslabpricing) {
-			echo "<a href=\"" . $_SERVER['PHP_SELF'] . "?action=deactivateslab&id=" . $id . "&cugroupid=" . $selectedcugroupid . "\" onclick=\"return confirm('" . $aInt->lang("domains", "deactivatepricingslabconfirm", 1) . "')\">";
+			echo "<a href=\"" . $_SERVER['PHP_SELF'] . "?action=deactivateslab&id=" . $id . "&cugroupid=" . $selectedcugroupid . generate_token("link") . "\" onclick=\"return confirm('" . $aInt->lang("domains", "deactivatepricingslabconfirm", 1) . "')\">";
 		}
 
 		echo $aInt->lang("domains", "deactivatepricingslab") . "</a> | ";
 
 		if (!$noslabpricing) {
-			echo "<a href=\"" . $_SERVER['PHP_SELF'] . "?action=resetpricing&id=" . $id . "&cugroupid=" . $selectedcugroupid . "\" onclick=\"return confirm('" . $aInt->lang("domains", "resetpricingslab", 1) . "')\">";
+			echo "<a href=\"" . $_SERVER['PHP_SELF'] . "?action=resetpricing&id=" . $id . "&cugroupid=" . $selectedcugroupid . generate_token("link") . "\" onclick=\"return confirm('" . $aInt->lang("domains", "resetpricingslab", 1) . "')\">";
 		}
 
 		echo $aInt->lang("domains", "resetpricingslab") . "</a></p>";
@@ -535,15 +541,11 @@ if ($action == "saveaddons") {
 	redir("success=true");
 }
 
-$jscode = "function doDelete(id) {
-    if (confirm(\"" . $aInt->lang("domains", "delsureextension") . "\")) {
-        window.location = \"" . $_SERVER['PHP_SELF'] . "?action=delete&id=\"+id+'" . generate_token("link") . "';
-    }
-}";
+$aInt->deleteJSConfirm("doDelete", "domains", "delsureextension", "?action=delete&id=");
 $jquerycode = "
 $('#domainpricing').tableDnD({
         onDrop: function(table, row) {
-        $.post(\"configdomains.php\", { action: \"saveorder\", pricingarr: $('#domainpricing').tableDnDSerialize() });
+        $.post(\"configdomains.php\", { action: \"saveorder\", pricingarr: $('#domainpricing').tableDnDSerialize(), token: \"" . generate_token("plain") . "\" });
     },
     dragHandle: \"sortcol\"
     });

@@ -3,32 +3,32 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.12
+ * @ Version  : 5.2.13
  * @ Author   : MTIMER
- * @ Release on : 2013-10-25
+ * @ Release on : 2013-11-25
  * @ Website  : http://www.mtimer.cn
  *
- * */
+ **/
 
 require "../../../init.php";
-$whmcs->load_function( "gateway" );
-$whmcs->load_function( "invoice" );
-require_once dirname( __FILE__ ) . "/myideal_lib.php";
-require_once dirname( __FILE__ ) . "/ThinMPI.php";
-$GATEWAY = getGatewayVariables( "myideal" );
+$whmcs->load_function("gateway");
+$whmcs->load_function("invoice");
+require_once dirname(__FILE__) . "/myideal_lib.php";
+require_once dirname(__FILE__) . "/ThinMPI.php";
+$GATEWAY = getGatewayVariables("myideal");
 
-if (!$GATEWAY["type"]) {
-	exit( "Module Not Activated" );
+if (!$GATEWAY['type']) {
+	exit("Module Not Activated");
 }
 
-$urltowhmcs = $CONFIG["SystemURL"] . "/";
-$whmcslogo = $CONFIG["LogoURL"];
+$urltowhmcs = $CONFIG['SystemURL'] . "/";
+$whmcslogo = $CONFIG['LogoURL'];
 $data = new AcquirerStatusRequest();
-$transID = $_GET["trxid"];
-$transID = str_pad( $transID, 16, "0" );
-$data->setTransactionID( $transID );
+$transID = $_GET['trxid'];
+$transID = str_pad($transID, 16, "0");
+$data->setTransactionID($transID);
 $rule = new ThinMPI();
-$result = $rule->ProcessRequest( $data );
+$result = $rule->ProcessRequest($data);
 
 if (!$result->isOK()) {
 	$error_message = $result->getErrorMessage();
@@ -39,16 +39,16 @@ else {
 	}
 	else {
 		$transactionID = $result->getTransactionID();
-		$invoiceid = get_query_val( "mod_myideal", "invoiceid", array( "transid" => $transactionID ) );
-		$logdata = array( "TransactionID" => $transactionID, "InvoiceID" => $invoiceid );
+		$invoiceid = get_query_val("mod_myideal", "invoiceid", array("transid" => $transactionID));
+		$logdata = array("TransactionID" => $transactionID, "InvoiceID" => $invoiceid);
 
 		if (!$invoiceid) {
-			logTransaction( "iDEAL", $logdata, "Invoice ID Not Found" );
+			logTransaction("iDEAL", $logdata, "Invoice ID Not Found");
 		}
 
-		logTransaction( "iDEAL", $logdata, "Successful" );
-		addInvoicePayment( $invoiceid, $transactionID, "", "", "myideal" );
-		header( "Location: " . $urltowhmcs . "viewinvoice.php?id=" . $invoiceid . "&paymentsuccess=true" );
+		logTransaction("iDEAL", $logdata, "Successful");
+		addInvoicePayment($invoiceid, $transactionID, "", "", "myideal");
+		header("Location: " . $urltowhmcs . "viewinvoice.php?id=" . (int)$invoiceid . "&paymentsuccess=true");
 		exit();
 	}
 }

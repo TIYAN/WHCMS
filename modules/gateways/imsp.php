@@ -3,51 +3,48 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.12
+ * @ Version  : 5.2.13
  * @ Author   : MTIMER
- * @ Release on : 2013-10-25
+ * @ Release on : 2013-11-25
  * @ Website  : http://www.mtimer.cn
  *
- * */
+ **/
 
 function imsp_config() {
-	$configarray = array( "FriendlyName" => array( "Type" => "System", "Value" => "IMSP" ), "merchantid" => array( "FriendlyName" => "Merchant ID", "Type" => "text", "Size" => "25" ), "terminalid" => array( "FriendlyName" => "Terminal ID", "Type" => "text", "Size" => "25" ), "passcode" => array( "FriendlyName" => "Passcode", "Type" => "text", "Size" => "25" ), "testmode" => array( "FriendlyName" => "Test Mode", "Type" => "yesno" ) );
+	$configarray = array("FriendlyName" => array("Type" => "System", "Value" => "IMSP"), "merchantid" => array("FriendlyName" => "Merchant ID", "Type" => "text", "Size" => "25"), "terminalid" => array("FriendlyName" => "Terminal ID", "Type" => "text", "Size" => "25"), "passcode" => array("FriendlyName" => "Passcode", "Type" => "text", "Size" => "25"), "testmode" => array("FriendlyName" => "Test Mode", "Type" => "yesno"));
 	return $configarray;
 }
-
 
 function imsp_3dsecure($params) {
 	global $remote_ip;
 
-	$url = "https://test.imsp.com/staging/Request3DS.aspx";
 	$currency = "978";
-	$amount = str_pad( $params["amount"] * 100, 12, "0", STR_PAD_LEFT );
-	$signature = $params["passcode"] . $params["merchantid"] . $params["terminalid"] . $params["invoiceid"] . $params["passcode"] . $amount;
-	
-	$signature = sha1( $signature );
+	$amount = str_pad($params['amount'] * 100, 12, "0", STR_PAD_LEFT);
+	$signature = $params['passcode'] . $params['merchantid'] . $params['terminalid'] . $params['invoiceid'] . $params['passcode'] . $amount;
+	$signature = sha1($signature);
 	$postfields = array();
-	$postfields["merchantid"] = $params["merchantid"];
-	$postfields["terminalid"] = $params["terminalid"];
-	$postfields["trxntype"] = "Sale";
-	$postfields["cardnumber"] = $params["cardnum"];
-	$postfields["expirydate"] = $params["cardexp"];
+	$postfields['merchantid'] = $params['merchantid'];
+	$postfields['terminalid'] = $params['terminalid'];
+	$postfields['trxntype'] = "Sale";
+	$postfields['cardnumber'] = $params['cardnum'];
+	$postfields['expirydate'] = $params['cardexp'];
 
-	if ($params["cccvv"]) {
-		$postfields["cardvervalue"] = $params["cccvv"];
+	if ($params['cccvv']) {
+		$postfields['cardvervalue'] = $params['cccvv'];
 	}
 
-	$postfields["amount"] = $amount;
-	$postfields["currency"] = $currency;
-	$postfields["batchnumber"] = $params["invoiceid"];
-	$postfields["invoicenumber"] = $params["invoiceid"];
-	$postfields["ipaddress"] = $remote_ip;
-	$postfields["signature"] = $signature;
-	$postfields["responseurl"] = $params["systemurl"] . "/modules/gateways/callback/imsp.php";
-	$data = curlCall( $url, $postfields );
-	$resultstemp = explode( ";", $data );
+	$postfields['amount'] = $amount;
+	$postfields['currency'] = $currency;
+	$postfields['batchnumber'] = $params['invoiceid'];
+	$postfields['invoicenumber'] = $params['invoiceid'];
+	$postfields['ipaddress'] = $remote_ip;
+	$postfields['signature'] = $signature;
+	$postfields['responseurl'] = $params['systemurl'] . "/modules/gateways/callback/imsp.php";
+	$data = curlCall($url, $postfields);
+	$resultstemp = explode(";", $data);
 	$results = array();
 	foreach ($resultstemp as $v) {
-		$v = explode( "|", $v );
+		$v = explode("|", $v);
 
 		if ($v[0]) {
 			$results[$v[0]] = $v[1];
@@ -55,17 +52,18 @@ function imsp_3dsecure($params) {
 		}
 	}
 
-	print_r( $results );
-	$responsecode = $results["responsecode"];
-	$responsereasoncode = $results["responsereasoncode"];
-	$trxnid = $results["trxnid"];
+	print_r($results);
+	$responsecode = $results['responsecode'];
+	$responsereasoncode = $results['responsereasoncode'];
+	$trxnid = $results['trxnid'];
+	$url = "https://test.imsp.com/staging/Request3DS.aspx";
 	$acsurl = "";
 	$pareq = "";
 	$termurl = "";
 	$Md = "";
 
-	if (( $responsecode == "5" && $responsereasoncode == "18" )) {
-		logTransaction( "IMSP 3D Secure", $results, "3D Auth Forward" );
+	if ($responsecode == "5" && $responsereasoncode == "18") {
+		logTransaction("IMSP 3D Secure", $results, "3D Auth Forward");
 		$code = "<form method=\"POST\" action=\"" . $acsurl . "\">
                 <input type=hidden name=\"PaReq\" value=\"" . $pareq . "\">
                 <input type=hidden name=\"TermUrl\" value=\"" . $termurl . "\">
@@ -86,22 +84,21 @@ function imsp_3dsecure($params) {
 
 
 	if ($responsecode == "1") {
-		logTransaction( "IMSP 3D Secure", $results, "Successful" );
-		addInvoicePayment( $params["invoiceid"], $trxnid, "", "", "imsp", "on" );
-		sendMessage( "Credit Card Payment Confirmation", $params["invoiceid"] );
-		header( "Location: viewinvoice.php?id=" . $params["invoiceid"] . "&paymentsuccess=true" );
-		exit();
+		logTransaction("IMSP 3D Secure", $results, "Successful");
+		addInvoicePayment($params['invoiceid'], $trxnid, "", "", "imsp", "on");
+		sendMessage("Credit Card Payment Confirmation", $params['invoiceid']);
+		redirSystemURL("id=" . $params['invoiceid'] . "&paymentsuccess=true", "viewinvoice.php");
 	}
 	else {
 		if ($responsecode == "2") {
-			logTransaction( "IMSP 3D Secure", $results, "Declined" );
+			logTransaction("IMSP 3D Secure", $results, "Declined");
 		}
 		else {
 			if ($responsecode == "3") {
-				logTransaction( "IMSP 3D Secure", $results, "Parse Error" );
+				logTransaction("IMSP 3D Secure", $results, "Parse Error");
 			}
 			else {
-				logTransaction( "IMSP 3D Secure", $results, "System Error" );
+				logTransaction("IMSP 3D Secure", $results, "System Error");
 			}
 		}
 	}
@@ -109,14 +106,13 @@ function imsp_3dsecure($params) {
 	return "declined";
 }
 
-
 function imsp_capture($params) {
-	return array( "status" => "error", "rawdata" => "Not Supported" );
+	return array("status" => "error", "rawdata" => "Not Supported");
 }
 
 
-if (!defined( "WHMCS" )) {
-	exit( "This file cannot be accessed directly" );
+if (!defined("WHMCS")) {
+	exit("This file cannot be accessed directly");
 }
 
 ?>

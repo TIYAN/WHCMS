@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.12
+ * @ Version  : 5.2.13
  * @ Author   : MTIMER
- * @ Release on : 2013-10-25
+ * @ Release on : 2013-11-25
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -19,6 +19,7 @@ $aInt->icon = "offlinecc";
 $aInt->requiredFiles(array("clientfunctions", "invoicefunctions", "gatewayfunctions", "ccfunctions"));
 
 if ($processwindow) {
+	check_token("WHMCS.admin.default");
 	$result = select_query("tblinvoices", "", array("id" => $id));
 	$data = mysql_fetch_array($result);
 	$id = $data['id'];
@@ -223,7 +224,7 @@ $jscode = "function openCCDetails(id) {
 var winl = (screen.width - 500) / 2;
 var wint = (screen.height - 400) / 2;
 winprops = 'height=400,width=500,top='+wint+',left='+winl+',scrollbars=no'
-win = window.open('" . $_SERVER['PHP_SELF'] . "?processwindow=true&id='+id, 'ccdetails', winprops)
+win = window.open('" . $_SERVER['PHP_SELF'] . "?processwindow=true" . generate_token("link") . "&id='+id, 'ccdetails', winprops)
 if (parseInt(navigator.appVersion) >= 4) { win.window.focus(); }
 }";
 $aInt->sortableTableInit("duedate", "ASC");

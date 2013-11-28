@@ -3,53 +3,50 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.12
+ * @ Version  : 5.2.13
  * @ Author   : MTIMER
- * @ Release on : 2013-10-25
+ * @ Release on : 2013-11-25
  * @ Website  : http://www.mtimer.cn
  *
- * */
+ **/
 
 require "../../../init.php";
-$whmcs->load_function( "gateway" );
-$whmcs->load_function( "invoice" );
-$GATEWAY = getGatewayVariables( "cyberbit" );
+$whmcs->load_function("invoice");
+$GATEWAY = getGatewayVariables("cyberbit");
 
-if (!$GATEWAY["type"]) {
-	exit( "Module Not Activated" );
+if (!$GATEWAY['type']) {
+	exit("Module Not Activated");
 }
 
-$hash = $_REQUEST["Hash"];
-$xml = $_REQUEST["xml"];
-$invoiceid = $OrderId = $_REQUEST["OrderId"];
-$StatusCode = $_REQUEST["StatusCode"];
-$StatusText = $_REQUEST["StatusText"];
-$Time = $_REQUEST["Time"];
-$invoiceid = explode( "-", $invoiceid );
+$hash = $_REQUEST['Hash'];
+$xml = $_REQUEST['xml'];
+$invoiceid = $OrderId = $_REQUEST['OrderId'];
+$StatusCode = $_REQUEST['StatusCode'];
+$StatusText = $_REQUEST['StatusText'];
+$Time = $_REQUEST['Time'];
+$invoiceid = explode("-", $invoiceid);
 $invoiceid = $invoiceid[1];
-$fingerprint = sha1( $StatusCode . $StatusText . $OrderId . $Time . $GATEWAY["hashkey"] );
+$invoiceid = checkCbInvoiceID($invoiceid, "CyberBit");
+$whmcs->load_function("gateway");
+$fingerprint = sha1($StatusCode . $StatusText . $OrderId . $Time . $GATEWAY['hashkey']);
 
 if ($fingerprint != $hash) {
-	logTransaction( "CyberBit", $_REQUEST, "Invalid Hash" );
-	header( "Location: ../../../viewinvoice.php?id=" . $invoiceid . "&paymentfailed=true" );
-	exit();
+	logTransaction("CyberBit", $_REQUEST, "Invalid Hash");
+	redirSystemURL("id=" . $invoiceid . "&paymentfailed=true", "viewinvoice.php");
 }
 
-$invoiceid = checkCbInvoiceID( $invoiceid, "CyberBit" );
 
 if ($StatusCode == "000") {
-	logTransaction( "CyberBit", $_REQUEST, "Successful" );
-	addInvoicePayment( $invoiceid, $OrderId, "", "", "cyberbit" );
-	$result = select_query( "tblinvoices", "userid", array( "id" => $invoiceid ) );
-	$data = mysql_fetch_array( $result );
-	$userid = $data["userid"];
-	update_query( "tblclients", array( "gatewayid" => $OrderId ), array( "id" => $userid ) );
-	header( "Location: ../../../viewinvoice.php?id=" . $invoiceid . "&paymentsuccess=true" );
-	exit();
+	logTransaction("CyberBit", $_REQUEST, "Successful");
+	addInvoicePayment($invoiceid, $OrderId, "", "", "cyberbit");
+	$result = select_query("tblinvoices", "userid", array("id" => $invoiceid));
+	$data = mysql_fetch_array($result);
+	$userid = $data['userid'];
+	update_query("tblclients", array("gatewayid" => $OrderId), array("id" => $userid));
+	redirSystemURL("id=" . $invoiceid . "&paymentsuccess=true", "viewinvoice.php");
 	return 1;
 }
 
-logTransaction( "CyberBit", $_REQUEST, "Unsuccessful" );
-header( "Location: ../../../viewinvoice.php?id=" . $invoiceid . "&paymentfailed=true" );
-exit();
+logTransaction("CyberBit", $_REQUEST, "Unsuccessful");
+redirSystemURL("id=" . $invoiceid . "&paymentfailed=true", "viewinvoice.php");
 ?>

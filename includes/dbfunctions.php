@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.12
+ * @ Version  : 5.2.13
  * @ Author   : MTIMER
- * @ Release on : 2013-10-25
+ * @ Release on : 2013-11-25
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -82,10 +82,11 @@ function select_query($table, $fields, $where, $orderby = "", $orderbyorder = ""
 
 
 					if ($value['sqltype'] == "IN") {
-						$criteria[] = "" . $key . " IN ('" . implode("','", db_escape_array($value['values'])) . "')";
+						$criteria[] = "" . $key . " IN (" . db_build_in_array($value['values']) . ")";
 						continue;
 					}
 
+					exit("Invalid input condition");
 					continue;
 				}
 
@@ -97,13 +98,7 @@ function select_query($table, $fields, $where, $orderby = "", $orderbyorder = ""
 					$key = "MD5(" . $key . ")";
 				}
 				else {
-					if (strpos($key, ".")) {
-						$key = explode(".", $key);
-						$key = "`" . $key[0] . "`.`" . $key[1] . "`";
-					}
-					else {
-						$key = "`" . $key . "`";
-					}
+					$key = db_build_quoted_field($key);
 				}
 
 				$criteria[] = "" . $key . "='" . db_escape_string($value) . "'";
@@ -245,8 +240,8 @@ function update_query($table, $array, $where) {
 
 	$query = "UPDATE " . db_make_safe_field($table) . " SET ";
 	foreach ($array as $key => $value) {
+		$query .= db_build_quoted_field($key) . "=";
 		$key = db_make_safe_field($key);
-		$query .= "`" . $key . "`=";
 
 		if ($value === "now()") {
 			$query .= "'" . date("YmdHis") . "',";
@@ -332,8 +327,7 @@ function insert_query($table, $array) {
 	$fieldnamelist = $fieldvaluelist = "";
 	$query = "INSERT INTO " . db_make_safe_field($table) . " ";
 	foreach ($array as $key => $value) {
-		$key = db_make_safe_field($key);
-		$fieldnamelist .= "`" . $key . "`,";
+		$fieldnamelist .= db_build_quoted_field($key) . ",";
 
 		if ($value === "now()") {
 			$fieldvaluelist .= "'" . date("YmdHis") . "',";
@@ -369,18 +363,17 @@ function delete_query($table, $where) {
 	global $mysql_errors;
 	global $whmcsmysql;
 
-	$query = "DELETE FROM " . db_make_safe_field($table) . " WHERE";
+	$query = "DELETE FROM " . db_make_safe_field($table) . " WHERE ";
 
 	if (is_array($where)) {
 		foreach ($where as $key => $value) {
-			$key = db_make_safe_field($key);
-			$query .= " " . $key . "='" . db_escape_string($value) . "' AND";
+			$query .= db_build_quoted_field($key) . "='" . db_escape_string($value) . "' AND ";
 		}
 
-		$query = substr($query, 0, 0 - 4);
+		$query = substr($query, 0, 0 - 5);
 	}
 	else {
-		$query .= " " . $where;
+		$query .= $where;
 	}
 
 	$result = mysql_query($query, $whmcsmysql);
@@ -390,6 +383,22 @@ function delete_query($table, $where) {
 	}
 
 	++$query_count;
+}
+
+function db_build_quoted_field($key) {
+	$field_quote = "`";
+	$parts = explode(".", $key, 3);
+	foreach ($parts as $k => $name) {
+		$clean_name = db_make_safe_field($name);
+
+		if ($clean_name !== $name) {
+			exit("Unexpected input field parameter in database query.");
+		}
+
+		$parts[$k] = $field_quote . $clean_name . $field_quote;
+	}
+
+	return implode(".", $parts);
 }
 
 function full_query($query, $userHandle = null) {

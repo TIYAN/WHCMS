@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.12
+ * @ Version  : 5.2.13
  * @ Author   : MTIMER
- * @ Release on : 2013-10-25
+ * @ Release on : 2013-11-25
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -160,13 +160,12 @@ if ($action == "submit") {
 
 		if ($params['paymentmethod'] == "offlinecc") {
 			sendAdminNotification("account", "Offline Credit Card Payment Submitted", "<p>An offline credit card payment has just been submitted.  Details are below:</p><p>Client ID: " . $_SESSION['uid'] . "<br />Invoice ID: " . $invoiceid . "</p>");
-			header("Location: viewinvoice.php?id=" . $invoiceid . "&offlinepaid=true");
-			exit();
+			redir("id=" . $invoiceid . "&offlinepaid=true", "viewinvoice.php");
 		}
 
 
 		if ($result == "success") {
-			header("Location: viewinvoice.php?id=" . $invoiceid . "&paymentsuccess=true");
+			redir("id=" . $invoiceid . "&paymentsuccess=true", "viewinvoice.php");
 			exit();
 		}
 		else {

@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.12
+ * @ Version  : 5.2.13
  * @ Author   : MTIMER
- * @ Release on : 2013-10-25
+ * @ Release on : 2013-11-25
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -24,7 +24,6 @@ function htmlspecialchars_array($arr) {
 }
 
 error_reporting(0);
-
 include dirname(__FILE__) . "/includes/classes/class.init.php";
 
 if (!class_exists("WHMCS_Init")) {
@@ -35,62 +34,13 @@ if (!class_exists("WHMCS_Init")) {
 $whmcs = new WHMCS_Init();
 $whmcs = $whmcs->init();
 
-if ($CONFIG['Version'] == "5.2.1") {
-	update_query("tblconfiguration", array("value" => "5.2.2"), array("setting" => "Version"));
-	$CONFIG['Version'] = "5.2.2";
+if ($CONFIG['Version'] == "5.2.12") {
+	update_query("tblconfiguration", array("value" => "5.2.13"), array("setting" => "Version"));
+	$CONFIG['Version'] = "5.2.13";
 }
 
 
-if ($CONFIG['Version'] == "5.2.2") {
-	update_query("tblconfiguration", array("value" => "5.2.3"), array("setting" => "Version"));
-	$CONFIG['Version'] = "5.2.3";
-}
-
-
-if ($CONFIG['Version'] == "5.2.3") {
-	update_query("tblconfiguration", array("value" => "5.2.4"), array("setting" => "Version"));
-	full_query("UPDATE `tblemailtemplates` SET  `message` = '<p>A new support ticket has been flagged to you.</p><p>Ticket #: " . $ticket_tid . "<br>Client Name: " . $client_name . " (ID " . $client_id . ")<br>Department: " . $ticket_department . "<br>Subject: " . $ticket_subject . "<br>Priority: " . $ticket_priority . "</p><p>----------------------<br />" . $ticket_message . "<br />----------------------</p><p><a href=\"" . $whmcs_admin_url . "supporttickets.php?action=viewticket&id=" . $ticket_id . "\">" . $whmcs_admin_url . "supporttickets.php?action=viewticket&id=" . $ticket_id . "</a></p>' WHERE  name='Support Ticket Flagged'");
-	$CONFIG['Version'] = "5.2.4";
-}
-
-
-if ($CONFIG['Version'] == "5.2.4") {
-	update_query("tblconfiguration", array("value" => "5.2.5"), array("setting" => "Version"));
-	$CONFIG['Version'] = "5.2.5";
-}
-
-
-if ($CONFIG['Version'] == "5.2.7") {
-	update_query("tblconfiguration", array("value" => "5.2.8"), array("setting" => "Version"));
-	$CONFIG['Version'] = "5.2.8";
-}
-
-
-if ($CONFIG['Version'] == "5.2.8") {
-	update_query("tblconfiguration", array("value" => "5.2.9"), array("setting" => "Version"));
-	$CONFIG['Version'] = "5.2.9";
-}
-
-
-if ($CONFIG['Version'] == "5.2.9") {
-	update_query("tblconfiguration", array("value" => "5.2.10"), array("setting" => "Version"));
-	$CONFIG['Version'] = "5.2.10";
-}
-
-
-if ($CONFIG['Version'] == "5.2.10") {
-	update_query("tblconfiguration", array("value" => "5.2.11"), array("setting" => "Version"));
-	$CONFIG['Version'] = "5.2.11";
-}
-
-
-if ($CONFIG['Version'] == "5.2.11") {
-	update_query("tblconfiguration", array("value" => "5.2.12"), array("setting" => "Version"));
-	$CONFIG['Version'] = "5.2.12";
-}
-
-
-if ($CONFIG['Version'] != "5.2.12") {
+if ($CONFIG['Version'] != "5.2.13") {
 	if (file_exists("../install/install.php")) {
 		header("Location: ../install/install.php");
 		exit();
@@ -102,13 +52,13 @@ if ($CONFIG['Version'] != "5.2.12") {
 
 
 if (file_exists(ROOTDIR . "/install/install.php")) {
-	echo "<div style=\"border: 1px dashed #cc0000;font-family:Tahoma;background-color:#FBEEEB;width:100%;padding:10px;color:#cc0000;\"><strong>安全提醒</strong><br>你必须删除 install 目录才能使用 WHMCS</div>";
+	echo "<div style=\"border: 1px dashed #cc0000;font-family:Tahoma;background-color:#FBEEEB;width:100%;padding:10px;color:#cc0000;\"><strong>安全提醒</strong><br>你必须删除 install 目录才能继续使用 WHMCS</div>";
 	exit();
 }
 
 
 if (!$whmcs->check_template_cache_writeable()) {
-	exit("<div style=\"border: 1px dashed #cc0000;font-family:Tahoma;background-color:#FBEEEB;width:100%;padding:10px;color:#cc0000;\"><strong>权限错误</strong><br>模版缓存目录 '" . $whmcs->get_template_compiledir_name() . "' 必须设置为可写 (CHMOD 777) 才能继续。<br>如果此路径错误, 请在 configuration.php file 中修正。</div>");
+	exit("<div style=\"border: 1px dashed #cc0000;font-family:Tahoma;background-color:#FBEEEB;width:100%;padding:10px;color:#cc0000;\"><strong>权限错误</strong><br>The 模版缓存目录 '" . $whmcs->get_template_compiledir_name() . "' 必须设置为可写 (CHMOD 777) 才能继续。<br>如果此路径错误, 请在 configuration.php file 中修正。</div>");
 }
 
 
@@ -118,7 +68,7 @@ if ((defined("CLIENTAREA") && $CONFIG['MaintenanceMode']) && !$_SESSION['adminid
 		exit();
 	}
 
-	echo "<div style=\"border: 1px dashed #cc0000;font-family:Tahoma;background-color:#FBEEEB;width:100%;padding:10px;color:#cc0000;\"><strong>Down for Maintenance (Err 3)</strong><br>" . $CONFIG['MaintenanceModeMessage'] . "</div>";
+	echo "<div style=\"border: 1px dashed #cc0000;font-family:Tahoma;background-color:#FBEEEB;width:100%;padding:10px;color:#cc0000;\"><strong>维护中 (Err 3)</strong><br>" . $CONFIG['MaintenanceModeMessage'] . "</div>";
 	exit();
 }
 
@@ -175,17 +125,6 @@ if (defined("CLIENTAREA") && $CONFIG['SystemSSLURL']) {
 	$filename = $_SERVER['PHP_SELF'];
 	$filename = substr($filename, strrpos($filename, "/"));
 	$filename = str_replace("/", "", $filename);
-	$requesturl = $_SERVER['PHP_SELF'] . "?";
-	foreach ($_REQUEST as $key => $value) {
-
-		if (!is_array($value)) {
-			$requesturl .= "" . $key . "=" . urlencode($value) . "&";
-			continue;
-		}
-	}
-
-	$requesturl = substr($requesturl, 0, 0 - 1);
-	$requesturl = substr($requesturl, strrpos($requesturl, "/"));
 	$ssldomain = $CONFIG['SystemSSLURL'];
 	$nonssldomain = $CONFIG['SystemURL'];
 
@@ -196,8 +135,7 @@ if (defined("CLIENTAREA") && $CONFIG['SystemSSLURL']) {
 
 	if (in_array($filename, $files) || defined("FORCESSL")) {
 		if (!$_SERVER['HTTPS'] || $_SERVER['HTTPS'] == "off") {
-			header("Location: " . $ssldomain . $requesturl);
-			exit();
+			redir($_REQUEST, $ssldomain . "/" . $filename);
 		}
 
 		$in_ssl = true;
@@ -205,8 +143,7 @@ if (defined("CLIENTAREA") && $CONFIG['SystemSSLURL']) {
 	else {
 		if (in_array($filename, $nonsslfiles)) {
 			if ($_SERVER['HTTPS'] && $_SERVER['HTTPS'] != "off") {
-				header("Location: " . $nonssldomain . $requesturl);
-				exit();
+				redir($_REQUEST, $nonssldomain . "/" . $filename);
 			}
 		}
 	}

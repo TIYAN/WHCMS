@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.12
+ * @ Version  : 5.2.13
  * @ Author   : MTIMER
- * @ Release on : 2013-10-25
+ * @ Release on : 2013-11-25
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -853,47 +853,37 @@ function calcCartTotals($checkout = "", $ignorenoconfig = "") {
 						}
 					}
 
-					$adminemailitems .= $_LANG['orderproduct'] . (": " . $groupname . " - " . $productname . "<br>
-");
+					$adminemailitems .= $_LANG['orderproduct'] . (": " . $groupname . " - " . $productname . "<br>\r\n");
 
 					if ($domain) {
-						$adminemailitems .= $_LANG['orderdomain'] . (": " . $domain . "<br>
-");
+						$adminemailitems .= $_LANG['orderdomain'] . (": " . $domain . "<br>\r\n");
 					}
 
 					foreach ($configurableoptions as $confkey => $value) {
-						$adminemailitems .= $value['optionname'] . ": " . $value['selectedname'] . "<br />
-";
+						$adminemailitems .= $value['optionname'] . ": " . $value['selectedname'] . "<br />\r\n";
 					}
 
 					foreach ($customfields as $customfield) {
 
 						if (!$customfield['adminonly']) {
-							$adminemailitems .= "" . $customfield['name'] . ": " . $customfield['value'] . "<br />
-";
+							$adminemailitems .= "" . $customfield['name'] . ": " . $customfield['value'] . "<br />\r\n";
 							continue;
 						}
 					}
 
-					$adminemailitems .= $_LANG['firstpaymentamount'] . ": " . formatCurrency($product_total_today_db) . "<br>
-";
+					$adminemailitems .= $_LANG['firstpaymentamount'] . ": " . formatCurrency($product_total_today_db) . "<br>\r\n";
 
 					if ($product_recurring_db) {
-						$adminemailitems .= $_LANG['recurringamount'] . ": " . formatCurrency($product_recurring_db) . "<br>
-";
+						$adminemailitems .= $_LANG['recurringamount'] . ": " . formatCurrency($product_recurring_db) . "<br>\r\n";
 					}
 
-					$adminemailitems .= $_LANG['orderbillingcycle'] . ": " . $_LANG["orderpaymentterm" . str_replace(array("-", " "), "", strtolower($databasecycle))] . "<br>
-";
+					$adminemailitems .= $_LANG['orderbillingcycle'] . ": " . $_LANG["orderpaymentterm" . str_replace(array("-", " "), "", strtolower($databasecycle))] . "<br>\r\n";
 
 					if ($allowqty && 1 < $qty) {
-						$adminemailitems .= $_LANG['quantity'] . (": " . $qty . "<br>
-") . $_LANG['invoicestotal'] . ": " . $productdata['pricing']['totaltoday'] . "<br>
-";
+						$adminemailitems .= $_LANG['quantity'] . (": " . $qty . "<br>\r\n") . $_LANG['invoicestotal'] . ": " . $productdata['pricing']['totaltoday'] . "<br>\r\n";
 					}
 
-					$adminemailitems .= "<br>
-";
+					$adminemailitems .= "<br>\r\n";
 					++$qtycount;
 				}
 			}
@@ -947,7 +937,7 @@ function calcCartTotals($checkout = "", $ignorenoconfig = "") {
 
 
 					if ($promotioncode) {
-						$onetimediscount = $recurringdiscount = $promoid = 34;
+						$onetimediscount = $recurringdiscount = $promoid = 0;
 
 						if ($promocalc = CalcPromoDiscount("A" . $addonid, $addon_billingcycle, $addon_total_today_db, $addon_recurring_db, $addon_setupfee)) {
 							$onetimediscount = $promocalc['onetimediscount'];
@@ -967,18 +957,13 @@ function calcCartTotals($checkout = "", $ignorenoconfig = "") {
 							$addonsetupfee = $addon_total_today_db - $addon_recurring_db;
 							$aid = insert_query("tblhostingaddons", array("hostingid" => $serviceid, "addonid" => $addonid, "orderid" => $orderid, "regdate" => "now()", "name" => "", "setupfee" => $addonsetupfee, "recurring" => $addon_recurring_db, "billingcycle" => $addon_billingcycle, "status" => "Pending", "nextduedate" => "now()", "nextinvoicedate" => "now()", "paymentmethod" => $paymentmethod, "tax" => $addon_tax));
 							$orderaddonids[] = $aid;
-							$adminemailitems .= $_LANG['clientareaaddon'] . (": " . $addon_name . "<br>
-") . $_LANG['ordersetupfee'] . ": " . formatCurrency($addonsetupfee) . "<br>
-";
+							$adminemailitems .= $_LANG['clientareaaddon'] . (": " . $addon_name . "<br>\r\n") . $_LANG['ordersetupfee'] . ": " . formatCurrency($addonsetupfee) . "<br>\r\n";
 
 							if ($addon_recurring_db) {
-								$adminemailitems .= $_LANG['recurringamount'] . ": " . formatCurrency($addon_recurring_db) . "<br>
-";
+								$adminemailitems .= $_LANG['recurringamount'] . ": " . formatCurrency($addon_recurring_db) . "<br>\r\n";
 							}
 
-							$adminemailitems .= $_LANG['orderbillingcycle'] . ": " . $_LANG["orderpaymentterm" . str_replace(array("-", " "), "", strtolower($addon_billingcycle))] . "<br>
-<br>
-";
+							$adminemailitems .= $_LANG['orderbillingcycle'] . ": " . $_LANG["orderpaymentterm" . str_replace(array("-", " "), "", strtolower($addon_billingcycle))] . "<br>\r\n<br>\r\n";
 							++$qtycount;
 						}
 					}
@@ -1167,18 +1152,13 @@ function calcCartTotals($checkout = "", $ignorenoconfig = "") {
 				$addonsetupfee = $addon_total_today_db - $addon_recurring_db;
 				$aid = insert_query("tblhostingaddons", array("hostingid" => $serviceid, "addonid" => $addonid, "orderid" => $orderid, "regdate" => "now()", "name" => "", "setupfee" => $addonsetupfee, "recurring" => $addon_recurring_db, "billingcycle" => $addon_billingcycle, "status" => "Pending", "nextduedate" => "now()", "nextinvoicedate" => "now()", "paymentmethod" => $paymentmethod, "tax" => $addon_tax));
 				$orderaddonids[] = $aid;
-				$adminemailitems .= $_LANG['clientareaaddon'] . (": " . $addon_name . "<br>
-") . $_LANG['ordersetupfee'] . ": " . formatCurrency($addonsetupfee) . "<br>
-";
+				$adminemailitems .= $_LANG['clientareaaddon'] . (": " . $addon_name . "<br>\r\n") . $_LANG['ordersetupfee'] . ": " . formatCurrency($addonsetupfee) . "<br>\r\n";
 
 				if ($addon_recurring_db) {
-					$adminemailitems .= $_LANG['recurringamount'] . ": " . formatCurrency($addon_recurring_db) . "<br>
-";
+					$adminemailitems .= $_LANG['recurringamount'] . ": " . formatCurrency($addon_recurring_db) . "<br>\r\n";
 				}
 
-				$adminemailitems .= $_LANG['orderbillingcycle'] . ": " . $_LANG["orderpaymentterm" . str_replace(array("-", " "), "", strtolower($addon_billingcycle))] . "<br>
-<br>
-";
+				$adminemailitems .= $_LANG['orderbillingcycle'] . ": " . $_LANG["orderpaymentterm" . str_replace(array("-", " "), "", strtolower($addon_billingcycle))] . "<br>\r\n<br>\r\n";
 			}
 
 			$cart_total += $addon_total_today_db;
@@ -1373,32 +1353,23 @@ function calcCartTotals($checkout = "", $ignorenoconfig = "") {
 				$donotrenew = ($CONFIG['DomainAutoRenewDefault'] ? "" : "on");
 				$domainid = insert_query("tbldomains", array("userid" => $userid, "orderid" => $orderid, "type" => $domaintype, "registrationdate" => "now()", "domain" => $domainname, "firstpaymentamount" => $domain_price_db, "recurringamount" => $domain_renew_price_db, "registrationperiod" => $regperiod, "status" => "Pending", "paymentmethod" => $paymentmethod, "expirydate" => "00000000", "nextduedate" => "now()", "nextinvoicedate" => "now()", "dnsmanagement" => $dnsmanagement, "emailforwarding" => $emailforwarding, "idprotection" => $idprotection, "donotrenew" => $donotrenew, "promoid" => $promoid));
 				$orderdomainids[] = $domainid;
-				$adminemailitems .= $_LANG['orderdomainregistration'] . ": " . ucfirst($domaintype) . "<br>
-" . $_LANG['orderdomain'] . (": " . $domainname . "<br>
-") . $_LANG['firstpaymentamount'] . ": " . formatCurrency($domain_price_db) . "<br>
-" . $_LANG['recurringamount'] . ": " . formatCurrency($domain_renew_price_db) . "<br>
-" . $_LANG['orderregperiod'] . (": " . $regperiod . " ") . $_LANG['orderyears'] . "<br>
-";
+				$adminemailitems .= $_LANG['orderdomainregistration'] . ": " . ucfirst($domaintype) . "<br>\r\n" . $_LANG['orderdomain'] . (": " . $domainname . "<br>\r\n") . $_LANG['firstpaymentamount'] . ": " . formatCurrency($domain_price_db) . "<br>\r\n" . $_LANG['recurringamount'] . ": " . formatCurrency($domain_renew_price_db) . "<br>\r\n" . $_LANG['orderregperiod'] . (": " . $regperiod . " ") . $_LANG['orderyears'] . "<br>\r\n";
 
 				if ($dnsmanagement) {
-					$adminemailitems .= " + " . $_LANG['domaindnsmanagement'] . "<br>
-";
+					$adminemailitems .= " + " . $_LANG['domaindnsmanagement'] . "<br>\r\n";
 				}
 
 
 				if ($emailforwarding) {
-					$adminemailitems .= " + " . $_LANG['domainemailforwarding'] . "<br>
-";
+					$adminemailitems .= " + " . $_LANG['domainemailforwarding'] . "<br>\r\n";
 				}
 
 
 				if ($idprotection) {
-					$adminemailitems .= " + " . $_LANG['domainidprotection'] . "<br>
-";
+					$adminemailitems .= " + " . $_LANG['domainidprotection'] . "<br>\r\n";
 				}
 
-				$adminemailitems .= "<br>
-";
+				$adminemailitems .= "<br>\r\n";
 
 				if ($domaintype == "register") {
 					unset($tempdomainfields);
@@ -1511,35 +1482,27 @@ function calcCartTotals($checkout = "", $ignorenoconfig = "") {
 				$domain_renew_price_db = format_as_currency($domain_renew_price_db);
 				$orderrenewalids[] = $domainid;
 				$orderrenewals .= "" . $domainid . "=" . $regperiod . ",";
-				$adminemailitems .= $_LANG['domainrenewal'] . (": " . $domainname . " - " . $regperiod . " ") . $_LANG['orderyears'] . "<br>
-";
+				$adminemailitems .= $_LANG['domainrenewal'] . (": " . $domainname . " - " . $regperiod . " ") . $_LANG['orderyears'] . "<br>\r\n";
 				$domaindesc = $_LANG['domainrenewal'] . (" - " . $domainname . " - " . $regperiod . " ") . $_LANG['orderyears'] . " (" . fromMySQLDate($expirydate) . " - " . fromMySQLDate(getInvoicePayUntilDate($expirydate, $regperiod)) . ")";
 
 				if ($dnsmanagement) {
-					$adminemailitems .= " + " . $_LANG['domaindnsmanagement'] . "<br>
-";
-					$domaindesc .= "
- + " . $_LANG['domaindnsmanagement'];
+					$adminemailitems .= " + " . $_LANG['domaindnsmanagement'] . "<br>\r\n";
+					$domaindesc .= "\r\n + " . $_LANG['domaindnsmanagement'];
 				}
 
 
 				if ($emailforwarding) {
-					$adminemailitems .= " + " . $_LANG['domainemailforwarding'] . "<br>
-";
-					$domaindesc .= "
- + " . $_LANG['domainemailforwarding'];
+					$adminemailitems .= " + " . $_LANG['domainemailforwarding'] . "<br>\r\n";
+					$domaindesc .= "\r\n + " . $_LANG['domainemailforwarding'];
 				}
 
 
 				if ($idprotection) {
-					$adminemailitems .= " + " . $_LANG['domainidprotection'] . "<br>
-";
-					$domaindesc .= "
- + " . $_LANG['domainidprotection'];
+					$adminemailitems .= " + " . $_LANG['domainidprotection'] . "<br>\r\n";
+					$domaindesc .= "\r\n + " . $_LANG['domainidprotection'];
 				}
 
-				$adminemailitems .= "<br>
-";
+				$adminemailitems .= "<br>\r\n";
 				$tax = ($CONFIG['TaxDomains'] ? "1" : "0");
 				update_query("tbldomains", array("registrationperiod" => $regperiod, "recurringamount" => $domain_renew_price_db), array("id" => $domainid));
 				insert_query("tblinvoiceitems", array("userid" => $userid, "type" => "Domain", "relid" => $domainid, "description" => $domaindesc, "amount" => $domain_renew_price_db, "taxed" => $tax, "duedate" => "now()", "paymentmethod" => $paymentmethod));
@@ -1720,8 +1683,7 @@ function calcCartTotals($checkout = "", $ignorenoconfig = "") {
 		$customfields = getCustomFields("client", "", $userid, "", true);
 		$clientcustomfields = "";
 		foreach ($customfields as $customfield) {
-			$clientcustomfields .= "" . $customfield['name'] . ": " . $customfield['value'] . "<br />
-";
+			$clientcustomfields .= "" . $customfield['name'] . ": " . $customfield['value'] . "<br />\r\n";
 		}
 
 		$result = select_query("tblpaymentgateways", "value", array("gateway" => $paymentmethod, "setting" => "name"));
@@ -2037,7 +1999,7 @@ function CalcPromoDiscount($pid, $cycle, $fpamount, $recamount, $setupfee = 0) {
 
 
 				if (count($requiredproducts)) {
-					$result = select_query("tblhosting", "COUNT(*)", "userid='" . (int)$_SESSION['uid'] . "' AND packageid IN (" . implode(",", $requiredproducts) . ") AND domainstatus='Active'");
+					$result = select_query("tblhosting", "COUNT(*)", "userid='" . (int)$_SESSION['uid'] . "' AND packageid IN (" . db_build_in_array($requiredproducts) . ") AND domainstatus='Active'");
 					$data = mysql_fetch_array($result);
 
 					if ($data[0]) {
@@ -2047,7 +2009,7 @@ function CalcPromoDiscount($pid, $cycle, $fpamount, $recamount, $setupfee = 0) {
 
 
 				if (count($requiredaddons)) {
-					$result = select_query("tblhostingaddons", "COUNT(*)", "tblhosting.userid='" . (int)$_SESSION['uid'] . "' AND addonid IN (" . implode(",", $requiredaddons) . ") AND status='Active'", "", "", "", "tblhosting ON tblhosting.id=tblhostingaddons.hostingid");
+					$result = select_query("tblhostingaddons", "COUNT(*)", "tblhosting.userid='" . (int)$_SESSION['uid'] . "' AND addonid IN (" . db_build_in_array($requiredaddons) . ") AND status='Active'", "", "", "", "tblhosting ON tblhosting.id=tblhostingaddons.hostingid");
 					$data = mysql_fetch_array($result);
 
 					if ($data[0]) {
@@ -2544,10 +2506,10 @@ function changeOrderStatus($orderid, $status) {
 }
 
 function cancelRefundOrder($orderid) {
-	$orderid = (int)$orderid;
 	$result = select_query("tblorders", "invoiceid", array("id" => $orderid));
 	$data = mysql_fetch_array($result);
 	$invoiceid = $data['invoiceid'];
+	$orderid = (int)$orderid;
 
 	if ($invoiceid) {
 		$result = select_query("tblinvoices", "status", array("id" => $invoiceid));

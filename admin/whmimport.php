@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.12
+ * @ Version  : 5.2.13
  * @ Author   : MTIMER
- * @ Release on : 2013-10-25
+ * @ Release on : 2013-11-25
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -81,6 +81,7 @@ if ($step == "") {
 }
 else {
 	if ($step == "2") {
+		check_token("WHMCS.admin.default");
 		echo "
 <p>The following accounts were found on the server.  Tick the boxes next to the accounts you wish to import.</p>
 
@@ -94,10 +95,7 @@ else {
 		$accesshash = html_entity_decode($data['accesshash']);
 		$usessl = $data['secure'];
 		$request = "/xml-api/listaccts";
-		preg_replace("'(
-|
-)'", "", $accesshash);
-		$cleanaccesshash = "";
+		$cleanaccesshash = preg_replace("'(\r\n|\r\n)'", "", $accesshash);
 
 		if ($cleanaccesshash) {
 			$authstr = "WHM " . $user . ":" . $cleanaccesshash;
@@ -282,8 +280,7 @@ Data: " . $data . "</textarea>";
 	}
 	else {
 		if ($step == "3") {
-			echo "
-";
+			check_token("WHMCS.admin.default");
 			$result = select_query("tblpaymentgateways", "gateway", "", "gateway", "ASC");
 			$data = mysql_fetch_array($result);
 			$defaultgateway = $data['gateway'];
@@ -296,10 +293,7 @@ Data: " . $data . "</textarea>";
 			$accesshash = html_entity_decode($data['accesshash']);
 			$usessl = $data['secure'];
 			$request = "/xml-api/listaccts";
-			preg_replace("'(
-|
-)'", "", $accesshash);
-			$cleanaccesshash = "";
+			$cleanaccesshash = preg_replace("'(\r\n|\r\n)'", "", $accesshash);
 
 			if ($cleanaccesshash) {
 				$authstr = "WHM " . $user . ":" . $cleanaccesshash;

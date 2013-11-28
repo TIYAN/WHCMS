@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.12
+ * @ Version  : 5.2.13
  * @ Author   : MTIMER
- * @ Release on : 2013-10-25
+ * @ Release on : 2013-11-25
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -32,7 +32,7 @@ if ($action == "save") {
 		}
 	}
 
-	header("Location: " . $_SERVER['PHP_SELF'] . ("?saved=true#" . $module));
+	redir("saved=true#" . $module);
 	exit();
 }
 
@@ -46,7 +46,7 @@ if ($action == "activate") {
 		insert_query("tblregistrars", array("registrar" => $module, "setting" => "Username", "value" => ""));
 	}
 
-	header("Location: " . $_SERVER['PHP_SELF'] . ("?activated=true#" . $module));
+	redir("activated=true#" . $module);
 	exit();
 }
 
@@ -59,7 +59,7 @@ if ($action == "deactivate") {
 		delete_query("tblregistrars", array("registrar" => $module));
 	}
 
-	header("Location: " . $_SERVER['PHP_SELF'] . "?deactivated=true");
+	redir("deactivated=true");
 	exit();
 }
 

@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.12
+ * @ Version  : 5.2.13
  * @ Author   : MTIMER
- * @ Release on : 2013-10-25
+ * @ Release on : 2013-11-25
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -147,6 +147,7 @@ if ($sub == "deletecustomfield") {
 
 
 if ($sub == "moveup") {
+	check_token("WHMCS.admin.default");
 	$result = select_query("tblticketdepartments", "", array("`order`" => $order));
 	$data = mysql_fetch_array($result);
 	$premid = $data['id'];
@@ -158,6 +159,7 @@ if ($sub == "moveup") {
 
 
 if ($sub == "movedown") {
+	check_token("WHMCS.admin.default");
 	$result = select_query("tblticketdepartments", "", array("`order`" => $order));
 	$data = mysql_fetch_array($result);
 	$premid = $data['id'];
@@ -186,10 +188,7 @@ if ($delsuccess) {
 echo $infobox;
 
 if ($action == "") {
-	$jscode = "function doDelete(id) {
-if (confirm(\"" . addslashes($aInt->lang("supportticketdepts", "delsuredept")) . "\")) {
-window.location='" . $_SERVER['PHP_SELF'] . "?sub=delete&id='+id+'" . generate_token("link") . "';
-}}";
+	$aInt->deleteJSConfirm("doDelete", "supportticketdepts", "delsuredept", "?sub=delete&id=");
 	echo "
 <p>";
 	echo $aInt->lang("supportticketdepts", "supportticketdeptsconfigheredesc");
@@ -248,7 +247,7 @@ window.location='" . $_SERVER['PHP_SELF'] . "?sub=delete&id='+id+'" . generate_t
 
 
 		if ($order != "1") {
-			$moveup = "<a href=\"" . $PHP_SELF . "?sub=moveup&order=" . $order . "\"><img src=\"images/moveup.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"" . $aInt->lang("products", "navmoveup") . "\"></a>";
+			$moveup = "<a href=\"" . $PHP_SELF . "?sub=moveup&order=" . $order . generate_token("link") . "\"><img src=\"images/moveup.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"" . $aInt->lang("products", "navmoveup") . "\"></a>";
 		}
 		else {
 			$moveup = "";
@@ -256,7 +255,7 @@ window.location='" . $_SERVER['PHP_SELF'] . "?sub=delete&id='+id+'" . generate_t
 
 
 		if ($order != $lastorder) {
-			$movedown = "<a href=\"" . $PHP_SELF . "?sub=movedown&order=" . $order . "\"><img src=\"images/movedown.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"" . $aInt->lang("products", "navmovedown") . "\"></a>";
+			$movedown = "<a href=\"" . $PHP_SELF . "?sub=movedown&order=" . $order . generate_token("link") . "\"><img src=\"images/movedown.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"" . $aInt->lang("products", "navmovedown") . "\"></a>";
 		}
 		else {
 			$movedown = "";

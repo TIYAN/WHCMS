@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.12
+ * @ Version  : 5.2.13
  * @ Author   : MTIMER
- * @ Release on : 2013-10-25
+ * @ Release on : 2013-11-25
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -32,7 +32,7 @@ if ($action == "save") {
 		update_query("tblconfiguration", array("value" => $v), array("setting" => $k));
 	}
 
-	header("Location: " . $_SERVER['PHP_SELF'] . "?saved=true");
+	redir("saved=true");
 	exit();
 }
 
@@ -55,7 +55,7 @@ if ($action == "add") {
 		}
 
 		insert_query("tbltax", array("level" => $level, "name" => $name, "state" => $state, "country" => $country, "taxrate" => $taxrate));
-		header("Location: " . $_SERVER['PHP_SELF']);
+		redir();
 		exit();
 	}
 }
@@ -64,7 +64,7 @@ if ($action == "add") {
 if ($action == "delete") {
 	check_token("WHMCS.admin.default");
 	delete_query("tbltax", array("id" => $id));
-	header("Location: " . $_SERVER['PHP_SELF']);
+	redir();
 	exit();
 }
 
@@ -82,10 +82,7 @@ if ($saved) {
 }
 
 echo $infobox;
-$jscode = "function doDelete(id) {
-if (confirm(\"" . addslashes($aInt->lang("taxconfig", "delsuretaxrule")) . "\")) {
-window.location='" . $_SERVER['PHP_SELF'] . "?action=delete&id='+id+'" . generate_token("link") . "';
-}}";
+$aInt->deleteJSConfirm("doDelete", "taxconfig", "delsuretaxrule", "?action=delete&id=");
 echo "
 ";
 echo "<s";

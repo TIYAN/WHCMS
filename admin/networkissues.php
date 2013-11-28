@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.12
+ * @ Version  : 5.2.13
  * @ Author   : MTIMER
- * @ Release on : 2013-10-25
+ * @ Release on : 2013-11-25
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -90,24 +90,26 @@ if ($action == "save") {
 			run_hook("NetworkIssueAdd", array_merge(array("id" => $nwid), $updatearray));
 		}
 
-		header("Location: networkissues.php");
+		redir();
 		exit();
 	}
 }
 
 
 if ($action == "close") {
+	check_token("WHMCS.admin.default");
 	update_query("tblnetworkissues", array("status" => "Resolved", "enddate" => "now()"), array("id" => $id));
 	run_hook("NetworkIssueClose", array("id" => $id));
-	header("Location: networkissues.php?view=Resolved");
+	redir("view=resolved");
 	exit();
 }
 
 
 if ($action == "reopen") {
+	check_token("WHMCS.admin.default");
 	update_query("tblnetworkissues", array("status" => "In Progress", "enddate" => "NULL"), array("id" => $id));
 	run_hook("NetworkIssueReopen", array("id" => $id));
-	header("Location: networkissues.php");
+	redir();
 	exit();
 }
 
@@ -116,7 +118,7 @@ if ($action == "delete") {
 	check_token("WHMCS.admin.default");
 	run_hook("NetworkIssueDelete", array("id" => $id));
 	delete_query("tblnetworkissues", array("id" => $id));
-	header("Location: networkissues.php");
+	redir();
 	exit();
 }
 
@@ -125,7 +127,7 @@ $t_result = full_query($t_query);
 
 if (0 < mysql_num_rows($t_result)) {
 	$t_row = mysql_fetch_row($t_result);
-	$type_options = explode("','", preg_replace("/(enum|set)\('(.+?)'\)/", "", $t_row[1]));
+	$type_options = explode("','", preg_replace("/(enum|set)\('(.+?)'\)/", "$1", $t_row[1]));
 }
 
 $p_query = "SHOW COLUMNS FROM tblnetworkissues LIKE 'priority'";
@@ -133,7 +135,7 @@ $p_result = full_query($p_query);
 
 if (0 < mysql_num_rows($p_result)) {
 	$p_row = mysql_fetch_row($p_result);
-	$priority_options = explode("','", preg_replace("/(enum|set)\('(.+?)'\)/", "", $p_row[1]));
+	$priority_options = explode("','", preg_replace("/(enum|set)\('(.+?)'\)/", "$1", $p_row[1]));
 }
 
 $s_query = "SHOW COLUMNS FROM tblnetworkissues LIKE 'status'";
@@ -141,7 +143,7 @@ $s_result = full_query($s_query);
 
 if (0 < mysql_num_rows($s_result)) {
 	$s_row = mysql_fetch_row($s_result);
-	$status_options = explode("','", preg_replace("/(enum|set)\('(.+?)'\)/", "", $s_row[1]));
+	$status_options = explode("','", preg_replace("/(enum|set)\('(.+?)'\)/", "$1", $s_row[1]));
 }
 
 $server_query = "SELECT id, name FROM tblservers";
@@ -165,10 +167,7 @@ if ($action == "") {
 	}
 
 	$result = select_query("tblnetworkissues", "*,(select name from tblservers where id = tblnetworkissues.server) as server", $where, "lastupdate", "DESC");
-	$jscode = "function doDelete(id) {
-if (confirm(\"Are you sure you want to delete this issue?\")) {
-window.location='" . $_SERVER['PHP_SELF'] . "?action=delete&id='+id+'" . generate_token("link") . "';
-}}";
+	$aInt->deleteJSConfirm("doDelete", "global", "deleteconfirm", "?action=delete&id=");
 	echo "
 <p>";
 	echo "<s";
@@ -203,10 +202,10 @@ window.location='" . $_SERVER['PHP_SELF'] . "?action=delete&id='+id+'" . generat
 
 
 			if ($open_row['status'] == "Resolved") {
-				$actions = "<a href=\"" . $_SERVER['PHP_SELF'] . "?action=reopen&id=" . $open_row['id'] . "\">Reopen</a>";
+				$actions = "<a href=\"" . $_SERVER['PHP_SELF'] . "?action=reopen&id=" . $open_row['id'] . generate_token("link") . "\">Reopen</a>";
 			}
 			else {
-				$actions = "<a href=\"" . $_SERVER['PHP_SELF'] . "?action=close&id=" . $open_row['id'] . "\">Close</a>";
+				$actions = "<a href=\"" . $_SERVER['PHP_SELF'] . "?action=close&id=" . $open_row['id'] . generate_token("link") . "\">Close</a>";
 			}
 
 			$tabledata[] = array("<a href=\"" . $_SERVER['PHP_SELF'] . "?action=manage&id=" . $open_row['id'] . "\">" . $open_row['title'] . "</a>", $open_row['type'], $open_row['priority'], $open_row['status'], fromMySQLDate($open_row['startdate'], true), $enddate, $actions, "<a href=\"#\" onClick=\"doDelete('" . $open_row['id'] . "');return false\"><img src=\"images/delete.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"Delete\"></a>");

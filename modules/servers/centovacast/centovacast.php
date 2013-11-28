@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.12
+ * @ Version  : 5.2.13
  * @ Author   : MTIMER
- * @ Release on : 2013-10-25
+ * @ Release on : 2013-11-25
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -144,27 +144,27 @@ function centovacast_UserExists($username) {
 function centovacast_GeneratePassword($maxlength = 8) {
 	$vowels = "aeuy";
 	$consonants = "bcdfghjkmnpqrtvwxz";
-	$concount = 312;
+	$concount = 0;
 	$digitpos = rand( 0, $maxlength - 1 );
 	$password = "";
-	$i = 312;
+	$i = 0;
 
 	while ($i < $maxlength) {
 		$type = rand( 0, 1 );
 
 		if ($type == 1) {
 			if (( ( $i == 1 || $i == $maxlength - 1 ) && 0 < $concount )) {
-				$type = 312;
+				$type = 0;
 			}
 
 
 			if (1 < $concount) {
-				$type = 312;
+				$type = 0;
 			}
 		}
 		else {
 			if ($concount == 0) {
-				$type = 313;
+				$type = 1;
 			}
 		}
 

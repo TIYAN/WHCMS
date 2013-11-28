@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.12
+ * @ Version  : 5.2.13
  * @ Author   : MTIMER
- * @ Release on : 2013-10-25
+ * @ Release on : 2013-11-25
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -25,7 +25,7 @@ if ($whmcs->get_req_var("save")) {
 	$data = mysql_fetch_array($result);
 
 	if ($data[0]) {
-		header("Location: " . $_SERVER['PHP_SELF'] . ("?userid=" . $userid . "&emailexists=1"));
+		redir("userid=" . $userid . "&emailexists=1");
 		exit();
 	}
 	else {
@@ -94,7 +94,7 @@ if ($whmcs->get_req_var("save")) {
 		logActivity("Client Profile Modified - " . implode(", ", $changelist) . (" - User ID: " . $userid), $userid);
 		run_hook("AdminClientProfileTabFieldsSave", $_REQUEST);
 		run_hook("ClientEdit", array_merge(array("userid" => $userid, "olddata" => $oldclientsdetails), $array));
-		header("Location: " . $_SERVER['PHP_SELF'] . ("?userid=" . $userid . "&success=true"));
+		redir("userid=" . $userid . "&success=true");
 		exit();
 	}
 }
@@ -116,6 +116,7 @@ else {
 		}
 		else {
 			if ($whmcs->get_req_var("resetpw")) {
+				check_token("WHMCS.admin.default");
 				sendMessage("Automated Password Reset", $userid);
 				infoBox($aInt->lang("clients", "resetsendpassword"), $aInt->lang("clients", "passwordsuccess"), "success");
 			}
@@ -224,7 +225,9 @@ echo "\" onfocus=\"if(this.value=='";
 echo $aInt->lang("fields", "entertochange");
 echo "')this.value=''\" tabindex=\"5\" /> <a href=\"clientsprofile.php?userid=";
 echo $userid;
-echo "&resetpw=true\"><img src=\"images/icons/resetpw.png\" border=\"0\" align=\"absmiddle\" /> ";
+echo "&resetpw=true";
+echo generate_token("link");
+echo "\"><img src=\"images/icons/resetpw.png\" border=\"0\" align=\"absmiddle\" /> ";
 echo $aInt->lang("clients", "resetsendpassword");
 echo "</a></td><td class=\"fieldlabel\">";
 echo $aInt->lang("fields", "postcode");
@@ -297,9 +300,9 @@ echo "<s";
 echo "elect name=\"billingcid\" tabindex=\"22\"><option value=\"0\">";
 echo $aInt->lang("global", "default");
 echo "</option>";
-$result = select_query("tblcontacts", "", array("userid" => $userid), "firstname` ASC,`lastname", "ASC");
+select_query("tblcontacts", "", array("userid" => $userid), "firstname` ASC,`lastname", "ASC");
 
-while ($data = mysql_fetch_array($result)) {
+while ($data = $result = mysql_fetch_array($result)) {
 	echo "<option value=\"" . $data['id'] . "\"";
 
 	if ($data['id'] == $billingcid) {
@@ -396,9 +399,9 @@ echo $aInt->lang("currencies", "currency");
 echo "</td><td class=\"fieldarea\">";
 echo "<s";
 echo "elect name=\"currency\" tabindex=\"25\">";
-$result = select_query("tblcurrencies", "id,code", "", "code", "ASC");
+select_query("tblcurrencies", "id,code", "", "code", "ASC");
 
-while ($data = mysql_fetch_array($result)) {
+while ($data = $result = mysql_fetch_array($result)) {
 	echo "<option value=\"" . $data['id'] . "\"";
 
 	if ($data['id'] == $currency) {
@@ -427,12 +430,12 @@ echo "elect name=\"groupid\" tabindex=\"27\"><option value=\"0\">";
 echo $aInt->lang("global", "none");
 echo "</option>
 ";
-$result = select_query("tblclientgroups", "", "", "groupname", "ASC");
+select_query("tblclientgroups", "", "", "groupname", "ASC");
 
-while ($data = mysql_fetch_assoc($result)) {
-	$group_id = $data['id'];
-	$group_name = $data['groupname'];
-	$group_colour = $data['groupcolour'];
+while ($data = $result = mysql_fetch_assoc($result)) {
+	$data['id'];
+	$data['groupname'];
+	$group_colour = $group_name = $group_id = $data['groupcolour'];
 	echo "<option style=\"background-color:" . $group_colour . "\" value=" . $group_id . "";
 
 	if ($group_id == $groupid) {

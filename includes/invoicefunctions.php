@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.12
+ * @ Version  : 5.2.13
  * @ Author   : MTIMER
- * @ Release on : 2013-10-25
+ * @ Release on : 2013-11-25
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -116,6 +116,7 @@ function updateInvoiceTotal($id) {
 	global $CONFIG;
 
 	$result = select_query("tblinvoiceitems", "", array("invoiceid" => $id));
+
 	while ($data = mysql_fetch_array($result)) {
 		if ($data['taxed'] == "1") {
 			$taxsubtotal += $data['amount'];
@@ -251,7 +252,7 @@ function addInvoicePayment($invoiceid, $transid, $amount, $fees, $gateway, $noem
 
 }
 
-function refundInvoicePayment($transid, $amount, $sendtogateway, $addascredit = "", $sendemail = true, &$refundtransid = "") {
+function refundInvoicePayment($transid, $amount, $sendtogateway, $addascredit = "", $sendemail = true, $refundtransid = "") {
 	$result = select_query("tblaccounts", "", array("id" => $transid));
 	$data = mysql_fetch_array($result);
 	$transid = $data['id'];
@@ -267,6 +268,7 @@ function refundInvoicePayment($transid, $amount, $sendtogateway, $addascredit = 
 	$fees = $data['fees'];
 	$gatewaytransid = $data['transid'];
 	$rate = $data['rate'];
+	$gateway = WHMCS_Gateways::makesafename($gateway);
 	$result = select_query("tblaccounts", "SUM(amountout),SUM(fees)", array("refundid" => $transid));
 	$data = mysql_fetch_array($result);
 	$alreadyrefunded = $data[0];
@@ -569,8 +571,8 @@ function pdfInvoice($invoiceid) {
 
 	$invoice = new WHMCS_Invoice();
 	$invoice->pdfCreate();
-	$invoice->pdfOutput();
-	$pdfdata = $invoice->pdfInvoicePage($invoiceid);
+	$invoice->pdfInvoicePage($invoiceid);
+	$pdfdata = $invoice->pdfOutput();
 	return $pdfdata;
 }
 
@@ -1006,10 +1008,10 @@ function getNewClientAutoProvisionStatus($userid) {
 	global $CONFIG;
 
 	if ($CONFIG['AutoProvisionExistingOnly']) {
-		select_query("tblhosting", "COUNT(*)", array("userid" => $userid, "domainstatus" => "Active"));
-		mysql_fetch_array($result);
-		$result = $result = select_query("tbldomains", "COUNT(*)", array("userid" => $userid, "status" => "Active"));
-		$data2 = $data = mysql_fetch_array($result);
+		$result = select_query("tblhosting", "COUNT(*)", array("userid" => $userid, "domainstatus" => "Active"));
+		$data = mysql_fetch_array($result);
+		$result = select_query("tbldomains", "COUNT(*)", array("userid" => $userid, "status" => "Active"));
+		$data2 = mysql_fetch_array($result);
 
 		if ($data[0] + $data2[0]) {
 			return true;
@@ -1021,19 +1023,19 @@ function getNewClientAutoProvisionStatus($userid) {
 	return true;
 }
 
-function applyCredit($invoiceid, $userid, $amount="", $noemail = "") {
+function applyCredit($invoiceid, $userid, $amount, $noemail = "") {
+	$amount = round($amount, 2);
 	$query = "UPDATE tblinvoices SET credit=credit+" . db_escape_string($amount) . " WHERE id='" . mysql_real_escape_string($invoiceid) . "'";
 	full_query($query);
 	$query = "UPDATE tblclients SET credit=credit-" . db_escape_string($amount) . " WHERE id='" . mysql_real_escape_string($userid) . "'";
 	full_query($query);
 	insert_query("tblcredit", array("clientid" => $userid, "date" => "now()", "description" => "Credit Applied to Invoice #" . $invoiceid, "amount" => $amount * (0 - 1)));
-	logActivity("Credit Applied - Amount: " . $amount . " - Invoice ID: " . $invoiceid, $userid);
 	updateInvoiceTotal($invoiceid);
-	$result = select_query("tblinvoices", "total", array("id" => $invoiceid));
+	select_query("tblinvoices", "total", array("id" => $invoiceid));
+	$result = logActivity("Credit Applied - Amount: " . $amount . " - Invoice ID: " . $invoiceid, $userid);
 	$data = mysql_fetch_array($result);
 	$total = $data['total'];
-	select_query("tblaccounts", "SUM(amountin)-SUM(amountout)", array("invoiceid" => $invoiceid));
-	$result = round($amount, 2);
+	$result = select_query("tblaccounts", "SUM(amountin)-SUM(amountout)", array("invoiceid" => $invoiceid));
 	$data = mysql_fetch_array($result);
 	$amountpaid = $data[0];
 	$balance = $total - $amountpaid;
@@ -1052,7 +1054,7 @@ function getBillingCycleDays($billingcycle) {
 	}
 	else {
 		if ($billingcycle == "Quarterly") {
-			$totaldays = 90;
+			$totaldays = 60;
 		}
 		else {
 			if ($billingcycle == "Semi-Annually") {

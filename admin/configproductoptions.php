@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.12
+ * @ Version  : 5.2.13
  * @ Author   : MTIMER
- * @ Release on : 2013-10-25
+ * @ Release on : 2013-11-25
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -66,7 +66,7 @@ if ($manageoptions) {
 			insert_query("tblproductconfigoptionssub", array("configid" => $cid, "optionname" => $addoptionname, "sortorder" => $addsortorder, "hidden" => $addhidden));
 		}
 
-		header("Location: " . $_SERVER['PHP_SELF'] . ("?manageoptions=true&cid=" . $cid));
+		redir("manageoptions=true&cid=" . $cid);
 		exit();
 	}
 
@@ -75,7 +75,7 @@ if ($manageoptions) {
 		check_token("WHMCS.admin.default");
 		checkPermission("Delete Products/Services");
 		delete_query("tblproductconfigoptionssub", array("id" => $confid));
-		header("Location: " . $_SERVER['PHP_SELF'] . ("?manageoptions=true&cid=" . $cid));
+		redir("manageoptions=true&cid=" . $cid);
 		exit();
 	}
 
@@ -278,7 +278,7 @@ if ($action == "savegroup") {
 		}
 	}
 
-	header("Location: " . $_SERVER['PHP_SELF'] . ("?action=managegroup&id=" . $id));
+	redir("action=managegroup&id=" . $id);
 	exit();
 }
 
@@ -386,7 +386,7 @@ if ($action == "duplicate") {
 		}
 	}
 
-	header("Location: " . $_SERVER['PHP_SELF'] . "?duplicated=true");
+	redir("duplicated=true");
 	exit();
 }
 
@@ -397,7 +397,7 @@ if ($action == "deleteoption") {
 	delete_query("tblproductconfigoptions", array("id" => $opid));
 	delete_query("tblproductconfigoptionssub", array("configid" => $opid));
 	delete_query("tblhostingconfigoptions", array("configid" => $opid));
-	header("Location: " . $_SERVER['PHP_SELF'] . ("?action=managegroup&id=" . $id));
+	redir("action=managegroup&id=" . $id);
 	exit();
 }
 
@@ -416,7 +416,7 @@ if ($action == "deletegroup") {
 
 	delete_query("tblproductconfiggroups", array("id" => $id));
 	delete_query("tblproductconfiglinks", array("gid" => $id));
-	header("Location: " . $_SERVER['PHP_SELF'] . "?deleted=true");
+	redir("deleted=true");
 	exit();
 }
 

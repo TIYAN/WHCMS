@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.12
+ * @ Version  : 5.2.13
  * @ Author   : MTIMER
- * @ Release on : 2013-10-25
+ * @ Release on : 2013-11-25
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -138,6 +138,7 @@ if ($action == "getcycles") {
 }
 else {
 	if ($action == "calcsummary") {
+		check_token("WHMCS.admin.default");
 		$_SESSION['uid'] = $userid;
 
 		if ($type == "product") {
@@ -183,6 +184,7 @@ else {
 	}
 	else {
 		if ($action == "order") {
+			check_token("WHMCS.admin.default");
 			$_SESSION['uid'] = $userid;
 
 			if ($type == "product") {
@@ -320,7 +322,7 @@ function calctotals() {
 							$optionhidden = $configoption['hidden'];
 							$optionname = ($optionhidden ? $configoption['optionname'] . " <i>(" . $aInt->lang("fields", "hidden") . ")</i>" : $configoption['optionname']);
 							$optiontype = $configoption['optiontype'];
-							$selectedvalue = $configoption['selectedvalue'];
+							$selectedvalue = $configoption = $configoption['selectedvalue'];
 							$selectedqty = $configoption['selectedqty'];
 							echo "<tr><td class=\"fieldlabel\">" . $optionname . "</td><td class=\"fieldarea\">";
 

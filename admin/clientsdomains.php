@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.12
+ * @ Version  : 5.2.13
  * @ Author   : MTIMER
- * @ Release on : 2013-10-25
+ * @ Release on : 2013-11-25
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -42,10 +42,9 @@ if (!$id) {
 }
 
 $domains = new WHMCS_Domains();
-$domain_data = $domains->getDomainsDatabyID($id);
-$id = $did = $domainid = $domain_data['id'];
-$userid = $domain_data['userid'];
-$aInt->valUserID($userid);
+$domains->getDomainsDatabyID($id);
+$did = $domainid = $domain_data['id'];
+$domain_data['userid'];
 
 if (!$id) {
 	$aInt->gracefulExit("Domain ID Not Found");
@@ -58,7 +57,7 @@ if ($action == "delete") {
 	run_hook("DomainDelete", array("userid" => $userid, "domainid" => $id));
 	delete_query("tbldomains", array("id" => $id));
 	logActivity("Deleted Domain - User ID: " . $userid . " - Domain ID: " . $id);
-	header("Location: " . $_SERVER['PHP_SELF'] . ("?userid=" . $userid));
+	redir("userid=" . $userid);
 	exit();
 }
 
@@ -202,7 +201,7 @@ if ($action == "savedomain" && $domain) {
 	run_hook("AdminClientDomainsTabFieldsSave", $_REQUEST);
 	run_hook("DomainEdit", array("userid" => $userid, "domainid" => $id));
 	$_SESSION['domainsavetemp'] = array("ns1" => $ns1, "ns2" => $ns2, "ns3" => $ns3, "ns4" => $ns4, "ns5" => $ns5, "oldns1" => $oldns1, "oldns2" => $oldns2, "oldns3" => $oldns3, "oldns4" => $oldns4, "oldns5" => $oldns5, "defaultns" => $defaultns, "newlockstatus" => $newlockstatus, "oldlockstatus" => $oldlockstatus);
-	header("Location: clientsdomains.php?userid=" . $userid . "&id=" . $id . "&conf=" . $conf);
+	redir("userid=" . $userid . "&id=" . $id . "&conf=" . $conf);
 	exit();
 }
 
@@ -217,11 +216,12 @@ ob_start();
 $did = $domain_data['id'];
 $orderid = $domain_data['orderid'];
 $ordertype = $domain_data['type'];
-$domain = $domain_data['domain'];
+$domain = $domain_data = $domain_data['domain'];
 $paymentmethod = $domain_data['paymentmethod'];
-$firstpaymentamount = $domain_data['firstpaymentamount'];
-$recurringamount = $domain_data['recurringamount'];
-$registrar = $domain_data['registrar'];
+$firstpaymentamount = $id = $domain_data['firstpaymentamount'];
+$recurringamount = $userid = $domain_data['recurringamount'];
+$domain_data['registrar'];
+$registrar = $aInt->valUserID($userid);
 $regtype = $domain_data['type'];
 $expirydate = $domain_data['expirydate'];
 $nextduedate = $domain_data['nextduedate'];
@@ -243,12 +243,12 @@ if (!$did) {
 $expirydate = fromMySQLDate($expirydate);
 $nextduedate = fromMySQLDate($nextduedate);
 $regdate = fromMySQLDate($registrationdate);
-echo $aInt->jqueryDialog("renew", $aInt->lang("domains", "renewdomain"), $aInt->lang("domains", "renewdomainq"), array($aInt->lang("global", "yes") => "window.location='" . $PHP_SELF . "?userid=" . $userid . "&id=" . $id . "&regaction=renew'", $aInt->lang("global", "no") => ""));
-echo $aInt->jqueryDialog("getepp", $aInt->lang("domains", "requestepp"), $aInt->lang("domains", "requesteppq"), array($aInt->lang("global", "yes") => "window.location='" . $PHP_SELF . "?userid=" . $userid . "&id=" . $id . "&regaction=eppcode'", $aInt->lang("global", "no") => ""));
-echo $aInt->jqueryDialog("reqdelete", $aInt->lang("domains", "requestdel"), $aInt->lang("domains", "requestdelq"), array($aInt->lang("global", "yes") => "window.location='" . $PHP_SELF . "?userid=" . $userid . "&id=" . $id . "&regaction=reqdelete'", $aInt->lang("global", "no") => ""));
+echo $aInt->jqueryDialog("renew", $aInt->lang("domains", "renewdomain"), $aInt->lang("domains", "renewdomainq"), array($aInt->lang("global", "yes") => "window.location='" . $PHP_SELF . "?userid=" . $userid . "&id=" . $id . "&regaction=renew" . generate_token("link") . "'", $aInt->lang("global", "no") => ""));
+echo $aInt->jqueryDialog("getepp", $aInt->lang("domains", "requestepp"), $aInt->lang("domains", "requesteppq"), array($aInt->lang("global", "yes") => "window.location='" . $PHP_SELF . "?userid=" . $userid . "&id=" . $id . "&regaction=eppcode" . generate_token("link") . "'", $aInt->lang("global", "no") => ""));
+echo $aInt->jqueryDialog("reqdelete", $aInt->lang("domains", "requestdel"), $aInt->lang("domains", "requestdelq"), array($aInt->lang("global", "yes") => "window.location='" . $PHP_SELF . "?userid=" . $userid . "&id=" . $id . "&regaction=reqdelete" . generate_token("link") . "'", $aInt->lang("global", "no") => ""));
 echo $aInt->jqueryDialog("delete", $aInt->lang("domains", "delete"), $aInt->lang("domains", "deleteq"), array($aInt->lang("global", "yes") => "window.location='" . $PHP_SELF . "?userid=" . $userid . "&id=" . $id . "&action=delete" . generate_token("link") . "'", $aInt->lang("global", "no") => ""));
-echo $aInt->jqueryDialog("reldomain", $aInt->lang("domains", "releasedomain"), $aInt->lang("domains", "releasedomainq") . "<br /><br />" . $aInt->lang("domains", "transfertag") . ": <input type=\"text\" id=\"transtag\" size=\"20\" />", array($aInt->lang("global", "submit") => "window.location='" . $PHP_SELF . "?userid=" . $userid . "&id=" . $id . "&regaction=release&transtag='+$(\"#transtag\").val();", $aInt->lang("global", "cancel") => ""));
-echo $aInt->jqueryDialog("idprotectdomain", $aInt->lang("domains", "idprotection"), $aInt->lang("domains", "idprotectionq"), array($aInt->lang("global", "yes") => "window.location='" . $PHP_SELF . "?userid=" . $userid . "&id=" . $id . "&regaction=idtoggle'", $aInt->lang("global", "no") => ""));
+echo $aInt->jqueryDialog("reldomain", $aInt->lang("domains", "releasedomain"), $aInt->lang("domains", "releasedomainq") . "<br /><br />" . $aInt->lang("domains", "transfertag") . ": <input type=\"text\" id=\"transtag\" size=\"20\" />", array($aInt->lang("global", "submit") => "window.location='" . $PHP_SELF . "?userid=" . $userid . "&id=" . $id . "&regaction=release" . generate_token("link") . ("&transtag='+$(\"#transtag\").val();"), $aInt->lang("global", "cancel") => ""));
+echo $aInt->jqueryDialog("idprotectdomain", $aInt->lang("domains", "idprotection"), $aInt->lang("domains", "idprotectionq"), array($aInt->lang("global", "yes") => "window.location='" . $PHP_SELF . "?userid=" . $userid . "&id=" . $id . "&regaction=idtoggle" . generate_token("link") . "'", $aInt->lang("global", "no") => ""));
 
 if ($conf) {
 	$ns1 = $_SESSION['domainsavetemp']['ns1'];
@@ -354,14 +354,16 @@ if ($domainregistraractions) {
 
 
 	if ($regaction == "renew") {
+		check_token("WHMCS.admin.default");
 		$values = RegRenewDomain($params);
 		wSetCookie("DomRenewRes", $values);
-		header("Location: clientsdomains.php?userid=" . $userid . "&id=" . $id . "&conf=renew");
+		redir("userid=" . $userid . "&id=" . $id . "&conf=renew");
 		exit();
 	}
 
 
 	if ($regaction == "eppcode") {
+		check_token("WHMCS.admin.default");
 		$values = RegGetEPPCode($params);
 
 		if ($values['error']) {
@@ -379,6 +381,7 @@ if ($domainregistraractions) {
 
 
 	if ($regaction == "reqdelete") {
+		check_token("WHMCS.admin.default");
 		$values = RegRequestDelete($params);
 
 		if ($values['error']) {
@@ -391,6 +394,7 @@ if ($domainregistraractions) {
 
 
 	if ($regaction == "release") {
+		check_token("WHMCS.admin.default");
 		$params['transfertag'] = $transtag;
 		$values = RegReleaseDomain($params);
 		$successmessage = str_replace("%s", $transtag, $aInt->lang("domains", "releaseinfo"));
@@ -405,6 +409,7 @@ if ($domainregistraractions) {
 
 
 	if ($regaction == "custom") {
+		check_token("WHMCS.admin.default");
 		$values = RegCustomFunction($params, $ac);
 
 		if ($values['error']) {
@@ -885,7 +890,9 @@ if ($domainregistraractions) {
 			echo $userid;
 			echo "&id=";
 			echo $id;
-			echo "&regaction=custom&ac=";
+			echo "&regaction=custom";
+			echo generate_token("link");
+			echo "&ac=";
 			echo $value;
 			echo "'\">";
 		}

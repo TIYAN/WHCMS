@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.12
+ * @ Version  : 5.2.13
  * @ Author   : MTIMER
- * @ Release on : 2013-10-25
+ * @ Release on : 2013-11-25
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -164,6 +164,12 @@ if ($action == "uploadfile") {
 		exit("Access Denied");
 	}
 
+
+	if (!isFileNameSafe($_FILES['uploadfile']['name'])) {
+		$aInt->gracefulExit("Invalid upload filename.  Valid filenames contain only alpha-numeric, dot, hyphen and underscore characters.");
+		exit();
+	}
+
 	$filename = $_FILES['uploadfile']['name'];
 
 	if (!$filename) {
@@ -214,7 +220,7 @@ if ($action == "createdownloadcat") {
 	checkPermission("Edit Products/Services");
 	insert_query("tbldownloadcats", array("parentid" => $catid, "name" => $title, "description" => html_entity_decode($description), "hidden" => ""));
 	logActivity("Added New Download Category - " . $title);
-	header("Location: configproducts.php?action=edit&id=" . $id . "&tab=7");
+	redir("action=edit&id=" . $id . "&tab=7");
 	redir("action=edit&id=" . $id . "&tab=7");
 }
 
@@ -285,7 +291,7 @@ if ($sub == "deletecustomfield") {
 	checkPermission("Edit Products/Services");
 	delete_query("tblcustomfields", array("id" => $fid));
 	delete_query("tblcustomfieldsvalues", array("fieldid" => $fid));
-	header("Location: configproducts.php?action=edit&id=" . $id . "&tab=" . $tab);
+	redir("action=edit&id=" . $id . "&tab=" . $tab);
 	exit();
 }
 
@@ -416,6 +422,7 @@ if ($sub == "delete") {
 
 
 if ($sub == "moveup") {
+	check_token("WHMCS.admin.default");
 	checkPermission("Manage Product Groups");
 	$result = select_query("tblproductgroups", "", array("`order`" => $order));
 	$data = mysql_fetch_array($result);
@@ -428,6 +435,7 @@ if ($sub == "moveup") {
 
 
 if ($sub == "movedown") {
+	check_token("WHMCS.admin.default");
 	checkPermission("Manage Product Groups");
 	$result = select_query("tblproductgroups", "", array("`order`" => $order));
 	$data = mysql_fetch_array($result);
@@ -440,6 +448,7 @@ if ($sub == "movedown") {
 
 
 if ($action == "updatesort") {
+	check_token("WHMCS.admin.default");
 	checkPermission("Edit Products/Services");
 	foreach ($so as $pid => $sort) {
 		update_query("tblproducts", array("order" => $sort), array("id" => $pid));
@@ -457,14 +466,8 @@ if ($action == "") {
 	$result = select_query("tblproducts", "COUNT(*)", "");
 	$data = mysql_fetch_array($result);
 	$num_rows2 = $data[0];
-	$jscode = "function doDelete(id) {
-if (confirm(\"" . $aInt->lang("products", "deleteproductconfirm", 1) . "\")) {
-window.location='" . $PHP_SELF . "?sub=delete&id='+id+'" . generate_token("link") . "';
-}}
-function doGroupDelete(id) {
-if (confirm(\"" . $aInt->lang("products", "deletegroupconfirm", 1) . "\")) {
-window.location='" . $PHP_SELF . "?sub=deletegroup&id='+id+'" . generate_token("link") . "';
-}}";
+	$aInt->deleteJSConfirm("doDelete", "products", "deleteproductconfirm", "?sub=delete&id=");
+	$aInt->deleteJSConfirm("doGroupDelete", "products", "deletegroupconfirm", "?sub=deletegroup&id=");
 	echo "
 <p>";
 	echo $aInt->lang("products", "description");
@@ -552,12 +555,12 @@ window.location='" . $PHP_SELF . "?sub=deletegroup&id='+id+'" . generate_token("
 
 
 		if ($order != "1") {
-			echo "<a href=\"" . $PHP_SELF . "?sub=moveup&order=" . $order . "\"><img src=\"images/moveup.gif\" border=\"0\" align=\"absmiddle\" alt=\"" . $aInt->lang("products", "navmoveup") . "\"></a>";
+			echo "<a href=\"" . $PHP_SELF . "?sub=moveup&order=" . $order . generate_token("link") . "\"><img src=\"images/moveup.gif\" border=\"0\" align=\"absmiddle\" alt=\"" . $aInt->lang("products", "navmoveup") . "\"></a>";
 		}
 
 
 		if ($order != $lastorder) {
-			echo "<a href=\"" . $PHP_SELF . "?sub=movedown&order=" . $order . "\"><img src=\"images/movedown.gif\" border=\"0\" align=\"absmiddle\" alt=\"" . $aInt->lang("products", "navmovedown") . "\"></a>";
+			echo "<a href=\"" . $PHP_SELF . "?sub=movedown&order=" . $order . generate_token("link") . "\"><img src=\"images/movedown.gif\" border=\"0\" align=\"absmiddle\" alt=\"" . $aInt->lang("products", "navmovedown") . "\"></a>";
 		}
 
 		echo "</div></td><td style=\"background-color:#ffffdd;\" align=center><a href=\"" . $PHP_SELF . "?action=editgroup&ids=" . $groupid . "\"><img src=\"images/edit.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"" . $aInt->lang("global", "edit") . ("\"></td><td  style=\"background-color:#ffffdd;\" align=center><a href=\"#\" onClick=\"" . $deletelink . ";return false\"><img src=\"images/delete.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"") . $aInt->lang("global", "delete") . "\"></a></td></tr>";

@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.12
+ * @ Version  : 5.2.13
  * @ Author   : MTIMER
- * @ Release on : 2013-10-25
+ * @ Release on : 2013-11-25
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -19,7 +19,7 @@ $aInt->icon = "domains";
 $aInt->requiredFiles(array("domainfunctions", "whoisfunctions"));
 ob_start();
 $whoisservers = file_get_contents("../includes/whoisservers.php");
-$whoisservers = explode("\n", $whoisservers);
+$whoisservers = explode("\r\n", $whoisservers);
 
 foreach ($whoisservers as $value) {
 	$value = explode("|", $value);
@@ -28,6 +28,7 @@ foreach ($whoisservers as $value) {
 
 
 if ($domain) {
+	check_token("WHMCS.admin.default");
 	$domain = strtolower($domain);
 	$domainbits = explode(".", $domain, 2);
 	$sld = $domainbits[0];
@@ -36,6 +37,7 @@ if ($domain) {
 
 
 if ($action == "checkavailability") {
+	check_token("WHMCS.admin.default");
 	$result = lookupDomain($sld, $tld);
 	echo $result['result'];
 	exit();

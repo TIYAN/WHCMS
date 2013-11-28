@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.12
+ * @ Version  : 5.2.13
  * @ Author   : MTIMER
- * @ Release on : 2013-10-25
+ * @ Release on : 2013-11-25
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -211,9 +211,7 @@ function SumUpPackageUpgradeOrder($id, $newproductid, $newproductbillingcycle, $
 	$upgradearray[] = array("oldproductid" => $oldproductid, "oldproductname" => $oldproductname, "newproductid" => $newproductid, "newproductname" => $newproductname, "daysuntilrenewal" => $days, "totaldays" => $totaldays, "newproductbillingcycle" => $newproductbillingcycleraw, "price" => formatCurrency($amountdue));
 
 	if ($checkout) {
-		$orderdescription = $_LANG['upgradedowngradepackage'] . (": " . $oldproductname . " => " . $newproductname . "<br>
-") . $_LANG['orderbillingcycle'] . ": " . $_LANG["orderpaymentterm" . str_replace(array("-", " "), "", strtolower($newproductbillingcycle))] . "<br>
-" . $_LANG['ordertotalduetoday'] . ": " . formatCurrency($amountdue);
+		$orderdescription = $_LANG['upgradedowngradepackage'] . (": " . $oldproductname . " => " . $newproductname . "<br>\r\n") . $_LANG['orderbillingcycle'] . ": " . $_LANG["orderpaymentterm" . str_replace(array("-", " "), "", strtolower($newproductbillingcycle))] . "<br>\r\n" . $_LANG['ordertotalduetoday'] . ": " . formatCurrency($amountdue);
 		$amountwithdiscount = $amountdue - $discount;
 		$upgradeid = insert_query("tblupgrades", array("type" => "package", "date" => "now()", "relid" => $id, "originalvalue" => $oldproductid, "newvalue" => "" . $newproductid . "," . $newproductbillingcycleraw, "amount" => $amountwithdiscount, "recurringchange" => $difference));
 		$upgradeslist .= $upgradeid . ",";
@@ -273,8 +271,7 @@ function SumUpConfigOptionsOrder($id, $configoptions, $promocode, $paymentmethod
 
 	$year = substr($nextduedate, 0, 4);
 	$month = substr($nextduedate, 5, 2);
-	$day = substr($nextduedate, 8, 2);
-	$cyclemonths = getBillingCycleMonths($billingcycle);
+	$cyclemonths = $day = substr($nextduedate, 8, 2);
 	$prevduedate = date("Y-m-d", mktime(0, 0, 0, $month - $cyclemonths, $day, $year));
 	$totaldays = round((strtotime($nextduedate) - strtotime($prevduedate)) / 86400);
 	$todaysdate = date("Ymd");
@@ -350,7 +347,8 @@ function SumUpConfigOptionsOrder($id, $configoptions, $promocode, $paymentmethod
 		}
 	}
 
-	$configoptions = getCartConfigOptions($packageid, $configoptions, $billingcycle);
+	getCartConfigOptions($packageid, $configoptions, $billingcycle);
+	$configoptions = getBillingCycleMonths($billingcycle);
 	$oldconfigoptions = getCartConfigOptions($packageid, "", $billingcycle, $id);
 	$subtotal = 0;
 	foreach ($configoptions as $key => $configoption) {
@@ -403,7 +401,7 @@ function SumUpConfigOptionsOrder($id, $configoptions, $promocode, $paymentmethod
 						$new_selectedqty = (int)$new_selectedqty;
 
 						if ($new_selectedqty < 0) {
-							$new_selectedqty = 10;
+							$new_selectedqty = 1073;
 						}
 
 						$db_orig_value = $old_selectedqty;
@@ -426,13 +424,10 @@ function SumUpConfigOptionsOrder($id, $configoptions, $promocode, $paymentmethod
 
 			if ($checkout) {
 				if ($orderdescription) {
-					$orderdescription .= "<br>
-<br>
-";
+					$orderdescription .= "<br>\r\n<br>\r\n";
 				}
 
-				$orderdescription .= $_LANG['upgradedowngradeconfigoptions'] . (": " . $configname . " - " . $originalvalue . " => " . $newvalue . "<br>
-Amount Due: ") . formatCurrency($amountdue);
+				$orderdescription .= $_LANG['upgradedowngradeconfigoptions'] . (": " . $configname . " - " . $originalvalue . " => " . $newvalue . "<br>\r\nAmount Due: ") . formatCurrency($amountdue);
 				$paid = "N";
 
 				if ($amountdue <= 0) {
@@ -471,8 +466,7 @@ Amount Due: ") . formatCurrency($amountdue);
 
 
 	if (!count($upgradearray)) {
-		header("Location: upgrade.php?type=configoptions&id=" . $id);
-		exit();
+		redir("type=configoptions&id=" . (int)$id, "upgrade.php");
 	}
 
 	$GLOBALS['subtotal'] = $subtotal;
@@ -519,7 +513,7 @@ function createUpgradeOrder($id, $ordernotes, $promocode, $paymentmethod) {
 	$invoiceid = createInvoices($_SESSION['uid'], true);
 
 	if ($invoiceid) {
-		$result = select_query("tblinvoiceitems", "invoiceid", "type='Upgrade' AND relid IN (" . implode(",", $_SESSION['upgradeids']) . ")", "invoiceid", "DESC");
+		$result = select_query("tblinvoiceitems", "invoiceid", "type='Upgrade' AND relid IN (" . db_build_in_array(db_escape_numarray($_SESSION['upgradeids'])) . ")", "invoiceid", "DESC");
 		$data = mysql_fetch_array($result);
 		$invoiceid = $data['invoiceid'];
 	}
@@ -545,7 +539,7 @@ function createUpgradeOrder($id, $ordernotes, $promocode, $paymentmethod) {
 	$adminemailitems = "";
 
 	if ($invoiceid) {
-		$result = select_query("tblinvoiceitems", "description", "type='Upgrade' AND relid IN (" . implode(",", $_SESSION['upgradeids']) . ")", "invoiceid", "DESC");
+		$result = select_query("tblinvoiceitems", "description", "type='Upgrade' AND relid IN (" . db_build_in_array(db_escape_numarray($_SESSION['upgradeids'])) . ")", "invoiceid", "DESC");
 
 		while ($invoicedata = mysql_fetch_assoc($result)) {
 			$adminemailitems .= $invoicedata['description'] . "<br />";

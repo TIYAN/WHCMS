@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.12
+ * @ Version  : 5.2.13
  * @ Author   : MTIMER
- * @ Release on : 2013-10-25
+ * @ Release on : 2013-11-25
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -162,7 +162,7 @@ if ($action == "save") {
 			update_query("tbladmins", array("password" => md5(trim($password))), array("id" => $_SESSION['adminid']));
 		}
 
-		header("Location: " . $_SERVER['PHP_SELF'] . "?success=true");
+		redir("success=true");
 		exit();
 	}
 }

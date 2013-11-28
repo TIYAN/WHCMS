@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.12
+ * @ Version  : 5.2.13
  * @ Author   : MTIMER
- * @ Release on : 2013-10-25
+ * @ Release on : 2013-11-25
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -289,8 +289,8 @@ function ccProcessing() {
 	global $whmcs;
 	global $cron;
 
-	$chargedate = "";
-	$chargedates[] = date("Ymd", mktime(0, 0, 0, date("m"), date("d") + $whmcs->get_config("CCProcessDaysBefore"), date("Y")));
+	$chargedate = date("Ymd", mktime(0, 0, 0, date("m"), date("d") + $whmcs->get_config("CCProcessDaysBefore"), date("Y")));
+	$chargedates = array();
 
 	if (!$whmcs->get_config("CCAttemptOnlyOnce")) {
 		$i = 1;
@@ -311,14 +311,12 @@ function ccProcessing() {
 
 
 	if (count($qrygateways)) {
-		$z = $y = 0;
+		$y = 0;
 		$query = "SELECT tblinvoices.* FROM tblinvoices INNER JOIN tblclients ON tblclients.id=tblinvoices.userid WHERE (tblinvoices.status='Unpaid') AND (" . implode(" OR ", $qrygateways) . ") AND tblclients.disableautocc='' AND (tblinvoices.duedate='" . $chargedate . "'";
 
 		if (!$whmcs->get_config("CCAttemptOnlyOnce")) {
 			if (0 < count($chargedates)) {
-				foreach ($chargedates as $value) {
-					$query .= " OR tblinvoices.duedate='" . $value . "'";
-				}
+				$query .= " OR " . implode(" OR ", $chargedates);
 			}
 			else {
 				$query .= " OR tblinvoices.duedate<'" . $chargedate . "'";
@@ -326,7 +324,7 @@ function ccProcessing() {
 		}
 
 		$query .= ")";
-		$result = full_query($query);
+		$result = $z = full_query($query);
 
 		while ($data = mysql_fetch_array($result)) {
 			if (is_object($cron)) {

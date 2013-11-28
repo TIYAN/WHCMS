@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.12
+ * @ Version  : 5.2.13
  * @ Author   : MTIMER
- * @ Release on : 2013-10-25
+ * @ Release on : 2013-11-25
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -70,9 +70,7 @@ if ($action == "emptytemplatecache") {
 	$dh = opendir($templates_compiledir);
 
 	while (false !== $file = readdir($dh)) {
-		if (is_file($templates_compiledir . $file)) {
-			@unlink($templates_compiledir . $file);
-		}
+		deleteFile($templates_compiledir, $file);
 	}
 
 	closedir($dh);
@@ -90,7 +88,7 @@ if ($action == "deleteattachments" && $date) {
 		$attachment = $data['attachment'];
 		$attachment = explode("|", $attachment);
 		foreach ($attachment as $file) {
-			@unlink($attachments_dir . $file);
+			deleteFile($attachments_dir, $file);
 		}
 	}
 
@@ -100,7 +98,7 @@ if ($action == "deleteattachments" && $date) {
 		$attachment = $data['attachment'];
 		$attachment = explode("|", $attachment);
 		foreach ($attachment as $file) {
-			@unlink($attachments_dir . $file);
+			deleteFile($attachments_dir, $file);
 		}
 	}
 

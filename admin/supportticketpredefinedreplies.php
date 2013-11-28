@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.12
+ * @ Version  : 5.2.13
  * @ Author   : MTIMER
- * @ Release on : 2013-10-25
+ * @ Release on : 2013-11-25
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -68,7 +68,7 @@ if ($addreply == "true") {
 	checkPermission("Create Predefined Replies");
 	$lastid = insert_query("tblticketpredefinedreplies", array("catid" => $catid, "name" => $name));
 	logActivity("Added New Predefined Reply - " . $title);
-	header("Location: " . $PHP_SELF . "?action=edit&id=" . $lastid);
+	redir("action=edit&id=" . $lastid);
 	exit();
 }
 
@@ -81,7 +81,7 @@ if ($sub == "save") {
 	$where = array("id" => $id);
 	update_query($table, $array, $where);
 	logActivity("Modified Predefined Reply (ID: " . $id . ")");
-	header("Location: " . $PHP_SELF . "?catid=" . $catid . "&save=true");
+	redir("catid=" . $catid . "&save=true");
 	exit();
 }
 
@@ -94,7 +94,7 @@ if ($sub == "savecat") {
 	$where = array("id" => $id);
 	update_query($table, $array, $where);
 	logActivity("Modified Predefined Reply Category (ID: " . $id . ")");
-	header("Location: " . $PHP_SELF . "?catid=" . $parentid . "&savecat=true");
+	redir("catid=" . $parentid . "&savecat=true");
 	exit();
 }
 
@@ -104,7 +104,7 @@ if ($addcategory == "true") {
 	checkPermission("Create Predefined Replies");
 	insert_query("tblticketpredefinedcats", array("parentid" => $catid, "name" => $catname));
 	logActivity("Added New Predefined Reply Category - " . $catname);
-	header("Location: " . $PHP_SELF . "?catid=" . $catid . "&addedcat=true");
+	redir("catid=" . $catid . "&addedcat=true");
 	exit();
 }
 
@@ -114,7 +114,7 @@ if ($sub == "delete") {
 	checkPermission("Delete Predefined Replies");
 	delete_query("tblticketpredefinedreplies", array("id" => $id));
 	logActivity("Deleted Predefined Reply (ID: " . $id . ")");
-	header("Location: " . $PHP_SELF . "?catid=" . $catid . "&delete=true");
+	redir("catid=" . $catid . "&delete=true");
 	exit();
 }
 
@@ -126,7 +126,7 @@ if ($sub == "deletecategory") {
 	delete_query("tblticketpredefinedcats", array("id" => $id));
 	deletePreDefCat($id);
 	logActivity("Deleted Predefined Reply Category (ID: " . $id . ")");
-	header("Location: " . $PHP_SELF . "?catid=" . $catid . "&deletecat=true");
+	redir("catid=" . $catid . "&deletecat=true");
 	exit();
 }
 

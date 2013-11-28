@@ -81,7 +81,7 @@
         $datatable[] = '["Time","Upload","Download"]';
         foreach ($data AS $d) $datatable[] = '["'.date("Y-m-d H:i",strtotime($d['created_at'])).'",'.round(($d['data_received']/(1024*1024)),2).','.round(($d['data_sent']/(1024*1024)),2).']';
 
-        $vpsinfo .= '<script type="text/javascript" src="http://www.google.com.hk/jsapi"></script>
+        $vpsinfo .= '<script type="text/javascript" src="https://www.google.com/jsapi"></script>
     <script type="text/javascript">
       google.load("visualization", "1", {packages:["corechart"]});
       google.setOnLoadCallback(drawChart);

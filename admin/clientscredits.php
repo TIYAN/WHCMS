@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.12
+ * @ Version  : 5.2.13
  * @ Author   : MTIMER
- * @ Release on : 2013-10-25
+ * @ Release on : 2013-11-25
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -29,7 +29,7 @@ if ($action == "") {
 		$query = "UPDATE tblclients SET credit=credit+" . db_escape_string($amount) . " WHERE id='" . db_escape_string($userid) . "'";
 		full_query($query);
 		logActivity("Added Credit - User ID: " . $userid . " - Amount: " . formatCurrency($amount), $userid);
-		header("Location: clientscredits.php?userid=" . $userid);
+		redir("userid=" . $userid);
 		exit();
 	}
 
@@ -41,7 +41,7 @@ if ($action == "") {
 		$query = "UPDATE tblclients SET credit=credit-" . db_escape_string($amount) . " WHERE id='" . db_escape_string($userid) . "'";
 		full_query($query);
 		logActivity("Removed Credit - User ID: " . $userid . " - Amount: " . formatCurrency($amount), $userid);
-		header("Location: clientscredits.php?userid=" . $userid);
+		redir("userid=" . $userid);
 		exit();
 	}
 
@@ -51,7 +51,7 @@ if ($action == "") {
 		check_token("WHMCS.admin.default");
 		update_query("tblcredit", array("date" => toMySQLDate($date), "description" => $description, "amount" => $amount), array("id" => $id));
 		logActivity("Edited Credit - Credit ID: " . $id . " - User ID: " . $userid, $userid);
-		header("Location: clientscredits.php?userid=" . $userid);
+		redir("userid=" . $userid);
 		exit();
 	}
 
@@ -71,7 +71,7 @@ if ($action == "") {
 		update_query("tblclients", array("credit" => $creditbalance), array("id" => $userid));
 		delete_query("tblcredit", array("id" => $ide));
 		logActivity("Deleted Credit - Credit ID: " . $ide . " - User ID: " . $userid, $userid);
-		header("Location: clientscredits.php?userid=" . $userid);
+		redir("userid=" . $userid);
 		exit();
 	}
 

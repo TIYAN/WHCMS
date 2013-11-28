@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.12
+ * @ Version  : 5.2.13
  * @ Author   : MTIMER
- * @ Release on : 2013-10-25
+ * @ Release on : 2013-11-25
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -28,7 +28,7 @@ function formatFileSize($val, $digits = 3) {
 	$symbols = array("", "k", "M", "G", "T", "P", "E", "Z", "Y");
 	$i = 0;
 
-	while (($i < count($symbols) - 1 && $factor <= $val)) {
+	while ($i < count($symbols) - 1 && $factor <= $val) {
 		$val /= $factor;
 		++$i;
 	}
@@ -137,8 +137,7 @@ if ($action == "displaycat" || $action == "displayarticle") {
 	$catid = $data['id'];
 
 	if (!$catid) {
-		header("Location: " . $CONFIG['SystemURL'] . "/downloads.php");
-		exit();
+		redir("", $CONFIG['SystemURL'] . "/downloads.php");
 	}
 
 	$catparentid = $data['parentid'];

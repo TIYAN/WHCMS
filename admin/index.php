@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.12
+ * @ Version  : 5.2.13
  * @ Author   : MTIMER
- * @ Release on : 2013-10-25
+ * @ Release on : 2013-11-25
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -71,11 +71,10 @@ if (!$licensing->checkOwnedUpdates()) {
 
 
 if (!checkPermission("Main Homepage", true) && checkPermission("Support Center Overview", true)) {
-	header("Location: supportcenter.php");
-	exit();
+	redir("", "supportcenter.php");
 }
 
-$aInt = new WHMCS_Admin("Main Homepage");
+$aInt = new WHMCS_Admin("Main Homepage", false);
 $aInt->title = $aInt->lang("global", "hometitle");
 $aInt->sidebar = "home";
 $aInt->icon = "home";
@@ -84,10 +83,38 @@ $aInt->template = "homepage";
 $chart = new WHMCSChart();
 $action = $whmcs->get_req_var("action");
 
+if ($whmcs->get_req_var("createinvoices") || $whmcs->get_req_var("generateinvoices")) {
+	check_token("WHMCS.admin.default");
+	checkPermission("Generate Due Invoices");
+	createInvoices("", $noemails);
+	redir("generatedinvoices=1&count=" . $invoicecount);
+}
+
+
+if ($whmcs->get_req_var("generatedinvoices")) {
+	infoBox($aInt->lang("invoices", "gencomplete"), (int)$whmcs->get_req_var("count") . " Invoices Created");
+}
+
+
+if ($whmcs->get_req_var("attemptccpayments")) {
+	check_token("WHMCS.admin.default");
+	checkPermission("Attempts CC Captures");
+	$_SESSION['AdminHomeCCCaptureResultMsg'] = ccProcessing();
+	redir("attemptedccpayments=1");
+}
+
+
+if ($whmcs->get_req_var("attemptedccpayments") && isset($_SESSION['AdminHomeCCCaptureResultMsg'])) {
+	infoBox($aInt->lang("invoices", "attemptcccapturessuccess"), $_SESSION['AdminHomeCCCaptureResultMsg']);
+	unset($_SESSION['AdminHomeCCCaptureResultMsg']);
+}
+
+releaseSession();
+
 if ($action == "savenotes") {
+	check_token("WHMCS.admin.default");
 	update_query("tbladmins", array("notes" => $notes), array("id" => $_SESSION['adminid']));
-	header("Location: " . $_SERVER['PHP_SELF'] . "");
-	exit();
+	redir();
 }
 
 
@@ -99,12 +126,12 @@ if ($whmcs->get_req_var("infopopup")) {
 	}
 
 	echo substr($data, 2);
-
 	exit();
 }
 
 
 if ($whmcs->get_req_var("toggleinfopopup")) {
+	check_token("WHMCS.admin.default");
 	$infotoggle = unserialize($whmcs->get_config("ToggleInfoPopup"));
 
 	if (!is_array($infotoggle)) {
@@ -127,6 +154,7 @@ if ($whmcs->get_req_var("toggleinfopopup")) {
 
 
 if ($whmcs->get_req_var("saveorder")) {
+	check_token("WHMCS.admin.default");
 	update_query("tbladmins", array("homewidgets" => $widgetdata), array("id" => $_SESSION['adminid']));
 	exit();
 }
@@ -152,6 +180,8 @@ if ($whmcs->get_req_var("dismissgs")) {
 
 
 if ($whmcs->get_req_var("getincome")) {
+	check_token("WHMCS.admin.default");
+
 	if (!checkPermission("View Income Totals", true)) {
 		return false;
 	}
@@ -165,20 +195,6 @@ $templatevars['licenseinfo'] = array("registeredname" => $licensing->getKeyData(
 
 if ($licensing->getKeyData("productname") == "15 Day Free Trial") {
 	$templatevars['freetrial'] = true;
-}
-
-
-if ($whmcs->get_req_var("createinvoices") || $whmcs->get_req_var("generateinvoices")) {
-	checkPermission("Generate Due Invoices");
-	createInvoices("", $noemails);
-	infoBox($aInt->lang("invoices", "gencomplete"), $invoicecount . " Invoices Created");
-}
-
-
-if ($whmcs->get_req_var("attemptccpayments")) {
-	checkPermission("Attempts CC Captures");
-	$ccresultmsg = ccProcessing();
-	infoBox($aInt->lang("invoices", "attemptcccapturessuccess"), $ccresultmsg);
 }
 
 $templatevars['infobox'] = $infobox;
@@ -258,7 +274,8 @@ if ($aInt->chartFunctions) {
 	$jscode .= "redrawCharts()";
 }
 
-$jscode .= "    $.post(\"index.php\", { saveorder: \"1\", widgetdata: orderdata });
+$csrfToken = generate_token("plain");
+$jscode .= "    $.post(\"index.php\", { saveorder: \"1\", widgetdata: orderdata, token: \"" . $csrfToken . "\" });
 }
 function resHomeWidgets() {
     var IDs = '';
@@ -304,14 +321,14 @@ $templatevars['widgets'] = load_admin_home_widgets();
 
 if (checkPermission("View Income Totals", true)) {
 	$templatevars['viewincometotals'] = true;
-	$jquerycode .= "jQuery.post(\"index.php\", { getincome: 1 },
+	$jquerycode .= "jQuery.post(\"index.php\", { getincome: 1, token: \"" . generate_token("plain") . "\" },
     function(data){
         jQuery(\"#incometotals\").html(data);
     });";
 }
 
-$invoicedialog = $aInt->jqueryDialog("geninvoices", $aInt->lang("invoices", "geninvoices"), $aInt->lang("invoices", "geninvoicessendemails"), array($aInt->lang("global", "yes") => "window.location='index.php?generateinvoices=true'", $aInt->lang("global", "no") => "window.location='index.php?generateinvoices=true&noemails=true'"));
-$cccapturedialog = $aInt->jqueryDialog("cccapture", $aInt->lang("invoices", "attemptcccaptures"), $aInt->lang("invoices", "attemptcccapturessure"), array($aInt->lang("global", "yes") => "window.location='index.php?attemptccpayments=true'", $aInt->lang("global", "no") => ""));
+$invoicedialog = $aInt->jqueryDialog("geninvoices", $aInt->lang("invoices", "geninvoices"), $aInt->lang("invoices", "geninvoicessendemails"), array($aInt->lang("global", "yes") => "window.location='index.php?generateinvoices=true" . generate_token("link") . "'", $aInt->lang("global", "no") => "window.location='index.php?generateinvoices=true&noemails=true" . generate_token("link") . "'"));
+$cccapturedialog = $aInt->jqueryDialog("cccapture", $aInt->lang("invoices", "attemptcccaptures"), $aInt->lang("invoices", "attemptcccapturessure"), array($aInt->lang("global", "yes") => "window.location='index.php?attemptccpayments=true" . generate_token("link") . "'", $aInt->lang("global", "no") => ""));
 $addons_html = run_hook("AdminHomepage", array());
 $templatevars['addons_html'] = $addons_html;
 
@@ -341,7 +358,7 @@ if (get_query_val("tbladmins", "roleid", array("id" => (int)$_SESSION['adminid']
 	if ($showdialog) {
 		$aInt->dialog("infopopup");
 		$jquerycode .= "dialogOpen();";
-		$jscode .= "function toggleInfoPopup() { jQuery.post(\"index.php\", \"toggleinfopopup=1&showhide=\"+$(\"#toggleinfocb\").is(\":checked\")); }";
+		$jscode .= "function toggleInfoPopup() { jQuery.post(\"index.php\", \"toggleinfopopup=1" . generate_token("link") . "&showhide=\"+$(\"#toggleinfocb\").is(\":checked\")); }";
 	}
 }
 

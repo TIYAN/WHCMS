@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.12
+ * @ Version  : 5.2.13
  * @ Author   : MTIMER
- * @ Release on : 2013-10-25
+ * @ Release on : 2013-11-25
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -58,6 +58,7 @@ if ($whmcs->get_req_var("ticketid")) {
 
 
 if ($action == "gettags") {
+	check_token("WHMCS.admin.default");
 	$array = array();
 	$result = select_query("tbltickettags", "DISTINCT tag", "tag LIKE '" . db_escape_string($q) . "%'", "tag", "ASC");
 
@@ -71,6 +72,7 @@ if ($action == "gettags") {
 
 
 if ($action == "savetags") {
+	check_token("WHMCS.admin.default");
 	$access = validateAdminTicketAccess($id);
 
 	if ($access) {
@@ -120,6 +122,7 @@ if ($action == "savetags") {
 
 
 if ($action == "checkstatus") {
+	check_token("WHMCS.admin.default");
 	$access = validateAdminTicketAccess($id);
 
 	if ($access) {
@@ -143,10 +146,11 @@ if ($action == "checkstatus") {
 
 if ($action == "split") {
 	if (empty($rids)) {
-		header("Location:supporttickets.php?action=viewticket&id=" . $id . "");
+		redir("action=viewticket&id=" . $id . "");
 		exit();
 	}
 
+	check_token("WHMCS.admin.default");
 	$access = validateAdminTicketAccess($id);
 
 	if ($access) {
@@ -180,12 +184,13 @@ if ($action == "split") {
 	$ticketid = $newOpenedTicketResults['ID'];
 	delete_query("tblticketreplies", array("id" => $messageEarliestID));
 	update_query("tblticketreplies", array("tid" => $ticketid), "`id` IN (" . $rids . ")");
-	header("Location: supporttickets.php?action=viewticket&id=" . $ticketid);
+	redir("action=viewticket&id=" . $ticketid);
 	exit();
 }
 
 
 if ($action == "getmsg") {
+	check_token("WHMCS.admin.default");
 	$msg = "";
 	$id = substr($ref, 1);
 
@@ -217,6 +222,7 @@ if ($action == "getmsg") {
 
 
 if ($action == "getticketlog") {
+	check_token("WHMCS.admin.default");
 	$access = validateAdminTicketAccess($id);
 
 	if ($access) {
@@ -259,6 +265,7 @@ if ($action == "getticketlog") {
 
 
 if ($action == "getclientlog") {
+	check_token("WHMCS.admin.default");
 	checkPermission("View Activity Log");
 	$totaltickets = get_query_val("tblactivitylog", "COUNT(id)", array("userid" => $userid));
 	$patterns = $replacements = array();
@@ -291,6 +298,7 @@ if ($action == "getclientlog") {
 	while ($data = mysql_fetch_array($result)) {
 		$description = $data['description'];
 		$description .= " ";
+		$description = htmlentities($description, ENT_QUOTES, "UTF-8");
 		$description = preg_replace($patterns, $replacements, $description);
 		$tabledata[] = array(fromMySQLDate($data['date'], 1), "<div style=\"text-align:left;\">" . $description . "</div>", $data['user'], $data['ipaddr']);
 	}
@@ -314,6 +322,7 @@ if ($action == "getclientlog") {
 
 
 if ($action == "gettickets") {
+	check_token("WHMCS.admin.default");
 	$departmentsarray = getDepartments();
 
 	if ($userid) {
@@ -420,6 +429,7 @@ if ($action == "gettickets") {
 
 
 if ($action == "getallservices") {
+	check_token("WHMCS.admin.default");
 	$pauserid = (int)$userid;
 	$currency = getCurrency($pauserid);
 	$service = get_query_val("tbltickets", "service", array("id" => $id));
@@ -533,6 +543,8 @@ if ($action == "getallservices") {
 
 
 if ($action == "updatereply") {
+	check_token("WHMCS.admin.default");
+
 	if (substr($ref, 0, 1) == "t") {
 		update_query("tbltickets", array("message" => $text), array("id" => substr($ref, 1)));
 	}
@@ -555,6 +567,7 @@ if ($action == "updatereply") {
 
 
 if ($action == "makingreply") {
+	check_token("WHMCS.admin.default");
 	$access = validateAdminTicketAccess($id);
 
 	if ($access) {
@@ -585,6 +598,7 @@ if ($action == "makingreply") {
 
 
 if ($action == "endreply") {
+	check_token("WHMCS.admin.default");
 	$access = validateAdminTicketAccess($id);
 
 	if ($access) {
@@ -597,6 +611,7 @@ if ($action == "endreply") {
 
 
 if ($action == "changestatus") {
+	check_token("WHMCS.admin.default");
 	$access = validateAdminTicketAccess($id);
 
 	if ($access) {
@@ -618,6 +633,7 @@ if ($action == "changestatus") {
 
 
 if ($action == "changeflag") {
+	check_token("WHMCS.admin.default");
 	$access = validateAdminTicketAccess($id);
 
 	if ($access) {
@@ -636,12 +652,14 @@ if ($action == "changeflag") {
 
 
 if ($action == "loadpredefinedreplies") {
+	check_token("WHMCS.admin.default");
 	echo genPredefinedRepliesList($cat, $predefq);
 	exit();
 }
 
 
 if ($action == "getpredefinedreply") {
+	check_token("WHMCS.admin.default");
 	$result = select_query("tblticketpredefinedreplies", "", array("id" => $id));
 	$data = mysql_fetch_array($result);
 	$reply = html_entity_decode($data['reply']);
@@ -651,6 +669,7 @@ if ($action == "getpredefinedreply") {
 
 
 if ($action == "getquotedtext") {
+	check_token("WHMCS.admin.default");
 	$replytext = "";
 
 	if ($id) {
@@ -691,6 +710,7 @@ if ($action == "getquotedtext") {
 
 
 if ($action == "getcontacts") {
+	check_token("WHMCS.admin.default");
 	echo getTicketContacts($userid);
 	exit();
 }
@@ -698,10 +718,10 @@ if ($action == "getcontacts") {
 
 if (!$action) {
 	if ($sub == "deleteticket") {
+		check_token("WHMCS.admin.default");
 		checkPermission("Delete Ticket");
 		deleteTicket($id);
-		header("Location: supporttickets.php");
-		exit();
+		redir();
 	}
 
 
@@ -794,6 +814,7 @@ if (!$action) {
 }
 else {
 	if ($action == "mergeticket") {
+		exit("action=mergeticket");
 		$result = select_query("tbltickets", "id", array("tid" => $mergetid));
 		$data = mysql_fetch_array($result);
 		$mergeid = $data['id'];
@@ -842,7 +863,7 @@ else {
 		$attachment = $data['attachment'];
 		insert_query("tblticketreplies", array("tid" => $mastertid, "userid" => $userid, "name" => $name, "email" => $email, "date" => $date, "message" => $message, "admin" => $admin, "attachment" => $attachment));
 		delete_query("tbltickets", array("id" => $mergeid));
-		header("Location: supporttickets.php?action=viewticket&id=" . $mastertid);
+		redir("action=viewticket&id=" . $mastertid);
 		exit();
 	}
 	else {
@@ -882,7 +903,7 @@ else {
 				$client = (int)str_replace("UserID:", "", $client);
 				$ticketdata = openNewTicket($client, $contactid, $deptid, $subject, $message, $priority, $attachments, array("name" => $name, "email" => $email), $relatedservice, $ccemail, ($sendemail ? false : true), true);
 				$id = $ticketdata['ID'];
-				header("Location: supporttickets.php?action=viewticket&id=" . $id);
+				redir("action=viewticket&id=" . $id);
 				exit();
 			}
 			else {
@@ -891,6 +912,28 @@ else {
 		}
 		else {
 			if ($action == "viewticket") {
+				$access = validateAdminTicketAccess($id);
+
+				if ($access == "invalidid") {
+					$aInt->gracefulExit($aInt->lang("support", "ticketnotfound"));
+				}
+
+
+				if ($access == "deptblocked") {
+					$aInt->gracefulExit($aInt->lang("support", "deptnoaccess"));
+				}
+
+
+				if ($access == "flagged") {
+					$aInt->gracefulExit($aInt->lang("support", "flagnoaccess") . ": " . getAdminName($flag));
+				}
+
+
+				if ($access) {
+					exit();
+				}
+
+
 				if ($postreply || $postaction) {
 					check_token("WHMCS.admin.default");
 
@@ -976,7 +1019,7 @@ else {
 						}
 					}
 
-					header("Location: supporttickets.php?action=viewticket&id=" . $id);
+					redir("action=viewticket&id=" . $id);
 					exit();
 				}
 
@@ -1043,16 +1086,18 @@ else {
 
 
 					if ($mergetid) {
-						header("Location: supporttickets.php?action=mergeticket&id=" . $id . "&mergetid=" . $mergetid);
+						redir("action=mergeticket&id=" . $id . "&mergetid=" . $mergetid);
 						exit();
 					}
 
-					header("Location: supporttickets.php?action=viewticket&id=" . $id);
+					redir("action=viewticket&id=" . $id);
 					exit();
 				}
 
 
 				if ($removeattachment) {
+					check_token("WHMCS.admin.default");
+
 					if ($type == "r") {
 						$result = select_query("tblticketreplies", "", array("id" => $idsd));
 						$data = mysql_fetch_array($result);
@@ -1074,11 +1119,11 @@ else {
 							}
 
 							$keepfile = substr($keepfile, 0, 0 - 1);
-							unlink($attachments_dir . $filetoremove);
+							deleteFile($attachments_dir, $filetoremove);
 							update_query("tblticketreplies", array("attachment" => $keepfile), array("id" => $idsd));
 						}
 						else {
-							unlink($attachments_dir . $attachment);
+							deleteFile($attachments_dir, $attachment);
 							update_query("tblticketreplies", array("attachment" => ""), array("id" => $idsd));
 						}
 					}
@@ -1103,37 +1148,40 @@ else {
 							}
 
 							$keepfile = substr($keepfile, 0, 0 - 1);
-							unlink($attachments_dir . $filetoremove);
+							deleteFile($attachments_dir, $filetoremove);
 							update_query("tbltickets", array("attachment" => $keepfile), array("id" => $idsd));
 						}
 						else {
-							unlink($attachments_dir . $attachment);
+							deleteFile($attachments_dir, $attachment);
 							update_query("tbltickets", array("attachment" => ""), array("id" => $idsd));
 						}
 					}
 
-					header("Location: supporttickets.php?action=viewticket&id=" . $id);
+					redir("action=viewticket&id=" . $id);
 					exit();
 				}
 
 
 				if ($sub == "del") {
+					check_token("WHMCS.admin.default");
 					checkPermission("Delete Ticket");
 					deleteTicket($id, $idsd);
-					header("Location: supporttickets.php?action=viewticket&id=" . $id);
+					redir("action=viewticket&id=" . $id);
 					exit();
 				}
 
 
 				if ($sub == "delnote") {
+					check_token("WHMCS.admin.default");
 					delete_query("tblticketnotes", array("id" => $idsd));
 					addTicketLog($id, "Deleted Ticket Note ID " . $idsd);
-					header("Location: supporttickets.php?action=viewticket&id=" . $id);
+					redir("action=viewticket&id=" . $id);
 					exit();
 				}
 
 
 				if ($blocksender) {
+					check_token("WHMCS.admin.default");
 					$result = select_query("tbltickets", "userid,email", array("id" => $id));
 					$data = get_query_vals("tbltickets", "userid,email", array("id" => $id));
 					$userid = $data['userid'];
@@ -1160,6 +1208,8 @@ else {
 
 
 if ($autorefresh) {
+	check_token("WHMCS.admin.default");
+
 	if ($autorefresh == "Never") {
 		wDelCookie("AutoRefresh");
 	}
@@ -1167,7 +1217,7 @@ if ($autorefresh) {
 		wSetCookie("AutoRefresh", $autorefresh, time() + 90 * 24 * 60 * 60);
 	}
 
-	header("Location: supporttickets.php");
+	redir();
 }
 
 
@@ -1509,7 +1559,7 @@ if (!$action) {
 		echo "<h2>" . $aInt->lang("support", "assignedtickets") . "</h2><p>" . sprintf($aInt->lang("support", "numticketsassigned"), count($tabledata)) . "</p>" . $aInt->sortableTable(array("checkall", "", $aInt->lang("support", "department"), $aInt->lang("fields", "subject"), $aInt->lang("support", "submitter"), $aInt->lang("fields", "status"), $aInt->lang("support", "lastreply")), $tabledata, $tableformurl, $tableformbuttons) . "<br /><h2>" . $aInt->lang("support", "unassignedtickets") . "</h2>";
 	}
 
-	$aInt->sortableTableInit("lastreply", "ASC", array("view", "client", "deptid", "subject", "email", "clientname"));
+	$aInt->sortableTableInit("lastreply", "ASC");
 	$tabledata = array();
 	$query = " FROM tbltickets LEFT JOIN tblclients ON tblclients.id=tbltickets.userid" . $tagjoin . " WHERE ";
 	$filters[] = "tbltickets.flag!=" . (int)$_SESSION['adminid'];
@@ -1532,7 +1582,7 @@ if (!$action) {
 
 
 if ($action == "search") {
-	$where = "tid='" . db_escape_string($ticketid) . "' AND did IN (" . implode(",", db_escape_numarray(getAdminDepartmentAssignments())) . ")";
+	$where = "tid='" . db_escape_string($ticketid) . "' AND did IN (" . db_build_in_array(db_escape_numarray(getAdminDepartmentAssignments())) . ")";
 	$result = select_query("tbltickets", "", $where);
 	$data = mysql_fetch_array($result);
 	$id = $data['id'];
@@ -1596,30 +1646,35 @@ if ($action == "viewticket") {
 	}
 
 
-	if ($updateticket == "deptid") {
-		$ticket->changeDept($value);
-		exit();
-	}
+	if ($updateticket) {
+		check_token("WHMCS.admin.default");
 
-
-	if ($updateticket == "flagto") {
-		$ticket->setFlagTo($value);
-		exit();
-	}
-
-
-	if ($updateticket == "priority") {
-		if (!in_array($value, array("High", "Medium", "Low"))) {
+		if ($updateticket == "deptid") {
+			$ticket->changeDept($value);
 			exit();
 		}
 
-		update_query("tbltickets", array("urgency" => $value), array("id" => (int)$id));
-		addTicketLog($id, "Priority changed to " . $value);
-		exit();
+
+		if ($updateticket == "flagto") {
+			$ticket->setFlagTo($value);
+			exit();
+		}
+
+
+		if ($updateticket == "priority") {
+			if (!in_array($value, array("High", "Medium", "Low"))) {
+				exit();
+			}
+
+			update_query("tbltickets", array("urgency" => $value), array("id" => (int)$id));
+			addTicketLog($id, "Priority changed to " . $value);
+			exit();
+		}
 	}
 
 
 	if ($sub == "savecustomfields") {
+		check_token("WHMCS.admin.default");
 		$customfields = getCustomFields("support", $deptid, $id, true);
 		foreach ($customfields as $v) {
 			$k = $v['id'];
@@ -1680,10 +1735,12 @@ if ($action == "viewticket") {
 
 	$smartyvalues['tags'] = $tags;
 	$tags = json_encode($tags);
+	$csrfToken = generate_token("plain");
 	$jsheadoutput = "<script type=\"text/javascript\">
 var ticketid = '" . $id . "';
 var userid = '" . $pauserid . "';
 var ticketTags = " . $tags . ";
+var csrfToken = '" . $csrfToken . "';
 var langdelreplysure = \"" . $_ADMINLANG['support']['delreplysure'] . "\";
 var langdelticketsure = \"" . $_ADMINLANG['support']['delticketsure'] . "\";
 var langdelnotesure = \"" . $_ADMINLANG['support']['delnotesure'] . "\";
@@ -1766,7 +1823,7 @@ var langstillsubmit = \"" . $_ADMINLANG['support']['stillsubmit'] . "\";
 
 	if ($service) {
 		switch (substr($service, 0, 1)) {
-		case "S": {
+		case "S":
 				$result = select_query("tblhosting", "tblhosting.id,tblhosting.userid,tblhosting.regdate,tblhosting.domain,tblhosting.domainstatus,tblhosting.nextduedate,tblhosting.billingcycle,tblproducts.name,tblhosting.username,tblhosting.password,tblproducts.servertype", array("tblhosting.id" => substr($service, 1)), "", "", "", "tblproducts ON tblproducts.id=tblhosting.packageid");
 				$data = mysql_fetch_array($result);
 				$service_id = $data['id'];
@@ -1797,9 +1854,8 @@ var langstillsubmit = \"" . $_ADMINLANG['support']['stillsubmit'] . "\";
 
 				$smartyvalues['relatedproduct'] = array("id" => $service_id, "name" => $service_name, "regdate" => fromMySQLDate($service_regdate), "domain" => $service_domain, "nextduedate" => fromMySQLDate($service_nextduedate), "username" => $service_username, "password" => $service_password, "loginlink" => $service_loginlink, "status" => $service_status);
 				break;
-			}
 
-		case "D": {
+		case "D":
 				$result = select_query("tbldomains", "", array("id" => substr($service, 1)));
 				$data = mysql_fetch_array($result);
 				$service_id = $data['id'];
@@ -1811,7 +1867,6 @@ var langstillsubmit = \"" . $_ADMINLANG['support']['stillsubmit'] . "\";
 				$service_regperiod = $data['registrationperiod'];
 				$service_registrar = $data['registrar'];
 				$smartyvalues['relateddomain'] = array("id" => $service_id, "domain" => $service_domain, "nextduedate" => fromMySQLDate($service_nextduedate), "registrar" => ucfirst($service_registrar), "regperiod" => $service_regperiod, "ordertype" => $service_type, "status" => $service_status);
-			}
 		}
 	}
 
@@ -2113,7 +2168,7 @@ $(\"#clientsearchcancel\").click(function () {
 $(\"#predefq\").keyup(function () {
     var intellisearchlength = $(\"#predefq\").val().length;
     if (intellisearchlength>2) {
-    $.post(\"supporttickets.php\", { action: \"loadpredefinedreplies\", predefq: $(\"#predefq\").val() },
+    $.post(\"supporttickets.php\", { action: \"loadpredefinedreplies\", predefq: $(\"#predefq\").val(), token: \"" . generate_token("plain") . "\" },
         function(data){
             $(\"#prerepliescontent\").html(data);
         });
@@ -2125,21 +2180,21 @@ $(\"#predefq\").keyup(function () {
     $(\"#replymessage\").addToReply(url);
 }
 function selectpredefcat(catid) {
-    $.post(\"supporttickets.php\", { action: \"loadpredefinedreplies\", cat: catid },
+    $.post(\"supporttickets.php\", { action: \"loadpredefinedreplies\", cat: catid, token: \"" . generate_token("plain") . "\" },
     function(data){
         $(\"#prerepliescontent\").html(data);
     });
 }
 function loadpredef(catid) {
     $(\"#prerepliescontainer\").slideToggle();
-    $(\"#prerepliescontent\").html('<img src=\\\"images/loading.gif\\\" align=\\\"top\\\" /> " . $aInt->lang("global", "loading") . "');
-    $.post(\"supporttickets.php\", { action: \"loadpredefinedreplies\", cat: catid },
+    $(\"#prerepliescontent\").html('<img src=\"images/loading.gif\" align=\"top\" /> " . $aInt->lang("global", "loading") . "');
+    $.post(\"supporttickets.php\", { action: \"loadpredefinedreplies\", cat: catid, token: \"" . generate_token("plain") . "\" },
     function(data){
         $(\"#prerepliescontent\").html(data);
     });
 }
 function selectpredefreply(artid) {
-    $.post(\"supporttickets.php\", { action: \"getpredefinedreply\", id: artid },
+    $.post(\"supporttickets.php\", { action: \"getpredefinedreply\", id: artid, token: \"" . generate_token("plain") . "\" },
     function(data){
         $(\"#replymessage\").addToReply(data);
     });

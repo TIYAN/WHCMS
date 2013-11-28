@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.12
+ * @ Version  : 5.2.13
  * @ Author   : MTIMER
- * @ Release on : 2013-10-25
+ * @ Release on : 2013-11-25
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -23,7 +23,7 @@ $chart = new WHMCSChart();
 if ($action == "addrole") {
 	check_token("WHMCS.admin.default");
 	$adminrole = insert_query("tbladminroles", array("name" => $name));
-	header("Location: configadminroles.php?action=edit&id=" . $adminrole);
+	redir("action=edit&id=" . $adminrole);
 	exit();
 }
 
@@ -43,7 +43,7 @@ if ($action == "duplicaterole") {
 		insert_query("tbladminperms", array("roleid" => $roleid, "permid" => $data['permid']));
 	}
 
-	header("Location: configadminroles.php?action=edit&id=" . $roleid);
+	redir("action=edit&id=" . $roleid);
 	exit();
 }
 
@@ -323,7 +323,7 @@ function zUncheckAll(oForm) {
 				$listwidgets = load_admin_home_widgets();
 				asort($listwidgets);
 				$totalportlets = ceil(count($listwidgets) / 3);
-				$i = 1;
+				$i = 0;
 				foreach ($listwidgets as $k => $v) {
 					echo "<input type=\"checkbox\" name=\"widget[]\" value=\"" . $k . "\" id=\"widget" . $k . "\"";
 
@@ -335,7 +335,7 @@ function zUncheckAll(oForm) {
 
 					if ($totalportlets <= $i) {
 						echo "</td><td width=\"33%\" valign=\"top\">";
-						$i = 1;
+						$i = 0;
 						continue;
 					}
 

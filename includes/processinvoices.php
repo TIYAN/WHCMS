@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.12
+ * @ Version  : 5.2.13
  * @ Author   : MTIMER
- * @ Release on : 2013-10-25
+ * @ Release on : 2013-11-25
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -53,17 +53,17 @@ function createInvoices($func_userid = "", $noemails = "", $nocredit = "", $spec
 		$hostingquery = $domainquery = $hostingaddonsquery = "";
 
 		if ($specificitems['products']) {
-			$hostingquery .= "(id IN (" . implode(",", db_escape_numarray($specificitems['products'])) . ") AND billingcycle!='Free' AND billingcycle!='Free Account')";
+			$hostingquery .= "(id IN (" . db_build_in_array(db_escape_numarray($specificitems['products'])) . ") AND billingcycle!='Free' AND billingcycle!='Free Account')";
 		}
 
 
 		if ($specificitems['addons']) {
-			$hostingaddonsquery .= "tblhostingaddons.id IN (" . implode(",", db_escape_numarray($specificitems['addons'])) . ") AND tblhostingaddons.billingcycle!='Free' AND tblhostingaddons.billingcycle!='Free Account'";
+			$hostingaddonsquery .= "tblhostingaddons.id IN (" . db_build_in_array(db_escape_numarray($specificitems['addons'])) . ") AND tblhostingaddons.billingcycle!='Free' AND tblhostingaddons.billingcycle!='Free Account'";
 		}
 
 
 		if ($specificitems['domains']) {
-			$domainquery .= "id IN (" . implode(",", db_escape_numarray($specificitems['domains'])) . ")";
+			$domainquery .= "id IN (" . db_build_in_array(db_escape_numarray($specificitems['domains'])) . ")";
 		}
 	}
 
@@ -230,7 +230,7 @@ function createInvoices($func_userid = "", $noemails = "", $nocredit = "", $spec
 		$addoncount = 0;
 
 		if (count($AddonSpecificIDs)) {
-			$hostingaddonsquery .= " AND tblhostingaddons.id NOT IN (" . implode(",", db_escape_numarray($AddonSpecificIDs)) . ")";
+			$hostingaddonsquery .= " AND tblhostingaddons.id NOT IN (" . db_build_in_array(db_escape_numarray($AddonSpecificIDs)) . ")";
 		}
 
 		$result = select_query("tblhostingaddons", "tblhostingaddons.*,tblhostingaddons.regdate AS addonregdate,tblhosting.userid,tblhosting.domain", $hostingaddonsquery, "tblhostingaddons`.`name", "ASC", "", "tblhosting ON tblhosting.id=tblhostingaddons.hostingid");
@@ -372,20 +372,17 @@ function createInvoices($func_userid = "", $noemails = "", $nocredit = "", $spec
 
 
 				if ($dnsmanagement) {
-					$domaindesc .= "
- + " . $_LANG['domaindnsmanagement'];
+					$domaindesc .= "\r\n + " . $_LANG['domaindnsmanagement'];
 				}
 
 
 				if ($emailforwarding) {
-					$domaindesc .= "
- + " . $_LANG['domainemailforwarding'];
+					$domaindesc .= "\r\n + " . $_LANG['domainemailforwarding'];
 				}
 
 
 				if ($idprotection) {
-					$domaindesc .= "
- + " . $_LANG['domainidprotection'];
+					$domaindesc .= "\r\n + " . $_LANG['domainidprotection'];
 				}
 
 				$promo_description = $promo_amount = 0;
@@ -738,7 +735,7 @@ function createInvoicesProcess($data, $noemails = "", $nocredit = "") {
 	}
 
 	$doprocesspaid = false;
-
+	
 	if ((!$nocredit && $credit != "0.00") && !$CONFIG['NoAutoApplyCredit']) {
 		if ($total <= $credit) {
 			$creditleft = $credit - $total;

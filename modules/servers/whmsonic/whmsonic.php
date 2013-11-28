@@ -3,10 +3,10 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.12
+ * @ Version  : 5.2.13
  * @ Author   : MTIMER
- * @ Release on : 2013-10-25
- * @ Website  : http://www.mtimer.cn
+ * @ Release on : 2013-11-25
+ * @ Website  : http://www.mtimer.net
  *
  * */
 
@@ -47,7 +47,7 @@ function whmsonic_CreateAccount($params) {
 	else {
 		$chars = "abcdefghijkmnpqrstuvwxyz0123456789";
 		srand( (double)microtime() * 1000000 );
-		$i = 6;
+		$i = 1;
 		$exu = "";
 
 		while ($i <= 4) {
@@ -62,7 +62,7 @@ function whmsonic_CreateAccount($params) {
 
 	$chars2 = "abcdefghijkmnopqrstuvwxyz023456789";
 	srand( (double)microtime() * 1000000 );
-	$i = 6;
+	$i = 1;
 	$pass = "";
 
 	while ($i <= 7) {

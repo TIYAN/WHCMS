@@ -27,11 +27,12 @@ function widget_activity_log($vars) {
     $result = select_query("tblactivitylog","","","id","DESC","0,10");
     while ($data = mysql_fetch_array($result)) {
         $description = $data["description"].' ';
+        $description = htmlentities($description, ENT_QUOTES, "UTF-8");
         $description = preg_replace($patterns, $replacements, $description);
         $content .= $description.'<br /><span style="font-size:11px;">&nbsp; - '.fromMySQLDate($data["date"],true).' - '.$data['user'].' - '.$data['ipaddr'].'</span><br />';
     }
 
-    if (!$content) $content = '<div align="center">暂无日志</div>';
+    if (!$content) $content = '<div align="center">No Activity Recorded Yet</div>';
     else $content .= '<div align="right"><a href="systemactivitylog.php">'.$_ADMINLANG['home']['viewall'].' &raquo;</a></div>';
 
     return array('title'=>$title,'content'=>$content);

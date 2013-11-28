@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.12
+ * @ Version  : 5.2.13
  * @ Author   : MTIMER
- * @ Release on : 2013-10-25
+ * @ Release on : 2013-11-25
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -15,12 +15,11 @@ require "../init.php";
 $aInt = new WHMCS_Admin("View Clients Products/Services");
 $aInt->requiredFiles(array("clientfunctions", "gatewayfunctions", "modulefunctions", "customfieldfunctions", "configoptionsfunctions", "invoicefunctions", "processinvoices"));
 $aInt->inClientsProfile = true;
-$id = (int)$whmcs->get_req_var("id");
 $hostingid = (int)$whmcs->get_req_var("hostingid");
 $userid = (int)$whmcs->get_req_var("userid");
 $aid = $whmcs->get_req_var("aid");
 $action = $whmcs->get_req_var("action");
-$modop = $whmcs->get_req_var("modop");
+$whmcs->get_req_var("modop");
 
 if ($modop) {
 	checkPermission("Perform Server Operations");
@@ -86,8 +85,8 @@ $ns1 = $service_data['ns1'];
 $ns2 = $service_data['ns2'];
 $dedicatedip = $service_data['dedicatedip'];
 $assignedips = $service_data['assignedips'];
-$diskusage = $service_data['diskusage'];
 $disklimit = $service_data['disklimit'];
+$diskusage = $service_data['diskusage'];
 $bwusage = $service_data['bwusage'];
 $bwlimit = $service_data['bwlimit'];
 $lastupdate = $service_data['lastupdate'];
@@ -372,6 +371,7 @@ if ($module) {
 
 
 if ($modop == "create") {
+	check_token("WHMCS.admin.default");
 	$result = ServerCreateAccount($id);
 	wSetCookie("ModCmdResult", $result);
 	redir("userid=" . $userid . "&id=" . $id . "&act=create&ajaxupdate=1");
@@ -379,6 +379,7 @@ if ($modop == "create") {
 
 
 if ($modop == "suspend") {
+	check_token("WHMCS.admin.default");
 	$result = ServerSuspendAccount($id, $suspreason);
 	wSetCookie("ModCmdResult", $result);
 
@@ -391,6 +392,7 @@ if ($modop == "suspend") {
 
 
 if ($modop == "unsuspend") {
+	check_token("WHMCS.admin.default");
 	$result = ServerUnsuspendAccount($id);
 	wSetCookie("ModCmdResult", $result);
 	redir("userid=" . $userid . "&id=" . $id . "&act=unsuspend&ajaxupdate=1");
@@ -398,6 +400,7 @@ if ($modop == "unsuspend") {
 
 
 if ($modop == "terminate") {
+	check_token("WHMCS.admin.default");
 	$result = ServerTerminateAccount($id);
 	wSetCookie("ModCmdResult", $result);
 	redir("userid=" . $userid . "&id=" . $id . "&act=terminate&ajaxupdate=1");
@@ -405,6 +408,7 @@ if ($modop == "terminate") {
 
 
 if ($modop == "changepackage") {
+	check_token("WHMCS.admin.default");
 	$result = ServerChangePackage($id);
 	wSetCookie("ModCmdResult", $result);
 	redir("userid=" . $userid . "&id=" . $id . "&act=updown&ajaxupdate=1");
@@ -412,6 +416,7 @@ if ($modop == "changepackage") {
 
 
 if ($modop == "changepw") {
+	check_token("WHMCS.admin.default");
 	$result = ServerChangePassword($id);
 	wSetCookie("ModCmdResult", $result);
 	redir("userid=" . $userid . "&id=" . $id . "&act=pwchange&ajaxupdate=1");
@@ -419,6 +424,7 @@ if ($modop == "changepw") {
 
 
 if ($modop == "custom") {
+	check_token("WHMCS.admin.default");
 	$result = ServerCustomFunction($id, $ac);
 
 	if (substr($result, 0, 9) == "redirect|") {
@@ -434,7 +440,7 @@ if (in_array($whmcs->get_req_var("act"), array("create", "suspend", "unsuspend",
 
 	if ($result = wGetCookie("ModCmdResult")) {
 		if ($result != "success") {
-			infoBox($aInt->lang("services", "moduleerror"), htmlspecialchars($result), "error");
+			infoBox($aInt->lang("services", "moduleerror"), $result, "error");
 		}
 		else {
 			infoBox($aInt->lang("services", "modulesuccess"), $aInt->lang("services", $act . "success"), "success");
@@ -450,6 +456,7 @@ if ($whmcs->get_req_var("success")) {
 $regdate = fromMySQLDate($regdate);
 $nextduedate = fromMySQLDate($nextduedate);
 $overidesuspenduntil = fromMySQLDate($overidesuspenduntil);
+$id = (int)$whmcs->get_req_var("id");
 
 if ($disklimit == "0") {
 	$disklimit = $aInt->lang("global", "unlimited");
@@ -462,7 +469,7 @@ if ($bwlimit == "0") {
 
 $currency = getCurrency($userid);
 $data = get_query_vals("tblcancelrequests", "id,type,reason", array("relid" => $id), "id", "DESC");
-$cancelid = $data['id'];
+$cancelid = $modop = $data['id'];
 $canceltype = $data['type'];
 $autoterminatereason = $data['reason'];
 $autoterminateendcycle = false;
@@ -499,7 +506,7 @@ function runModuleCommand(cmd,custom) {
     $(\"#modcmdworking\").css(\"padding\",\"9px 50px 0\");
     $(\"#modcmdworking\").fadeIn();
 
-    var reqstr = \"userid=" . $userid . "&id=" . $id . "&modop=\"+cmd;
+    var reqstr = \"userid=" . $userid . "&id=" . $id . "&modop=\"+cmd+\"" . generate_token("link") . "\";
     if (custom) reqstr += \"&ac=\"+custom;
     else if (cmd==\"suspend\") reqstr += \"&suspreason=\"+encodeURIComponent($(\"#suspreason\").val())+\"&suspemail=\"+$(\"#suspemail\").is(\":checked\");
 

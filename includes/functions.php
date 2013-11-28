@@ -3,28 +3,28 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.12
+ * @ Version  : 5.2.13
  * @ Author   : MTIMER
- * @ Release on : 2013-10-25
+ * @ Release on : 2013-11-25
  * @ Website  : http://www.mtimer.cn
  *
  **/
 
 if (!function_exists("emailtpl_template")) {
-	function emailtpl_template($tpl_name, $tpl_source, $smarty_obj) {
+	function emailtpl_template($tpl_name, &$tpl_source, &$smarty_obj) {
 		$tpl_source = $smarty_obj->get_template_vars($tpl_name);
 		return empty($tpl_source) ? false : true;
 	}
 
-	function emailtpl_timestamp($tpl_name, $tpl_timestamp, $smarty_obj) {
+	function emailtpl_timestamp($tpl_name, &$tpl_timestamp, &$smarty_obj) {
 		return true;
 	}
 
-	function emailtpl_secure($tpl_name, $smarty_obj) {
+	function emailtpl_secure($tpl_name, &$smarty_obj) {
 		return true;
 	}
 
-	function emailtpl_trusted($tpl_name, $smarty_obj) {
+	function emailtpl_trusted($tpl_name, &$smarty_obj) {
 	}
 
 	function sendMessage($func_messagename, $func_id, $extra = "", $displayresult = "", $attachments = "") {
@@ -229,7 +229,7 @@ if (!function_exists("emailtpl_template")) {
 					$date = fromMySQLDate($date, 0, 1);
 
 					if ($func_messagename != "Support Ticket Feedback Request") {
-						$subject = "[Ticket ID: {$ticket_id}] {$ticket_subject}";
+						$subject = "[Ticket ID: {\$ticket_id}] {\$ticket_subject}";
 					}
 
 					$tmessage = strip_tags($tmessage);
@@ -426,7 +426,7 @@ if (!function_exists("emailtpl_template")) {
 						$query4 = "SELECT tblproductconfigoptions.id, tblproductconfigoptions.optionname AS confoption, tblproductconfigoptions.optiontype AS conftype, tblproductconfigoptionssub.optionname, tblhostingconfigoptions.qty FROM tblhostingconfigoptions INNER JOIN tblproductconfigoptions ON tblproductconfigoptions.id = tblhostingconfigoptions.configid INNER JOIN tblproductconfigoptionssub ON tblproductconfigoptionssub.id = tblhostingconfigoptions.optionid INNER JOIN tblhosting ON tblhosting.id=tblhostingconfigoptions.relid INNER JOIN tblproductconfiglinks ON tblproductconfiglinks.gid=tblproductconfigoptions.gid WHERE tblhostingconfigoptions.relid='" . (int)$id . "' AND tblproductconfiglinks.pid=tblhosting.packageid ORDER BY tblproductconfigoptions.`order`,tblproductconfigoptions.id ASC";
 						$result4 = full_query($query4);
 
-						while ($data4 = mysql_fetch_array($result4)) {
+						if ($data4 = mysql_fetch_array($result4)) {
 							$confoption = $data4['confoption'];
 							$conftype = $data4['conftype'];
 
@@ -859,8 +859,8 @@ if (!function_exists("emailtpl_template")) {
 		$mail = new PHPMailer(true);
 
 		try{
-		$mail->From = $fromemail;
-		$mail->FromName = str_replace("&amp;", "&", $fromname);
+			$mail->From = $fromemail;
+			$mail->FromName = str_replace("&amp;", "&", $fromname);
 
 		if ($CONFIG['MailType'] == "mail") {
 			$mail->Mailer = "mail";
@@ -970,7 +970,6 @@ if (!function_exists("emailtpl_template")) {
 		}
 		else {
 			$message_text = str_replace("<p>", "", $message);
-
 			$message_text = str_replace("</p>", "\r\n\r\n", $message_text);
 			$message_text = str_replace("<br>", "\r\n", $message_text);
 
@@ -1029,7 +1028,7 @@ if (!function_exists("emailtpl_template")) {
 
 
 		if ($email_debug) {
-			echo "Email: {$email}<br>Subject: {$subject}<br>Message: {$message}<br>Attachment: {$attachmentfilename}<br><br>";
+			echo "Email: " . $email . "<br>Subject: " . $subject . "<br>Message: " . $message . "<br>Attachment: " . $attachmentfilename . "<br><br>";
 			return false;
 		}
 
@@ -1060,13 +1059,12 @@ if (!function_exists("emailtpl_template")) {
 				echo "<p>Email Sending Failed - " . $e->errorMessage() . "</p>";
 			}
 		}
-
 		catch (Exception $e) {
-				logActivity("Email Sending Failed - " . $e->getMessage() . (" (User ID: " . $userid . " - Subject: " . $subject . ")"), "none");
+			logActivity("Email Sending Failed - " . $e->getMessage() . (" (User ID: " . $userid . " - Subject: " . $subject . ")"), "none");
 
-				if ($displayresult) {
-					echo "<p>Email Sending Failed - " . $e->getMessage() . "</p>";
-				}
+			if ($displayresult) {
+				echo "<p>Email Sending Failed - " . $e->getMessage() . "</p>";
+			}
 
 			return null;
 		}
@@ -1143,7 +1141,6 @@ if (!function_exists("emailtpl_template")) {
 		}
 
 		$message_text = str_replace("</p>", "\r\n\r\n", $message);
-
 		$message_text = str_replace("<br>", "\r\n", $message_text);
 
 		$message_text = str_replace("<br />", "\r\n", $message_text);
@@ -1234,7 +1231,6 @@ if (!function_exists("emailtpl_template")) {
 		$email_merge_fields['whmcs_admin_url'] = $adminurl;
 		$email_merge_fields['whmcs_admin_link'] = "<a href=\"" . $adminurl . "\">" . $adminurl . "</a>";
 		include_once ROOTDIR . "/includes/smarty/Smarty.class.php";
-
 		$smarty = new Smarty();
 		$smarty->caching = 0;
 		$smarty->compile_dir = $templates_compiledir;
@@ -1298,9 +1294,8 @@ if (!function_exists("emailtpl_template")) {
 			$mail->Body = html_entity_decode($message);
 		}
 		else {
-
+			
 			$message_text = str_replace("</p>", "\r\n\r\n", $message);
-
 			$message_text = str_replace("<br>", "\r\n", $message_text);
 
 			$message_text = str_replace("<br />", "\r\n", $message_text);
@@ -1843,7 +1838,7 @@ if (!function_exists("emailtpl_template")) {
 
 		$accents = "/&([A-Za-z]{1,2})(grave|acute|circ|cedil|uml|lig|tilde|ring|slash|zlig|elig|quest|caron);/";
 		$string = htmlentities($string, ENT_NOQUOTES, $CONFIG['Charset']);
-		$string = preg_replace($accents, "$1", $string);
+		$string = preg_replace($accents, "", $string);
 		$string = html_entity_decode($string, ENT_NOQUOTES, $CONFIG['Charset']);
 
 		if ((function_exists("mb_internal_encoding") && function_exists("mb_regex_encoding")) && function_exists("mb_ereg_replace")) {
@@ -1898,33 +1893,34 @@ if (!function_exists("emailtpl_template")) {
 	 * Expect list nodes of the same name to have their nodeName
 	 * altered:
 	 * <clients>
-	 *   <client><name>foo</name></client>
-	 *   <client><name>bar</name></client>
+	 * <client><name>foo</name></client>
+	 * <client><name>bar</name></client>
 	 * <clients>
 	 * becomes
 	 * Array("clients => Array(
-	 *          "client" => Array("name" => "foo"),
-	 *          "client1" => Array("name" => "foo"),
-	 *       )
-	 *     )
+	 * "client" => Array("name" => "foo"),
+	 * "client1" => Array("name" => "foo"),
+	 *)
+	 *)
 	 * while text nodes of the same name will be become ordinal values
 	 * <clients>
-	 *   <client>foo</client>
-	 *   <client>bar</client>
+	 * <client>foo</client>
+	 * <client>bar</client>
 	 * </clients>
 	 * becomes
 	 * Array("clients" => Array(
-	 *          "client" => Array(
-	 *            0 => "foo",
-	 *            1 => "bar",
-	 *           )
-	 *       )
-	 *     )
+	 * "client" => Array(
+	 * 0 => "foo",
+	 * 1 => "bar",
+	 *)
+	 *)
+	 *)
 	 *
 	 * This is done for backwards compatibility for places that depend on the
 	 * obscure behavior of node renaming as originally provided by XMLtoARRAY()
 	 *
-	 * @param string $rawxml Well-formed XML string to parse into a native PHP Array
+	 * @param string $rawxml
+	 *            Well-formed XML string to parse into a native PHP Array
 	 * @return array
 	 */
 	function ParseXmlToArray($rawxml, $options = array()) {
@@ -2130,40 +2126,63 @@ if (!function_exists("emailtpl_template")) {
 		return $currency_array;
 	}
 
-	function formatCurrency($amount) {
+	function formatCurrency($amount, $currencyType = false) {
 		global $currency;
+
+		if ($currencyType === false || !is_numeric($currencyType)) {
+			$currencyType = $currency;
+		}
+
+
+		if (is_array($currencyType) && isset($currencyType['id'])) {
+			$currencyType = $currencyType['id'];
+		}
+
+		$currencyDetails = array();
+
+		if (is_numeric($currencyType)) {
+			$currencyDetails = getCurrency("", $currencyType);
+		}
+
+
+		if ((!$currencyDetails || !is_array($currencyDetails)) || !isset($currencyDetails['id'])) {
+			$currencyDetails = getCurrency();
+		}
 
 		$amount += 9.99999999999999954748112e-7;
 		$amount = round($amount, 2);
 
-		if ($currency['format'] == 1) {
+		if ($currencyDetails['format'] == 1) {
 			$format_dm = "2";
 			$format_dp = ".";
 			$format_ts = "";
 		}
 		else {
-			if ($currency['format'] == 2) {
+			if ($currencyDetails['format'] == 2) {
 				$format_dm = "2";
 				$format_dp = ".";
 				$format_ts = ",";
 			}
 			else {
-				if ($currency['format'] == 3) {
+				if ($currencyDetails['format'] == 3) {
 					$format_dm = "2";
 					$format_dp = ",";
 					$format_ts = ".";
 				}
 				else {
-					if ($currency['format'] == 4) {
+					if ($currencyDetails['format'] == 4) {
 						$format_dm = "0";
 						$format_dp = "";
 						$format_ts = ",";
+					}
+					else {
+						exit(sprintf("Cannot apply currency format to %s. Unknown currency format details for currency type %s", htmlspecialchars($amount, ENT_QUOTES, "UTF-8"), htmlspecialchars($currencyType, ENT_QUOTES, "UTF-8")));
 					}
 				}
 			}
 		}
 
-		$amount = $currency['prefix'] . number_format($amount, $format_dm, $format_dp, $format_ts) . $currency['suffix'];
+		$amount = $currencyDetails['prefix'] . number_format($amount, $format_dm, $format_dp, $format_ts) . $currencyDetails['suffix'];
 		return $amount;
 	}
 
@@ -2206,7 +2225,7 @@ if (!function_exists("emailtpl_template")) {
 		global $debug_output;
 
 		if (!array_key_exists("CURLOPT_TIMEOUT", $curlopts)) {
-			$curlopts['CURLOPT_TIMEOUT'] = 20;
+			$curlopts['CURLOPT_TIMEOUT'] = 100;
 		}
 
 		$ch = curl_init();
@@ -2367,35 +2386,6 @@ if (!function_exists("emailtpl_template")) {
 		return $apiresults;
 	}
 
-	function redir($vars = "", $file = "") {
-		if (!$file) {
-			$file = $_SERVER['PHP_SELF'];
-		}
-
-		$filenamePattern = "/^[a-zA-Z0-9\._\/\:\-]*$/";
-
-		if (preg_match($filenamePattern, $file) !== 1) {
-			exit(sprintf("Invalid filename for redirect: %s", $file));
-		}
-
-
-		if (is_string($vars) && strpos($vars, "=") !== false) {
-			$urlEncodedNewline = urlencode("\r\n");
-
-			$urlEncodeCarrageReturn = urlencode("\r\n");
-			$newlinePattern = "/[\r\n\r\n]|(" . $urlEncodedNewline . ")|(" . $urlEncodedCarrageReturn . ")/i";
-			$vars = sprintf("?%s", preg_replace($newlinePattern, "", trim($vars)));
-		}
-		else {
-			if ($vars) {
-				exit(sprintf("URL parameter variables must be in the form of an HTTP build query string"));
-			}
-		}
-
-		header(sprintf("Location: %s%s", $file, $vars));
-		exit();
-	}
-
 	function logModuleCall($module, $action, $request, $response, $arraydata = "", $replacevars = array()) {
 		global $CONFIG;
 
@@ -2449,12 +2439,60 @@ if (!function_exists("emailtpl_template")) {
 		session_write_close();
 	}
 
+	function redir($vars = "", $file = "", $prefixSystemURL = false) {
+		if (!$file) {
+			$file = $_SERVER['SCRIPT_NAME'];
+		}
+
+		$filenamePattern = "/^[a-zA-Z0-9~\._\/\:\-]*$/";
+
+		if (preg_match($filenamePattern, $file) !== 1) {
+			exit(sprintf("Invalid filename for redirect: %s", htmlspecialchars($file, ENT_QUOTES)));
+		}
+
+
+		if ($prefixSystemURL) {
+			global $whmcs;
+
+			$file = $whmcs->get_config("SystemURL") . "/" . $file;
+		}
+
+		$AnyMultipleSlashNotPrecededByColonPattern = "/([^:]|^)\/\/+/";
+		$precedingCharacterIfAnyWithOneSlash = '$1/';
+		$file = preg_replace($AnyMultipleSlashNotPrecededByColonPattern, $precedingCharacterIfAnyWithOneSlash, $file);
+
+		if (is_array($vars)) {
+			$vars = http_build_query($vars);
+		}
+
+
+		if (is_string($vars) && strpos($vars, "=") !== false) {
+			$urlEncodedNewline = urlencode("\r\n");
+
+			$urlEncodedCarrageReturn = urlencode("\r\n");
+			$newlinePattern = "/[\n\r]|(" . $urlEncodedNewline . ")|(" . $urlEncodedCarrageReturn . ")/i";
+			$vars = sprintf("?%s", preg_replace($newlinePattern, "", trim($vars)));
+		}
+		else {
+			if ($vars) {
+				exit(sprintf("URL parameter variables must be in the form of an HTTP build query string"));
+			}
+		}
+
+		header(sprintf("Location: %s%s", $file, $vars));
+		exit();
+	}
+
+	function redirSystemURL($vars = "", $file = "") {
+		redir($vars, $file, true);
+	}
+
 	function wSetCookie($name, $value, $expires = 0, $secure = false) {
 		return WHMCS_Cookie::set($name, $value, $expires, $secure);
 	}
 
-	function wGetCookie($name, $array = false) {
-		return WHMCS_Cookie::get($name, $array);
+	function wGetCookie($name, $treatAsArray = false) {
+		return WHMCS_Cookie::get($name, $treatAsArray);
 	}
 
 	function wDelCookie($name) {
@@ -2495,7 +2533,7 @@ if (!function_exists("emailtpl_template")) {
 	}
 
 	function autoHyperLink($message) {
-		$message = preg_replace("/((http(s?):\/\/)|(www\.))([\w\.]+)([a-zA-Z0-9?&%#~.;:\/=+_-]+)/i", "<a href=\"http://\" target=\"_blank\"></a>", $message);
+		$message = preg_replace("/((http(s?):\/\/)|(www\.))([\w\.]+)([a-zA-Z0-9?&%#~.;:\/=+_-]+)/i", "<a href=\"http://\" target=\"_blank\">$1</a>", $message);
 		return $message;
 	}
 
@@ -2507,6 +2545,87 @@ if (!function_exists("emailtpl_template")) {
 
 		if (!ctype_alnum(str_replace(array("_", "-"), "", $name))) {
 			return false;
+		}
+
+		return true;
+	}
+
+	function isFileNameSafe($filename) {
+		if (empty($filename)) {
+			return false;
+		}
+
+
+		if (strpos($filename, "") !== false) {
+			return false;
+		}
+
+
+		if (strpos($filename, DIRECTORY_SEPARATOR) !== false || strpos($filename, PATH_SEPARATOR) !== false) {
+			return false;
+		}
+
+
+		if (strpos($filename, chr(8)) !== false) {
+			return false;
+		}
+
+
+		if (substr($filename, 0, 1) === ".") {
+			return false;
+		}
+
+
+		if (escapeshellcmd($filename) != $filename) {
+			return false;
+		}
+
+		return true;
+	}
+
+	function generateNewCaptchaCode() {
+		$alphanum = "ABCDEFGHIJKLMNPQRSTUVWXYZ123456789";
+		$rand = substr(str_shuffle($alphanum), 0, 5);
+		$_SESSION['captchaValue'] = md5($rand);
+		return $rand;
+	}
+
+	/**
+	 * Safely delete a file from the file system
+	 *
+	 * This protects against directory traversal thru a bad filename
+	 *
+	 * Note: If the file requested to be deleted does not exist, this function
+	 * assumes it has been deleted from the file system by other means and
+	 * returns successful
+	 *
+	 * @param string $dir The directory to delete from
+	 * @param string $filename The filename to be deleted
+	 *
+	 * @return boolean
+	 */
+	function deleteFile($dir, $filename) {
+		if (!trim($dir) || !trim($filename)) {
+			return false;
+		}
+
+		$filepath_to_delete = $dir . $filename;
+
+		if (file_exists($filepath_to_delete)) {
+			$folder_path_real = realpath($dir);
+			$file_path_real = realpath($filepath_to_delete);
+
+			if ($file_path_real === false || strpos($file_path_real, $folder_path_real) !== 0) {
+				if (class_exists("WHMCS_Admin", false)) {
+					global $aInt;
+
+					$aInt->gracefulExit("Invalid file. Please contact support.");
+				}
+
+				exit("Invalid file. Please contact support.");
+			}
+
+			return unlink($file_path_real);
 		}
 
 		return true;

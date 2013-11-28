@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.12
+ * @ Version  : 5.2.13
  * @ Author   : MTIMER
- * @ Release on : 2013-10-25
+ * @ Release on : 2013-11-25
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -19,6 +19,7 @@ $aInt->icon = "quotes";
 $aInt->requiredFiles(array("clientfunctions", "customfieldfunctions", "invoicefunctions", "quotefunctions", "configoptionsfunctions", "orderfunctions"));
 
 if ($action == "getdesc") {
+	check_token("WHMCS.admin.default");
 	$result = select_query("tblproducts", "", array("id" => $id));
 	$data = mysql_fetch_array($result);
 	$name = $data['name'];
@@ -29,6 +30,7 @@ if ($action == "getdesc") {
 
 
 if ($action == "getprice") {
+	check_token("WHMCS.admin.default");
 	$result = select_query("tblpricing", "", array("type" => "product", "currency" => $currency, "relid" => $id));
 	$data = mysql_fetch_array($result);
 
@@ -69,6 +71,7 @@ if ($action == "getprice") {
 
 
 if ($action == "getproddetails") {
+	check_token("WHMCS.admin.default");
 	$currency = getCurrency("", $currency);
 	$pricing = getPricingInfo($pid);
 
@@ -164,6 +167,7 @@ if ($action == "getproddetails") {
 
 
 if ($action == "loadprod") {
+	check_token("WHMCS.admin.default");
 	$result = select_query("tblquotes", "userid,currency", array("id" => $id));
 	$data = mysql_fetch_array($result);
 	$userid = $data['userid'];
@@ -209,6 +213,7 @@ function selectproduct() {
 
 
 if ($action == "addproduct") {
+	check_token("WHMCS.admin.default");
 	$result = select_query("tblquotes", "userid,currency", array("id" => $id));
 	$data = mysql_fetch_array($result);
 	$userid = $data['userid'];
@@ -236,12 +241,13 @@ if ($action == "addproduct") {
 
 	insert_query("tblquoteitems", array("quoteid" => $id, "description" => $desc, "quantity" => "1", "unitprice" => $amount, "discount" => "0", "taxable" => $tax));
 	saveQuote($id, "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", true);
-	header("Location: quotes.php?action=manage&id=" . $id);
+	redir("action=manage&id=" . $id);
 	exit();
 }
 
 
 if ($action == "save") {
+	check_token("WHMCS.admin.default");
 	$lineitems = array();
 
 	if ($desc) {
@@ -257,12 +263,13 @@ if ($action == "save") {
 
 	$id = saveQuote($id, $subject, $stage, $datecreated, $validuntil, $clienttype, $userid, $firstname, $lastname, $companyname, $email, $address1, $address2, $city, $state, $postcode, $country, $phonenumber, $currency, $lineitems, $proposal, $customernotes, $adminnotes);
 	logActivity("Modified Quote - Quote ID: " . $id, $userid);
-	header("Location: quotes.php?action=manage&id=" . $id);
+	redir("action=manage&id=" . $id);
 	exit();
 }
 
 
 if ($action == "duplicate") {
+	check_token("WHMCS.admin.default");
 	$addstr = "";
 	$result = select_query("tblquotes", "", array("id" => $id));
 	$data = mysql_fetch_array($result);
@@ -313,23 +320,24 @@ if ($action == "duplicate") {
 		full_query($query);
 	}
 
-	header("Location: quotes.php?action=manage&id=" . $newquoteid . "&duplicated=true");
+	redir("action=manage&id=" . $newquoteid . "&duplicated=true");
 	exit();
 }
 
 
 if ($action == "delete") {
+	check_token("WHMCS.admin.default");
 	delete_query("tblquotes", array("id" => $id));
 	delete_query("tblquoteitems", array("quoteid" => $id));
-	header("Location: quotes.php");
-	exit();
+	redir();
 }
 
 
 if ($action == "deleteline") {
+	check_token("WHMCS.admin.default");
 	delete_query("tblquoteitems", array("id" => $lid));
 	saveQuote($id, $subject, $stage, $datecreated, $validuntil, $clienttype, $userid, $firstname, $lastname, $companyname, $email, $address1, $address2, $city, $state, $postcode, $country, $phonenumber, $currency, $lineitems, $proposal, $customernotes, $adminnotes, true);
-	header("Location: quotes.php?action=manage&id=" . $id);
+	redir("action=manage&id=" . $id);
 	exit();
 }
 
@@ -350,31 +358,27 @@ if ($action == "dlpdf") {
 
 
 if ($action == "sendpdf") {
+	check_token("WHMCS.admin.default");
+
 	if (get_query_val("tblquotes", "datesent", array("id" => $id)) == "0000-00-00") {
 		update_query("tblquotes", array("datesent" => "now()"), array("id" => $id));
 	}
 
 	sendQuotePDF($id);
-	header("Location: quotes.php?action=manage&id=" . $id . "&sent=true");
+	redir("action=manage&id=" . $id . "&sent=true");
 	exit();
 }
 
 
 if ($action == "convert") {
+	check_token("WHMCS.admin.default");
 	$invoiceid = convertQuotetoInvoice($id, $invoicetype, $invoiceduedate, $depositpercent, $depositduedate, $finalduedate, $sendemail);
-	header("Location: invoices.php?action=edit&id=" . $invoiceid);
-	exit();
+	redir("action=edit&id=" . $invoiceid, "invoices.php");
 }
 
 ob_start();
-$jscode = "function doDelete(id) {
-if (confirm(\"Are you sure you want to delete this quote?\")) {
-window.location='" . $_SERVER['PHP_SELF'] . "?action=delete&id='+id;
-}}
-function doDeleteLine(id) {
-if (confirm(\"Are you sure you want to delete this line item?\")) {
-window.location='" . $_SERVER['PHP_SELF'] . "?action=deleteline&id=" . $id . "&lid='+id;
-}}";
+$aInt->deleteJSConfirm("doDelete", "quotes", "deletesure", "?action=delete&id=");
+$aInt->deleteJSConfirm("doDeleteLine", "global", "deleteconfirm", "?action=deleteline&id=" . $id . "&lid=");
 
 if (!$action) {
 	echo $aInt->Tabs(array("Search/Filter"), true);
@@ -729,7 +733,7 @@ function selectDeposit() {
 		echo "</table>
 
 <p align=\"center\"><input type=\"submit\" value=\"Save Changes\" class=\"btn-primary\" /> <input type=\"button\" value=\"Duplicate\" class=\"button\" onclick=\"window.location='quotes.php?action=duplicate&id=";
-		echo $id;
+		echo $id . generate_token("link");
 		echo "'\"";
 
 		if (!$id) {
@@ -749,7 +753,7 @@ function selectDeposit() {
 		echo "&viewpdf=1','pdfquote','')\" /> <input type=\"button\" value=\"Download PDF\" class=\"button\" onclick=\"window.location='";
 		echo $_SERVER['PHP_SELF'];
 		echo "?action=dlpdf&id=";
-		echo $id;
+		echo $id . generate_token("link");
 		echo "';\"";
 
 		if (!$id) {
@@ -757,7 +761,7 @@ function selectDeposit() {
 		}
 
 		echo " /> <input type=\"button\" value=\"Email as PDF\" class=\"button\" onclick=\"window.location='quotes.php?action=sendpdf&id=";
-		echo $id;
+		echo $id . generate_token("link");
 		echo "';\"";
 
 		if (!$id) {
@@ -943,7 +947,7 @@ function selectDeposit() {
 </table>
 
 <p align=\"center\"><input type=\"submit\" value=\"Save Changes\" class=\"btn-primary\" /> <input type=\"button\" value=\"Duplicate\" class=\"button\" onclick=\"window.location='quotes.php?action=duplicate&id=";
-		echo $id;
+		echo $id . generate_token("link");
 		echo "'\"";
 
 		if (!$id) {
@@ -971,7 +975,7 @@ function selectDeposit() {
 		}
 
 		echo " /> <input type=\"button\" value=\"Email as PDF\" class=\"button\" onclick=\"window.location='quotes.php?action=sendpdf&id=";
-		echo $id;
+		echo $id . generate_token("link");
 		echo "';\"";
 
 		if (!$id) {
@@ -998,6 +1002,7 @@ function selectDeposit() {
 
 ";
 		$content = "<form id=\"convertquotefrm\">
+" . generate_token("form") . "
 <label><input type=\"radio\" name=\"invoicetype\" value=\"single\" onclick=\"selectSingle()\" checked /> Generate a single invoice for the entire amount</label><br />
 <div id=\"singleoptions\" align=\"center\">
 <br />

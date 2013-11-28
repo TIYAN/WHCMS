@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.12
+ * @ Version  : 5.2.13
  * @ Author   : MTIMER
- * @ Release on : 2013-10-25
+ * @ Release on : 2013-11-25
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -14,7 +14,6 @@ define("ADMINAREA", true);
 require "../init.php";
 require "../includes/customfieldfunctions.php";
 $aInt = new WHMCS_Admin("List Support Tickets");
-$aInt->title = $aInt->lang("support", "printticketversion");
 $aInt->requiredFiles(array("ticketfunctions"));
 $result = select_query("tbltickets", "", array("id" => $id));
 $data = mysql_fetch_array($result);
@@ -32,6 +31,27 @@ $attachment = $data['attachment'];
 $urgency = $data['urgency'];
 $lastreply = $data['lastreply'];
 $flag = $data['flag'];
+$access = validateAdminTicketAccess($id);
+
+if ($access == "invalidid") {
+	$aInt->gracefulExit($aInt->lang("support", "ticketnotfound"));
+}
+
+
+if ($access == "deptblocked") {
+	$aInt->gracefulExit($aInt->lang("support", "deptnoaccess"));
+}
+
+
+if ($access == "flagged") {
+	$aInt->gracefulExit($aInt->lang("support", "flagnoaccess") . ": " . getAdminName($flag));
+}
+
+
+if ($access) {
+	exit();
+}
+
 $message = strip_tags($message);
 $message = nl2br($message);
 $message = ticketAutoHyperlinks($message);
@@ -151,7 +171,8 @@ while ($data = mysql_fetch_array($result)) {
 }
 
 echo "<p align=center style=\"font-size:10px;\">" . $aInt->lang("support", "outputgenby") . " WHMCompleteSolution (www.whmcs.com)</p>";
-$content = ob_get_contents();
+ob_get_contents();
+$content = $aInt->title = $aInt->lang("support", "printticketversion");
 ob_end_clean();
 $aInt->content = $content;
 $aInt->displayPopUp();

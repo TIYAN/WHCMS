@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.12
+ * @ Version  : 5.2.13
  * @ Author   : MTIMER
- * @ Release on : 2013-10-25
+ * @ Release on : 2013-11-25
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -22,6 +22,11 @@ if ($adddownload == "true") {
 	check_token("WHMCS.admin.default");
 
 	if ($filetype == "upload") {
+		if (!isFileNameSafe($_FILES['uploadfile']['name'])) {
+			$aInt->gracefulExit("Invalid upload filename.  Valid filenames contain only alpha-numeric, dot, hyphen and underscore characters.");
+			exit();
+		}
+
 		move_uploaded_file($_FILES['uploadfile']['tmp_name'], $downloads_dir . $_FILES['uploadfile']['name']);
 		$filename = $_FILES['uploadfile']['name'];
 	}
@@ -65,8 +70,14 @@ if ($action == "") {
 		check_token("WHMCS.admin.default");
 		$result = select_query("tbldownloads", "location", array("id" => $id));
 		$data = mysql_fetch_array($result);
-		$location = $data['location'];
-		@unlink($downloads_dir . $location);
+		$filename = $data['location'];
+
+		if ((substr($filename, 0, 7) == "http://" || substr($filename, 0, 8) == "https://") || substr($filename, 0, 6) == "ftp://") {
+		}
+		else {
+			deleteFile($downloads_dir, $filename);
+		}
+
 		delete_query("tbldownloads", array("id" => $id));
 		logActivity("Deleted Download (ID: " . $id . ")");
 	}
@@ -254,15 +265,15 @@ if ($action == "") {
 			$idnumbers[] = $id;
 			$result3 = select_query("tbldownloadcats", "id", array("parentid" => $id));
 
-			while ($data3 = mysql_fetch_array($result3)) {
+			if ($data3 = mysql_fetch_array($result3)) {
 				$idnumbers[] = $data3['id'];
 				$result4 = select_query("tbldownloadcats", "id", array("parentid" => $data3['id']));
 
-				while ($data4 = mysql_fetch_array($result4)) {
+				if ($data4 = mysql_fetch_array($result4)) {
 					$idnumbers[] = $data4['id'];
 					$result5 = select_query("tbldownloadcats", "id", array("parentid" => $data4['id']));
 
-					while ($data5 = mysql_fetch_array($result5)) {
+					if ($data5 = mysql_fetch_array($result5)) {
 						$idnumbers[] = $data5['id'];
 					}
 				}

@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.12
+ * @ Version  : 5.2.13
  * @ Author   : MTIMER
- * @ Release on : 2013-10-25
+ * @ Release on : 2013-11-25
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -171,7 +171,7 @@ if ($type == "pdfbatch") {
 		}
 	}
 
-	$clientWhere = ($userid ? "AND tblinvoices.userid=" . (int)$userid : "");
+	$clientWhere = (is_numeric($userid) ? "AND tblinvoices.userid=" . (int)$userid : "");
 
 	if ($filterby == "Date Created") {
 		$filterby = "date";
@@ -186,7 +186,10 @@ if ($type == "pdfbatch") {
 		}
 	}
 
-	$batchpdfresult = select_query("tblinvoices", "tblinvoices.id", "tblinvoices." . $filterby . ">='" . toMySQLDate($datefrom) . ("' AND tblinvoices." . $filterby . "<='") . toMySQLDate($dateto) . "' AND tblinvoices.status IN ('" . implode("','", $statuses) . "') AND tblinvoices.paymentmethod IN ('" . implode("','", $paymentmethods) . "')" . $clientWhere, $orderby, "ASC", "", "tblclients ON tblclients.id=tblinvoices.userid");
+	$statuses_in_clause = db_build_in_array($statuses);
+	$paymentmethods_in_clause = db_build_in_array($paymentmethods);
+	$batchpdf_where_clause = "tblinvoices." . $filterby . " >= '" . toMySQLDate($datefrom) . ("' AND tblinvoices." . $filterby . "<='") . toMySQLDate($dateto) . "' AND tblinvoices.status IN (" . $statuses_in_clause . ")" . " AND tblinvoices.paymentmethod IN (" . $paymentmethods_in_clause . ")" . $clientWhere;
+	$batchpdfresult = select_query("tblinvoices", "tblinvoices.id", $batchpdf_where_clause, $orderby, "ASC", "", "tblclients ON tblclients.id=tblinvoices.userid");
 	$numrows = mysql_num_rows($batchpdfresult);
 
 	if (!$numrows) {

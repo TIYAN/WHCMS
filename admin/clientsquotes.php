@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.12
+ * @ Version  : 5.2.13
  * @ Author   : MTIMER
- * @ Release on : 2013-10-25
+ * @ Release on : 2013-11-25
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -18,18 +18,16 @@ $aInt->inClientsProfile = true;
 $aInt->valUserID($userid);
 
 if ($delete == "true") {
+	check_token("WHMCS.admin.default");
 	checkPermission("Manage Quotes");
 	delete_query("tblquotes", array("id" => $quoteid));
 	logActivity("Deleted Quote (ID: " . $quoteid . " - User ID: " . $userid . ")");
-	header("Location: " . $_SERVER['PHP_SELF'] . ("?userid=" . $userid));
+	redir("userid=" . $userid);
 	exit();
 }
 
 ob_start();
-$jscode = "function doDelete(id) {
-if (confirm(\"" . $aInt->lang("quotes", "deletesure") . "\")) {
-window.location='" . $PHP_SELF . "?userid=" . $userid . "&delete=true&quoteid='+id;
-}}";
+$aInt->deleteJSConfirm("doDelete", "quotes", "deletesure", "?userid=" . $userid . "&delete=true&quoteid=");
 echo "
 <div align=center><input type=\"button\" value=\"";
 echo $aInt->lang("quotes", "createnew");

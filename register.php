@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.12
+ * @ Version  : 5.2.13
  * @ Author   : MTIMER
- * @ Release on : 2013-10-25
+ * @ Release on : 2013-11-25
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -25,7 +25,7 @@ $firstname = $whmcs->get_req_var("firstname");
 $lastname = $whmcs->get_req_var("lastname");
 $companyname = $whmcs->get_req_var("companyname");
 $email = $whmcs->get_req_var("email");
-$address1 = $whmcs->get_req_var("address1");
+$whmcs->get_req_var("address1");
 $address2 = $whmcs->get_req_var("address2");
 $city = $whmcs->get_req_var("city");
 $state = $whmcs->get_req_var("state");
@@ -45,8 +45,7 @@ if ($whmcs->get_req_var("register")) {
 	if (!$errormessage) {
 		$userid = addClient($firstname, $lastname, $companyname, $email, $address1, $address2, $city, $state, $postcode, $country, $phonenumber, $password, $securityqid, $securityqans);
 		run_hook("ClientAreaRegister", array("userid" => $userid));
-		header("Location: clientarea.php");
-		exit();
+		redir("", "clientarea.php");
 	}
 }
 
@@ -75,7 +74,7 @@ $smarty->assign("clientpostcode", $postcode);
 $smarty->assign("clientcountriesdropdown", $countriesdropdown);
 $smarty->assign("clientphonenumber", $phonenumber);
 $smarty->assign("securityquestions", $securityquestions);
-$customfields = getCustomFields("client", "", "", "", "on", $customfield);
+$customfields = $address1 = getCustomFields("client", "", "", "", "on", $customfield);
 $smarty->assign("customfields", $customfields);
 $smarty->assign("capatacha", $capatacha);
 $smarty->assign("recapatchahtml", clientAreaReCaptchaHTML());

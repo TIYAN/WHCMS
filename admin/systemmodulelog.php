@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.12
+ * @ Version  : 5.2.13
  * @ Author   : MTIMER
- * @ Release on : 2013-10-25
+ * @ Release on : 2013-11-25
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -19,6 +19,8 @@ $aInt->icon = "logs";
 $aInt->helplink = "Troubleshooting Module Problems";
 
 if ($enable) {
+	check_token("WHMCS.admin.default");
+
 	if (isset($CONFIG['ModuleDebugMode'])) {
 		update_query("tblconfiguration", array("value" => "on"), array("setting" => "ModuleDebugMode"));
 	}
@@ -31,12 +33,14 @@ if ($enable) {
 
 
 if ($disable) {
+	check_token("WHMCS.admin.default");
 	update_query("tblconfiguration", array("value" => ""), array("setting" => "ModuleDebugMode"));
 	$CONFIG['ModuleDebugMode'] = "";
 }
 
 
 if ($reset) {
+	check_token("WHMCS.admin.default");
 	delete_query("tblmodulelog", "id!=''");
 	redir();
 }

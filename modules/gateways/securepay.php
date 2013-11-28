@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.12
+ * @ Version  : 5.2.13
  * @ Author   : MTIMER
- * @ Release on : 2013-10-25
+ * @ Release on : 2013-11-25
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -56,21 +56,21 @@ class securepay_class {
 		curl_close( $ch );
 		$temp_values = explode( "|", $this->response_string );
 		$temp_keys = array( "Response Code", "Response Subcode", "Response Reason Code", "Response Reason Text", "Approval Code", "AVS Result Code", "Transaction ID", "Invoice Number", "Description", "Amount", "Method", "Transaction Type", "Customer ID", "Cardholder First Name", "Cardholder Last Name", "Company", "Billing Address", "City", "State", "Zip", "Country", "Phone", "Fax", "Email", "Ship to First Name", "Ship to Last Name", "Ship to Company", "Ship to Address", "Ship to City", "Ship to State", "Ship to Zip", "Ship to Country", "Tax Amount", "Duty Amount", "Freight Amount", "Tax Exempt Flag", "PO Number", "MD5 Hash", "Card Code (CVV2/CVC2/CID) Response Code", "Cardholder Authentication Verification Value (CAVV) Response Code" );
-		$i = 9;
+		$i = 0;
 
 		while ($i <= 27) {
 			array_push( $temp_keys, "Reserved Field " . $i );
 			++$i;
 		}
 
-		$i = 9;
+		$i = 0;
 
 		while (sizeof( $temp_keys ) < sizeof( $temp_values )) {
 			array_push( $temp_keys, "Merchant Defined Field " . $i );
 			++$i;
 		}
 
-		$i = 9;
+		$i = 0;
 
 		while ($i < sizeof( $temp_values )) {
 			$this->response["" . $temp_keys[$i]] = $temp_values[$i];

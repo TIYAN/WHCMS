@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.12
+ * @ Version  : 5.2.13
  * @ Author   : MTIMER
- * @ Release on : 2013-10-25
+ * @ Release on : 2013-11-25
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -365,7 +365,14 @@ if ($action == "massaction") {
 
 
 if ($action == "uploadfile") {
+	check_token("WHMCS.admin.default");
 	checkPermission("Manage Clients Files");
+
+	if (!isFileNameSafe($_FILES['uploadfile']['name'])) {
+		$aInt->gracefulExit("Invalid upload filename.  Valid filenames contain only alpha-numeric, dot, hyphen and underscore characters.");
+		exit();
+	}
+
 	$filename = $_FILES['uploadfile']['name'];
 
 	if (!$title) {
@@ -385,22 +392,27 @@ if ($action == "uploadfile") {
 	move_uploaded_file($_FILES['uploadfile']['tmp_name'], $attachments_dir . $filename);
 	insert_query("tblclientsfiles", array("userid" => $userid, "title" => $title, "filename" => $filename, "adminonly" => $adminonly, "dateadded" => "now()"));
 	logActivity("Added Client File - Title: " . $title . " - User ID: " . $userid, $userid);
-	header("Location: clientssummary.php?userid=" . $userid);
-	exit();
+	redir("userid=" . $userid);
 }
 
 
 if ($action == "deletefile") {
+	check_token("WHMCS.admin.default");
 	checkPermission("Manage Clients Files");
-	$result = select_query("tblclientsfiles", "", array("id" => $id));
+	$result = select_query("tblclientsfiles", "", array("id" => $id, "userid" => $userid));
 	$data = mysql_fetch_array($result);
+	$id = $data['id'];
+
+	if (!$id) {
+		$aInt->gracefulExit("Invalid File to Delete");
+	}
+
 	$title = $data['title'];
 	$filename = $data['filename'];
-	unlink($attachments_dir . $filename);
+	deleteFile($attachments_dir, $filename);
 	delete_query("tblclientsfiles", array("id" => $id));
 	logActivity("Deleted Client File - Title: " . $title . " - User ID: " . $userid, $userid);
-	header("Location: clientssummary.php?userid=" . $userid);
-	exit();
+	redir("userid=" . $userid);
 }
 
 
@@ -411,7 +423,7 @@ if ($action == "closeclient") {
 	checkPermission("Edit Clients Domains");
 	checkPermission("Manage Invoice");
 	closeClient($userid);
-	header("Location: " . $_SERVER['PHP_SELF'] . ("?userid=" . $userid));
+	redir("userid=" . $userid);
 	exit();
 }
 
@@ -421,8 +433,7 @@ if ($action == "deleteclient") {
 	checkPermission("Delete Client");
 	run_hook("ClientDelete", array("userid" => $userid));
 	deleteClient($userid);
-	header("Location: clients.php");
-	exit();
+	redir("", "clients.php");
 }
 
 
@@ -431,7 +442,7 @@ if ($action == "savenotes") {
 	checkPermission("Edit Clients Details");
 	update_query("tblclients", array("notes" => $adminnotes), array("id" => $userid));
 	logActivity("Client Summary Notes Updated - User ID: " . $userid, $userid);
-	header("Location: " . $_SERVER['PHP_SELF'] . ("?userid=" . $userid));
+	redir("userid=" . $userid);
 	exit();
 }
 
@@ -445,10 +456,10 @@ if ($action == "addfunds") {
 		$paymentmethod = getClientsPaymentMethod($userid);
 		insert_query("tblinvoiceitems", array("userid" => $userid, "type" => "AddFunds", "relid" => "", "description" => $_LANG['addfunds'], "amount" => $addfundsamt, "taxed" => "0", "duedate" => "now()", "paymentmethod" => $paymentmethod));
 		$invoiceid = createInvoices($userid, "", true);
-		header("Location: " . $PHP_SELF . "?userid=" . $userid . "&addfunds=true&invoiceid=" . $invoiceid);
+		redir("userid=" . $userid . "&addfunds=true&invoiceid=" . $invoiceid);
 	}
 	else {
-		header("Location: " . $PHP_SELF . "?userid=" . $userid);
+		redir("userid=" . $userid);
 	}
 
 	exit();
@@ -460,7 +471,7 @@ if ($generateinvoices) {
 	checkPermission("Generate Due Invoices");
 	$invoiceid = createInvoices($userid, $noemails);
 	$_SESSION['adminclientgeninvoicescount'] = $invoicecount;
-	header("Location: " . $PHP_SELF . "?userid=" . $userid . "&geninvoices=true");
+	redir("userid=" . $userid . "&geninvoices=true");
 	exit();
 }
 
@@ -468,7 +479,7 @@ if ($generateinvoices) {
 if ($activateaffiliate) {
 	check_token("WHMCS.admin.default");
 	affiliateActivate($userid);
-	header("Location: " . $PHP_SELF . "?userid=" . $userid . "&affactivated=true");
+	redir("userid=" . $userid . "&affactivated=true");
 	exit();
 }
 
@@ -476,12 +487,14 @@ if ($activateaffiliate) {
 if ($resetpw) {
 	check_token("WHMCS.admin.default");
 	sendMessage("Automated Password Reset", $userid);
-	header("Location: " . $PHP_SELF . "?userid=" . $userid . "&pwreset=true");
+	redir("userid=" . $userid . "&pwreset=true");
 	exit();
 }
 
 
 if ($csajaxtoggle) {
+	check_token("WHMCS.admin.default");
+
 	if (!checkPermission("Edit Clients Details", true)) {
 		exit("Permission Denied");
 	}
@@ -560,14 +573,14 @@ window.location='" . $PHP_SELF . "?userid=" . $userid . "&action=deleteclient" .
 }}
 function deleteFile(id) {
 if (confirm(\"" . $aInt->lang("clientsummary", "filedeletesure") . "\")) {
-window.location='" . $PHP_SELF . "?userid=" . $userid . "&action=deletefile&id='+id;
+window.location='" . $PHP_SELF . "?userid=" . $userid . "&action=deletefile" . generate_token("link") . "&id='+id;
 }}";
 $jquerycode = "$(\"#addfile\").click(function () {
     $(\"#addfileform\").slideToggle();
     return false;
 });
 $(\".csajaxtoggle\").click(function () {
-	var csturl = \"clientssummary.php?userid=" . $userid . "&csajaxtoggle=\"+$(this).attr(\"id\");
+	var csturl = \"clientssummary.php?userid=" . $userid . generate_token("link") . "&csajaxtoggle=\"+$(this).attr(\"id\");
 	var cstelm = \"#\"+$(this).attr(\"id\");
 	$.get(csturl, function(data){
 		 $(cstelm).html(data);
@@ -847,6 +860,7 @@ foreach ($tmplinks as $tmplinks2) {
 
 $templatevars['customactionlinks'] = $actionlinks;
 $templatevars['tokenvar'] = generate_token("link");
+$templatevars['csrfToken'] = generate_token("plain");
 $aInt->templatevars = $templatevars;
 echo $aInt->getTemplate("clientssummary");
 echo $aInt->jqueryDialog("geninvoices", $aInt->lang("invoices", "geninvoices"), $aInt->lang("invoices", "geninvoicessendemails"), array($aInt->lang("global", "yes") => "window.location='" . $PHP_SELF . "?userid=" . $userid . "&generateinvoices=true" . generate_token("link") . "'", $aInt->lang("global", "no") => "window.location='" . $PHP_SELF . "?userid=" . $userid . "&generateinvoices=true&noemails=true" . generate_token("link") . "'"));

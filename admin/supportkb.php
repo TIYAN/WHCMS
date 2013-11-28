@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.12
+ * @ Version  : 5.2.13
  * @ Author   : MTIMER
- * @ Release on : 2013-10-25
+ * @ Release on : 2013-11-25
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -71,7 +71,7 @@ if ($addarticle) {
 	$newarticleid = insert_query("tblknowledgebase", array("title" => $articlename));
 	insert_query("tblknowledgebaselinks", array("categoryid" => $catid, "articleid" => $newarticleid));
 	logActivity("Added New Knowledgebase Article - " . $articlename);
-	header("Location: " . $PHP_SELF . "?action=edit&id=" . $newarticleid);
+	redir("action=edit&id=" . $newarticleid);
 	exit();
 }
 
@@ -80,7 +80,7 @@ if ($addcategory) {
 	check_token("WHMCS.admin.default");
 	$newcatid = insert_query("tblknowledgebasecats", array("parentid" => $catid, "name" => $catname, "description" => $description, "hidden" => $hidden));
 	logActivity("Added New Knowledgebase Category - " . $catname);
-	header("Location: supportkb.php?catid=" . $newcatid);
+	redir("catid=" . $newcatid);
 	exit();
 }
 
@@ -113,7 +113,7 @@ if ($action == "save") {
 	}
 
 	logActivity("Modified Knowledgebase Article ID: " . $id);
-	header("Location: supportkb.php?catid=" . $categories[0]);
+	redir("catid=" . $categories[0]);
 	exit();
 }
 
@@ -131,7 +131,7 @@ if ($action == "savecat") {
 	}
 
 	logActivity("Modified Knowledgebase Category (ID: " . $id . ")");
-	header("Location: supportkb.php?catid=" . $parentcategory);
+	redir("catid=" . $parentcategory);
 	exit();
 }
 
@@ -141,7 +141,7 @@ if ($action == "delete") {
 	delete_query("tblknowledgebase", array("id" => $id));
 	delete_query("tblknowledgebaselinks", array("articleid" => $id));
 	logActivity("Deleted Knowledgebase Article (ID: " . $id . ")");
-	header("Location: supportkb.php?catid=" . $catid);
+	redir("catid=" . $catid);
 	exit();
 }
 
@@ -153,7 +153,7 @@ if ($action == "deletecategory") {
 	delete_query("tblknowledgebasecats", array("parentid" => $id));
 	full_query("DELETE FROM tblknowledgebase WHERE parentid=0 AND id NOT IN (SELECT articleid FROM tblknowledgebaselinks)");
 	logActivity("Deleted Knowledgebase Category (ID: " . $id . ")");
-	header("Location: supportkb.php?catid=" . $catid);
+	redir("catid=" . $catid);
 	exit();
 }
 

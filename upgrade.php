@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.12
+ * @ Version  : 5.2.13
  * @ Author   : MTIMER
- * @ Release on : 2013-10-25
+ * @ Release on : 2013-11-25
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -110,7 +110,7 @@ if (!$step) {
 		$data = mysql_fetch_array($result);
 		$upgradepackages = $data['upgradepackages'];
 		$upgradepackages = unserialize($upgradepackages);
-		$result = select_query("tblproducts", "id", "id IN (" . implode(",", $upgradepackages) . ")", "order` ASC,`name", "ASC");
+		$result = select_query("tblproducts", "id", "id IN (" . db_build_in_array($upgradepackages) . ")", "order` ASC,`name", "ASC");
 
 		while ($data = mysql_fetch_array($result)) {
 			$upgradepackageid = $data['id'];
@@ -327,72 +327,73 @@ else {
 			}
 
 			$_SESSION['upgradeorder'] = createUpgradeOrder($serviceid, $ordernotes, $promocode, $paymentmethod);
-			header("Location: upgrade.php?step=4");
-			exit();
+			redir("step=4");
 		}
 		else {
 			if ($step == "4") {
 				$orderfrm = new WHMCS_OrderForm();
-				$result = select_query("tblinvoices", "id,total,paymentmethod", array("userid" => $_SESSION['uid'], "id" => $invoiceid));
-				$data = mysql_fetch_array($result);
-				$invoiceid = $data['id'];
-				$total = $data['total'];
-				$paymentmethod = $data['paymentmethod'];
-				$paymentmethod = WHMCS_Gateways::makesafename($paymentmethod);
+				$invoiceid = (int)$invoiceid;
 
-				if (!$paymentmethod) {
-					exit("Unexpected payment method value. Exiting.");
-				}
-
-
-				if ($invoiceid && 0 < $total) {
-					$result = select_query("tblpaymentgateways", "value", array("gateway" => $paymentmethod, "setting" => "type"));
+				if ($invoiceid) {
+					$result = select_query("tblinvoices", "id,total,paymentmethod", array("userid" => $_SESSION['uid'], "id" => $invoiceid));
 					$data = mysql_fetch_array($result);
-					$gatewaytype = $data['value'];
+					$invoiceid = $data['id'];
+					$total = $data['total'];
+					$paymentmethod = $data['paymentmethod'];
 
-					if (($gatewaytype == "CC" || $gatewaytype == "OfflineCC") && ($CONFIG['AutoRedirectoInvoice'] == "on" || $CONFIG['AutoRedirectoInvoice'] == "gateway")) {
-						if (!isValidforPath($paymentmethod)) {
-							exit("Invalid Payment Gateway Name");
+					if ($invoiceid && 0 < $total) {
+						$paymentmethod = WHMCS_Gateways::makesafename($paymentmethod);
+
+						if (!$paymentmethod) {
+							exit("Unexpected payment method value. Exiting.");
 						}
 
-						$gatewaypath = ROOTDIR . "/modules/gateways/" . $paymentmethod . ".php";
+						$result = select_query("tblpaymentgateways", "value", array("gateway" => $paymentmethod, "setting" => "type"));
+						$data = mysql_fetch_array($result);
+						$gatewaytype = $data['value'];
 
-						if (file_exists($gatewaypath)) {
-							require_once $gatewaypath;
+						if (($gatewaytype == "CC" || $gatewaytype == "OfflineCC") && ($CONFIG['AutoRedirectoInvoice'] == "on" || $CONFIG['AutoRedirectoInvoice'] == "gateway")) {
+							if (!isValidforPath($paymentmethod)) {
+								exit("Invalid Payment Gateway Name");
+							}
+
+							$gatewaypath = ROOTDIR . "/modules/gateways/" . $paymentmethod . ".php";
+
+							if (file_exists($gatewaypath)) {
+								require_once $gatewaypath;
+							}
+
+
+							if (!function_exists($paymentmethod . "_link")) {
+								redir("invoiceid=" . (int)$invoiceid, "creditcard.php");
+							}
 						}
 
 
-						if (!function_exists($paymentmethod . "_link")) {
-							header("Location: creditcard.php?invoiceid=" . $invoiceid);
+						if ($CONFIG['AutoRedirectoInvoice'] == "on") {
+							redir("id=" . (int)$invoiceid, "viewinvoice.php");
+						}
+
+
+						if ($CONFIG['AutoRedirectoInvoice'] == "gateway") {
+							$clientsdetails = getClientsDetails($_SESSION['uid']);
+							$params = getGatewayVariables($paymentmethod, $invoiceid, $total);
+							$paymentbutton = call_user_func($paymentmethod . "_link", $params);
+							$templatefile = "forwardpage";
+							$smarty->assign("message", $_LANG['forwardingtogateway']);
+							$smarty->assign("code", $paymentbutton);
+							$smarty->assign("invoiceid", $invoiceid);
+							outputClientArea($templatefile);
 							exit();
 						}
 					}
-
-
-					if ($CONFIG['AutoRedirectoInvoice'] == "on") {
-						header("Location: viewinvoice.php?id=" . $invoiceid);
-						exit();
+					else {
+						$smarty->assign("ispaid", true);
 					}
-
-
-					if ($CONFIG['AutoRedirectoInvoice'] == "gateway") {
-						$clientsdetails = getClientsDetails($_SESSION['uid']);
-						$params = getGatewayVariables($paymentmethod, $invoiceid, $total);
-						$paymentbutton = call_user_func($paymentmethod . "_link", $params);
-						$templatefile = "forwardpage";
-						$smarty->assign("message", $_LANG['forwardingtogateway']);
-						$smarty->assign("code", $paymentbutton);
-						$smarty->assign("invoiceid", $invoiceid);
-						outputClientArea($templatefile);
-						exit();
-					}
-				}
-				else {
-					$smarty->assign("ispaid", true);
 				}
 
 				$templatefile = "complete";
-				$smarty->assign("orderid", $orderid);
+				$smarty->assign("orderid", (int)$orderid);
 				$smarty->assign("ordernumber", $order_number);
 				$smarty->assign("invoiceid", $invoiceid);
 				$smarty->assign("carttpl", $orderfrm->getTemplate());

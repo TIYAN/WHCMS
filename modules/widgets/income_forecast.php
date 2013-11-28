@@ -66,7 +66,7 @@ if (count($incomestats)) {
     <span class=\"textgreen\"><b>".$_ADMINLANG['billing']['annualestimate'].": ".formatCurrency($currencytotal)."</b></span></div>";
     }
 } else {
-    $content = '<div align="center">没有可供预测的数据</div>';
+    $content = '<div align="center">No Active or Suspended Products/Services Found to build Forecast</div>';
 }
 
     $content = '<div id="incomeforecast">'.$content.'</div>';

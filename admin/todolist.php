@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.12
+ * @ Version  : 5.2.13
  * @ Author   : MTIMER
- * @ Release on : 2013-10-25
+ * @ Release on : 2013-11-25
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -20,7 +20,7 @@ $aInt->icon = "todolist";
 if ($action == "delete") {
 	check_token("WHMCS.admin.default");
 	delete_query("tbltodolist", array("id" => $id));
-	header("Location: todolist.php");
+	redir();
 	exit();
 }
 
@@ -30,7 +30,7 @@ if ($action == "add") {
 	$table = "tbltodolist";
 	$array = array("date" => toMySQLDate($date), "title" => $title, "description" => $description, "admin" => $admin, "status" => $status, "duedate" => toMySQLDate($duedate));
 	insert_query($table, $array);
-	header("Location: todolist.php");
+	redir();
 	exit();
 }
 
@@ -41,7 +41,7 @@ if ($action == "save") {
 	$array = array("date" => toMySQLDate($date), "title" => $title, "description" => $description, "admin" => $admin, "status" => $status, "duedate" => toMySQLDate($duedate));
 	$where = array("id" => $id);
 	update_query($table, $array, $where);
-	header("Location: todolist.php");
+	redir();
 	exit();
 }
 
@@ -52,7 +52,7 @@ if ($mass_assign) {
 		update_query("tbltodolist", array("admin" => $_SESSION['adminid']), array("id" => $id));
 	}
 
-	header("Location: todolist.php");
+	redir();
 	exit();
 }
 
@@ -63,7 +63,7 @@ if ($mass_inprogress) {
 		update_query("tbltodolist", array("status" => "In Progress"), array("id" => $id));
 	}
 
-	header("Location: todolist.php");
+	redir();
 	exit();
 }
 
@@ -74,7 +74,7 @@ if ($mass_completed) {
 		update_query("tbltodolist", array("status" => "Completed"), array("id" => $id));
 	}
 
-	header("Location: todolist.php");
+	redir();
 	exit();
 }
 
@@ -85,7 +85,7 @@ if ($mass_postponed) {
 		update_query("tbltodolist", array("status" => "Postponed"), array("id" => $id));
 	}
 
-	header("Location: todolist.php");
+	redir();
 	exit();
 }
 
@@ -96,7 +96,7 @@ if ($mass_delete) {
 		delete_query("tbltodolist", array("id" => $id));
 	}
 
-	header("Location: todolist.php");
+	redir();
 	exit();
 }
 

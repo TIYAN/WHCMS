@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.12
+ * @ Version  : 5.2.13
  * @ Author   : MTIMER
- * @ Release on : 2013-10-25
+ * @ Release on : 2013-11-25
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -218,7 +218,7 @@ function getClientsStats($userid) {
 	$stats['productsnumactive'] = $stats['productsnumactivehosting'] + $stats['productsnumactivereseller'] + $stats['productsnumactiveservers'] + $stats['productsnumactiveother'];
 	$stats['productsnumtotal'] = $stats['productsnumhosting'] + $stats['productsnumreseller'] + $stats['productsnumservers'] + $stats['productsnumother'];
 	$domainstats = array();
-	$result = select_query("tbldomains", "status,COUNT(*)", "userid=" . (int)$userid . " GROUP BY status");
+	select_query("tbldomains", "status,COUNT(*)", "userid=" . (int)$userid . " GROUP BY status");
 
 	while ($data = mysql_fetch_array($result)) {
 		$domainstats[$data[0]] = $data[1];
@@ -268,7 +268,7 @@ function getClientsStats($userid) {
 	}
 
 	$result = select_query("tblaffiliatesaccounts", "COUNT(*)", array("clientid" => $userid), "", "", "", "tblaffiliates ON tblaffiliatesaccounts.affiliateid=tblaffiliates.id");
-	$data = mysql_fetch_array($result);
+	$data = $result = mysql_fetch_array($result);
 	$stats['numaffiliatesignups'] = $data[0];
 	return $stats;
 }
@@ -477,6 +477,12 @@ function addContact($userid, $firstname, $lastname, $companyname, $email, $addre
 }
 
 function deleteClient($userid) {
+	$userid = (int)get_query_val("tblclients", "id", array("id" => (int)$userid));
+
+	if (!$userid) {
+		return false;
+	}
+
 	run_hook("PreDeleteClient", array("userid" => $userid));
 	delete_query("tblclients", array("id" => $userid));
 	delete_query("tblcontacts", array("userid" => $userid));
@@ -521,6 +527,7 @@ function deleteClient($userid) {
 	delete_query("tblactivitylog", array("userid" => $userid));
 	delete_query("tblsslorders", array("userid" => $userid));
 	logActivity("Client Deleted - ID: " . $userid);
+	return true;
 }
 
 function getSecurityQuestions($questionid = "") {
@@ -1548,8 +1555,7 @@ function doResetPW($key, $newpw, $confirmpw) {
 		logActivity("Password Reset Completed", $userid);
 		sendMessage("Password Reset Confirmation", $userid, array("contactid" => $contactid));
 		validateClientLogin($email, $newpw);
-		header("Location: pwreset.php?success=true");
-		exit();
+		redir("success=true", "pwreset.php");
 	}
 
 	return $validate->getHTMLErrorOutput();

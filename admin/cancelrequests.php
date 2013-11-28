@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.12
+ * @ Version  : 5.2.13
  * @ Author   : MTIMER
- * @ Release on : 2013-10-25
+ * @ Release on : 2013-11-25
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -16,18 +16,15 @@ $aInt = new WHMCS_Admin("View Cancellation Requests");
 $aInt->title = $aInt->lang("clients", "cancelrequests");
 $aInt->sidebar = "clients";
 $aInt->icon = "cancelrequests";
-$aInt->helplink = "Cancellation Requests";
 
 if ($action == "delete") {
+	check_token("WHMCS.admin.default");
 	delete_query("tblcancelrequests", array("id" => $id));
-	header("Location: " . $_SERVER['PHP_SELF']);
+	redir();
 	exit();
 }
 
-$jscode = "function doDelete(id) {
-if (confirm(\"" . $aInt->lang("clients", "cancelrequestsdelete") . "\")) {
-window.location='" . $_SERVER['PHP_SELF'] . "?action=delete&id='+id;
-}}";
+$aInt->deleteJSConfirm("doDelete", "clients", "cancelrequestsdelete", "?action=delete&id=");
 ob_start();
 echo $aInt->Tabs(array("Search/Filter"), true);
 echo "
@@ -185,7 +182,8 @@ while ($data = mysql_fetch_array($result)) {
 }
 
 echo $aInt->sortableTable(array($aInt->lang("fields", "date"), $aInt->lang("fields", "product"), $aInt->lang("fields", "reason"), $aInt->lang("fields", "type"), ""), $tabledata);
-$content = ob_get_contents();
+ob_get_contents();
+$content = $aInt->helplink = "Cancellation Requests";
 ob_end_clean();
 $aInt->content = $content;
 $aInt->jquerycode = $jquerycode;

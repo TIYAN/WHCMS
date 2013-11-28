@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.12
+ * @ Version  : 5.2.13
  * @ Author   : MTIMER
- * @ Release on : 2013-10-25
+ * @ Release on : 2013-11-25
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -52,8 +52,7 @@ function usaepay_capture($params) {
 	}
 
 	curl_close( $ch );
-	$tmp = split( "
-", $result );
+	$tmp = split( "\r\n", $result );
 
 	$result = $tmp[count( $tmp ) - 1];
 	parse_str( $result, $tmp );

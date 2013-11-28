@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.12
+ * @ Version  : 5.2.13
  * @ Author   : MTIMER
- * @ Release on : 2013-10-25
+ * @ Release on : 2013-11-25
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -43,11 +43,11 @@ if ($action == "save") {
 
 	if ($id) {
 		update_query("tblticketescalations", array("name" => $name, "departments" => $departments, "statuses" => $statuses, "priorities" => $priorities, "timeelapsed" => $timeelapsed, "newdepartment" => $newdepartment, "newstatus" => $newstatus, "newpriority" => $newpriority, "flagto" => $flagto, "notify" => $notify, "addreply" => $addreply), array("id" => $id));
-		header("Location: " . $_SERVER['PHP_SELF'] . "?saved=true");
+		redir("saved=true");
 	}
 	else {
 		insert_query("tblticketescalations", array("name" => $name, "departments" => $departments, "statuses" => $statuses, "priorities" => $priorities, "timeelapsed" => $timeelapsed, "newdepartment" => $newdepartment, "newstatus" => $newstatus, "newpriority" => $newpriority, "flagto" => $flagto, "notify" => $notify, "addreply" => $addreply));
-		header("Location: " . $_SERVER['PHP_SELF'] . "?added=true");
+		redir("added=true");
 	}
 
 	exit();
@@ -57,7 +57,7 @@ if ($action == "save") {
 if ($action == "delete") {
 	check_token("WHMCS.admin.default");
 	delete_query("tblticketescalations", array("id" => $id));
-	header("Location: configticketescalations.php?deleted=true");
+	redir("deleted=true");
 	exit();
 }
 
@@ -79,10 +79,7 @@ if ($action == "") {
 	}
 
 	echo $infobox;
-	$jscode = "function doDelete(id) {
-if (confirm(\"" . addslashes($aInt->lang("taxconfig", "delsureescalationrule")) . "\")) {
-window.location='" . $_SERVER['PHP_SELF'] . "?action=delete&id='+id+'" . generate_token("link") . "';
-}}";
+	$aInt->deleteJSConfirm("doDelete", "supportticketescalations", "delsureescalationrule", "?action=delete&id=");
 	echo "
 <p>";
 	echo $aInt->lang("supportticketescalations", "escalationrulesinfo");

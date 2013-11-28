@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.12
+ * @ Version  : 5.2.13
  * @ Author   : MTIMER
- * @ Release on : 2013-10-25
+ * @ Release on : 2013-11-25
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -59,6 +59,7 @@ $aInt->helplink = "General Settings";
 $aInt->requiredFiles(array("clientfunctions"));
 
 if ($action == "addwhitelistip") {
+	check_token("WHMCS.admin.default");
 	$whitelistedips = $whmcs->get_config("WhitelistedIPs");
 	$whitelistedips = unserialize($whitelistedips);
 	$whitelistedips[] = array("ip" => $ipaddress, "note" => $notes);
@@ -69,6 +70,7 @@ if ($action == "addwhitelistip") {
 
 
 if ($action == "deletewhitelistip") {
+	check_token("WHMCS.admin.default");
 	$removeip = explode(" - ", $removeip);
 	$whitelistedips = $whmcs->get_config("WhitelistedIPs");
 	$whitelistedips = unserialize($whitelistedips);
@@ -87,6 +89,7 @@ if ($action == "deletewhitelistip") {
 
 
 if ($action == "addapiip") {
+	check_token("WHMCS.admin.default");
 	$whitelistedips = $whmcs->get_config("APIAllowedIPs");
 	$whitelistedips = unserialize($whitelistedips);
 	$whitelistedips[] = array("ip" => $ipaddress, "note" => $notes);
@@ -96,6 +99,7 @@ if ($action == "addapiip") {
 
 
 if ($action == "deleteapiip") {
+	check_token("WHMCS.admin.default");
 	$removeip = explode(" - ", $removeip);
 	$whitelistedips = $whmcs->get_config("APIAllowedIPs");
 	$whitelistedips = unserialize($whitelistedips);
@@ -316,7 +320,7 @@ if ($action == "save") {
 		$token_manager = &getTokenManager();
 
 		$token_manager->processAdminHTMLSave($whmcs);
-		header("Location: " . $_SERVER['PHP_SELF'] . ("?success=true&tab=" . $tab));
+		redir("success=true&tab=" . $tab);
 		exit();
 	}
 }
@@ -326,24 +330,24 @@ ob_start();
 $jquerycode .= "$(\"#removewhitelistedip\").click(function () {
     var removeip = $('#whitelistedips option:selected;').text();
     $('#whitelistedips option:selected').remove();
-    $.post(\"configgeneral.php\", { action: \"deletewhitelistip\", removeip: removeip });
+    $.post(\"configgeneral.php\", { action: \"deletewhitelistip\", removeip: removeip, token: '" . generate_token("plain") . "'});
     return false;
 });
 function addwhitelistedip(ipaddress,note) {
     $('#whitelistedips').append('<option>'+ipaddress+' - '+note+'</option>');
-    $.post(\"configgeneral.php\", { action: \"addwhitelistip\", ipaddress: ipaddress, notes: note });
+    $.post(\"configgeneral.php\", { action: \"addwhitelistip\", ipaddress: ipaddress, notes: note, token: '" . generate_token("plain") . "'});
     $('#addwhitelistip').dialog('close');
     return false;
 };
 $(\"#removeapiip\").click(function () {
     var removeip = $('#apiallowedips option:selected;').text();
     $('#apiallowedips option:selected').remove();
-    $.post(\"configgeneral.php\", { action: \"deleteapiip\", removeip: removeip });
+    $.post(\"configgeneral.php\", { action: \"deleteapiip\", removeip: removeip, token: '" . generate_token("plain") . "'});
     return false;
 });
 function addapiip(ipaddress,note) {
     $('#apiallowedips').append('<option>'+ipaddress+' - '+note+'</option>');
-    $.post(\"configgeneral.php\", { action: \"addapiip\", ipaddress: ipaddress, notes: note });
+    $.post(\"configgeneral.php\", { action: \"addapiip\", ipaddress: ipaddress, notes: note, token: '" . generate_token("plain") . "'});
     $('#addapiip').dialog('close');
     return false;
 };

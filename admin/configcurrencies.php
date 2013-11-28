@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.12
+ * @ Version  : 5.2.13
  * @ Author   : MTIMER
- * @ Release on : 2013-10-25
+ * @ Release on : 2013-11-25
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -22,7 +22,7 @@ $aInt->requiredFiles(array("currencyfunctions"));
 if ($action == "add") {
 	check_token("WHMCS.admin.default");
 	insert_query("tblcurrencies", array("code" => $code, "prefix" => html_entity_decode($prefix), "suffix" => html_entity_decode($suffix), "format" => $format, "rate" => $rate));
-	header("Location: configcurrencies.php");
+	redir();
 	exit();
 }
 
@@ -40,7 +40,7 @@ if ($action == "save") {
 		currencyUpdatePricing($id);
 	}
 
-	header("Location: configcurrencies.php");
+	redir();
 	exit();
 }
 
@@ -56,7 +56,7 @@ if ($action == "delete") {
 		delete_query("tblpricing", array("currency" => $id));
 	}
 
-	header("Location: configcurrencies.php");
+	redir();
 	exit();
 }
 
@@ -69,12 +69,14 @@ window.location='" . $_SERVER['PHP_SELF'] . "?action=delete&id='+id+'" . generat
 }}";
 
 	if ($updaterates) {
+		check_token("WHMCS.admin.default");
 		$msg = currencyUpdateRates();
 		infoBox($aInt->lang("currencies", "exchrateupdate"), $msg);
 	}
 
 
 	if ($updateprices) {
+		check_token("WHMCS.admin.default");
 		currencyUpdatePricing();
 		infoBox($aInt->lang("currencies", "updatepricing"), $aInt->lang("currencies", "updatepricinginfo"));
 	}
@@ -140,9 +142,13 @@ window.location='" . $_SERVER['PHP_SELF'] . "?action=delete&id='+id+'" . generat
 	echo "
 <p align=\"center\"><input type=\"button\" value=\"";
 	echo $aInt->lang("currencies", "updateexch");
-	echo "\" class=\"button\" onclick=\"window.location='configcurrencies.php?updaterates=true'\" /> <input type=\"button\" value=\"";
+	echo "\" class=\"button\" onclick=\"window.location='configcurrencies.php?updaterates=true";
+	echo generate_token("link");
+	echo "'\" /> <input type=\"button\" value=\"";
 	echo $aInt->lang("currencies", "updateprod");
-	echo "\" class=\"button\" onclick=\"window.location='configcurrencies.php?updateprices=true'\" /></p>
+	echo "\" class=\"button\" onclick=\"window.location='configcurrencies.php?updateprices=true";
+	echo generate_token("link");
+	echo "'\" /></p>
 
 <h2>";
 	echo $aInt->lang("currencies", "addadditional");

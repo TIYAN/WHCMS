@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.12
+ * @ Version  : 5.2.13
  * @ Author   : MTIMER
- * @ Release on : 2013-10-25
+ * @ Release on : 2013-11-25
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -22,8 +22,7 @@ if ($sub == "delete") {
 	delete_query("tblannouncements", array("id" => $id));
 	delete_query("tblannouncements", array("parentid" => $id));
 	logActivity("Deleted Announcement (ID: " . $id . ")");
-	header("Location: supportannouncements.php");
-	exit();
+	redir();
 }
 
 
@@ -67,10 +66,7 @@ if ($sub == "save") {
 ob_start();
 
 if ($action == "") {
-	$jscode = "function doDelete(id) {
-if (confirm(\"" . $aInt->lang("support", "announcesuredel") . "\")) {
-window.location='" . $_SERVER['PHP_SELF'] . "?sub=delete&id='+id+'" . generate_token("link") . "';
-}}";
+	$aInt->deleteJSConfirm("doDelete", "support", "announcesuredel", "?sub=delete&id=");
 
 	if ($success) {
 		infoBox($aInt->lang("global", "success"), $aInt->lang("global", "changesuccess"));

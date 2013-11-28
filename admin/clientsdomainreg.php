@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.12
+ * @ Version  : 5.2.13
  * @ Author   : MTIMER
- * @ Release on : 2013-10-25
+ * @ Release on : 2013-11-25
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -17,6 +17,11 @@ $aInt->title = $aInt->lang("domains", "regtransfer");
 $aInt->sidebar = "clients";
 $aInt->icon = "clientsprofile";
 $aInt->requiredFiles(array("clientfunctions", "registrarfunctions"));
+
+if ($action == "do") {
+	check_token("WHMCS.admin.default");
+}
+
 ob_start();
 $result = select_query("tbldomains", "", array("id" => $domainid));
 $data = mysql_fetch_array($result);

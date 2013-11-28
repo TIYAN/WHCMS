@@ -27,7 +27,7 @@
  * @author Monte Ohrt <monte at ohrt dot com>
  * @author Andrei Zmievski <andrei@php.net>
  * @package Smarty
- * @version 2.6.27
+ * @version 2.6.28
  */
 
 /* $Id: Smarty.class.php 4660 2012-09-24 20:05:15Z uwe.tews@googlemail.com $ */
@@ -465,7 +465,7 @@ class Smarty
      *
      * @var string
      */
-    var $_version              = '2.6.27';
+    var $_version              = '2.6.28';
 
     /**
      * current template inclusion depth
@@ -1090,9 +1090,14 @@ class Smarty
      */
     function trigger_error($error_msg, $error_type = E_USER_WARNING)
     {
-        $error_msg = trim(str_replace(array('(Smarty_Compiler.class.php, line 590)','(Smarty_Compiler.class.php, line 446)'),'',$error_msg));
-        logActivity("Smarty Error: $error_msg");
-        #trigger_error("Smarty error: $error_msg", $error_type);
+        // Suppress the smarty fatal error and log to WHMCS activity log instead when possible
+        if (function_exists('logActivity')) {
+            $msg = trim(str_replace(array('(Smarty_Compiler.class.php, line 590)','(Smarty_Compiler.class.php, line 446)'),'',$error_msg));
+            logActivity("Smarty Error: $msg");
+        } else {
+            $msg = htmlentities($error_msg);
+            trigger_error("Smarty error: $msg", $error_type);
+        }
     }
 
 

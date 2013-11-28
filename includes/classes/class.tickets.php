@@ -3,15 +3,14 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.12
+ * @ Version  : 5.2.13
  * @ Author   : MTIMER
- * @ Release on : 2013-10-25
+ * @ Release on : 2013-11-25
  * @ Website  : http://www.mtimer.cn
  *
  **/
 
-class WHMCS_Tickets extends WHMCS_TableModel 
-{
+class WHMCS_Tickets extends WHMCS_TableModel {
 	public $ticketid = "";
 	public $data = array();
 	public $deptids = array();
@@ -61,7 +60,7 @@ class WHMCS_Tickets extends WHMCS_TableModel
 			$companyname = $data['companyname'];
 			$groupid = $data['groupid'];
 			$adminread = explode(",", $adminread);
-			$unread = in_array(WHMCS_Session::get("adminid"), $adminread) ? 0 : 1;
+			$unread = (in_array(WHMCS_Session::get("adminid"), $adminread) ? 0 : 1);
 			$alttitle = "";
 			$title = trim($title);
 
@@ -251,12 +250,12 @@ class WHMCS_Tickets extends WHMCS_TableModel
 				$ticketcounts[] = array("label" => $data[0], "count" => $data[1]);
 
 				if ($data['showactive']) {
-					$ticketcounts[1]['count'] += $data[1];
+					$ticketcounts[1]['count'] = $data[1];
 				}
 
 
 				if ($data['showawaiting']) {
-					$ticketcounts[0]['count'] += $data[1];
+					$ticketcounts[0]['count'] = $data[1];
 				}
 			}
 
@@ -761,7 +760,7 @@ class WHMCS_Tickets extends WHMCS_TableModel
 		}
 
 		$message = strip_tags($message);
-		$message = preg_replace("/\[div=\"(.*?)\"\]/", "<div class=\"\">", $message);
+		$message = preg_replace("/\[div=\"(.*?)\"\]/", "<div class=\"$1\">", $message);
 		$replacetags = array("b" => "strong", "i" => "em", "u" => "ul", "div" => "div");
 		foreach ($replacetags as $k => $v) {
 			$message = str_replace("[" . $k . "]", "<" . $k . ">", $message);
@@ -783,11 +782,11 @@ class WHMCS_Tickets extends WHMCS_TableModel
 				$file = substr($file, 7);
 
 				if ($replyid) {
-					$attachments[] = array("filename" => $file, "dllink" => "dl.php?type=ar&id=" . $replyid . "&i=" . $num, "deletelink" => "" . $PHP_SELF . "?action=viewticket&id=" . $ticketid . "&removeattachment=true&type=r&idsd=" . $replyid . "&filecount=" . $num);
+					$attachments[] = array("filename" => $file, "dllink" => "dl.php?type=ar&id=" . $replyid . "&i=" . $num, "deletelink" => "" . $PHP_SELF . "?action=viewticket&id=" . $ticketid . "&removeattachment=true&type=r&idsd=" . $replyid . "&filecount=" . $num . generate_token("link"));
 					continue;
 				}
 
-				$attachments[] = array("filename" => $file, "dllink" => "dl.php?type=a&id=" . $ticketid . "&i=" . $num, "deletelink" => "" . $PHP_SELF . "?action=viewticket&id=" . $ticketid . "&removeattachment=true&idsd=" . $ticketid . "&filecount=" . $num);
+				$attachments[] = array("filename" => $file, "dllink" => "dl.php?type=a&id=" . $ticketid . "&i=" . $num, "deletelink" => "" . $PHP_SELF . "?action=viewticket&id=" . $ticketid . "&removeattachment=true&idsd=" . $ticketid . "&filecount=" . $num . generate_token("link"));
 			}
 		}
 

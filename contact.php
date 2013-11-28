@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.12
+ * @ Version  : 5.2.13
  * @ Author   : MTIMER
- * @ Release on : 2013-10-25
+ * @ Release on : 2013-11-25
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -24,8 +24,7 @@ $subject = $whmcs->get_req_var("subject");
 $message = $whmcs->get_req_var("message");
 
 if ($CONFIG['ContactFormDept']) {
-	header("Location: submitticket.php?step=2&deptid=" . $CONFIG['ContactFormDept']);
-	exit();
+	redir("step=2&deptid=" . (int)$CONFIG['ContactFormDept'], "submitticket.php");
 }
 
 $capatacha = clientAreaInitCaptcha();
@@ -59,7 +58,8 @@ if ($action == "send") {
 		if ($CONFIG['MailType'] == "mail") {
 			$mail->Mailer = "mail";
 		}
-		elseif ($CONFIG['MailType'] == "smtp") {
+		else {
+			if ($CONFIG['MailType'] == "smtp") {
 				$mail->IsSMTP();
 				$mail->Host = $CONFIG['SMTPHost'];
 				$mail->Port = $CONFIG['SMTPPort'];
@@ -79,6 +79,7 @@ if ($action == "send") {
 				$mail->Sender = $CONFIG['Email'];
 				$mail->AddReplyTo($fromemail, $fromname);
 			}
+		}
 
 		$message_text = str_replace("</p>", "\r\n\r\n", $sendmessage);
 		$message_text = str_replace("<br>", "\r\n", $message_text);

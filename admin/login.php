@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.12
+ * @ Version  : 5.2.13
  * @ Author   : MTIMER
- * @ Release on : 2013-10-25
+ * @ Release on : 2013-11-25
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -21,7 +21,7 @@ if (!function_exists("curl_init")) {
 
 
 if ($whmcs->get_req_var("conntest")) {
-	$whmcsurl = "https://www.mtiemr.cn/";
+	$whmcsurl = "http://www.mtimer.cn/";
 	$postfields = array("curltest" => "1");
 	$ip = gethostbyname("api.mtimer.cn");
 	echo "<font style=\"font-size:18px;\">Testing Connection to whmcs.com...<br />URL resolves to " . $ip . "<br /><br />";

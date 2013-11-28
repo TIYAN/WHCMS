@@ -5,12 +5,20 @@ $(document).ready(function(){
     });
     $("#savenotes").click(function () {
         $("#mynotes").toggle("slow");
-        $.post("index.php", { action: "savenotes", notes: $("#mynotesbox").val() });
+        $.post("index.php", $("#frmmynotes").serialize() );
+    });
+    $("#frmintellisearch").submit(function(e) {
+        e.preventDefault();
+        $.post("search.php", $("#frmintellisearch").serialize(),
+        function(data){
+            $("#searchresults").html(data);
+            $("#searchresults").slideDown("slow");
+        });
     });
     $("#intellisearchval").keyup(function () {
         var intellisearchlength = $("#intellisearchval").val().length;
         if (intellisearchlength>2) {
-        $.post("search.php", { intellisearch: "true", value: $("#intellisearchval").val() },
+        $.post("search.php", $("#frmintellisearch").serialize(),
           function(data){
             $("#searchresults").html(data);
             $("#searchresults").slideDown("slow");

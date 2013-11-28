@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.12
+ * @ Version  : 5.2.13
  * @ Author   : MTIMER
- * @ Release on : 2013-10-25
+ * @ Release on : 2013-11-25
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -19,6 +19,7 @@ $aInt->icon = "dbbackups";
 $aInt->requiredFiles(array("backupfunctions"));
 
 if ($optimize) {
+	check_token("WHMCS.admin.default");
 	$alltables = full_query("SHOW TABLES");
 
 	while ($table = mysql_fetch_assoc($alltables)) {
@@ -32,6 +33,7 @@ if ($optimize) {
 
 
 if ($dlbackup) {
+	check_token("WHMCS.admin.default");
 	$db_name = "";
 	require ROOTDIR . "/configuration.php";
 	set_time_limit(0);
@@ -121,9 +123,13 @@ echo "</p>
 
 <p align=center><input type=\"button\" value=\"";
 echo $aInt->lang("system", "opttables");
-echo "\" class=\"button\" onClick=\"window.location='systemdatabase.php?optimize=true'\"> <input type=\"button\" value=\"";
+echo "\" class=\"button\" onClick=\"window.location='systemdatabase.php?optimize=true";
+echo generate_token("link");
+echo "'\"> <input type=\"button\" value=\"";
 echo $aInt->lang("system", "dldbbackup");
-echo "\" class=\"button\" onClick=\"window.location='systemdatabase.php?dlbackup=true'\"></p>
+echo "\" class=\"button\" onClick=\"window.location='systemdatabase.php?dlbackup=true";
+echo generate_token("link");
+echo "'\"></p>
 
 </td></tr></table>
 

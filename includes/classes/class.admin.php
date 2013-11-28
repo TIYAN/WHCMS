@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.12
+ * @ Version  : 5.2.13
  * @ Author   : MTIMER
- * @ Release on : 2013-10-25
+ * @ Release on : 2013-11-25
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -47,8 +47,7 @@ class WHMCS_Admin {
 		$licensing->remoteCheck();
 
 		if ($licensing->getStatus() != "Active") {
-			header("Location: licenseerror.php?licenseerror=" . $licensing->getStatus());
-			exit();
+			redir("licenseerror=" . $licensing->getStatus(), "licenseerror.php");
 		}
 
 
@@ -125,7 +124,7 @@ class WHMCS_Admin {
 			$match = $data[0];
 
 			if (!$match) {
-				header("Location: accessdenied.php?permid=" . $permid);
+				redir("permid=" . $permid, "accessdenied.php");
 				exit();
 			}
 		}
@@ -323,7 +322,7 @@ class WHMCS_Admin {
 			$this->extrajscode[] = "$(window).bind(\"resize\", function(event) { redrawCharts(); });";
 		}
 
-		$jquerycode = count($this->internaljquerycode) ? implode("\r\n", $this->internaljquerycode) : "";
+		$jquerycode = (count($this->internaljquerycode) ? implode("\r\n", $this->internaljquerycode) : "");
 
 		if ($this->jquerycode) {
 			$jquerycode .= "\r\n" . $this->jquerycode;
@@ -346,6 +345,7 @@ class WHMCS_Admin {
 		$this->assign("jquerycode", $jquerycode);
 		$this->assign("jscode", $this->jscode . implode("\r\n", $this->extrajscode));
 		$this->assign("_ADMINLANG", $_ADMINLANG);
+		$this->assign("csrfToken", generate_token("plain"));
 		$addonmodulesperms = unserialize($CONFIG['AddonModulesPerms']);
 		$this->assign("datepickerformat", str_replace(array("DD", "MM", "YYYY"), array("dd", "mm", "yy"), $CONFIG['DateFormat']));
 
@@ -540,6 +540,8 @@ class WHMCS_Admin {
 	}
 
 	public function output() {
+		global $whmcs;
+
 		$hookvars = $this->templatevars;
 		unset($hookvars['_ADMINLANG']);
 		$hookres = run_hook("AdminAreaPage", $hookvars);
@@ -559,10 +561,10 @@ class WHMCS_Admin {
 
 		$this->smarty->assign("headoutput", $headoutput);
 		$hookres = run_hook("AdminAreaHeaderOutput", $hookvars);
-		$headeroutput = count($hookres) ? implode("\r\n", $hookres) : "";
+		$headeroutput = (count($hookres) ? implode("\r\n", $hookres) : "");
 		$this->smarty->assign("headeroutput", $headeroutput);
 		$hookres = run_hook("AdminAreaFooterOutput", $hookvars);
-		$footeroutput = count($hookres) ? implode("\r\n", $hookres) : "";
+		$footeroutput = (count($hookres) ? implode("\r\n", $hookres) : "");
 		$this->smarty->assign("footeroutput", $footeroutput);
 		$this->smarty->display($this->adminTemplate . "/header.tpl");
 
@@ -576,7 +578,11 @@ class WHMCS_Admin {
 			$content = $this->smarty->fetch($this->adminTemplate . "/" . $this->template . ".tpl");
 		}
 
-		$content = preg_replace("/(<form\W[^>]*\bmethod=('|\"|)POST('|\"|)\b[^>]*>)/i", "$1" . "\r\n" . generate_token(), $content);
+
+		if ($whmcs->getCurrentFilename() != "systemintegrationcode") {
+			$content = preg_replace("/(<form\W[^>]*\bmethod=('|\"|)POST('|\"|)\b[^>]*>)/i", "$1" . "\r\n" . generate_token(), $content);
+
+		}
 
 
 		if ($this->exitmsg) {
@@ -691,7 +697,7 @@ $(\"#tab" . $tabnumber . "box\").css(\"display\",\"\");";
 		return $content;
 	}
 
-	public function sortableTableInit($defaultsort, $defaultorder = "ASC", $passthruvars = array()) {
+	public function sortableTableInit($defaultsort, $defaultorder = "ASC") {
 		global $orderby;
 		global $order;
 		global $page;
@@ -706,7 +712,12 @@ $(\"#tab" . $tabnumber . "box\").css(\"display\",\"\");";
 		else {
 			$this->tablePagination = true;
 			$sortdata = (isset($_COOKIE['sortdata']) ? $_COOKIE['sortdata'] : "");
-			$sortdata = unserialize(base64_decode($sortdata));
+			$sortdata = json_decode(base64_decode($sortdata), true);
+
+			if (!is_array($sortdata)) {
+				$sortdata = array();
+			}
+
 			$xorderby = $sortdata[$sortpage . "orderby"];
 			$xorder = $sortdata[$sortpage . "order"];
 
@@ -742,9 +753,9 @@ $(\"#tab" . $tabnumber . "box\").css(\"display\",\"\");";
 
 			$sortdata[$sortpage . "orderby"] = $xorderby;
 			$sortdata[$sortpage . "order"] = $xorder;
-			setcookie("sortdata", base64_encode(serialize($sortdata)));
 			$orderby = db_escape_string($xorderby);
 			$order = db_escape_string($xorder);
+			setcookie("sortdata", base64_encode(json_encode($sortdata)));
 		}
 
 
@@ -753,22 +764,6 @@ $(\"#tab" . $tabnumber . "box\").css(\"display\",\"\");";
 		}
 
 		$limit = $this->rowLimit;
-
-		if (isset($_COOKIE['WHMCSVarsPassThru'])) {
-			$vars = wGetCookie("VarsPassThru", 1);
-			foreach ($vars as $k => $v) {
-
-				if (in_array($k, $passthruvars)) {
-					global $$k;
-
-					$$k = $_REQUEST[$k] = $v;
-					continue;
-				}
-			}
-
-			wDelCookie("VarsPassThru");
-		}
-
 		$this->sortableTableCount++;
 		$tabledata = array();
 	}
@@ -878,7 +873,7 @@ $(\"#tab" . $tabnumber . "box\").css(\"display\",\"\");";
 
 
 			if ($columnname == "checkall") {
-				$this->internaljquerycode[] = "$(\"#checkall" . $this->sortableTableCount . "\").click(public function () {
+				$this->internaljquerycode[] = "$(\"#checkall" . $this->sortableTableCount . "\").click(function () {
     $(\"#sortabletbl" . $this->sortableTableCount . " .checkall\").attr(\"checked\",this.checked);
 });";
 				$content .= "<th width=\"20\"><input type=\"checkbox\" id=\"checkall" . $this->sortableTableCount . "\"></th>";
@@ -914,16 +909,14 @@ $(\"#tab" . $tabnumber . "box\").css(\"display\",\"\");";
 			$content .= "</th>";
 		}
 
-		$content .= "</tr>
-";
+		$content .= "</tr>\r\n";
 		$totalcols = count($columns);
 
 		if (is_array($tabledata) && count($tabledata)) {
 			foreach ($tabledata as $tablevalues) {
 
 				if ($tablevalues[0] == "dividingline") {
-					$content .= "<tr><td colspan=\"" . $totalcols . "\" style=\"background-color:#efefef;\"><div align=\"left\"><b>" . $tablevalues[1] . "</b></div></td></tr>
-";
+					$content .= "<tr><td colspan=\"" . $totalcols . "\" style=\"background-color:#efefef;\"><div align=\"left\"><b>" . $tablevalues[1] . "</b></div></td></tr>\r\n";
 					continue;
 				}
 
@@ -932,23 +925,17 @@ $(\"#tab" . $tabnumber . "box\").css(\"display\",\"\");";
 					$content .= "<td>" . $tablevalue . "</td>";
 				}
 
-				$content .= "</tr>
-";
+				$content .= "</tr>\r\n";
 			}
 		}
 		else {
-			$content .= "<tr><td colspan=\"" . $totalcols . "\">" . $this->lang("global", "norecordsfound") . "</td></tr>
-";
+			$content .= "<tr><td colspan=\"" . $totalcols . "\">" . $this->lang("global", "norecordsfound") . "</td></tr>\r\n";
 		}
 
-		$content .= "</table>
-</div>
-";
+		$content .= "</table>\r\n</div>\r\n";
 
 		if ($formbuttons) {
-			$content .= "" . $this->lang("global", "withselected") . ": " . $formbuttons . "
-</form>
-";
+			$content .= "" . $this->lang("global", "withselected") . ": " . $formbuttons . "\r\n</form>\r\n";
 		}
 
 
@@ -1037,8 +1024,7 @@ $(\"#tab" . $tabnumber . "box\").css(\"display\",\"\");";
 		$tabarray['clientsemails'] = $this->lang("clientsummary", "emails");
 		$tabarray['clientsnotes'] = $this->lang("clientsummary", "notes") . " (" . get_query_val("tblnotes", "COUNT(id)", array("userid" => $uid)) . ")";
 		$tabarray['clientslog'] = $this->lang("clientsummary", "log");
-		echo "<form action=\"" . $_SERVER['PHP_SELF'] . "\" method=\"get\">
-<p>" . $this->lang("clientsummary", "activeclient") . ": ";
+		echo "<form action=\"" . $_SERVER['PHP_SELF'] . "\" method=\"get\">\r\n<p>" . $this->lang("clientsummary", "activeclient") . ": ";
 
 		if ($CONFIG['DisableClientDropdown']) {
 			$result = select_query("tblclients", "", array("id" => $uid));
@@ -1057,10 +1043,7 @@ $(\"#tab" . $tabnumber . "box\").css(\"display\",\"\");";
 			echo " <input type=\"submit\" value=\"Go\">";
 		}
 
-		echo "</p>
-</form>
-<div id=\"clienttabs\">
-<ul>";
+		echo "</p>\r\n</form>\r\n<div id=\"clienttabs\">\r\n<ul>";
 		foreach ($tabarray as $link => $name) {
 
 			if ($link == $this->filename) {
@@ -1073,10 +1056,7 @@ $(\"#tab" . $tabnumber . "box\").css(\"display\",\"\");";
 			echo "<li class=\"" . $class . "\"><a href=\"" . $link . ".php?userid=" . $_GET['userid'] . "\">" . $name . "</a></li>";
 		}
 
-		echo "</ul>
-</div>
-<div id=\"tab0box\" class=\"tabbox\">
-  <div id=\"tab_content\" style=\"text-align:left;\">";
+		echo "</ul>\r\n</div>\r\n<div id=\"tab0box\" class=\"tabbox\">\r\n  <div id=\"tab_content\" style=\"text-align:left;\">";
 	}
 
 	public function gracefulExit($msg) {
@@ -1194,9 +1174,7 @@ $(\"#tab" . $tabnumber . "box\").css(\"display\",\"\");";
 		},";
 		}
 
-		$jquerycode .= substr($buttoncode, 0, 0 - 1) . "}
-});
-";
+		$jquerycode .= substr($buttoncode, 0, 0 - 1) . "}\r\n});\r\n";
 		$this->internaljquerycode[] = $jquerycode;
 		$alerticon = "";
 
@@ -1390,10 +1368,6 @@ function insertMergeField(mfield) {
 ";
 	}
 
-	public function varsPassThru() {
-		wSetCookie("VarsPassThru", $_REQUEST);
-	}
-
 	public function productDropDown($pid = 0, $noneopt = "", $anyopt = "") {
 		global $aInt;
 
@@ -1470,7 +1444,7 @@ function dialogOpen() {
     $(\"#bgfilter\").css(\"position\",\"absolute\").css(\"top\",\"0\").css(\"left\",\"0\").css(\"width\",\"100%\").css(\"height\",$(\"body\").height()).css(\"background-color\",\"#ccc\").css(\"display\",\"block\").css(\"filter\",\"alpha(opacity=70)\").css(\"-moz-opacity\",\"0.7\").css(\"-khtml-opacity\",\"0.7\").css(\"opacity\",\"0.7\").css(\"z-index\",\"1000\");
 
     $(\"body\").append(\"<div class=\\\"admindialog\\\" id=\\\"dl1\\\"><a href=\\\"#\\\" onclick=\\\"dialogClose();return false\\\" class=\\\"close\\\">x</a><div id=\\\"admindialogcont\\\">" . addslashes($content) . "</div></div>\");
-	$(\"#dl1\").css(\"position\",\"absolute\");
+		$(\"#dl1\").css(\"position\",\"absolute\");
     $(\"#dl1\").css(\"z-index\",\"1001\");
 
     dialoginit = true;

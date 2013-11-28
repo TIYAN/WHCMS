@@ -11,8 +11,8 @@ function widget_income_overview($vars) {
     $args = array();
     $args['colors'] = '#F9D88C,#1E78BB';
     $args['legendpos'] = 'top';
-    $args['xlabel'] = '当前月';
-    $args['ylabel'] = '默认货币';
+    $args['xlabel'] = 'Day of the Month';
+    $args['ylabel'] = 'Default Currency';
     $args['chartarea'] = '80,40,85%,70%';
 
     $content = $chart->drawChart('Area',chartdata_income(),$args,'300px');
@@ -25,9 +25,9 @@ function chartdata_income() {
     global $currency;
     $currency = getCurrency();
     $chartdata = array();
-    $chartdata['cols'][] = array('label'=>'天','type'=>'string');
-    $chartdata['cols'][] = array('label'=>'收入','type'=>'number');
-    $chartdata['cols'][] = array('label'=>'支出/退款','type'=>'number');
+    $chartdata['cols'][] = array('label'=>'Day','type'=>'string');
+    $chartdata['cols'][] = array('label'=>'Income','type'=>'number');
+    $chartdata['cols'][] = array('label'=>'Expenditure/Refunds','type'=>'number');
     for ($i = 14; $i >= 0; $i--) {
         $date = mktime(0,0,0,date("m"),date("d")-$i,date("Y"));
         $data = get_query_vals("tblaccounts","SUM(amountin/rate),SUM(amountout/rate)","date LIKE '".date("Y-m-d",$date)."%'");

@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.12
+ * @ Version  : 5.2.13
  * @ Author   : MTIMER
- * @ Release on : 2013-10-25
+ * @ Release on : 2013-11-25
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -23,13 +23,13 @@ if ($action == "delete") {
 	$numaccounts = get_query_val("tblhosting", "COUNT(*)", array("server" => $id));
 
 	if (0 < $numaccounts) {
-		header("Location: " . $_SERVER['PHP_SELF'] . "?deleteerror=true");
+		redir("deleteerror=true");
 		exit();
 	}
 	else {
 		run_hook("ServerDelete", array("serverid" => $id));
 		delete_query("tblservers", array("id" => $id));
-		header("Location: " . $_SERVER['PHP_SELF'] . "?deletesuccess=true");
+		redir("deletesuccess=true");
 		exit();
 	}
 }
@@ -39,7 +39,7 @@ if ($action == "deletegroup") {
 	check_token("WHMCS.admin.default");
 	delete_query("tblservergroups", array("id" => $id));
 	delete_query("tblservergroupsrel", array("serverid" => $id));
-	header("Location: " . $_SERVER['PHP_SELF'] . "?deletegroupsuccess=true");
+	redir("deletegroupsuccess=true");
 	exit();
 }
 
@@ -60,7 +60,7 @@ if ($action == "save") {
 
 		update_query("tblservers", array("name" => $name, "type" => $type, "ipaddress" => trim($ipaddress), "assignedips" => trim($assignedips), "hostname" => trim($hostname), "monthlycost" => trim($monthlycost), "noc" => $noc, "statusaddress" => trim($statusaddress), "nameserver1" => trim($nameserver1), "nameserver1ip" => trim($nameserver1ip), "nameserver2" => trim($nameserver2), "nameserver2ip" => trim($nameserver2ip), "nameserver3" => trim($nameserver3), "nameserver3ip" => trim($nameserver3ip), "nameserver4" => trim($nameserver4), "nameserver4ip" => trim($nameserver4ip), "nameserver5" => trim($nameserver5), "nameserver5ip" => trim($nameserver5ip), "maxaccounts" => trim($maxaccounts), "username" => trim($username), "password" => encrypt(trim($password)), "accesshash" => trim($accesshash), "secure" => $secure, "disabled" => $disabled, "active" => $active), array("id" => $id));
 		run_hook("ServerEdit", array("serverid" => $id));
-		header("Location: " . $_SERVER['PHP_SELF'] . "?savesuccess=true");
+		redir("savesuccess=true");
 	}
 	else {
 		$result = select_query("tblservers", "id", array("type" => $type, "active" => "1"));
@@ -68,7 +68,7 @@ if ($action == "save") {
 		$active = ($data['id'] ? "" : "1");
 		$newid = insert_query("tblservers", array("name" => $name, "type" => $type, "ipaddress" => trim($ipaddress), "assignedips" => trim($assignedips), "hostname" => trim($hostname), "monthlycost" => trim($monthlycost), "noc" => $noc, "statusaddress" => trim($statusaddress), "nameserver1" => trim($nameserver1), "nameserver1ip" => trim($nameserver1ip), "nameserver2" => trim($nameserver2), "nameserver2ip" => trim($nameserver2ip), "nameserver3" => trim($nameserver3), "nameserver3ip" => trim($nameserver3ip), "nameserver4" => trim($nameserver4), "nameserver4ip" => trim($nameserver4ip), "nameserver5" => trim($nameserver5), "nameserver5ip" => trim($nameserver5ip), "maxaccounts" => trim($maxaccounts), "username" => trim($username), "password" => encrypt(trim($password)), "accesshash" => trim($accesshash), "secure" => $secure, "active" => $active, "disabled" => $disabled));
 		run_hook("ServerAdd", array("serverid" => $newid));
-		header("Location: " . $_SERVER['PHP_SELF'] . "?createsuccess=true");
+		redir("createsuccess=true");
 	}
 
 	exit();
@@ -93,7 +93,7 @@ if ($action == "savegroup") {
 		}
 	}
 
-	header("Location: " . $_SERVER['PHP_SELF']);
+	redir();
 	exit();
 }
 
@@ -101,24 +101,27 @@ ob_start();
 
 if ($action == "") {
 	if ($sub == "enable") {
+		check_token("WHMCS.admin.default");
 		update_query("tblservers", array("disabled" => "0"), array("id" => $id));
-		infoBox($aInt->lang("configservers", "enabled"), $aInt->lang("configservers", "enableddesc"));
+		redir("enablesuccess=1");
 	}
 
 
 	if ($sub == "disable") {
+		check_token("WHMCS.admin.default");
 		update_query("tblservers", array("disabled" => "1"), array("id" => $id));
-		infoBox($aInt->lang("configservers", "disabled"), $aInt->lang("configservers", "disableddesc"));
+		redir("disablesuccess=1");
 	}
 
 
 	if ($sub == "makedefault") {
+		check_token("WHMCS.admin.default");
 		$result = select_query("tblservers", "", array("id" => $id));
 		$data = mysql_fetch_array($result);
 		$type = $data['type'];
 		update_query("tblservers", array("active" => ""), array("type" => $type));
 		update_query("tblservers", array("active" => "1"), array("id" => $id));
-		infoBox($aInt->lang("configservers", "defaultchange"), $aInt->lang("configservers", "defaultchangedesc"));
+		redir("makedefault=1");
 	}
 
 
@@ -133,7 +136,7 @@ if ($action == "") {
 
 
 	if ($deletegroupsuccess) {
-		infoBox($aInt->lang("configservers", "groupdelsucessful"), $aInt->lang("configservers", "groupdelsucessfuldesc"));
+		infoBox($aInt->lang("configservers", "groupdelsuccessful"), $aInt->lang("configservers", "groupdelsuccessfuldesc"));
 	}
 
 
@@ -146,15 +149,24 @@ if ($action == "") {
 		infoBox($aInt->lang("configservers", "changesuccess"), $aInt->lang("configservers", "changesuccessdesc"));
 	}
 
+
+	if ($enablesuccess) {
+		infoBox($aInt->lang("configservers", "enabled"), $aInt->lang("configservers", "enableddesc"));
+	}
+
+
+	if ($disablesuccess) {
+		infoBox($aInt->lang("configservers", "disabled"), $aInt->lang("configservers", "disableddesc"));
+	}
+
+
+	if ($makedefault) {
+		infoBox($aInt->lang("configservers", "defaultchange"), $aInt->lang("configservers", "defaultchangedesc"));
+	}
+
 	echo $infobox;
-	$jscode = "function doDelete(id) {
-if (confirm(\"" . $aInt->lang("configservers", "delserverconfirm") . "\")) {
-window.location='" . $_SERVER['PHP_SELF'] . "?action=delete&id='+id+'" . generate_token("link") . "';
-}}
-function doDeleteGroup(id) {
-if (confirm(\"" . $aInt->lang("configservers", "delgroupconfirm") . "\")) {
-window.location='" . $_SERVER['PHP_SELF'] . "?action=deletegroup&id='+id+'" . generate_token("link") . "';
-}}";
+	$aInt->deleteJSConfirm("doDelete", "configservers", "delserverconfirm", "?action=delete&id=");
+	$aInt->deleteJSConfirm("doDeleteGroup", "configservers", "delgroupconfirm", "?action=deletegroup&id=");
 	echo "
 <p>";
 	echo $aInt->lang("configservers", "pagedesc");
@@ -232,10 +244,10 @@ window.location='" . $_SERVER['PHP_SELF'] . "?action=deletegroup&id='+id+'" . ge
 
 
 			if ($disabled) {
-				$disableddata[] = array("<i>" . $name . " (" . $aInt->lang("emailtpls", "disabled") . ")</i>", "<i>" . $ipaddress . "</i>", "<i>" . $numaccounts . "/" . $maxaccounts . "</i>", "<i>" . $percentuse . "%</i>", $adminlogincode, "<div align=\"center\"><a href=\"" . $PHP_SELF . "?sub=enable&id=" . $id . "\" title=\"" . $aInt->lang("configservers", "enableserver") . "\"><img src=\"images/icons/disabled.png\"></a></div>", "<a href=\"" . $PHP_SELF . "?action=manage&id=" . $id . "\" title=\"" . $aInt->lang("global", "edit") . "\"><img src=\"images/edit.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"Edit\"></a>", "<a href=\"#\" onClick=\"doDelete('" . $id . "');return false\" title=\"" . $aInt->lang("global", "delete") . "\"><img src=\"images/delete.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"" . $aInt->lang("global", "delete") . "\"></a>");
+				$disableddata[] = array("<i>" . $name . " (" . $aInt->lang("emailtpls", "disabled") . ")</i>", "<i>" . $ipaddress . "</i>", "<i>" . $numaccounts . "/" . $maxaccounts . "</i>", "<i>" . $percentuse . "%</i>", $adminlogincode, "<div align=\"center\"><a href=\"" . $PHP_SELF . "?sub=enable&id=" . $id . generate_token("link") . "\" title=\"" . $aInt->lang("configservers", "enableserver") . "\"><img src=\"images/icons/disabled.png\"></a></div>", "<a href=\"" . $PHP_SELF . "?action=manage&id=" . $id . "\" title=\"" . $aInt->lang("global", "edit") . "\"><img src=\"images/edit.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"Edit\"></a>", "<a href=\"#\" onClick=\"doDelete('" . $id . "');return false\" title=\"" . $aInt->lang("global", "delete") . "\"><img src=\"images/delete.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"" . $aInt->lang("global", "delete") . "\"></a>");
 			}
 
-			$tabledata[] = array("<a href=\"" . $PHP_SELF . "?sub=makedefault&id=" . $id . "\" title=\"" . $aInt->lang("configservers", "defaultsignups") . ("\">" . $name . "</a> " . $active), $ipaddress, "" . $numaccounts . "/" . $maxaccounts, "" . $percentuse . "%", $adminlogincode, "<div align=\"center\"><a href=\"" . $PHP_SELF . "?sub=disable&id=" . $id . "\" title=\"" . $aInt->lang("configservers", "disableserver") . "\"><img src=\"images/icons/tick.png\"></a></div>", "<a href=\"" . $PHP_SELF . "?action=manage&id=" . $id . "\" title=\"" . $aInt->lang("global", "edit") . "\"><img src=\"images/edit.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"" . $aInt->lang("global", "edit") . "\"></a>", "<a href=\"#\" onClick=\"doDelete('" . $id . "');return false\" title=\"" . $aInt->lang("global", "delete") . "\"><img src=\"images/delete.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"" . $aInt->lang("global", "delete") . "\"></a>");
+			$tabledata[] = array("<a href=\"" . $PHP_SELF . "?sub=makedefault&id=" . $id . generate_token("link") . "\" title=\"" . $aInt->lang("configservers", "defaultsignups") . ("\">" . $name . "</a> " . $active), $ipaddress, "" . $numaccounts . "/" . $maxaccounts, "" . $percentuse . "%", $adminlogincode, "<div align=\"center\"><a href=\"" . $PHP_SELF . "?sub=disable&id=" . $id . generate_token("link") . "\" title=\"" . $aInt->lang("configservers", "disableserver") . "\"><img src=\"images/icons/tick.png\"></a></div>", "<a href=\"" . $PHP_SELF . "?action=manage&id=" . $id . "\" title=\"" . $aInt->lang("global", "edit") . "\"><img src=\"images/edit.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"" . $aInt->lang("global", "edit") . "\"></a>", "<a href=\"#\" onClick=\"doDelete('" . $id . "');return false\" title=\"" . $aInt->lang("global", "delete") . "\"><img src=\"images/delete.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"" . $aInt->lang("global", "delete") . "\"></a>");
 		}
 
 		foreach ($disableddata as $data) {

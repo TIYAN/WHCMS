@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.12
+ * @ Version  : 5.2.13
  * @ Author   : MTIMER
- * @ Release on : 2013-10-25
+ * @ Release on : 2013-11-25
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -18,6 +18,7 @@ $aInt->inClientsProfile = true;
 $aInt->valUserID($userid);
 
 if ($action == "save") {
+	check_token("WHMCS.admin.default");
 	checkPermission("Edit Clients Details");
 
 	if ($subaccount) {
@@ -37,7 +38,7 @@ if ($action == "save") {
 				}
 			}
 
-			header("Location: " . $_SERVER['PHP_SELF'] . "?error=" . $_LANG['ordererroruserexists'] . $querystring);
+			redir("error=" . $_LANG['ordererroruserexists'] . $querystring);
 			exit();
 		}
 	}
@@ -104,16 +105,17 @@ if ($action == "save") {
 		run_hook("ContactEdit", array_merge(array("userid" => $userid, "contactid" => $contactid, "olddata" => $oldcontactdata), $array));
 	}
 
-	header("Location: " . $_SERVER['PHP_SELF'] . ("?userid=" . $userid . "&contactid=" . $contactid));
+	redir("userid=" . $userid . "&contactid=" . $contactid);
 	exit();
 }
 
 
 if ($action == "delete") {
-	delete_query("tblcontacts", array("id" => $contactid));
-	update_query("tblclients", array("billingcid" => ""), array("billingcid" => $contactid));
+	check_token("WHMCS.admin.default");
+	delete_query("tblcontacts", array("id" => $contactid, "userid" => $userid));
+	update_query("tblclients", array("billingcid" => ""), array("id" => $userid, "billingcid" => $contactid));
 	run_hook("ContactDelete", array("userid" => $userid, "contactid" => $contactid));
-	header("Location: " . $_SERVER['PHP_SELF'] . ("?userid=" . $userid));
+	redir("userid=" . $userid);
 	exit();
 }
 
@@ -180,12 +182,10 @@ echo "\">
 <br>
 
 ";
-$jscode = "function deleteContact() {
-if (confirm(\"" . $aInt->lang("clients", "deletecontactconfirm") . "\")) {
-window.location='" . $PHP_SELF . "?action=delete&userid=" . $userid . "&contactid=" . $contactid . "';
-}}";
+$aInt->deleteJSConfirm("deleteContact", "clients", "deletecontactconfirm", "?action=delete&userid=" . $userid . "&contactid=");
 
 if ($resetpw) {
+	check_token("WHMCS.admin.default");
 	sendMessage("Automated Password Reset", $userid, array("contactid" => $contactid));
 	infoBox($aInt->lang("clients", "resetsendpassword"), $aInt->lang("clients", "passwordsuccess"));
 	echo $infobox;
@@ -310,7 +310,9 @@ if ($contactid != "addnew") {
 	echo $userid;
 	echo "&contactid=";
 	echo $contactid;
-	echo "&resetpw=true\"><img src=\"images/icons/resetpw.png\" border=\"0\" align=\"absmiddle\" /> ";
+	echo "&resetpw=true";
+	echo generate_token("link");
+	echo "\"><img src=\"images/icons/resetpw.png\" border=\"0\" align=\"absmiddle\" /> ";
 	echo $aInt->lang("clients", "resetsendpassword");
 	echo "</a>";
 }
@@ -410,7 +412,9 @@ if ($contactid != "addnew") {
 	echo "\" class=\"button\" tabindex=\"";
 	echo $taxindex++;
 	echo "\" /><br />
-<a href=\"#\" onClick=\"deleteContact();return false\" style=\"color:#cc0000\"><b>";
+<a href=\"#\" onClick=\"deleteContact('";
+	echo $contactid;
+	echo "');return false\" style=\"color:#cc0000\"><b>";
 	echo $aInt->lang("global", "delete");
 	echo "</b></a>";
 }

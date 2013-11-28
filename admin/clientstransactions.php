@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.12
+ * @ Version  : 5.2.13
  * @ Author   : MTIMER
- * @ Release on : 2013-10-25
+ * @ Release on : 2013-11-25
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -62,7 +62,7 @@ if ($sub == "add") {
 		full_query($query);
 	}
 
-	header("Location: " . $_SERVER['PHP_SELF'] . ("?userid=" . $userid));
+	redir("userid=" . $userid);
 	exit();
 }
 
@@ -71,7 +71,7 @@ if ($sub == "save") {
 	check_token("WHMCS.admin.default");
 	update_query("tblaccounts", array("gateway" => $paymentmethod, "date" => toMySQLDate($date), "description" => $description, "amountin" => $amountin, "fees" => $fees, "amountout" => $amountout, "transid" => $transid, "invoiceid" => $invoiceid), array("id" => $id));
 	logActivity("Modified Transaction (User ID: " . $userid . " - Transaction ID: " . $id . ")");
-	header("Location: " . $_SERVER['PHP_SELF'] . ("?userid=" . $userid));
+	redir("userid=" . $userid);
 	exit();
 }
 
@@ -81,7 +81,7 @@ if ($sub == "delete") {
 	checkPermission("Delete Transaction");
 	delete_query("tblaccounts", array("id" => $ide));
 	logActivity("Deleted Transaction (ID: " . $ide . " - User ID: " . $userid . ")");
-	header("Location: " . $_SERVER['PHP_SELF'] . ("?userid=" . $userid));
+	redir("userid=" . $userid);
 	exit();
 }
 

@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.12
+ * @ Version  : 5.2.13
  * @ Author   : MTIMER
- * @ Release on : 2013-10-25
+ * @ Release on : 2013-11-25
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -50,6 +50,7 @@ if (!in_array($status, array("Unpaid", "Overdue", "Paid", "Cancelled", "Refunded
 
 
 if ($action == "invtooltip") {
+	check_token("WHMCS.admin.default");
 	echo "<table bgcolor=\"#cccccc\" cellspacing=\"1\" cellpadding=\"3\"><tr bgcolor=\"#efefef\" style=\"text-align:center;font-weight:bold;\"><td>" . $aInt->lang("fields", "description") . "</td><td>" . $aInt->lang("fields", "amount") . "</td></tr>";
 	$currency = getCurrency($userid);
 	$result = select_query("tblinvoiceitems", "", array("invoiceid" => $id), "id", "ASC");
@@ -81,6 +82,8 @@ if ($action == "invtooltip") {
 
 
 if ($action == "createinvoice") {
+	check_token("WHMCS.admin.default");
+
 	if (!checkActiveGateway()) {
 		$aInt->gracefulExit($aInt->lang("gateways", "nonesetup"));
 	}
@@ -116,7 +119,7 @@ if ($action == "createinvoice") {
 	}
 
 	run_hook("InvoiceCreationAdminArea", array("invoiceid" => $invoiceid));
-	header("Location: " . $PHP_SELF . "?action=edit&id=" . $invoiceid);
+	redir("action=edit&id=" . $invoiceid);
 	exit();
 }
 
@@ -394,7 +397,7 @@ if ($action == "") {
 		foreach ($invoicelist as $invoice) {
 			$linkopen = "<a href=\"invoices.php?action=edit&id=" . $invoice['id'] . "\">";
 			$linkclose = "</a>";
-			$tbl->addRow(array("<input type=\"checkbox\" name=\"selectedinvoices[]\" value=\"" . $invoice['id'] . "\" class=\"checkall\">", $linkopen . $invoice['invoicenum'] . $linkclose, $invoice['clientname'], $invoice['date'], $invoice['duedate'], "<a href=\"invoices.php?action=invtooltip&id=" . $invoice['id'] . "&userid=" . $invoice['userid'] . "\" class=\"invtooltip\" lang=\"\">" . $invoice['totalformatted'] . "</a>", $invoice['paymentmethod'], $invoice['statusformatted'], $linkopen . "<img src=\"images/edit.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"Edit\">" . $linkclose, "<a href=\"#\" onClick=\"doDelete('" . $invoice['id'] . "');return false\"><img src=\"images/delete.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"Delete\"></a>"));
+			$tbl->addRow(array("<input type=\"checkbox\" name=\"selectedinvoices[]\" value=\"" . $invoice['id'] . "\" class=\"checkall\">", $linkopen . $invoice['invoicenum'] . $linkclose, $invoice['clientname'], $invoice['date'], $invoice['duedate'], "<a href=\"invoices.php?action=invtooltip&id=" . $invoice['id'] . "&userid=" . $invoice['userid'] . generate_token("link") . "\" class=\"invtooltip\" lang=\"\">" . $invoice['totalformatted'] . "</a>", $invoice['paymentmethod'], $invoice['statusformatted'], $linkopen . "<img src=\"images/edit.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"Edit\">" . $linkclose, "<a href=\"#\" onClick=\"doDelete('" . $invoice['id'] . "');return false\"><img src=\"images/delete.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"Delete\"></a>"));
 		}
 
 		$tbl->setMassActionBtns("<input type=\"submit\" value=\"" . $aInt->lang("invoices", "markpaid") . "\" class=\"btn-success\" name=\"markpaid\" onclick=\"return confirm('" . $aInt->lang("invoices", "markpaidconfirm", "1") . "')\" /> <input type=\"submit\" value=\"" . $aInt->lang("invoices", "markunpaid") . "\" name=\"markunpaid\" onclick=\"return confirm('" . $aInt->lang("invoices", "markunpaidconfirm", "1") . "')\" /> <input type=\"submit\" value=\"" . $aInt->lang("invoices", "markcancelled") . "\" name=\"markcancelled\" onclick=\"return confirm('" . $aInt->lang("invoices", "markcancelledconfirm", "1") . "')\" /> <input type=\"submit\" value=\"" . $aInt->lang("invoices", "duplicateinvoice") . "\" name=\"duplicateinvoice\" onclick=\"return confirm('" . $aInt->lang("invoices", "duplicateinvoiceconfirm", "1") . "')\" /> <input type=\"submit\" value=\"" . $aInt->lang("invoices", "sendreminder") . "\" name=\"paymentreminder\" onclick=\"return confirm('" . $aInt->lang("invoices", "sendreminderconfirm", "1") . "')\" /> <input type=\"submit\" value=\"" . $aInt->lang("global", "delete") . "\" class=\"btn-danger\" name=\"massdelete\"  onclick=\"return confirm('" . $aInt->lang("invoices", "massdeleteconfirm", "1") . "')\" />");
@@ -420,7 +423,7 @@ else {
 			}
 
 			logActivity("Modified Invoice Options - Invoice ID: " . $id, $userid);
-			header("Location: invoices.php?action=edit&id=" . $id);
+			redir("action=edit&id=" . $id);
 			exit();
 		}
 
@@ -429,25 +432,27 @@ else {
 			check_token("WHMCS.admin.default");
 			update_query("tblinvoices", array("notes" => $notes), array("id" => $id));
 			logActivity("Modified Invoice Notes - Invoice ID: " . $id, $userid);
-			header("Location: invoices.php?action=edit&id=" . $id);
+			redir("action=edit&id=" . $id);
 			exit();
 		}
 
 
 		if ($sub == "statuscancelled") {
+			check_token("WHMCS.admin.default");
 			update_query("tblinvoices", array("status" => "Cancelled"), array("id" => $id));
 			logActivity("Cancelled Invoice - Invoice ID: " . $id, $userid);
 			run_hook("InvoiceCancelled", array("invoiceid" => $id));
-			header("Location: invoices.php?action=edit&id=" . $id);
+			redir("action=edit&id=" . $id);
 			exit();
 		}
 
 
 		if ($sub == "statusunpaid") {
+			check_token("WHMCS.admin.default");
 			update_query("tblinvoices", array("status" => "Unpaid"), array("id" => $id));
 			logActivity("Reactivated Invoice - Invoice ID: " . $id, $userid);
 			run_hook("InvoiceUnpaid", array("invoiceid" => $id));
-			header("Location: invoices.php?action=edit&id=" . $id);
+			redir("action=edit&id=" . $id);
 			exit();
 		}
 
@@ -464,7 +469,7 @@ else {
 			}
 
 			addInvoicePayment($id, $transid, $amount, $fees, $paymentmethod, $sendconfirmation, $date);
-			header("Location: invoices.php?action=edit&id=" . $id);
+			redir("action=edit&id=" . $id);
 			exit();
 		}
 
@@ -509,12 +514,12 @@ else {
 
 					if (1 < $CONFIG['InvoiceIncrement']) {
 						$invoiceincrement = $CONFIG['InvoiceIncrement'] - 1;
-						$counter = 31;
+						$counter = 1;
 
 						while ($counter <= $invoiceincrement) {
 							$tempinvoiceid = insert_query("tblinvoices", array("date" => "now()"));
 							delete_query("tblinvoices", array("id" => $tempinvoiceid));
-							$counter += 31;
+							$counter += 1;
 						}
 					}
 
@@ -525,7 +530,7 @@ else {
 					updateInvoiceTotal($invoiceid);
 					updateInvoiceTotal($id);
 					logActivity("Split Invoice - Invoice ID: " . $id . " to Invoice ID: " . $invoiceid, $userid);
-					header("Location: invoices.php?action=edit&id=" . $invoiceid);
+					redir("action=edit&id=" . $invoiceid);
 					exit();
 				}
 			}
@@ -535,12 +540,13 @@ else {
 			$data = mysql_fetch_array($result);
 			$userid = $data[0];
 			logActivity("Modified Invoice - Invoice ID: " . $id, $userid);
-			header("Location: invoices.php?action=edit&id=" . $id);
+			redir("action=edit&id=" . $id);
 			exit();
 		}
 
 
 		if ($addcredit != "0.00" && $addcredit) {
+			check_token("WHMCS.admin.default");
 			$result2 = select_query("tblinvoices", "userid,subtotal,credit,total", array("id" => $id));
 			$data = mysql_fetch_array($result2);
 			$userid = $data['userid'];
@@ -579,6 +585,7 @@ else {
 
 
 		if ($removecredit != "0.00" && $removecredit != "") {
+			check_token("WHMCS.admin.default");
 			$result2 = select_query("tblinvoices", "userid,subtotal,credit,total", array("id" => $id));
 			$data = mysql_fetch_array($result2);
 			$userid = $data['userid'];
@@ -604,9 +611,10 @@ else {
 
 
 		if ($sub == "delete") {
+			check_token("WHMCS.admin.default");
 			delete_query("tblinvoiceitems", array("id" => $iid));
 			updateInvoiceTotal($id);
-			header("Location: invoices.php?action=edit&id=" . $id);
+			redir("action=edit&id=" . $id);
 			exit();
 		}
 
@@ -615,12 +623,14 @@ else {
 		$type = $data['value'];
 
 		if ($tplname) {
+			check_token("WHMCS.admin.default");
 			sendMessage($tplname, $id, "", true);
 		}
 
 
 		if ($type == "CC") {
 			if ($sub == "attemptpayment") {
+				check_token("WHMCS.admin.default");
 				$data = get_query_vals("tblclients", "cardtype,gatewayid", array("id" => $userid));
 
 				if ($data[0] || $data[1]) {
@@ -640,6 +650,7 @@ else {
 
 
 			if ($sub == "initiatepayment") {
+				check_token("WHMCS.admin.default");
 				$data = get_query_vals("tblclients", "gatewayid", array("id" => $userid));
 				logActivity("Admin Initiated Payment Attempt - Invoice ID: " . $id, $userid);
 
@@ -654,6 +665,7 @@ else {
 
 
 		if ($sub == "refund" && $transid) {
+			check_token("WHMCS.admin.default");
 			checkPermission("Refund Invoice Payments");
 			logActivity("Admin Initiated Refund - Invoice ID: " . $id . " - Transaction ID: " . $transid);
 
@@ -693,10 +705,11 @@ else {
 
 
 		if ($sub == "deletetrans") {
+			check_token("WHMCS.admin.default");
 			checkPermission("Delete Transaction");
 			delete_query("tblaccounts", array("id" => $ide));
 			logActivity("Deleted Transaction - Transaction ID: " . $ide);
-			header("Location: invoices.php?action=edit&id=" . $id);
+			redir("action=edit&id=" . $id);
 			exit();
 		}
 
@@ -733,7 +746,7 @@ else {
 		$lastname = $data['lastname'];
 		$companyname = $data['companyname'];
 		$groupid = $data['groupid'];
-		$clientstate = $data['state'];
+		$data['state'];
 		$clientcountry = $data['country'];
 		$date = fromMySQLDate($date);
 		$duedate = fromMySQLDate($duedate);
@@ -948,7 +961,9 @@ else {
 		echo $PHP_SELF;
 		echo "?action=edit&id=";
 		echo $id;
-		echo "&sub=statuscancelled';\"";
+		echo "&sub=statuscancelled";
+		echo generate_token("link");
+		echo "'\"";
 
 		if ($status == "Cancelled") {
 			echo " disabled";
@@ -960,7 +975,9 @@ else {
 		echo $PHP_SELF;
 		echo "?action=edit&id=";
 		echo $id;
-		echo "&sub=statusunpaid';\" class=\"button\"";
+		echo "&sub=statusunpaid";
+		echo generate_token("link");
+		echo "';\" class=\"button\"";
 
 		if ($status == "Unpaid") {
 			echo " disabled";
@@ -982,7 +999,7 @@ else {
 		echo "'\" />
 
 ";
-		$addons_html = run_hook("AdminInvoicesControlsOutput", array("invoiceid" => $id, "userid" => $userid, "subtotal" => $subtotal, "tax" => $tax, "tax2" => $tax2, "credit" => $credit, "total" => $total, "balance" => $balance, "taxrate" => $taxrate, "taxrate2" => $taxrate2, "paymentmethod" => $paymentmethod));
+		$addons_html = $clientstate = run_hook("AdminInvoicesControlsOutput", array("invoiceid" => $id, "userid" => $userid, "subtotal" => $subtotal, "tax" => $tax, "tax2" => $tax2, "credit" => $credit, "total" => $total, "balance" => $balance, "taxrate" => $taxrate, "taxrate2" => $taxrate2, "paymentmethod" => $paymentmethod));
 		foreach ($addons_html as $output) {
 			echo $output;
 		}
@@ -1324,7 +1341,9 @@ window.location='";
 		echo $PHP_SELF;
 		echo "?action=edit&id=";
 		echo $id;
-		echo "&sub=delete&iid='+id;
+		echo "&sub=delete";
+		echo generate_token("link");
+		echo "&iid='+id;
 }}
 function doDeleteTransaction(id) {
 if (confirm(\"Are you sure you want to delete this transaction?\")) {
@@ -1332,7 +1351,9 @@ window.location='";
 		echo $PHP_SELF;
 		echo "?action=edit&id=";
 		echo $id;
-		echo "&sub=deletetrans&ide='+id;
+		echo "&sub=deletetrans";
+		echo generate_token("link");
+		echo "&ide='+id;
 }}
 function attemptpayment() {
 if (confirm(\"Are you sure you want to attempt payment for this invoice?\")) {
@@ -1342,15 +1363,9 @@ window.location='";
 		echo $id;
 		echo "&sub=";
 		echo $initiatevscapture ? "initiate" : "attempt";
-		echo "payment';
-}}
-function refundpayment() {
-if (confirm(\"Are you sure you want to refund the payment for this invoice?\")) {
-window.location='";
-		echo $PHP_SELF;
-		echo "?action=edit&id=";
-		echo $id;
-		echo "&sub=refundpayment';
+		echo "payment";
+		echo generate_token("link");
+		echo "';
 }}
 </script>
 
@@ -1384,7 +1399,7 @@ window.location='";
 		while ($data = mysql_fetch_array($result)) {
 			$lineid = $data['id'];
 			$description = $data['description'];
-			$linecount = explode("\n", $description);
+			$linecount = explode("\r\n", $description);
 
 			$linecount = count($linecount);
 			echo (("<tr><td width=\"20\" align=\"center\"><input type=\"checkbox\" name=\"itemids[]\" value=\"" . $lineid . "\" /></td><td><textarea name=\"description[" . $lineid . "]") . "\" style=\"width:98%\" rows=\"" . $linecount . "\">" . $description . "</textarea></td><td align=center nowrap><input type=\"text\" name=\"amount[" . $lineid . "]") . "\" value=\"" . $data['amount'] . (("\" size=\"10\" style=\"text-align:center\"></td><td align=center><input type=\"checkbox\" name=\"taxed[" . $lineid . "]") . "\" value=\"1\"");

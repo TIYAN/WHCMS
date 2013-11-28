@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.12
+ * @ Version  : 5.2.13
  * @ Author   : MTIMER
- * @ Release on : 2013-10-25
+ * @ Release on : 2013-11-25
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -30,26 +30,20 @@ if ($action == "save") {
 		insert_query("tblemailmarketer", array("name" => $name, "type" => $type, "settings" => $settings, "disable" => $disable, "marketing" => $marketing));
 	}
 
-	header("Location: " . $PHP_SELF);
-	exit();
+	redir();
 }
 
 
 if ($action == "delete") {
 	check_token("WHMCS.admin.default");
 	delete_query("tblemailmarketer", array("id" => $id));
-	header("Location: " . $PHP_SELF);
-	exit();
+	redir();
 }
 
 ob_start();
 
 if (!$action) {
-	$jscode = "function doDelete(id) {
-	if (confirm(\"Are you sure you want to delete this mailing entry?\")) {
-		window.location='" . $PHP_SELF . "?action=delete&id='+id+'" . generate_token("link") . "';
-	}
-}";
+	$aInt->deleteJSConfirm("doDelete", "global", "deleteconfirm", "?action=delete&id=");
 	echo "
 <p>The email marketer tool allows you to schedule automated emails to be sent out to your clients when certain events and/or criteria are met.</p>
 

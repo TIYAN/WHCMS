@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.12
+ * @ Version  : 5.2.13
  * @ Author   : MTIMER
- * @ Release on : 2013-10-25
+ * @ Release on : 2013-11-25
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -33,13 +33,13 @@ $action = $whmcs->get_req_var("action");
 $kbcats = $kbmostviews = $kbarticles = array();
 
 if (isset($catid) && !is_numeric($catid)) {
-	header("Location: " . $CONFIG['SystemURL'] . "/knowledgebase.php");
+	redir("", $CONFIG['SystemURL'] . "/knowledgebase.php");
 	exit();
 }
 
 
 if (isset($id) && !is_numeric($id)) {
-	header("Location: " . $CONFIG['SystemURL'] . "/knowledgebase.php");
+	redir("", $CONFIG['SystemURL'] . "/knowledgebase.php");
 	exit();
 }
 
@@ -63,7 +63,7 @@ if ($CONFIG['SupportModule']) {
 
 
 if ($action == "search" && $searchin == "Downloads") {
-	header("Location: " . $CONFIG['SystemURL'] . ("/downloads.php?action=search&search=" . $search));
+	redir("action=search&search=" . $search, $CONFIG['SystemURL'] . "/downloads.php");
 	exit();
 }
 
@@ -76,7 +76,7 @@ if ($action == "displaycat") {
 	$catid = $data['id'];
 
 	if (!$catid) {
-		header("Location: " . $CONFIG['SystemURL'] . "/knowledgebase.php");
+		redir("", $CONFIG['SystemURL'] . "/knowledgebase.php");
 		exit();
 	}
 
@@ -336,7 +336,7 @@ else {
 			$private = $data['private'];
 
 			if (!$id) {
-				header("Location: " . $CONFIG['SystemURL'] . "/knowledgebase.php");
+				redir("", $CONFIG['SystemURL'] . "/knowledgebase.php");
 				exit();
 			}
 
@@ -348,7 +348,7 @@ else {
 			$hidden = $data['hidden'];
 
 			if ($hidden) {
-				header("Location: " . $CONFIG['SystemURL'] . "/knowledgebase.php");
+				redir("", $CONFIG['SystemURL'] . "/knowledgebase.php");
 				exit();
 			}
 

@@ -10,19 +10,19 @@ function widget_calendar($vars) {
         $day = $whmcs->get_req_var('day');
         if (!$day) $day = date("d");
         echo '<div class="title">';
-        if ($day==date("d")) echo '今天, '.date("Y F jS",mktime(0,0,0,date("m"),$day,date("Y")));
-        elseif ($day==date("d")-1) echo '昨天, '.date("Y F jS",mktime(0,0,0,date("m"),$day,date("Y")));
-        elseif ($day==date("d")+1) echo '明天, '.date("Y F jS",mktime(0,0,0,date("m"),$day,date("Y")));
-        else echo date("l, Y F jS",mktime(0,0,0,date("m"),$day,date("Y")));
+        if ($day==date("d")) echo 'Today, '.date("jS F Y",mktime(0,0,0,date("m"),$day,date("Y")));
+        elseif ($day==date("d")-1) echo 'Yesterday, '.date("jS F Y",mktime(0,0,0,date("m"),$day,date("Y")));
+        elseif ($day==date("d")+1) echo 'Tomorrow, '.date("jS F Y",mktime(0,0,0,date("m"),$day,date("Y")));
+        else echo date("l, jS F Y",mktime(0,0,0,date("m"),$day,date("Y")));
         echo '</div>';
         $numproducts = get_query_val("tblhosting","COUNT(id)","domainstatus IN ('Active','Suspended') AND nextduedate='".date("Y-m-").(int)$day."'");
         $numaddons = get_query_val("tblhostingaddons","COUNT(id)","status IN ('Active','Suspended') AND nextduedate='".date("Y-m-").(int)$day."'");
         $numdomains = get_query_val("tbldomains","COUNT(id)","status IN ('Active') AND nextduedate='".date("Y-m-").(int)$day."'");
         $numtodoitems = get_query_val("tbltodolist","COUNT(id)","duedate BETWEEN '".mktime(0,0,0,date("m"),$day,date("Y"))."' AND '".mktime(0,0,0,date("m"),$day+1,date("Y"))."'");
         $numevents = get_query_val("tblcalendar","COUNT(id)","start>='".mktime(0,0,0,date("m"),$day,date("Y"))."' AND start<'".mktime(0,0,0,date("m"),$day+1,date("Y"))."'");
-        if ($numproducts==0 && $numaddons==0 && $numdomains==0 && $numtodoitems==0 && $numevents==0) echo '<div>没有安排</div>';
+        if ($numproducts==0 && $numaddons==0 && $numdomains==0 && $numtodoitems==0 && $numevents==0) echo '<div>No Events Scheduled</div>';
         else echo '<div>'.$numproducts.' Products/Services Due to Renew</div><div>'.$numaddons.' Addons Due to Renew</div><div>'.$numdomains.' Domains Due to Renew</div><div>'.$numtodoitems.' To-Do Items Due</div><div>'.$numevents.' Events Scheduled</div>';
-        echo '<div style="padding-top:10px;"><a href="calendar.php"><img src="images/icons/add.png" align="top" /> 新增安排</a></div>';
+        echo '<div style="padding-top:10px;"><a href="calendar.php"><img src="images/icons/add.png" align="top" /> Add New Event</a></div>';
         exit;
     }
 
@@ -35,7 +35,7 @@ function widget_calendar($vars) {
 
     $jquerycode = 'loadCalEvents();';
 
-    $title = "日历";
+    $title = "Calendar";
 
     $content = '<style>
 div#calendarwidget div.calendar { float: left; width: 265px; padding: 0 0 0 20px; }
@@ -56,7 +56,7 @@ div#calendarwidget td.calendar-day, td.calendar-day-np { width:14%; padding:0; b
 </style>
 ';
 
-$headings = array('日','一','二','三','四','五','六');
+$headings = array('S','M','T','W','T','F','S');
 
 $calendar = '
 <div id="calendarwidget">

@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.12
+ * @ Version  : 5.2.13
  * @ Author   : MTIMER
- * @ Release on : 2013-10-25
+ * @ Release on : 2013-11-25
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -38,8 +38,7 @@ if ($m = $whmcs->get_req_var("m")) {
 		exit("Invalid Addon Module Name");
 	}
 
-	$modulevars = array();
-	$result = select_query("tbladdonmodules", "", array("module" => $module));
+	$result = $modulevars = array();
 
 	while ($data = mysql_fetch_array($result)) {
 		$modulevars[$data['setting']] = $data['value'];
@@ -52,7 +51,8 @@ if ($m = $whmcs->get_req_var("m")) {
 
 	$modulevars['modulelink'] = "index.php?m=" . $module;
 	$_ADDONLANG = array();
-	$calanguage = $whmcs->get_client_language();
+	$whmcs->get_client_language();
+	$calanguage = select_query("tbladdonmodules", "", array("module" => $module));
 
 	if (!isValidforPath($calanguage)) {
 		exit("Invalid Client Area Language Name");
@@ -101,21 +101,9 @@ if ($m = $whmcs->get_req_var("m")) {
 			$filename = $_SERVER['PHP_SELF'];
 			$filename = substr($filename, strrpos($filename, "/"));
 			$filename = str_replace("/", "", $filename);
-			$requesturl = $_SERVER['PHP_SELF'] . "?";
-			foreach ($_REQUEST as $key => $value) {
-
-				if (!is_array($value)) {
-					$requesturl .= "" . $key . "=" . urlencode($value) . "&";
-					continue;
-				}
-			}
-
-			$requesturl = substr($requesturl, 0, 0 - 1);
-			$requesturl = substr($requesturl, strrpos($requesturl, "/"));
 			$ssldomain = $CONFIG['SystemSSLURL'];
 			$_SESSION['FORCESSL'] = true;
-			header("Location: " . $ssldomain . $requesturl);
-			exit();
+			redir($_REQUEST, $ssldomain . "/" . $filename);
 		}
 	}
 

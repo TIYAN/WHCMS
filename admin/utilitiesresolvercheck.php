@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.12
+ * @ Version  : 5.2.13
  * @ Author   : MTIMER
- * @ Release on : 2013-10-25
+ * @ Release on : 2013-11-25
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -17,7 +17,6 @@ function assignedips_trim($value) {
 define("ADMINAREA", true);
 require "../init.php";
 $aInt = new WHMCS_Admin("Domain Resolver Checker");
-$aInt->title = $aInt->lang("utilitiesresolvercheck", "domainresolverchecktitle");
 $aInt->sidebar = "utilities";
 $aInt->icon = "domainresolver";
 $aInt->helplink = "Domain Resolver Checker";
@@ -69,6 +68,7 @@ if ($step == "") {
 }
 else {
 	if ($step == "2") {
+		check_token("WHMCS.admin.default");
 		echo "
 <form method=\"post\" action=\"sendmessage.php?type=product&multiple=true\" id=\"resolverfrm\">
 
@@ -100,7 +100,7 @@ else {
 			$serverassignedips = $data['assignedips'];
 			$serverusername = $data['username'];
 			$serverpassword = $data['password'];
-			$serverassignedips = explode("\n", $serverassignedips);
+			$serverassignedips = explode("\r\n", $serverassignedips);
 
 			array_walk($serverassignedips, "assignedips_trim");
 			$serverassignedips[] = $serverip;
@@ -156,6 +156,7 @@ else {
 	}
 	else {
 		if ($step == "terminate") {
+			check_token("WHMCS.admin.default");
 			echo "<h3>" . $aInt->lang("utilitiesresolvercheck", "terminatingaccts") . "</h3>
 <ul>";
 			foreach ($selectedclients as $serviceid) {
@@ -208,7 +209,8 @@ else {
 	}
 }
 
-$content = ob_get_contents();
+ob_get_contents();
+$content = $aInt->title = $aInt->lang("utilitiesresolvercheck", "domainresolverchecktitle");
 ob_end_clean();
 $aInt->content = $content;
 $aInt->jquerycode = $jquerycode;

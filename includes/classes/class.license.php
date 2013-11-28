@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.12
+ * @ Version  : 5.2.13
  * @ Author   : MTIMER
- * @ Release on : 2013-10-25
+ * @ Release on : 2013-11-25
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -20,7 +20,7 @@ class WHMCS_License {
 	private $responsedata = "";
 	private $forceremote = false;
 	private $postmd5hash = "";
-	private $releasedate = "20130423";
+	private $releasedate = "20131119";
 	private $localkeydays = "10";
 	private $allowcheckfaildays = "5";
 	private $debuglog = array();
@@ -233,7 +233,6 @@ class WHMCS_License {
 		$data_encoded = sha1($data_encoded . $this->getSalt()) . $data_encoded . sha1($data_encoded . $this->getSalt() . time());
 		$data_encoded = base64_encode($data_encoded);
 		$data_encoded = wordwrap($data_encoded, 80, "\r\n", true);
-
 		$whmcs->set_config("License", $data_encoded);
 		$this->debug("Updated Local Key");
 	}
@@ -472,7 +471,7 @@ class WHMCS_License {
 			return true;
 		}
 
-		foreach (unserialize($this->getKeyData("addons")) as $addon) {
+		foreach ($this->getKeyData("addons") as $addon) {
 
 			if ($addon['name'] == "Branding Removal" && $addon['status'] == "Active") {
 				return true;

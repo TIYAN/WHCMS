@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.12
+ * @ Version  : 5.2.13
  * @ Author   : MTIMER
- * @ Release on : 2013-10-25
+ * @ Release on : 2013-11-25
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -56,16 +56,14 @@ if ($action == "save") {
 		$id = insert_query("tblbillableitems", array("userid" => $userid, "description" => $description, "hours" => $hours, "amount" => $amount, "recur" => $recur, "recurcycle" => $recurcycle, "recurfor" => $recurfor, "invoiceaction" => $invoiceaction, "duedate" => $duedate));
 	}
 
-	header("Location: billableitems.php");
-	exit();
+	redir();
 }
 
 
 if ($action == "delete") {
 	check_token("WHMCS.admin.default");
 	delete_query("tblbillableitems", array("id" => $id));
-	header("Location: billableitems.php");
-	exit();
+	redir();
 }
 
 ob_start();
@@ -193,16 +191,16 @@ if (!$action) {
 		}
 		else {
 			if ($status == "Recurring") {
-				$where['invoiceaction'] = 1;
+				$where['invoiceaction'] = 4;
 			}
 			else {
 				if ($status == "Active Recurring") {
-					$where['invoiceaction'] = 1;
+					$where['invoiceaction'] = 4;
 					$where['invoicecount'] = array("sqltype" => "<", "value" => "recurfor");
 				}
 				else {
 					if ($status == "Completed Recurring") {
-						$where['invoiceaction'] = 1;
+						$where['invoiceaction'] = 4;
 						$where['invoicecount'] = array("sqltype" => ">=", "value" => "recurfor");
 					}
 				}

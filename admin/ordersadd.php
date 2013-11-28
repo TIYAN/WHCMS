@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.12
+ * @ Version  : 5.2.13
  * @ Author   : MTIMER
- * @ Release on : 2013-10-25
+ * @ Release on : 2013-11-25
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -23,6 +23,8 @@ $userid = $whmcs->get_req_var("userid");
 $currency = getCurrency($userid);
 
 if ($action == "createpromo") {
+	check_token("WHMCS.admin.default");
+
 	if (!$code) {
 		exit("Promotion Code is Required");
 	}
@@ -60,6 +62,7 @@ if ($action == "createpromo") {
 
 
 if ($action == "getconfigoptions") {
+	check_token("WHMCS.admin.default");
 	releaseSession();
 
 	if (!trim($pid)) {
@@ -159,6 +162,7 @@ if ($action == "getconfigoptions") {
 
 
 if ($action == "getdomainaddlfields") {
+	check_token("WHMCS.admin.default");
 	$domainparts = explode(".", $domain, 2);
 	$tempdomainfields = $additionaldomainfields["." . $domainparts[1]];
 	$addlfieldscode = "";
@@ -472,7 +476,7 @@ if ($whmcs->get_req_var("submitorder")) {
 		}
 
 		getUsersLang(0);
-		header("Location: orders.php?action=view&id=" . $_SESSION['orderdetails']['OrderID']);
+		redir("action=view&id=" . $_SESSION['orderdetails']['OrderID'], "orders.php");
 		exit();
 	}
 }
@@ -522,7 +526,7 @@ $(function(){
     	var domainname = $(this).val();
 		if(domainname.length >= 5){
 			var ord = $(this).attr(\"id\").replace(\"regdomain\",\"\");
-			$.post(\"ordersadd.php\", { action: \"getdomainaddlfields\", domain: domainname, order:ord},
+			$.post(\"ordersadd.php\", { action: \"getdomainaddlfields\", domain: domainname, order:ord, token: \"" . generate_token("plain") . "\" },
 			function(data){
 				$(\".domainaddlfields\"+ord).remove();
 				$(\"#domainaddlfieldserase\"+ord).after(data);
@@ -542,8 +546,8 @@ function loadproductoptions(piddd) {
         $(\"#addonsrow\"+ord).hide();
         updatesummary();
     } else {
-    $(\"#productconfigoptions\"+ord).html(\"<p align=\"center\">" . $aInt->lang("global", "loading") . "<br><img src=\"../images/loading.gif\"></p>\");
-    $.post(\"ordersadd.php\", { action: \"getconfigoptions\", pid: pid, cycle: billingcycle, orderid: ord },
+    $(\"#productconfigoptions\"+ord).html(\"<p align=\\\"center\\\">" . $aInt->lang("global", "loading") . "<br><img src=\\\"../images/loading.gif\\\"></p>\");
+    $.post(\"ordersadd.php\", { action: \"getconfigoptions\", pid: pid, cycle: billingcycle, orderid: ord, token: \"" . generate_token("plain") . "\" },
     function(data){
         if (data.addons) {
             $(\"#addonsrow\"+ord).show();
@@ -837,6 +841,7 @@ echo "cript> updatesummary(); </script>
 
 ";
 echo $aInt->jqueryDialog("createpromo", $aInt->lang("orders", "createpromo"), "<form id=\"createpromofrm\">
+" . generate_token("form") . "
 <table class=\"form\" width=\"100%\" border=\"0\" cellspacing=\"2\" cellpadding=\"3\">
 <tr><td class=\"fieldlabel\" width=\"110\">" . $aInt->lang("fields", "promocode") . "</td><td class=\"fieldarea\"><input type=\"text\" name=\"code\" id=\"promocode\" /></td></tr>
 <tr><td class=\"fieldlabel\">" . $aInt->lang("fields", "type") . "</td><td class=\"fieldarea\"><select name=\"type\">

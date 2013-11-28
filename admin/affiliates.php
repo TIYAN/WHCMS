@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.12
+ * @ Version  : 5.2.13
  * @ Author   : MTIMER
- * @ Release on : 2013-10-25
+ * @ Release on : 2013-11-25
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -23,7 +23,7 @@ if ($action == "save") {
 	check_token("WHMCS.admin.default");
 	update_query("tblaffiliates", array("paytype" => $paymenttype, "payamount" => $payamount, "onetime" => $onetime, "visitors" => $visitors, "balance" => $balance, "withdrawn" => $withdrawn), array("id" => $id));
 	logActivity("Affiliate ID " . $id . " Details Updated");
-	header("Location: affiliates.php?action=edit&id=" . $id);
+	redir("action=edit&id=" . $id);
 	exit();
 }
 
@@ -31,7 +31,7 @@ if ($action == "save") {
 if ($action == "deletecommission") {
 	check_token("WHMCS.admin.default");
 	delete_query("tblaffiliatespending", array("id" => $cid));
-	header("Location: affiliates.php?action=edit&id=" . $id);
+	redir("action=edit&id=" . $id);
 	exit();
 }
 
@@ -39,7 +39,7 @@ if ($action == "deletecommission") {
 if ($action == "deletehistory") {
 	check_token("WHMCS.admin.default");
 	delete_query("tblaffiliateshistory", array("id" => $hid));
-	header("Location: affiliates.php?action=edit&id=" . $id);
+	redir("action=edit&id=" . $id);
 	exit();
 }
 
@@ -47,7 +47,7 @@ if ($action == "deletehistory") {
 if ($action == "deletereferral") {
 	check_token("WHMCS.admin.default");
 	delete_query("tblaffiliatesaccounts", array("id" => $affaccid));
-	header("Location: affiliates.php?action=edit&id=" . $id);
+	redir("action=edit&id=" . $id);
 	exit();
 }
 
@@ -55,16 +55,17 @@ if ($action == "deletereferral") {
 if ($action == "deletewithdrawal") {
 	check_token("WHMCS.admin.default");
 	delete_query("tblaffiliateswithdrawals", array("id" => $wid));
-	header("Location: affiliates.php?action=edit&id=" . $id);
+	redir("action=edit&id=" . $id);
 	exit();
 }
 
 
 if ($action == "addcomm") {
+	check_token("WHMCS.admin.default");
 	$amount = format_as_currency($amount);
 	insert_query("tblaffiliateshistory", array("affiliateid" => $id, "date" => toMySQLDate($date), "affaccid" => $refid, "description" => $description, "amount" => $amount));
 	full_query("UPDATE tblaffiliates SET balance=balance+" . db_escape_string($amount) . " WHERE id='" . db_escape_string($id) . "'");
-	header("Location: affiliates.php?action=edit&id=" . $id);
+	redir("action=edit&id=" . $id);
 	exit();
 }
 
@@ -94,7 +95,7 @@ if ($action == "withdraw") {
 		}
 	}
 
-	header("Location: affiliates.php?action=edit&id=" . $id);
+	redir("action=edit&id=" . $id);
 	exit();
 }
 
@@ -103,8 +104,7 @@ if ($sub == "delete") {
 	check_token("WHMCS.admin.default");
 	delete_query("tblaffiliates", array("id" => $ide));
 	logActivity("Affiliate " . $ide . " Deleted");
-	header("Location: affiliates.php");
-	exit();
+	redir();
 }
 
 ob_start();

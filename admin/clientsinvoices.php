@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.12
+ * @ Version  : 5.2.13
  * @ Author   : MTIMER
- * @ Release on : 2013-10-25
+ * @ Release on : 2013-11-25
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -144,24 +144,24 @@ if ($merge) {
 			$userid .= "&page=" . $page;
 		}
 
-		header("Location: clientsinvoices.php?userid=" . $userid . "&mergeerr=1");
+		redir("userid=" . $userid . "&mergeerr=1");
 		exit();
 	}
 
 	$selectedinvoices = db_escape_numarray($selectedinvoices);
 	sort($selectedinvoices);
 	$endinvoiceid = end($selectedinvoices);
-	update_query("tblinvoiceitems", array("invoiceid" => $endinvoiceid), "invoiceid IN (" . implode(",", $selectedinvoices) . ")");
-	update_query("tblaccounts", array("invoiceid" => $endinvoiceid), "invoiceid IN (" . implode(",", $selectedinvoices) . ")");
-	update_query("tblorders", array("invoiceid" => $endinvoiceid), "invoiceid IN (" . implode(",", $selectedinvoices) . ")");
-	$result = select_query("tblinvoices", "SUM(credit)", "id IN (" . implode(",", $selectedinvoices) . ")");
+	update_query("tblinvoiceitems", array("invoiceid" => $endinvoiceid), "invoiceid IN (" . db_build_in_array($selectedinvoices) . ")");
+	update_query("tblaccounts", array("invoiceid" => $endinvoiceid), "invoiceid IN (" . db_build_in_array($selectedinvoices) . ")");
+	update_query("tblorders", array("invoiceid" => $endinvoiceid), "invoiceid IN (" . db_build_in_array($selectedinvoices) . ")");
+	$result = select_query("tblinvoices", "SUM(credit)", "id IN (" . db_build_in_array($selectedinvoices) . ")");
 	$data = mysql_fetch_array($result);
 	$totalcredit = $data[0];
 	update_query("tblinvoices", array("credit" => $totalcredit), array("id" => $endinvoiceid));
 	unset($selectedinvoices[count($selectedinvoices) - 1]);
-	delete_query("tblinvoices", "id IN (" . implode(",", $selectedinvoices) . ")");
+	delete_query("tblinvoices", "id IN (" . db_build_in_array($selectedinvoices) . ")");
 	updateInvoiceTotal($endinvoiceid);
-	logActivity("Merged Invoice IDs " . implode(",", $selectedinvoices) . (" to Invoice ID: " . $endinvoiceid), $userid);
+	logActivity("Merged Invoice IDs " . db_build_in_array($selectedinvoices) . (" to Invoice ID: " . $endinvoiceid), $userid);
 
 	if ($page) {
 		$userid .= "&page=" . $page;
@@ -179,7 +179,7 @@ if ($masspay) {
 			$userid .= "&page=" . $page;
 		}
 
-		header("Location: clientsinvoices.php?userid=" . $userid . "&masspayerr=1");
+		redir("userid=" . $userid . "&masspayerr=1");
 		exit();
 	}
 
@@ -272,7 +272,6 @@ if ($invoicenum = $filt->get("invoicenum")) {
 if ($lineitem = $filt->get("lineitem")) {
 	$filters[] = "tblinvoices.id IN (SELECT invoiceid FROM tblinvoiceitems WHERE userid=" . (int)$userid . " AND description LIKE '%" . db_escape_string($lineitem) . "%')";
 }
-
 
 if ($paymentmethod = $filt->get("paymentmethod")) {
 	$filters[] = "tblinvoices.paymentmethod='" . db_escape_string($paymentmethod) . "'";
@@ -433,7 +432,7 @@ echo $aInt->lang("global", "search");
 echo "\" class=\"button\" /> <input type=\"button\" value=\"";
 echo $aInt->lang("invoices", "create");
 echo "\" class=\"button\" onClick=\"window.location='invoices.php?action=createinvoice&userid=";
-echo $userid;
+echo $userid . generate_token("link");
 echo "'\" class=\"btn-success\" /></div>
 </form>
 
@@ -473,7 +472,7 @@ while ($data = mysql_fetch_array($result)) {
 		$invoicenum = $id;
 	}
 
-	$tabledata[] = array("<input type=\"checkbox\" name=\"selectedinvoices[]\" value=\"" . $id . "\" class=\"checkall\">", "<a href=\"invoices.php?action=edit&id=" . $id . "\">" . $invoicenum . "</a>", $date, $duedate, $datepaid, "<a href=\"invoices.php?action=invtooltip&id=" . $id . "&userid=" . $userid . "\" class=\"invtooltip\" lang=\"\">" . $total . "</a>", $paymentmethod, $status, "<a href=\"invoices.php?action=edit&id=" . $id . "\"><img src=\"images/edit.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"" . $aInt->lang("global", "edit") . "\"></a>", "<a href=\"#\" onClick=\"doDelete('" . $id . "');return false\"><img src=\"images/delete.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"" . $aInt->lang("global", "delete") . "\"></a>");
+	$tabledata[] = array("<input type=\"checkbox\" name=\"selectedinvoices[]\" value=\"" . $id . "\" class=\"checkall\">", "<a href=\"invoices.php?action=edit&id=" . $id . "\">" . $invoicenum . "</a>", $date, $duedate, $datepaid, "<a href=\"invoices.php?action=invtooltip&id=" . $id . "&userid=" . $userid . generate_token("link") . ("\" class=\"invtooltip\" lang=\"\">" . $total . "</a>"), $paymentmethod, $status, "<a href=\"invoices.php?action=edit&id=" . $id . "\"><img src=\"images/edit.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"" . $aInt->lang("global", "edit") . "\"></a>", "<a href=\"#\" onClick=\"doDelete('" . $id . "');return false\"><img src=\"images/delete.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"" . $aInt->lang("global", "delete") . "\"></a>");
 }
 
 $tableformurl = $_SERVER['PHP_SELF'] . "?userid=" . $userid . "&filter=1";

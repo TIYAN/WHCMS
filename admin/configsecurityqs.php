@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.12
+ * @ Version  : 5.2.13
  * @ Author   : MTIMER
- * @ Release on : 2013-10-25
+ * @ Release on : 2013-11-25
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -70,10 +70,7 @@ if ($update) {
 }
 
 echo $infobox;
-$jscode = "function doDelete(id) {
-if (confirm(\"" . $aInt->lang("securityquestionconfig", "delsuresecurityquestion", 1) . "\")) {
-window.location='" . $_SERVER['PHP_SELF'] . "?action=delete&id='+id+'" . generate_token("link") . "';
-}}";
+$aInt->deleteJSConfirm("doDelete", "securityquestionconfig", "delsuresecurityquestion", "?action=delete&id=");
 echo "
 <h2>";
 echo $aInt->lang("securityquestionconfig", "questions");

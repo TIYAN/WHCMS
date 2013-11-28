@@ -1,13 +1,15 @@
 <h1>WHMCS 5.2系列 完全解码破解版 —— 时光人破解版</h1>
 
-2013.11.25更新至5.2.13，官方更新了80%文件，提供了安全性，并修复大量解码错误，逐行校对。
+2013.11.28更新至5.2.14，只提供捐助者。
 
-只提供捐助者。http://www.mtimer.cn/release/25-whmcs-5213-wan-quan-jie-ma-po-jie.html 
+捐助后即可查看隐藏文件地址：http://www.mtimer.cn/release/25-whmcs-5214-wan-quan-jie-ma-po-jie.html 
 
-无需登录，捐助后直接下载 v5.2.13 [联系邮箱：admin@mtimer.cn]
+无需登录，捐助后直接下载 v5.2.14 {联系邮箱：admin[at]mtimer.cn}
 
 
 <h2>更新记录</h2>
+
+2013.11.25更新至5.2.13，官方更新了80%文件，提供了安全性，并修复大量解码错误，逐行校对。
 
 2013.10.25更新至5.2.12
 
@@ -49,7 +51,7 @@ SAE特别版下载：http://pan.baidu.com/s/1BYKLh
 
 此破解版由 时光人社区 www.mtimer.cn 维护
 
-捐助 支付宝：http://www.mtimer.cn/release/25-whmcs-5213-wan-quan-jie-ma-po-jie.html 
+捐助 支付宝：http://www.mtimer.cn/release/25-whmcs-5214-wan-quan-jie-ma-po-jie.html 
 
 <strong>捐助后将通过邮件获得今后更新</strong>
 
@@ -60,4 +62,10 @@ SAE特别版下载：http://pan.baidu.com/s/1BYKLh
 http://www.mtimer.cn
 
 
-Donate - Paypal : mtimercms@hotmail.com  & get updates lifetime via email ;)
+Donate to get updates *lifetime* via email.
+
+Donate paypal: mtimercms@hotmail.com 
+
+Donate Webmoney: Z369907552397  R374005435218
+
+Decoded & Nulled By Mtimer

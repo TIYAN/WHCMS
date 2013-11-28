@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.12
+ * @ Version  : 5.2.13
  * @ Author   : MTIMER
- * @ Release on : 2013-10-25
+ * @ Release on : 2013-11-25
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -358,7 +358,7 @@ if ($action == "saveitem") {
 	}
 
 	update_query("tblbundles", array("itemdata" => serialize($itemdata)), array("id" => $id));
-	header("Location: configbundles.php?action=manage&id=" . $id);
+	redir("action=manage&id=" . $id);
 	exit();
 }
 
@@ -372,7 +372,7 @@ if ($action == "deleteitem") {
 	$itemdata = ($itemdata ? unserialize($itemdata) : array());
 	unset($itemdata[$i]);
 	update_query("tblbundles", array("itemdata" => serialize($itemdata)), array("id" => $id));
-	header("Location: configbundles.php?action=manage&id=" . $id);
+	redir("action=manage&id=" . $id);
 	exit();
 }
 
@@ -705,7 +705,7 @@ else {
 
 						if ($data['addons']) {
 							echo " &nbsp;&nbsp; - " . $aInt->lang("addons", "title") . ": ";
-							$result = select_query("tbladdons", "name", "id IN (" . implode(",", $data['addons']) . ")");
+							$result = select_query("tbladdons", "name", "id IN (" . db_build_in_array($data['addons']) . ")");
 
 							while ($data = mysql_fetch_array($result)) {
 								echo $data[0] . ", ";

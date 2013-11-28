@@ -24,7 +24,7 @@ var datepickerformat = "{$datepickerformat}";
 <body>
 {$headeroutput}
 <div class="topbar">
-<div class="left"><a href="index.php">{$_ADMINLANG.home.title}</a> | <a href="../">{$_ADMINLANG.global.clientarea}</a> | <a href="#" id="shownotes">{$_ADMINLANG.global.mynotes}</a> | <a href="myaccount.php">{$_ADMINLANG.global.myaccount}</a> | <a href="logout.php">{$_ADMINLANG.global.logout}</a></div>
+<div class="left"><a href="index.php">{$_ADMINLANG.home.title}</a> | <a href="../">{$_ADMINLANG.global.clientarea}</a> | <a href="#" id="shownotes">{$_ADMINLANG.global.mynotes}</a> | <a href="myaccount.php">{$_ADMINLANG.global.myaccount}</a> | <a id="logout" href="logout.php">{$_ADMINLANG.global.logout}</a></div>
 <div class="right date">
 {$smarty.now|date_format:"%A, %d %B %Y, %H:%M"}
 </div>

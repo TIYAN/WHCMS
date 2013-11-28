@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.12
+ * @ Version  : 5.2.13
  * @ Author   : MTIMER
- * @ Release on : 2013-10-25
+ * @ Release on : 2013-11-25
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -41,7 +41,7 @@ class WHMCSChart {
 
 
 		if ($this->chartcount == 0) {
-			$aInt->headOutput[] = "<script type=\"text/javascript\" src=\"https://www.google.com.hk/jsapi\"></script>";
+			$aInt->headOutput[] = "<script type=\"text/javascript\" src=\"https://www.google.com/jsapi\"></script>";
 		}
 
 		$this->chartcount++;

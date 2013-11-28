@@ -13,7 +13,7 @@
      $("#intellisearchval").keyup(function () {
         var intellisearchlength = $("#intellisearchval").val().length;
         if (intellisearchlength>2) {
-        $.post("search.php", { intellisearch: "true", value: $("#intellisearchval").val() },
+        $.post("search.php", { intellisearch: "true", value: $("#intellisearchval").val(), token: "{/literal}{$csrfToken}{literal}" },
           function(data){
             $("#searchresults").html(data);
             $("#searchresults").slideDown("slow");

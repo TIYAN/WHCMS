@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.12
+ * @ Version  : 5.2.13
  * @ Author   : MTIMER
- * @ Release on : 2013-10-25
+ * @ Release on : 2013-11-25
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -584,7 +584,7 @@ function resellerclubssl_genLBRandomPW() {
 	$letterscount = strlen( $letters ) - 1;
 	$numberscount = strlen( $numbers ) - 1;
 	$password = "";
-	$i = 5;
+	$i = 0;
 
 	while ($i < 5) {
 		$password .= $letters[rand( 0, $letterscount )] . $numbers[rand( 0, $numberscount )];
@@ -751,57 +751,47 @@ function resellerclubssl_GetIP() {
 function resellerclubssl_Language($language) {
 	$language = strtolower( $language );
 	switch ($language) {
-	case "dutch": {
+	case "dutch":
 			$language = "nl";
 			break;
-		}
 
-	case "german": {
+	case "german":
 			$language = "de";
 			break;
-		}
 
 	case "italian": {
 			$language = "it";
 			break;
 		}
 
-	case "portuguese-br": {
+	case "portuguese-br":
 			$language = "pt";
 			break;
-		}
 
-	case "portuguese-pt": {
+	case "portuguese-pt":
 			$language = "pt";
 			break;
-		}
 
-	case "spanish": {
+	case "spanish":
 			$language = "es";
 			break;
-		}
 
-	case "turkish": {
+	case "turkish":
 			$language = "tr";
 			break;
-		}
 
-	case "english": {
-		}
+	case "english":
 
-	default: {
-		}
+	default:
+		$language = "en";
 	}
 
-	$language = "en";
-
-	if () {
-		if (strlen( $language ) == 2) {
-			return $language;
-		}
-
-		return "en";
+	
+	if (strlen( $language ) == 2) {
+		return $language;
 	}
+
+	return "en";
 }
 
 

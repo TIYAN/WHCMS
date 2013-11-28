@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.12
+ * @ Version  : 5.2.13
  * @ Author   : MTIMER
- * @ Release on : 2013-10-25
+ * @ Release on : 2013-11-25
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -704,7 +704,7 @@ if ($cron->isScheduled("emailmarketing")) {
 
 				if (count($filterpids)) {
 					$query = "SELECT id FROM tblhosting WHERE ";
-					$criteria[] = "packageid IN (" . implode(",", $filterpids) . ")";
+					$criteria[] = "packageid IN (" . db_build_in_array($filterpids) . ")";
 
 					if (0 < $prodnumdays) {
 						if ($prodfiltertype == "afterorder") {
@@ -719,20 +719,20 @@ if ($cron->isScheduled("emailmarketing")) {
 
 
 					if (count($prodstatus)) {
-						$criteria[] = "domainstatus IN ('" . implode("','", $prodstatus) . "')";
+						$criteria[] = "domainstatus IN (" . db_build_in_array($prodstatus) . ")";
 					}
 
 
 					if (count($prodexcludepid)) {
 						if (implode($prodexcludepid)) {
-							$criteria[] = "(SELECT COUNT(*) FROM tblhosting h2 WHERE h2.userid=tblhosting.userid AND h2.packageid IN (" . implode(",", $prodexcludepid) . ") AND h2.domainstatus='Active')=0";
+							$criteria[] = "(SELECT COUNT(*) FROM tblhosting h2 WHERE h2.userid=tblhosting.userid AND h2.packageid IN (" . db_build_in_array($prodexcludepid) . ") AND h2.domainstatus='Active')=0";
 						}
 					}
 
 
 					if (count($prodexcludeaid)) {
 						if (implode($prodexcludeaid)) {
-							$criteria[] = "(SELECT COUNT(*) FROM tblhostingaddons WHERE tblhostingaddons.hostingid=tblhosting.id AND tblhostingaddons.addonid IN (" . implode(",", $prodexcludeaid) . ") AND tblhostingaddons.status='Active')=0";
+							$criteria[] = "(SELECT COUNT(*) FROM tblhostingaddons WHERE tblhostingaddons.hostingid=tblhosting.id AND tblhostingaddons.addonid IN (" . db_build_in_array($prodexcludeaid) . ") AND tblhostingaddons.status='Active')=0";
 						}
 					}
 
@@ -748,7 +748,7 @@ if ($cron->isScheduled("emailmarketing")) {
 				if (count($filteraids)) {
 					$criteria = array();
 					$query1 = "SELECT hostingid FROM tblhostingaddons WHERE ";
-					$criteria[] = "addonid IN (" . implode(",", $filteraids) . ")";
+					$criteria[] = "addonid IN (" . db_build_in_array($filteraids) . ")";
 
 					if (0 < $prodnumdays) {
 						if ($prodfiltertype == "afterorder") {
@@ -763,20 +763,20 @@ if ($cron->isScheduled("emailmarketing")) {
 
 
 					if (count($prodstatus)) {
-						$criteria[] = "status IN ('" . implode("','", $prodstatus) . "')";
+						$criteria[] = "status IN (" . db_build_in_array($prodstatus) . ")";
 					}
 
 
 					if (count($prodexcludepid)) {
 						if (implode($prodexcludepid)) {
-							$criteria[] = "(SELECT COUNT(*) FROM tblhosting h2 WHERE h2.userid=(SELECT userid FROM tblhosting WHERE tblhosting.id=tblhostingaddons.hostingid) AND h2.packageid IN (" . implode(",", $prodexcludepid) . ") AND h2.domainstatus='Active')=0";
+							$criteria[] = "(SELECT COUNT(*) FROM tblhosting h2 WHERE h2.userid=(SELECT userid FROM tblhosting WHERE tblhosting.id=tblhostingaddons.hostingid) AND h2.packageid IN (" . db_build_in_array($prodexcludepid) . ") AND h2.domainstatus='Active')=0";
 						}
 					}
 
 
 					if (count($prodexcludeaid)) {
 						if (implode($prodexcludeaid)) {
-							$criteria[] = "(SELECT COUNT(*) FROM tblhostingaddons h2 WHERE h2.hostingid=tblhostingaddons.hostingid AND tblhostingaddons.addonid IN (" . implode(",", $prodexcludeaid) . ") AND tblhostingaddons.status='Active')=0";
+							$criteria[] = "(SELECT COUNT(*) FROM tblhostingaddons h2 WHERE h2.hostingid=tblhostingaddons.hostingid AND tblhostingaddons.addonid IN (" . db_build_in_array($prodexcludeaid) . ") AND tblhostingaddons.status='Active')=0";
 						}
 					}
 
@@ -832,8 +832,7 @@ if (date("d") == $CONFIG['CCDaySendExpiryNotices'] && $cron->isScheduled("ccexpi
 
 	while ($data = mysql_fetch_array($result)) {
 		$userid = $data['id'];
-		md5($cc_encryption_hash . $userid);
-		$cchash = "";
+		$cchash = md5($cc_encryption_hash . $userid);
 		$result2 = select_query("tblclients", "id", "id='" . $userid . "' AND AES_DECRYPT(expdate,'" . $cchash . "')='" . $expirymonth . "'");
 		$data = mysql_fetch_array($result2);
 		$userid = $data['id'];
@@ -1117,8 +1116,7 @@ if ($cron->isScheduled("backups")) {
 		}
 
 		$ftp_server = str_replace("ftp://", "", $ftp_server);
-		ftp_connect($ftp_server, $ftp_port);
-		($ftpconnection =  || $error = "Couldn't connect to " . $ftp_server);
+		$ftpconnection = ftp_connect($ftp_server, $ftp_port) || $error = "Couldn't connect to " . $ftp_server;
 
 		if (!ftp_login($ftpconnection, $ftp_user, $ftp_pass)) {
 			$cron->logActivity("FTP Backup - Login Failed");

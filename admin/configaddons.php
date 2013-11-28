@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.12
+ * @ Version  : 5.2.13
  * @ Author   : MTIMER
- * @ Release on : 2013-10-25
+ * @ Release on : 2013-11-25
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -43,10 +43,10 @@ if ($action == "save") {
 	run_hook("AddonConfigSave", array("id" => $id));
 
 	if ($creatednew) {
-		header("Location: " . $_SERVER['PHP_SELF'] . "?created=true");
+		redir("created=true");
 	}
 	else {
-		header("Location: " . $_SERVER['PHP_SELF'] . "?saved=true");
+		redir("saved=true");
 	}
 
 	exit();
@@ -58,7 +58,7 @@ if ($action == "delete") {
 	delete_query("tbladdons", array("id" => $id));
 	delete_query("tblpricing", array("type" => "addon", "relid" => $id));
 	infoBox($aInt->lang("addons", "addondeletesuccess"), $aInt->lang("addon", "addondelsuccessinfo"));
-	header("Location: " . $_SERVER['PHP_SELF'] . "?deleted=true");
+	redir("deleted=true");
 	exit();
 }
 

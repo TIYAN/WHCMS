@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.12
+ * @ Version  : 5.2.13
  * @ Author   : MTIMER
- * @ Release on : 2013-10-25
+ * @ Release on : 2013-11-25
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -90,7 +90,7 @@ if ($action == "add") {
 		}
 	}
 
-	header("Location: transactions.php?added=true");
+	redir("added=true");
 	exit();
 }
 
@@ -106,7 +106,7 @@ if ($action == "save") {
 	$date = toMySQLDate($date);
 	update_query("tblaccounts", array("userid" => $client, "currency" => $currency, "date" => $date, "description" => $description, "amountin" => $amountin, "fees" => $fees, "amountout" => $amountout, "gateway" => $paymentmethod, "transid" => $transid, "invoiceid" => $invoiceid), array("id" => $id));
 	logActivity("Modified Transaction - Transaction ID: " . $id);
-	header("Location: transactions.php?saved=true");
+	redir("saved=true");
 	exit();
 }
 
@@ -116,7 +116,7 @@ if ($action == "delete") {
 	checkPermission("Delete Transaction");
 	delete_query("tblaccounts", array("id" => $id));
 	logActivity("Deleted Transaction - Transaction ID: " . $id);
-	header("Location: transactions.php?deleted=true");
+	redir("deleted=true");
 	exit();
 }
 
@@ -405,7 +405,6 @@ if (!$action) {
 		$query .= " WHERE " . implode(" AND ", $where);
 	}
 
-	$totals = array();
 	$fullquery = "SELECT tblclients.currency,SUM(amountin),SUM(fees),SUM(amountout),SUM(amountin-fees-amountout) FROM tblaccounts,tblclients " . ($query ? $query . " AND" : "WHERE") . " tblclients.id=tblaccounts.userid GROUP BY tblclients.currency";
 	$result = full_query($fullquery);
 
@@ -436,7 +435,8 @@ if (!$action) {
 	$gatewaysarray = getGatewaysArray();
 	$query .= " ORDER BY tblaccounts.date DESC,tblaccounts.id DESC";
 	$result = full_query("SELECT COUNT(*) FROM tblaccounts" . $query);
-	$data = mysql_fetch_array($result);
+	mysql_fetch_array($result);
+	$data = $totals = array();
 	$numrows = $data[0];
 	$query = "SELECT tblaccounts.*,tblclients.firstname,tblclients.lastname,tblclients.companyname,tblclients.groupid,tblclients.currency AS currencyid FROM tblaccounts LEFT JOIN tblclients ON tblclients.id=tblaccounts.userid" . $query . " LIMIT " . (int)$page * $limit . "," . (int)$limit;
 	$result = full_query($query);

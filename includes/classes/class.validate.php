@@ -3,15 +3,14 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.12
+ * @ Version  : 5.2.13
  * @ Author   : MTIMER
- * @ Release on : 2013-10-25
+ * @ Release on : 2013-11-25
  * @ Website  : http://www.mtimer.cn
  *
  **/
 
-class WHMCS_Validate 
-{
+class WHMCS_Validate {
 	protected $optional_fields = array();
 	protected $validated = array();
 	protected $errors = array();
@@ -161,22 +160,18 @@ class WHMCS_Validate
 		}
 
 		switch ($rule) {
-		case "required": {
-				return !trim($val) ? false : true;
-			}
-		case "numeric": {
-				return $this->is_numeric($val);;
-			}
-		case "match_value": {
+		case "required":
+			return (!trim($val) ? false : true);
+		case "numeric":
+			return is_numeric($val);
+		case "match_value":
             if (is_array($field2))
             {
                 return ($field2[0] === $field2[1]) ? true:false;
             }
             return ($val === $val2) ? true:false;
-			}
-		case "matchpattern": {
-				return preg_match($field2[0], $val);
-			}
+		case "matchpattern":
+			return preg_match($field2[0], $val);
         case "email" :
             if (function_exists("filter_var"))
             {
@@ -239,13 +234,12 @@ class WHMCS_Validate
                 return false;
             }
             return true;
-		case "captcha": {
-				return ($this->checkCaptchaInput($val) ? true : false);
-			}
-		case "uploaded": {
-				return ($this->checkUploadExtensions($field) ? true : false);
-			}
+		case "captcha":
+			return ($this->checkCaptchaInput($val) ? true : false);
+		case "uploaded":
+			return ($this->checkUploadExtensions($field) ? true : false);
 		}
+
 		return true;
 	}
 
@@ -320,11 +314,13 @@ class WHMCS_Validate
 			}
 		}
 		else {
-			if ($_SESSION['image_random_value'] != md5(strtoupper($val))) {
+			if ($_SESSION['captchaValue'] != md5(strtoupper($val))) {
+				generateNewCaptchaCode();
 				return false;
 			}
 		}
 
+		generateNewCaptchaCode();
 		return true;
 	}
 

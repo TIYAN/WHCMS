@@ -226,6 +226,7 @@ No Replies Yet
 </ul>
 
 <form method="post" action="browser.php?action=add">
+<input type="hidden" name="token" value="{$csrfToken}" />
 <span class="header"><img src="images/icons/browseradd.png" class="absmiddle" width="16" height="16" /> {$_ADMINLANG.browser.addnew}</span>
 <ul class="menu">
     <li>{$_ADMINLANG.browser.sitename}:<br><input type="text" name="sitename" size="25" style="font-size:9px;"><br>{$_ADMINLANG.browser.url}:<br><input type="text" name="siteurl" size="25" value="http://" style="font-size:9px;"><br><input type="submit" value="{$_ADMINLANG.browser.add}" style="font-size:9px;"></li>

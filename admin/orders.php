@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.12
+ * @ Version  : 5.2.13
  * @ Author   : MTIMER
- * @ Release on : 2013-10-25
+ * @ Release on : 2013-11-25
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -29,6 +29,7 @@ $aInt->helplink = "Order Management";
 $aInt->requiredFiles(array("gatewayfunctions", "orderfunctions", "modulefunctions", "domainfunctions", "invoicefunctions", "processinvoices", "clientfunctions", "ccfunctions", "registrarfunctions", "fraudfunctions"));
 
 if ($whmcs->get_req_var("rerunfraudcheck")) {
+	check_token("WHMCS.admin.default");
 	$result = select_query("tblorders", "id,userid,ipaddress", array("id" => $orderid));
 	$data = mysql_fetch_array($result);
 	$orderid = $data['id'];
@@ -96,6 +97,7 @@ if ($action == "affassign") {
 
 
 if ($action == "ajaxchangeorderstatus") {
+	check_token("WHMCS.admin.default");
 	$id = get_query_val("tblorders", "id", array("id" => $id));
 	$result = select_query("tblorderstatuses", "title", "", "sortorder", "ASC");
 
@@ -118,6 +120,7 @@ if ($action == "ajaxchangeorderstatus") {
 $filters = new WHMCS_Filter();
 
 if ($action == "delete" && $id) {
+	check_token("WHMCS.admin.default");
 	checkPermission("Delete Order");
 	deleteOrder($id);
 	$filters->redir();
@@ -125,6 +128,7 @@ if ($action == "delete" && $id) {
 
 
 if ($whmcs->get_req_var("massaccept")) {
+	check_token("WHMCS.admin.default");
 	checkPermission("View Order Details");
 
 	if (is_array($selectedorders)) {
@@ -138,6 +142,7 @@ if ($whmcs->get_req_var("massaccept")) {
 
 
 if ($whmcs->get_req_var("masscancel")) {
+	check_token("WHMCS.admin.default");
 	checkPermission("View Order Details");
 
 	if (is_array($selectedorders)) {
@@ -151,6 +156,7 @@ if ($whmcs->get_req_var("masscancel")) {
 
 
 if ($whmcs->get_req_var("massdelete")) {
+	check_token("WHMCS.admin.default");
 	checkPermission("Delete Order");
 
 	if (is_array($selectedorders)) {
@@ -164,15 +170,15 @@ if ($whmcs->get_req_var("massdelete")) {
 
 
 if ($whmcs->get_req_var("sendmessage")) {
+	check_token("WHMCS.admin.default");
 	$clientslist = "";
-	$result = select_query("tblorders", "DISTINCT userid", "id IN (" . implode($selectedorders, ",") . ")");
+	$result = select_query("tblorders", "DISTINCT userid", "id IN (" . db_build_in_array($selectedorders) . ")");
 
 	while ($data = mysql_fetch_array($result)) {
 		$clientslist .= "selectedclients[]=" . $data['userid'] . "&";
 	}
 
-	header("Location: sendmessage.php?type=general&multiple=true&" . substr($clientslist, 0, 0 - 1));
-	exit();
+	redir("type=general&multiple=true&" . substr($clientslist, 0, 0 - 1), "sendmessage.php");
 }
 
 ob_start();
@@ -325,7 +331,7 @@ else {
 			check_token("WHMCS.admin.default");
 			$errors = acceptOrder($id, $vars);
 			wSetCookie("OrderAccept", $errors);
-			header("Location: orders.php?action=view&id=" . $id . "&activated=true");
+			redir("action=view&id=" . $id . "&activated=true");
 			exit();
 		}
 
@@ -333,7 +339,7 @@ else {
 		if ($whmcs->get_req_var("cancel")) {
 			check_token("WHMCS.admin.default");
 			changeOrderStatus($id, "Cancelled");
-			header("Location: orders.php?action=view&id=" . $id . "&cancelled=true");
+			redir("action=view&id=" . $id . "&cancelled=true");
 			exit();
 		}
 
@@ -341,7 +347,7 @@ else {
 		if ($whmcs->get_req_var("fraud")) {
 			check_token("WHMCS.admin.default");
 			changeOrderStatus($id, "Fraud");
-			header("Location: orders.php?action=view&id=" . $id . "&frauded=true");
+			redir("action=view&id=" . $id . "&frauded=true");
 			exit();
 		}
 
@@ -349,7 +355,7 @@ else {
 		if ($whmcs->get_req_var("pending")) {
 			check_token("WHMCS.admin.default");
 			changeOrderStatus($id, "Pending");
-			header("Location: orders.php?action=view&id=" . $id . "&backpending=true");
+			redir("action=view&id=" . $id . "&backpending=true");
 			exit();
 		}
 
@@ -358,7 +364,7 @@ else {
 			check_token("WHMCS.admin.default");
 			checkPermission("Refund Invoice Payments");
 			$error = cancelRefundOrder($id);
-			header("Location: orders.php?action=view&id=" . $id . "&cancelledrefunded=true&error=" . $error);
+			redir("action=view&id=" . $id . "&cancelledrefunded=true&error=" . $error);
 			exit();
 		}
 
@@ -424,6 +430,7 @@ else {
 
 
 		if ($whmcs->get_req_var("updatenotes")) {
+			check_token("WHMCS.admin.default");
 			update_query("tblorders", array("notes" => $notes), array("id" => $id));
 			exit();
 		}
@@ -446,7 +453,7 @@ else {
 		$paymentmethod = $data['paymentmethod'];
 		$paymentmethod = $gatewaysarray[$paymentmethod];
 		$orderstatus = $data['status'];
-		$showpending = get_query_val("tblorderstatuses", "showpending", array("title" => $orderstatus));
+		get_query_val("tblorderstatuses", "showpending", array("title" => $orderstatus));
 		$amount = $data['amount'];
 		$client = $aInt->outputClientLink($userid, $data['firstname'], $data['lastname'], $data['companyname'], $data['groupid']);
 		$address = $data['address1'];
@@ -498,7 +505,7 @@ function deleteOrder() {
 		$amount = formatCurrency($amount);
 		$jquerycode = "$(\"#ajaxchangeorderstatus\").change(function() {
 	var newstatus = $(\"#ajaxchangeorderstatus\").val();
-$.post(\"" . $_SERVER['PHP_SELF'] . "?action=ajaxchangeorderstatus&id=" . $id . "\", { status: newstatus },
+$.post(\"" . $_SERVER['PHP_SELF'] . "?action=ajaxchangeorderstatus&id=" . $id . "\", { status: newstatus, token: \"" . generate_token("plain") . "\" },
    function(data) {
      if(data == " . $id . "){
 		 $(\"#orderstatusupdated\").fadeIn().fadeOut(5000);
@@ -838,7 +845,7 @@ $.post(\"" . $_SERVER['PHP_SELF'] . "?action=ajaxchangeorderstatus&id=" . $id . 
 		$predefinedaddons = array();
 		$result = select_query("tbladdons", "", "");
 
-		while ($data = mysql_fetch_array($result)) {
+		while ($data = $showpending = mysql_fetch_array($result)) {
 			$addon_id = $data['id'];
 			$addon_name = $data['name'];
 			$addon_welcomeemail = $data['welcomeemail'];
@@ -1238,8 +1245,8 @@ $.post(\"" . $_SERVER['PHP_SELF'] . "?action=ajaxchangeorderstatus&id=" . $id . 
 
 				echo "</tr></table></div>";
 				$jquerycode .= "$(\"#rerunfraud\").click(function () {
-    $(\"#rerunfraud\").html(\"<img src=\"../images/spinner.gif\" align=\"absmiddle\" /> Performing Check...\");
-    $.post(\"orders.php\", { action: \"view\", rerunfraudcheck: \"true\", orderid: " . $id . " },
+    $(\"#rerunfraud\").html(\"<img src=\\\"../images/spinner.gif\\\" align=\\\"absmiddle\\\" /> Performing Check...\");
+    $.post(\"orders.php\", { action: \"view\", rerunfraudcheck: \"true\", orderid: " . $id . ", token: \"" . generate_token("plain") . "\" },
     function(data){
         $(\"#fraudresults\").html(data);
         $(\"#rerunfraud\").html(\"Update Completed\");
@@ -1253,7 +1260,7 @@ $.post(\"" . $_SERVER['PHP_SELF'] . "?action=ajaxchangeorderstatus&id=" . $id . 
 </form>
 
 ";
-		echo $aInt->jqueryDialog("affassign", $aInt->lang("orders", "affassign"), $aInt->lang("global", "loading"), array($aInt->lang("global", "savechanges") => "$('#affiliatefield').html($('#affid option:selected').text());$(this).dialog('close');$.post('orders.php', { action: 'affassign', orderid: " . $id . ", affid: $('#affid').val() });", $aInt->lang("global", "cancelchanges") => ""));
+		echo $aInt->jqueryDialog("affassign", $aInt->lang("orders", "affassign"), $aInt->lang("global", "loading"), array($aInt->lang("global", "savechanges") => "$('#affiliatefield').html($('#affid option:selected').text());$(this).dialog('close');$.post('orders.php', { action: 'affassign', orderid: " . $id . ", affid: $('#affid').val(), token: '" . generate_token("plain") . "' });", $aInt->lang("global", "cancelchanges") => ""));
 		$jquerycode .= "$(\"#showaffassign\").click(
     function() {
         $(\"#affassign\").dialog(\"open\");
@@ -1271,7 +1278,7 @@ $(\"#togglenotesbtn\").click(function() {
 	return false;
 });
 $(\"#savenotesbtn\").click(function() {
-	$.post(\"" . $PHP_SELF . "?action=view&id=" . $id . "\", { updatenotes: true, notes: $('#notes').val()});
+	$.post(\"" . $PHP_SELF . "?action=view&id=" . $id . "\", { updatenotes: true, notes: $('#notes').val(), token: \"" . generate_token("plain") . "\" });
 	$(\"#savenotesbtn\").attr(\"value\",\"Saved\");
 	return false;
 });

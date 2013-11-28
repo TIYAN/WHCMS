@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.12
+ * @ Version  : 5.2.13
  * @ Author   : MTIMER
- * @ Release on : 2013-10-25
+ * @ Release on : 2013-11-25
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -15,6 +15,7 @@ require "../init.php";
 $aInt = new WHMCS_Admin("loginonly");
 
 if ($a == "savenotes") {
+	check_token("WHMCS.admin.default");
 	update_query("tbladmins", array("notes" => $notes), array("id" => $_SESSION['adminid']));
 	exit();
 }
@@ -34,6 +35,7 @@ if ($a == "maxsidebar") {
 $matches = $tempmatches = $invoicematches = $ticketmatches = "";
 
 if ($intellisearch) {
+	check_token("WHMCS.admin.default");
 	$value = trim($_POST['value']);
 
 	if (strlen($value) < 3 && !is_numeric($value)) {
@@ -327,6 +329,7 @@ if ($clientsearch || $ticketclientsearch) {
 	exit();
 }
 
+$searchin = "";
 
 if ($type == "clients") {
 	if ($field == "ID" || $field == "Client ID") {
@@ -388,85 +391,84 @@ if ($type == "clients") {
 		}
 	}
 
-	header("Location: clients.php?" . $searchin . "=" . $q);
-	exit();
+	redir("" . $searchin . "=" . $q, "clients.php");
 	return 1;
 }
 
 
 if ($type == "orders") {
 	if ($field == "Order ID") {
-		header("Location: orders.php?orderid=" . $q);
+		$searchin = "orderid";
 	}
 	else {
 		if ($field == "Order #") {
-			header("Location: orders.php?ordernum=" . $q);
+			$searchin = "ordernum";
 		}
 		else {
 			if ($field == "Order Date") {
-				header("Location: orders.php?orderdate=" . $q);
+				$searchin = "orderdate";
 			}
 			else {
 				if ($field == "Client Name") {
-					header("Location: orders.php?clientname=" . $q);
+					$searchin = "clientname";
 				}
 				else {
 					if ($field == "Amount") {
-						header("Location: orders.php?amount=" . $q);
+						$searchin = "amount";
 					}
 				}
 			}
 		}
 	}
 
-	exit();
+	redir("" . $searchin . "=" . $q, "orders.php");
 	return 1;
 }
 
 
 if ($type == "services") {
 	if ($field == "ID" || $field == "Service ID") {
-		header("Location: clientshostinglist.php?id=" . $q);
+		$searchin = "id";
 	}
 	else {
 		if ($field == "Domain") {
-			header("Location: clientshostinglist.php?domain=" . $q);
+			$searchin = "domain";
 		}
 		else {
 			if ($field == "Client Name") {
-				header("Location: clientshostinglist.php?clientname=" . $q);
+				$searchin = "clientname";
 			}
 			else {
 				if ($field == "Package" || $field == "Product") {
-					header("Location: clientshostinglist.php?packagesearch=" . $q);
+					$searchin = "packagesearch";
 				}
 				else {
 					if ($field == "Billing Cycle") {
-						header("Location: clientshostinglist.php?billingcycle=" . $q);
+						$searchin = "billingcycle";
 					}
 					else {
 						if ($field == "Status") {
-							header("Location: clientshostinglist.php?status=" . $q);
+							$searchin = "status";
 						}
 						else {
 							if ($field == "Username") {
-								header("Location: clientshostinglist.php?username=" . $q);
+								$searchin = "username";
 							}
 							else {
 								if ($field == "Dedicated IP") {
-									header("Location: clientshostinglist.php?dedicatedip=" . $q);
+									$searchin = "dedicatedip";
 								}
 								else {
 									if ($field == "Assigned IPs") {
-										header("Location: clientshostinglist.php?assignedips=" . $q);
+										$searchin = "assignedips";
 									}
 									else {
 										if ($field == "Subscription ID") {
-											header("Location: clientshostinglist.php?subscriptionid=" . $q);
+											$searchin = "subscriptionid";
 										}
 										else {
 											if ($field == "Notes") {
-												header("Location: clientshostinglist.php?notes=" . $q);
+												$searchin = "notes";
 											}
 										}
 									}
@@ -479,38 +481,38 @@ if ($type == "services") {
 		}
 	}
 
-	exit();
+	redir("" . $searchin . "=" . $q, "clientshostinglist.php");
 	return 1;
 }
 
 
 if ($type == "domains") {
 	if ($field == "ID" || $field == "Domain ID") {
-		header("Location: clientsdomainlist.php?id=" . $q);
+		$searchin = "id";
 	}
 	else {
 		if ($field == "Domain") {
-			header("Location: clientsdomainlist.php?domain=" . $q);
+			$searchin = "domain";
 		}
 		else {
 			if ($field == "Client Name") {
-				header("Location: clientsdomainlist.php?clientname=" . $q);
+				$searchin = "clientname";
 			}
 			else {
 				if ($field == "Registrar") {
-					header("Location: clientsdomainlist.php?registrar=" . $q);
+					$searchin = "registrar";
 				}
 				else {
 					if ($field == "Status") {
-						header("Location: clientsdomainlist.php?status=" . $q);
+						$searchin = "status";
 					}
 					else {
 						if ($field == "Subscription ID") {
-							header("Location: clientsdomainlist.php?subscriptionid=" . $q);
+							$searchin = "subscriptionid";
 						}
 						else {
 							if ($field == "Notes") {
-								header("Location: clientsdomainlist.php?notes=" . $q);
+								$searchin = "notes";
 							}
 						}
 					}
@@ -519,42 +521,42 @@ if ($type == "domains") {
 		}
 	}
 
-	exit();
+	redir("" . $searchin . "=" . $q, "clientsdomainlist.php");
 	return 1;
 }
 
 
 if ($type == "invoices") {
 	if ($field == "Invoice #") {
-		header("Location: invoices.php?invoicenum=" . $q);
+		$searchin = "invoicenum";
 	}
 	else {
 		if ($field == "Client Name") {
-			header("Location: invoices.php?clientname=" . $q);
+			$searchin = "clientname";
 		}
 		else {
 			if ($field == "Line Item") {
-				header("Location: invoices.php?lineitem=" . $q);
+				$searchin = "lineitem";
 			}
 			else {
 				if ($field == "Invoice Date") {
-					header("Location: invoices.php?invoicedate=" . $q);
+					$searchin = "invoicedate";
 				}
 				else {
 					if ($field == "Due Date") {
-						header("Location: invoices.php?duedate=" . $q);
+						$searchin = "duedate";
 					}
 					else {
 						if ($field == "Date Paid") {
-							header("Location: invoices.php?datepaid=" . $q);
+							$searchin = "datepaid";
 						}
 						else {
 							if ($field == "Total Due") {
-								header("Location: invoices.php?totalfrom=" . $q . "&totalto=" . $q);
+								redir("totalfrom=" . $q . "&totalto=" . $q, "invoices.php");
 							}
 							else {
 								if ($field == "Status") {
-									header("Location: invoices.php?staus=" . $q);
+									$searchin = "status";
 								}
 							}
 						}
@@ -564,37 +566,37 @@ if ($type == "invoices") {
 		}
 	}
 
-	exit();
+	redir("" . $searchin . "=" . $q, "invoices.php");
 	return 1;
 }
 
 
 if ($type == "tickets") {
 	if ($field == "Ticket #") {
-		header("Location: supporttickets.php?ticketid=" . $q);
+		$searchin = "ticketid";
 	}
 	else {
 		if ($field == "Tag") {
-			header("Location: supporttickets.php?tag=" . $q);
+			$searchin = "tag";
 		}
 		else {
 			if ($field == "Subject") {
-				header("Location: supporttickets.php?subject=" . $q);
+				$searchin = "subject";
 			}
 			else {
 				if ($field == "Email Address") {
-					header("Location: supporttickets.php?email=" . $q);
+					$searchin = "email";
 				}
 				else {
 					if ($field == "Client Name") {
-						header("Location: supporttickets.php?clientname=" . $q);
+						$searchin = "clientname";
 					}
 				}
 			}
 		}
 	}
 
-	exit();
+	redir("" . $searchin . "=" . $q, "supporttickets.php");
 }
 
 ?>

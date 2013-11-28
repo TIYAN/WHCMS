@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.12
+ * @ Version  : 5.2.13
  * @ Author   : MTIMER
- * @ Release on : 2013-10-25
+ * @ Release on : 2013-11-25
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -33,7 +33,7 @@ if ($action == "save") {
 		insert_query($table, $array);
 	}
 
-	header("Location: " . $_SERVER['PHP_SELF']);
+	redir();
 	exit();
 }
 
@@ -41,18 +41,14 @@ if ($action == "save") {
 if ($sub == "delete") {
 	check_token("WHMCS.admin.default");
 	delete_query("tbllinks", array("id" => $id));
-	header("Location: " . $_SERVER['PHP_SELF']);
+	redir();
 	exit();
 }
 
 ob_start();
 
 if (!$action) {
-	$jscode = "function doDelete(id) {
-	if (confirm(\"Are you sure you want to delete this link?\")) {
-		window.location='" . $_SERVER['PHP_SELF'] . "?sub=delete&id='+id+'" . generate_token("link") . "';
-	}
-}";
+	$aInt->deleteJSConfirm("doDelete", "global", "deleteconfirm", "?sub=delete&id=");
 	echo "
 <p>The Link Tracking system allows you to track how people are arriving at your site (what links they are clicking on) and then how many conversions you get from people who have clicked on that link.</p>
 
@@ -80,7 +76,7 @@ if (!$action) {
 		}
 
 		$conversionrate = @round($conversions / $clicks * 100, 2);
-		$tabledata[] = array($id, $name, "<a href=\"" . $link . "\" target=\"_blank\">" . $displaylink . "</a>", $clicks, $conversions, $conversionrate . "%", "<a href=\"" . $PHP_SELF . "?action=manage&id=" . $id . "\"><img src=\"images/edit.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"Edit\"></a>", "<a href=\"#\" onClick=\"doDelete('" . $id . "');return false\"><img src=\"images/delete.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"Delete\"></a>");
+		$tabledata[] = array($id, $name, "<a href=\"" . $link . "\" target=\"_blank\">" . $displaylink . "</a>", $clicks, $conversions, $conversionrate . "%", "<a href=\"" . $PHP_SELF . "?action=manage&id=" . $id . generate_token("link") . "\"><img src=\"images/edit.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"Edit\"></a>", "<a href=\"#\" onClick=\"doDelete('" . $id . "');return false\"><img src=\"images/delete.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"Delete\"></a>");
 	}
 
 	echo $aInt->sortableTable(array(array("id", "ID"), array("name", "Name"), array("link", "Link"), array("clicks", "Clicks"), array("conversions", "Conversions"), array("conversionrate", "Conversion Rate"), "", ""), $tabledata);

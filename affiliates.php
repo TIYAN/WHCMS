@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.12
+ * @ Version  : 5.2.13
  * @ Author   : MTIMER
- * @ Release on : 2013-10-25
+ * @ Release on : 2013-11-25
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -29,8 +29,7 @@ if (isset($_SESSION['uid'])) {
 		if (isset($_REQUEST['activate'])) {
 			check_token();
 			affiliateActivate($_SESSION['uid']);
-			header("Location: affiliates.php");
-			exit();
+			redir();
 		}
 
 		$result = select_query("tblclients", "currency", array("id" => $_SESSION['uid']));

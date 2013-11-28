@@ -6,7 +6,7 @@ if (!defined("WHMCS"))
 function widget_supporttickets_overview($vars) {
     global $_ADMINLANG;
 
-    $title = "工单总览";
+    $title = "Support Tickets Overview";
 
     $activestatuses = $replystatuses = array();
     $result = select_query("tblticketstatuses","title,showactive,showawaiting","showactive=1");
@@ -35,7 +35,7 @@ function widget_supporttickets_overview($vars) {
     }
     $chartdata2 = implode(',',$chartdata2);
 
-    if (!$ticketcount) $content = '<br /><div align="center">当前有 <strong>0</strong> 个工单等待回复</div><br />';
+    if (!$ticketcount) $content = '<br /><div align="center">There are <strong>0</strong> Tickets Currently Awaiting a Reply</div><br />';
     else $content = <<<EOF
     <script type="text/javascript">
       google.load("visualization", "1", {packages:["corechart"]});

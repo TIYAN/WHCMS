@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.12
+ * @ Version  : 5.2.13
  * @ Author   : MTIMER
- * @ Release on : 2013-10-25
+ * @ Release on : 2013-11-25
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -17,22 +17,32 @@ $aInt->title = $aInt->lang("stspamcontrol", "stspamcontroltitle");
 $aInt->sidebar = "config";
 $aInt->icon = "spamcontrol";
 $aInt->helplink = "Email Piping Spam Control";
-ob_start();
-$jscode = "function doDelete(id,num) {
-if (confirm(\"" . $aInt->lang("stspamcontrol", "delsurespamcontrol", 1) . "\")) {
-window.location='" . $_SERVER['PHP_SELF'] . "?action=delete&id='+id+'&tabnum='+num+'" . generate_token("link") . "';
-}}";
 
 if ($action == "add") {
 	check_token("WHMCS.admin.default");
 	insert_query("tblticketspamfilters", array("type" => $type, "content" => $spamvalue));
-	infoBox($aInt->lang("stspamcontrol", "spamcontrolupdatedtitle"), $aInt->lang("stspamcontrol", "spamcontrolupdatedadded"));
+	redir("added=1");
 }
 
 
 if ($action == "delete") {
 	check_token("WHMCS.admin.default");
 	delete_query("tblticketspamfilters", array("id" => $id));
+	redir("deleted=1");
+}
+
+ob_start();
+$jscode = "function doDelete(id,num) {
+if (confirm(\"" . $aInt->lang("stspamcontrol", "delsurespamcontrol", 1) . "\")) {
+window.location='" . $_SERVER['PHP_SELF'] . "?action=delete&id='+id+'&tabnum='+num+'" . generate_token("link") . "';
+}}";
+
+if ($added) {
+	infoBox($aInt->lang("stspamcontrol", "spamcontrolupdatedtitle"), $aInt->lang("stspamcontrol", "spamcontrolupdatedadded"));
+}
+
+
+if ($deleted) {
 	infoBox($aInt->lang("stspamcontrol", "spamcontrolupdatedtitle"), $aInt->lang("stspamcontrol", "spamcontrolupdateddel"));
 }
 

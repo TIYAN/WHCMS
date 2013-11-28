@@ -211,7 +211,6 @@
     {if in_array("Configure General Settings",$admin_perms)}<li><a href="systemupdates.php">{$_ADMINLANG.help.updates}</a></li>
     <li><a href="systemsupportrequest.php">{$_ADMINLANG.help.support}</a></li>{/if}
     <li><a href="http://forum.whmcs.com/" target="_blank">{$_ADMINLANG.help.forums}</a></li>
-    <li><a href="http://www.mtimer.cn/" target="_blank">{$_ADMINLANG.help.mtimer}</a></li>
   </ul>
 </li>
 </ul>

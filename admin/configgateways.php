@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.12
+ * @ Version  : 5.2.13
  * @ Author   : MTIMER
- * @ Release on : 2013-10-25
+ * @ Release on : 2013-11-25
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -50,8 +50,7 @@ while (false !== $file = readdir($dh)) {
 
 	if (((trim($file) && $file != "index.php") && $fileext[1] == "php") && !in_array($fileext[0], $includedmodules)) {
 		$includedmodules[] = $fileext[0];
-		$pieces = explode( ".", $file );
-		$gwv_modulename = $pieces[0];
+		$gwv_modulename = $fileext[0];
 
 		if (!isValidforPath($fileext[0])) {
 			exit("Invalid Gateway Module Name");
@@ -67,8 +66,8 @@ while (false !== $file = readdir($dh)) {
 		}
 
 
-		if (function_exists( $gwv_modulename . "_config" )) {
-			$GatewayConfig[$gwv_modulename] = call_user_func( $gwv_modulename . "_config" );
+		if (function_exists($gwv_modulename . "_config")) {
+			$GatewayConfig[$gwv_modulename] = call_user_func($gwv_modulename . "_config");
 		}
 		else
 		{
@@ -160,6 +159,7 @@ if ($action == "save" && in_array($module, $includedmodules)) {
 
 
 if ($action == "moveup") {
+	check_token("WHMCS.admin.default");
 	$result = select_query("tblpaymentgateways", "", array("`order`" => $order));
 	$data = mysql_fetch_array($result);
 	$gateway = $data['gateway'];
@@ -171,6 +171,7 @@ if ($action == "moveup") {
 
 
 if ($action == "movedown") {
+	check_token("WHMCS.admin.default");
 	$result = select_query("tblpaymentgateways", "", array("`order`" => $order));
 	$data = mysql_fetch_array($result);
 	$gateway = $data['gateway'];
@@ -258,12 +259,12 @@ while ($data = mysql_fetch_array($result3)) {
 	echo "</b>";
 
 	if ($order != "1") {
-		echo "<a href=\"" . $PHP_SELF . "?action=moveup&order=" . $order . "\"><img src=\"images/moveup.gif\" align=\"absmiddle\" width=\"16\" height=\"16\" border=\"0\" alt=\"\"></a> ";
+		echo "<a href=\"" . $PHP_SELF . "?action=moveup&order=" . $order . generate_token("link") . "\"><img src=\"images/moveup.gif\" align=\"absmiddle\" width=\"16\" height=\"16\" border=\"0\" alt=\"\"></a> ";
 	}
 
 
 	if ($order != $lastorder) {
-		echo "<a href=\"" . $PHP_SELF . "?action=movedown&order=" . $order . "\"><img src=\"images/movedown.gif\" align=\"absmiddle\" width=\"16\" height=\"16\" border=\"0\" alt=\"\"></a>";
+		echo "<a href=\"" . $PHP_SELF . "?action=movedown&order=" . $order . generate_token("link") . "\"><img src=\"images/movedown.gif\" align=\"absmiddle\" width=\"16\" height=\"16\" border=\"0\" alt=\"\"></a>";
 	}
 
 	echo "</p>
@@ -338,8 +339,14 @@ while ($data = mysql_fetch_array($result3)) {
 	$newgateways .= "<option value=\"" . $module . "\">" . $GatewayConfig[$module]['FriendlyName']['Value'] . "</option>";
 }
 
-echo $aInt->jqueryDialog( "deactivategw", $aInt->lang( "gateways", "deactivatemodule" ), "<p>" . $aInt->lang( "gateways", "deactivatemoduleinfo" ) . ( "</p><form method=\"post\" action=\"configgateways.php?action=deactivate\" id=\"deactivategwfrm\"><input type=\"hidden\" name=\"gateway\" value=\"\" id=\"deactivategwfield\"><input type=\"hidden\" name=\"friendlygateway\" value=\"\" id=\"friendlygatewayname\"><div align=\"center\"><select id=\"newgateway\" name=\"newgateway\">" . $newgateways . "</select></div></form>" ), array( $aInt->lang( "gateways", "deactivate" ) => "$('#deactivategwfrm').submit();", $aInt->lang( "supportreq", "cancel" ) => "$('#newgateway').append(\"<option value='\"+$(\"#deactivategwfield\").val()+\"'>\"+$(\"#friendlygatewayname\").val()+\"</option>\"); $('#deactivategw').dialog('close');" ) );
-$jscode .= "\r\nfunction deactivateGW(module,friendlyname) {\r\n    $(\"#deactivategwfield\").val(module);\r\n    $(\"#friendlygatewayname\").val(friendlyname);\r\n    $(\"#newgateway option[value='\"+module+\"']\").remove();\r\n    showDialog(\"deactivategw\");\r\n}";
+echo $aInt->jqueryDialog("deactivategw", $aInt->lang("gateways", "deactivatemodule"), "<p>" . $aInt->lang("gateways", "deactivatemoduleinfo") . ("</p><form method=\"post\" action=\"configgateways.php?action=deactivate\" id=\"deactivategwfrm\"><input type=\"hidden\" name=\"gateway\" value=\"\" id=\"deactivategwfield\"><input type=\"hidden\" name=\"friendlygateway\" value=\"\" id=\"friendlygatewayname\"><div align=\"center\"><select id=\"newgateway\" name=\"newgateway\">" . $newgateways . "</select></div></form>"), array($aInt->lang("gateways", "deactivate") => "$('#deactivategwfrm').submit();", $aInt->lang("supportreq", "cancel") => "$('#newgateway').append(\"<option value='\"+$(\"#deactivategwfield\").val()+\"'>\"+$(\"#friendlygatewayname\").val()+\"</option>\"); $('#deactivategw').dialog('close');"));
+$jscode .= "
+function deactivateGW(module,friendlyname) {
+    $(\"#deactivategwfield\").val(module);
+    $(\"#friendlygatewayname\").val(friendlyname);
+    $(\"#newgateway option[value='\"+module+\"']\").remove();
+    showDialog(\"deactivategw\");
+}";
 $content = ob_get_contents();
 ob_end_clean();
 $aInt->content = $content;

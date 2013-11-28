@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.12
+ * @ Version  : 5.2.13
  * @ Author   : MTIMER
- * @ Release on : 2013-10-25
+ * @ Release on : 2013-11-25
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -83,7 +83,7 @@ if ($type == "a") {
 	$userid = $data['userid'];
 	$attachments = $data['attachment'];
 	$folder_path = $attachments_dir;
-	$files = explode("|", $attachment);
+	$files = explode("|", $attachments);
 	$file_name = $files[$i];
 	$display_name = substr($file_name, 7);
 

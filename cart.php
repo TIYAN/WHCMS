@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.12
+ * @ Version  : 5.2.13
  * @ Author   : MTIMER
- * @ Release on : 2013-10-25
+ * @ Release on : 2013-11-25
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -52,7 +52,7 @@ if (file_exists($orderfrmconfig)) {
 
 
 if (((!$ajax && isset($orderconf['denynonajaxaccess'])) && is_array($orderconf['denynonajaxaccess'])) && in_array($a, $orderconf['denynonajaxaccess'])) {
-	header("Location: cart.php");
+	redir();
 	exit();
 }
 
@@ -89,14 +89,14 @@ if ($promocode = $whmcs->get_req_var("promocode")) {
 
 if ($a == "empty") {
 	unset($_SESSION['cart']);
-	header("Location: cart.php?a=view");
+	redir("a=view");
 	exit();
 }
 
 
 if ($a == "startover") {
 	unset($_SESSION['cart']);
-	header("Location: cart.php");
+	redir();
 	exit();
 }
 
@@ -124,7 +124,7 @@ if ($a == "remove") {
 		}
 	}
 
-	header("Location: cart.php?a=view");
+	redir("a=view");
 	exit();
 }
 
@@ -143,7 +143,7 @@ if ($a == "removepromo") {
 		exit();
 	}
 
-	header("Location: cart.php?a=view");
+	redir("a=view");
 	exit();
 }
 
@@ -178,7 +178,7 @@ if (!$a) {
 
 
 	if ($gid == "domains") {
-		header("Location: cart.php?a=add&domain=register");
+		redir("a=add&domain=register");
 		exit();
 	}
 	else {
@@ -230,7 +230,7 @@ if (!$a) {
 			$addons = array();
 
 			if (count($addonids)) {
-				$result = select_query("tbladdons", "", "id IN (" . implode($addonids, ",") . ")", "weight` ASC,`name", "ASC");
+				$result = select_query("tbladdons", "", "id IN (" . db_build_in_array($addonids) . ")", "weight` ASC,`name", "ASC");
 
 				while ($data = mysql_fetch_array($result)) {
 					$addonid = $data['id'];
@@ -478,7 +478,7 @@ if ($a == "add") {
 
 
 		if ($orderconf['directpidstep1'] && !$ajax) {
-			header("Location: cart.php?pid=" . $pid);
+			redir("pid=" . $pid);
 			exit();
 		}
 
@@ -838,12 +838,12 @@ if ($a == "add") {
 				if ($passedvariables['skipconfig']) {
 					unset($_SESSION['cart']['products'][$newprodnum]['noconfig']);
 					$_SESSION['cart']['lastconfigured'] = array("type" => "product", "i" => $newprodnum);
-					header("Location: cart.php?a=view");
+					redir("a=view");
 					exit();
 				}
 			}
 
-			header("Location: cart.php?a=confproduct&i=" . $newprodnum . $ajax);
+			redir("a=confproduct&i=" . $newprodnum . $ajax);
 			exit();
 		}
 	}
@@ -986,7 +986,7 @@ if ($a == "add") {
 						$smartyvalues['skipselect'] = true;
 					}
 					else {
-						header("Location: cart.php?a=confdomains" . $ajax);
+						redir("a=confdomains" . $ajax);
 						exit();
 					}
 				}
@@ -1086,7 +1086,7 @@ if ($a == "add") {
 					}
 					else {
 						if (!count($renewalids)) {
-							header("Location: cart.php?gid=renewals");
+							redir("gid=renewals");
 							exit();
 						}
 						else {
@@ -1101,7 +1101,7 @@ if ($a == "add") {
 						exit();
 					}
 
-					header("Location: cart.php?a=view");
+					redir("a=view");
 					exit();
 				}
 				else {
@@ -1142,7 +1142,7 @@ if ($a == "add") {
 						redir("a=add&pid=" . $vals['pid']);
 					}
 					else {
-						header("Location: cart.php");
+						redir();
 						exit();
 					}
 				}
@@ -1297,7 +1297,7 @@ if ($a == "confproduct") {
 			exit($_LANG['invoiceserror']);
 		}
 
-		header("Location: cart.php");
+		redir();
 		exit();
 	}
 
@@ -1405,7 +1405,7 @@ if ($a == "confproduct") {
 
 
 		if ((!$ajax && !$nocyclerefresh) && $previousbillingcycle != $billingcycle) {
-			header("Location: cart.php?a=confproduct&i=" . $i);
+			redir("a=confproduct&i=" . $i);
 			exit();
 		}
 
@@ -1433,7 +1433,7 @@ if ($a == "confproduct") {
 				exit();
 			}
 
-			header("Location: cart.php?a=confdomains");
+			redir("a=confdomains");
 			exit();
 		}
 	}
@@ -1487,7 +1487,7 @@ if ($a == "confproduct") {
 			exit();
 		}
 
-		header("Location: cart.php?a=confdomains");
+		redir("a=confdomains");
 		exit();
 	}
 
@@ -1596,7 +1596,7 @@ if ($a == "confdomains") {
 			$smartyvalues['errormessage'] = $errormessage;
 		}
 		else {
-			header("Location: cart.php?a=view");
+			redir("a=view");
 			exit();
 		}
 	}
@@ -1795,7 +1795,7 @@ if ($a == "confdomains") {
 			exit();
 		}
 
-		header("Location: cart.php?a=view");
+		redir("a=view");
 		exit();
 	}
 }
@@ -1886,7 +1886,7 @@ if ($a == "view") {
 
 
 		if ($contact == "new") {
-			header("Location: cart.php?a=addcontact");
+			redir("a=addcontact");
 			exit();
 		}
 
@@ -1975,7 +1975,7 @@ if ($a == "view") {
 					exit();
 				}
 
-				header("Location: cart.php?a=complete");
+				redir("a=complete");
 				exit();
 			}
 
@@ -2010,7 +2010,7 @@ if ($a == "view") {
 				exit();
 			}
 
-			header("Location: cart.php?a=fraudcheck");
+			redir("a=fraudcheck");
 			exit();
 		}
 
@@ -2200,7 +2200,7 @@ if ($a == "view") {
 
 if ($a == "login") {
 	if ($_SESSION['uid']) {
-		header("Location: cart.php?a=checkout");
+		redir("a=checkout");
 		exit();
 	}
 
@@ -2239,7 +2239,7 @@ if ($a == "fraudcheck") {
 
 
 		if (!$fraudmodule) {
-			header("Location: cart.php?a=complete");
+			redir("a=complete");
 			exit();
 		}
 
@@ -2293,7 +2293,7 @@ if ($a == "fraudcheck") {
 
 		update_query("tblinvoices", array("status" => "Unpaid"), array("id" => $_SESSION['orderdetails']['InvoiceID'], "status" => "Cancelled"));
 		logActivity("Order ID " . $orderid . " Passed Fraud Check");
-		header("Location: cart.php?a=complete");
+		redir("a=complete");
 		exit();
 	}
 }
@@ -2426,7 +2426,7 @@ if ($a == "complete") {
 
 
 if (!$templatefile) {
-	header("Location: cart.php");
+	redir();
 	exit();
 }
 
