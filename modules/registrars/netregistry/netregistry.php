@@ -119,7 +119,7 @@ function logError($msg) {
 }
 
 
-function addIfNotEmpty($array, $value) {
+function addIfNotEmpty(&$array, $value) {
 	if (( isset( $value ) && trim( $value ) != "" )) {
 		array_push( $array, trim( $value ) );
 	}
@@ -223,11 +223,11 @@ function netregistry_SaveNameservers($params) {
 	$sld = $params["sld"];
 	$nameServers = array();
 	try{
-	addIfNotEmpty( &$nameServers, $params["ns1"] );
-	addIfNotEmpty( &$nameServers, $params["ns2"] );
-	addIfNotEmpty( &$nameServers, $params["ns3"] );
-	addIfNotEmpty( &$nameServers, $params["ns4"] );
-	addIfNotEmpty( &$nameServers, $params["ns5"] );
+	addIfNotEmpty( $nameServers, $params["ns1"] );
+	addIfNotEmpty( $nameServers, $params["ns2"] );
+	addIfNotEmpty( $nameServers, $params["ns3"] );
+	addIfNotEmpty( $nameServers, $params["ns4"] );
+	addIfNotEmpty( $nameServers, $params["ns5"] );
 	$values = array();
 	$client = getSOAPClient( $username, $password, $proxyHost, $proxyPort );
 	$result = $proxyHost = $client->updateDomainNS( array( "domain" => "" . $sld . "." . $tld, "nameServers" => $nameServers ) );
@@ -256,11 +256,11 @@ function netregistry_RegisterDomain($params) {
 	$additionalFields = $params["additionalfields"];
 	$nameServers = array();
 	try{
-	addIfNotEmpty( &$nameServers, $params["ns1"] );
-	addIfNotEmpty( &$nameServers, $params["ns2"] );
-	addIfNotEmpty( &$nameServers, $params["ns3"] );
-	addIfNotEmpty( &$nameServers, $params["ns4"] );
-	addIfNotEmpty( &$nameServers, $params["ns5"] );
+	addIfNotEmpty( $nameServers, $params["ns1"] );
+	addIfNotEmpty( $nameServers, $params["ns2"] );
+	addIfNotEmpty( $nameServers, $params["ns3"] );
+	addIfNotEmpty( $nameServers, $params["ns4"] );
+	addIfNotEmpty( $nameServers, $params["ns5"] );
 
 	if (( ( isset( $params["companyname"] ) && $params["companyname"] != null ) || strcmp( trim( $params["companyname"] ), "" ) != 0 )) {
 		$organisation = $params["companyname"];

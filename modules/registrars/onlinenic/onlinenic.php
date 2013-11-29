@@ -1476,7 +1476,7 @@ function onlinenic_Sync($params) {
 		$password = md5( "654123" );
 	}
 
-	$values = onlinenic_Login( &$fp, $username, $password, $testmode );
+	$values = onlinenic_Login( $fp, $username, $password, $testmode );
 
 	if ($values["error"]) {
 		return $values;
