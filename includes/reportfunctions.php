@@ -30,6 +30,14 @@ class WHMCSChart {
 			if ($_POST['chartdata'] == $datafunc) {
 				if (function_exists("chartdata_" . $datafunc)) {
 					$chartdata = call_user_func("chartdata_" . $datafunc);
+					foreach ($chartdata['cols'] as $k => $col) {
+
+						if (isset($chartdata['cols'][$k]['label'])) {
+							$chartdata['cols'][$k]['label'] = strval($chartdata['cols'][$k]['label']);
+							continue;
+						}
+					}
+
 					echo json_encode($chartdata);
 					exit();
 				}
@@ -41,7 +49,14 @@ class WHMCSChart {
 
 
 		if ($this->chartcount == 0) {
-			$aInt->headOutput[] = "<script type=\"text/javascript\" src=\"https://www.google.com/jsapi\"></script>";
+			if (is_string($aInt->headOutput)) {
+				$aInt->headOutput .= "<script type=\"text/javascript\" src=\"https://www.google.com/jsapi\"></script>";
+			}
+			else {
+				if (is_array($aInt->headOutput)) {
+					$aInt->headOutput[] = "<script type=\"text/javascript\" src=\"https://www.google.com/jsapi\"></script>";
+				}
+			}
 		}
 
 		$this->chartcount++;
@@ -124,13 +139,19 @@ class WHMCSChart {
           data: \"chartdata=" . $datafunc . "\",
           dataType:\"json\",
           async: false
-          }).responseText;
-";
+          }).responseText;\r\n";
 		}
 		else {
+			foreach ($data['cols'] as $k => $col) {
+
+				if (isset($data['cols'][$k]['label'])) {
+					$data['cols'][$k]['label'] = strval($data['cols'][$k]['label']);
+					continue;
+				}
+			}
+
 			$output .= "
-      var jsonData = '" . json_encode($data) . "';
-";
+      var jsonData = '" . json_encode($data) . "';\r\n";
 		}
 
 		$output .= "
@@ -140,8 +161,7 @@ class WHMCSChart {
         chart.draw(data,options);
       }
   </script>
-  <div id=\"chartcont" . $this->chartcount . "\" style=\"width:" . $width . ";height:" . $height . ";\"><div style=\"padding-top:" . round($height / 2 - 10, 0) . "px;text-align:center;\"><img src=\"images/loading.gif\" /> Loading...</div></div>
-";
+  <div id=\"chartcont" . $this->chartcount . "\" style=\"width:" . $width . ";height:" . $height . ";\"><div style=\"padding-top:" . round($height / 2 - 10, 0) . "px;text-align:center;\"><img src=\"images/loading.gif\" /> Loading...</div></div>\r\n";
 		$aInt->chartFunctions[] = "drawChart" . $this->chartcount;
 		return $output;
 	}
