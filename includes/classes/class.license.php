@@ -209,7 +209,7 @@ class WHMCS_License {
 		$data = strrev($data);
 		$data = base64_decode($data);
 		$data = unserialize($data);
-		preg_match_all('/<(.*?)>([^<]+)<\\/\\1>/i', $data, $matches);
+		preg_match_all("/<(.*?)>([^<]+)<\\/\\1>/i", $data, $matches);
 		$results = array();
 		foreach ($matches[1] as $k => $v)
         {
