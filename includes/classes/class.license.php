@@ -467,11 +467,11 @@ class WHMCS_License {
 	}
 
 	public function getBrandingRemoval() {
-/*		if (in_array($this->getProductName(), array("Owned License No Branding", "Monthly Lease No Branding"))) {
+		if (in_array($this->getProductName(), array("Owned License No Branding", "Monthly Lease No Branding"))) {
 			return true;
 		}
 
-		foreach ($this->getKeyData("addons") as $addon) {
+		foreach (unserialize($this->getKeyData("addons")) as $addon) {
 
 			if ($addon['name'] == "Branding Removal" && $addon['status'] == "Active") {
 				return true;
@@ -480,7 +480,6 @@ class WHMCS_License {
 		}
 
 		return false;
-*/		return true;
 	}
 
 	public function getVersionHash() {
