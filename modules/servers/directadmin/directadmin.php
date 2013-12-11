@@ -36,9 +36,9 @@ function directadmin_AdminLink($params) {
 
 function directadmin_CreateAccount($params) {
 	$fields = array();
-	$params["serverip"];
+	$ip = $params["serverip"];
 
-	if (( $params["configoption3"] || ( ( DACONFPACKAGEADDONLICENSE && $params["configoption1"] == "Custom" ) && $params["configoptions"]["Dedicated IP"] ) )) {
+	if ( $params["configoption3"] || ( ( DACONFPACKAGEADDONLICENSE && $params["configoption1"] == "Custom" ) && $params["configoptions"]["Dedicated IP"] ) ) {
 		$command = "CMD_API_SHOW_RESELLER_IPS";
 		$params["getip"] = true;
 		$fields["action"] = "all";
@@ -56,7 +56,7 @@ function directadmin_CreateAccount($params) {
 
 	$params["getip"] = "";
 
-	if (( DACONFPACKAGEADDONLICENSE && $params["configoption1"] == "Custom" )) {
+	if ( DACONFPACKAGEADDONLICENSE && $params["configoption1"] == "Custom" ) {
 		$command = "CMD_API_ACCOUNT_USER";
 		$fields["action"] = "create";
 		$fields["add"] = "Submit";
@@ -306,7 +306,7 @@ function directadmin_CreateAccount($params) {
 		$command = "CMD_ACCOUNT_RESELLER";
 	}
 
-	$results = $ip = directadmin_req( $command, $fields, $params );
+	$results = directadmin_req( $command, $fields, $params );
 
 	if ($results["error"]) {
 		$result = $results["details"];
