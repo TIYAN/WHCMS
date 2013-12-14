@@ -14,7 +14,7 @@ function getSOAPClient($username, $password, $proxyHost, $proxyPort) {
 	$location = "https://theconsole.netregistry.com.au/external/services/ResellerAPIService/";
 	$WSDL = $location . "?wsdl";
 
-	if (( ( ( isset( $proxyHost ) && isset( $proxyPort ) ) && $proxyHost != "" ) && $proxyPort != "" )) {
+	if ( ( ( isset( $proxyHost ) && isset( $proxyPort ) ) && $proxyHost != "" ) && $proxyPort != "" ) {
 		$client = new SoapClient( $WSDL, array( "login" => $username, "password" => $password, "proxy_host" => $proxyHost, "proxy_port" => $proxyPort ) );
 	}
 	else {
@@ -27,7 +27,7 @@ function getSOAPClient($username, $password, $proxyHost, $proxyPort) {
 
 
 function hasErrors($result) {
-	if (( !$result->return->success == "TRUE" || isset( $result->return->errors ) )) {
+	if ( !$result->return->success == "TRUE" || isset( $result->return->errors ) ) {
 		return true;
 	}
 
@@ -111,8 +111,7 @@ function logError($msg) {
 
 	if (is_string( $msg )) {
 		$str = "[" . date( "Y/m/d h:i:s", mktime() ) . "] " . $msg;
-		fwrite( $fd, $str . "
-" );
+		fwrite( $fd, $str . "\r\n" );
 	}
 
 	fclose( $fd );
@@ -120,7 +119,7 @@ function logError($msg) {
 
 
 function addIfNotEmpty(&$array, $value) {
-	if (( isset( $value ) && trim( $value ) != "" )) {
+	if ( isset( $value ) && trim( $value ) != "" ) {
 		array_push( $array, trim( $value ) );
 	}
 
@@ -128,7 +127,7 @@ function addIfNotEmpty(&$array, $value) {
 
 
 function getStateCodeFromState($state) {
-	if (( isset( $state ) && is_string( $state ) )) {
+	if ( isset( $state ) && is_string( $state ) ) {
 		if (strcasecmp( trim( $state ), "Queensland" ) == 0) {
 			return "QLD";
 		}
@@ -217,7 +216,7 @@ function netregistry_GetNameservers($params) {
 function netregistry_SaveNameservers($params) {
 	$username = $params["Username"];
 	$password = $params["Password"];
-	$params["ProxyHost"];
+	$proxyHost = $params["ProxyHost"];
 	$proxyPort = $params["ProxyPort"];
 	$tld = $params["tld"];
 	$sld = $params["sld"];
@@ -230,7 +229,7 @@ function netregistry_SaveNameservers($params) {
 	addIfNotEmpty( $nameServers, $params["ns5"] );
 	$values = array();
 	$client = getSOAPClient( $username, $password, $proxyHost, $proxyPort );
-	$result = $proxyHost = $client->updateDomainNS( array( "domain" => "" . $sld . "." . $tld, "nameServers" => $nameServers ) );
+	$result = $client->updateDomainNS( array( "domain" => "" . $sld . "." . $tld, "nameServers" => $nameServers ) );
 
 	if (hasErrors( $result )) {
 		logError( getErrorString( $result ) );
@@ -248,7 +247,7 @@ function netregistry_SaveNameservers($params) {
 function netregistry_RegisterDomain($params) {
 	$username = $params["Username"];
 	$password = $params["Password"];
-	$params["ProxyHost"];
+	$proxyHost = $params["ProxyHost"];
 	$proxyPort = $params["ProxyPort"];
 	$tld = $params["tld"];
 	$sld = $params["sld"];
@@ -262,7 +261,7 @@ function netregistry_RegisterDomain($params) {
 	addIfNotEmpty( $nameServers, $params["ns4"] );
 	addIfNotEmpty( $nameServers, $params["ns5"] );
 
-	if (( ( isset( $params["companyname"] ) && $params["companyname"] != null ) || strcmp( trim( $params["companyname"] ), "" ) != 0 )) {
+	if ( ( isset( $params["companyname"] ) && $params["companyname"] != null ) || strcmp( trim( $params["companyname"] ), "" ) != 0 ) {
 		$organisation = $params["companyname"];
 	}
 	else {
@@ -294,7 +293,7 @@ function netregistry_RegisterDomain($params) {
 	$values = array();
 	$client = getSOAPClient( $username, $password, $proxyHost, $proxyPort );
 	$domainDetails = array( "domain" => "" . $sld . "." . $tld, "period" => $regperiod, "nameServers" => $nameServers, "contactDetails" => $contactDetails, "eligibility" => $eligibility );
-	$result = $proxyHost = $client->registerDomain( $domainDetails );
+	$result = $client->registerDomain( $domainDetails );
 
 	if (hasErrors( $result )) {
 		logError( getErrorString( $result ) );
@@ -324,7 +323,7 @@ function getAUEligabilityType($whmcsType) {
 function netregistry_TransferDomain($params) {
 	$username = $params["Username"];
 	$password = $params["Password"];
-	$params["ProxyHost"];
+	$proxyHost = $params["ProxyHost"];
 	$proxyPort = $params["ProxyPort"];
 	$tld = $params["tld"];
 	$sld = $params["sld"];
@@ -345,7 +344,7 @@ function netregistry_TransferDomain($params) {
 	$values = array();
 	try{
 	$client = getSOAPClient( $username, $password, $proxyHost, $proxyPort );
-	$result = $proxyHost = $client->transferDomain( array( "domain" => "" . $sld . "." . $tld, "contactDetails" => $contactDetails, "authcode" => $transfersecret, "period" => $regperiod ) );
+	$result = $client->transferDomain( array( "domain" => "" . $sld . "." . $tld, "contactDetails" => $contactDetails, "authcode" => $transfersecret, "period" => $regperiod ) );
 
 	if (hasErrors( $result )) {
 		logError( getErrorString( $result ) );
@@ -363,7 +362,7 @@ function netregistry_TransferDomain($params) {
 function netregistry_RenewDomain($params) {
 	$username = $params["Username"];
 	$password = $params["Password"];
-	$params["ProxyHost"];
+	$proxyHost = $params["ProxyHost"];
 	$proxyPort = $params["ProxyPort"];
 	$tld = $params["tld"];
 	$sld = $params["sld"];
@@ -371,7 +370,7 @@ function netregistry_RenewDomain($params) {
 	$values = array();
 	try{
 	$client = getSOAPClient( $username, $password, $proxyHost, $proxyPort );
-	$result = $proxyHost = $client->renewDomain( array( "domain" => "" . $sld . "." . $tld, "period" => $regperiod ) );
+	$result = $client->renewDomain( array( "domain" => "" . $sld . "." . $tld, "period" => $regperiod ) );
 
 	if (hasErrors( $result )) {
 		logError( getErrorString( $result ) );
@@ -408,7 +407,7 @@ function netregistry_GetContactDetails($params) {
 	if (isset( $result->return->fields->entries )) {
 		$returnedFields = getHashMap( $result->return->fields->entries );
 
-		if (( 5 <= strlen( $tld ) && strcmp( substr( $tld, 0 - 5 ), "co.uk" ) == 0 )) {
+		if ( 5 <= strlen( $tld ) && strcmp( substr( $tld, 0 - 5 ), "co.uk" ) == 0 ) {
 			print "<div id='infobox'>
                         <strong>Registrar Warning</strong>
                         <br/>
@@ -426,17 +425,17 @@ function netregistry_GetContactDetails($params) {
 		}
 
 
-		if (( isset( $returnedFields["domain.ownerid"] ) && strcmp( trim( $returnedFields["domain.ownerid"] ), "" ) != 0 )) {
+		if ( isset( $returnedFields["domain.ownerid"] ) && strcmp( trim( $returnedFields["domain.ownerid"] ), "" ) != 0 ) {
 			netregistry_getContactsDetails( "" . $sld . "." . $tld, $returnedFields["domain.ownerid"], "Registrant", $client, $values );
 		}
 
 
-		if (( isset( $returnedFields["domain.adminid"] ) && strcmp( trim( $returnedFields["domain.adminid"] ), "" ) != 0 )) {
+		if ( isset( $returnedFields["domain.adminid"] ) && strcmp( trim( $returnedFields["domain.adminid"] ), "" ) != 0 ) {
 			netregistry_getContactsDetails( "" . $sld . "." . $tld, $returnedFields["domain.adminid"], "Admin", $client, $values );
 		}
 
 
-		if (( isset( $returnedFields["domain.techid"] ) && strcmp( trim( $returnedFields["domain.techid"] ), "" ) != 0 )) {
+		if ( isset( $returnedFields["domain.techid"] ) && strcmp( trim( $returnedFields["domain.techid"] ), "" ) != 0 ) {
 			netregistry_getContactsDetails( "" . $sld . "." . $tld, $returnedFields["domain.techid"], "Tech", $client, $values );
 		}
 	}
@@ -462,7 +461,7 @@ function netregistry_getContactsDetails($domain, $nicHandle, $contactType, &$cli
 	if ($contactResult->return->fields->entries) {
 		$domainContact = getHashMap( $contactResult->return->fields->entries );
 
-		if (( isset( $domainContact["user.firstname"] ) || isset( $domainContact["user.organisation"] ) )) {
+		if ( isset( $domainContact["user.firstname"] ) || isset( $domainContact["user.organisation"] ) ) {
 			$strLen = strlen( ".nz" );
 			$endStr = substr( $domain, strlen( $domain ) - $strLen );
 
@@ -527,12 +526,12 @@ function netregistry_SaveContactDetails($params) {
 		}
 
 
-		if (( isset( $returnedFields["domain.adminid"] ) && strcmp( trim( $returnedFields["domain.adminid"] ), "" ) != 0 )) {
+		if ( isset( $returnedFields["domain.adminid"] ) && strcmp( trim( $returnedFields["domain.adminid"] ), "" ) != 0 ) {
 			netregistry_updateContact( "" . $sld . "." . $tld, $returnedFields["domain.adminid"], $params, "Admin", $client, $values );
 		}
 
 
-		if (( isset( $returnedFields["domain.techid"] ) && strcmp( trim( $returnedFields["domain.techid"] ), "" ) != 0 )) {
+		if ( isset( $returnedFields["domain.techid"] ) && strcmp( trim( $returnedFields["domain.techid"] ), "" ) != 0 ) {
 			netregistry_updateContact( "" . $sld . "." . $tld, $returnedFields["domain.techid"], $params, "Tech", $client, $values );
 		}
 	}
@@ -607,7 +606,7 @@ function netregistry_GetRegistrarLock($params) {
 	$sld = $params["sld"];
 	$lockstatus = "unlocked";
 
-	if (( ( strcmp( substr( $tld, 0 - 2 ), "au" ) == 0 || strcmp( substr( $tld, 0 - 2 ), "uk" ) == 0 ) || strcmp( substr( $tld, 0 - 2 ), "nz" ) == 0 )) {
+	if ( ( strcmp( substr( $tld, 0 - 2 ), "au" ) == 0 || strcmp( substr( $tld, 0 - 2 ), "uk" ) == 0 ) || strcmp( substr( $tld, 0 - 2 ), "nz" ) == 0 ) {
 		return $lockstatus;
 	}
 	try{
@@ -621,7 +620,7 @@ function netregistry_GetRegistrarLock($params) {
 		if (isset( $result->return->fields->entries )) {
 			$returnedFields = getHashMap( $result->return->fields->entries );
 
-			if (( strpos( $returnedFields["domain.status"], "clientTransferProhibited" ) !== false || strpos( $returnedFields["domain.status"], "REGISTRAR-LOCK" ) !== false )) {
+			if ( strpos( $returnedFields["domain.status"], "clientTransferProhibited" ) !== false || strpos( $returnedFields["domain.status"], "REGISTRAR-LOCK" ) !== false ) {
 				$lockstatus = "locked";
 			}
 		}
@@ -662,7 +661,7 @@ function netregistry_SaveRegistrarLock($params) {
 
 	$client = getSOAPClient( $username, $password, $proxyHost, $proxyPort );
 
-	if (( isset( $params["lockenabled"] ) && strcmp( $params["lockenabled"], "locked" ) == 0 )) {
+	if ( isset( $params["lockenabled"] ) && strcmp( $params["lockenabled"], "locked" ) == 0 ) {
 		$result = $client->lockDomain( array( "domain" => "" . $sld . "." . $tld ) );
 	}
 	else {
@@ -686,7 +685,7 @@ function netregistry_SaveRegistrarLock($params) {
 function netregistry_RegisterNameserver($params) {
 	$username = $params["Username"];
 	$password = $params["Password"];
-	$params["ProxyHost"];
+	$proxyHost = $params["ProxyHost"];
 	$proxyPort = $params["ProxyPort"];
 	$tld = $params["tld"];
 	$sld = $params["sld"];
@@ -695,7 +694,7 @@ function netregistry_RegisterNameserver($params) {
 	$values = array();
 	try{
 	$client = getSOAPClient( $username, $password, $proxyHost, $proxyPort );
-	$result = $proxyHost = $client->createHost( array( "domain" => "" . $sld . "." . $tld, "hostName" => $nameserver, "ip" => $ipaddress ) );
+	$result = $client->createHost( array( "domain" => "" . $sld . "." . $tld, "hostName" => $nameserver, "ip" => $ipaddress ) );
 
 	if (hasErrors( $result )) {
 		logError( getErrorString( $result ) );
@@ -713,7 +712,7 @@ function netregistry_RegisterNameserver($params) {
 function netregistry_ModifyNameserver($params) {
 	$username = $params["Username"];
 	$password = $params["Password"];
-	$params["ProxyHost"];
+	$proxyHost = $params["ProxyHost"];
 	$proxyPort = $params["ProxyPort"];
 	$tld = $params["tld"];
 	$sld = $params["sld"];
@@ -723,7 +722,7 @@ function netregistry_ModifyNameserver($params) {
 	$values = array();
 	try{
 	$client = getSOAPClient( $username, $password, $proxyHost, $proxyPort );
-	$result = $proxyHost = $client->updateHost( array( "domain" => "" . $sld . "." . $tld, "hostName" => $nameserver, "ip" => $newipaddress ) );
+	$result = $client->updateHost( array( "domain" => "" . $sld . "." . $tld, "hostName" => $nameserver, "ip" => $newipaddress ) );
 
 	if (hasErrors( $result )) {
 		logError( getErrorString( $result ) );
@@ -741,7 +740,7 @@ function netregistry_ModifyNameserver($params) {
 function netregistry_DeleteNameserver($params) {
 	$username = $params["Username"];
 	$password = $params["Password"];
-	$params["ProxyHost"];
+	$proxyHost = $params["ProxyHost"];
 	$proxyPort = $params["ProxyPort"];
 	$tld = $params["tld"];
 	$sld = $params["sld"];
@@ -749,7 +748,7 @@ function netregistry_DeleteNameserver($params) {
 	$values = array();
 	try{
 	$client = getSOAPClient( $username, $password, $proxyHost, $proxyPort );
-	$result = $proxyHost = $client->deleteHost( array( "domain" => "" . $sld . "." . $tld, "hostName" => $nameserver ) );
+	$result = $client->deleteHost( array( "domain" => "" . $sld . "." . $tld, "hostName" => $nameserver ) );
 
 	if (hasErrors( $result )) {
 		logError( getErrorString( $result ) );
