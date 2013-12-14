@@ -21,9 +21,9 @@ function ventraip_getConfigArray() {
 		curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 );
 		curl_setopt( $ch, CURLOPT_SSL_VERIFYHOST, 0 );
 		curl_setopt( $ch, CURLOPT_SSL_VERIFYPEER, 0 );
-		$data = curl_exec( $ch );
+		$data = $ch = curl_exec( $ch );
 		curl_close( $ch );
-		$ipaddress = $ch = $data;
+		$ipaddress = $data;
 	}
 	else {
 		$ipaddress = "";
@@ -77,7 +77,7 @@ function ventraip_GetRegistrarLock($params) {
 	$request = array();
 	$request["domainName"] = $params["sld"] . "." . $params["tld"];
 
-	if (preg_match( "/\.au/i", $params["tld"] )) {
+	if (preg_match( '/\.au/i', $params['tld'] )) {
 		return null;
 	}
 
@@ -87,7 +87,7 @@ function ventraip_GetRegistrarLock($params) {
 
 
 function ventraip_SaveRegistrarLock($params) {
-	if (preg_match( "/\.au/i", $params["tld"] )) {
+	if (preg_match( '/\.au/i', $params['tld'] )) {
 		$values["error"] = "Unable to lock/unlock .AU domain names";
 		return $values;
 	}
@@ -187,7 +187,7 @@ function ventraip_RegisterDomain($params) {
 
 	$request["registrant_postcode"] = $params["postcode"];
 
-	if (( strtoupper( $params["country"] ) == "AU" || strtoupper( $params["country"] == "AUSTRALIA" ) )) {
+	if ( strtoupper( $params["country"] ) == "AU" || strtoupper( $params["country"] == "AUSTRALIA" ) ) {
 
 		if (!$phoneNumber = ventraip_formatAUPhone( $params["phonenumber"] )) {
 			$values["error"] = "Invalid or Incorrectly Formatted AU Phone Number Supplied";
@@ -241,7 +241,7 @@ function ventraip_RegisterDomain($params) {
 
 	$request["technical_postcode"] = $params["adminpostcode"];
 
-	if (( strtoupper( $params["admincountry"] ) == "AU" || strtoupper( $params["admincountry"] == "AUSTRALIA" ) )) {
+	if ( strtoupper( $params["admincountry"] ) == "AU" || strtoupper( $params["admincountry"] == "AUSTRALIA" ) ) {
 
 		if (!$phoneNumber = ventraip_formatAUPhone( $params["adminphonenumber"] )) {
 			$values["error"] = "Invalid or Incorrectly Formatted AU Phone Number Supplied";
@@ -295,7 +295,7 @@ function ventraip_RegisterDomain($params) {
 
 	$request["admin_postcode"] = $params["adminpostcode"];
 
-	if (( strtoupper( $params["admincountry"] ) == "AU" || strtoupper( $params["admincountry"] == "AUSTRALIA" ) )) {
+	if ( strtoupper( $params["admincountry"] ) == "AU" || strtoupper( $params["admincountry"] == "AUSTRALIA" ) ) {
 
 		if (!$phoneNumber = ventraip_formatAUPhone( $params["adminphonenumber"] )) {
 			$values["error"] = "Invalid or Incorrectly Formatted AU Phone Number Supplied";
@@ -349,7 +349,7 @@ function ventraip_RegisterDomain($params) {
 
 	$request["billing_postcode"] = $params["adminpostcode"];
 
-	if (( strtoupper( $params["admincountry"] ) == "AU" || strtoupper( $params["admincountry"] == "AUSTRALIA" ) )) {
+	if ( strtoupper( $params["admincountry"] ) == "AU" || strtoupper( $params["admincountry"] == "AUSTRALIA" ) ) {
 
 		if (!$phoneNumber = ventraip_formatAUPhone( $params["adminphonenumber"] )) {
 			$values["error"] = "Invalid or Incorrectly Formatted AU Phone Number Supplied";
@@ -498,7 +498,7 @@ function ventraip_TransferDomain($params) {
 
 		$request["postcode"] = $params["postcode"];
 
-		if (( strtoupper( $params["country"] ) == "AU" || strtoupper( $params["country"] == "AUSTRALIA" ) )) {
+		if ( strtoupper( $params["country"] ) == "AU" || strtoupper( $params["country"] == "AUSTRALIA" ) ) {
 
 			if (!$phoneNumber = ventraip_formatAUPhone( $params["phonenumber"] )) {
 				$values["error"] = "Invalid or Incorrectly Formatted AU Phone Number Supplied";
@@ -579,7 +579,7 @@ function ventraip_SaveEmailForwarding($params) {
 	foreach ($params["prefix"] as $key => $value) {
 
 		if ($params["prefix"][$key] != $existingrecords[$key]["prefix"]) {
-			if (( empty( $params["prefix"][$key] ) && empty( $params["forwardto"][$key] ) )) {
+			if ( empty( $params["prefix"][$key] ) && empty( $params["forwardto"][$key] ) ) {
 				$request["domainName"] = $params["sld"] . "." . $params["tld"];
 				$request["forwardID"] = $key;
 				ventraip_APICall( "deleteMailForward", $request, $params );
@@ -629,13 +629,13 @@ function ventraip_SaveDNS($params) {
 	$existingrecords = ventraip_GetDNS( $params );
 	foreach ($params["dnsrecords"] as $key => $values) {
 
-		if (( ( $values && $values["address"] ) && !$values["recid"] )) {
+		if ( ( $values && $values["address"] ) && !$values["recid"] ) {
 			ventraip_AddDNSRec( $values, $params );
 			continue;
 		}
 	}
 
-	$i = 6;
+	$i = 1;
 
 	while ($i <= count( $existingrecords )) {
 		if (( $params["dnsrecords"][$i]["address"] != $existingrecords[$i]["address"] && $params["dnsrecords"][$i]["recid"] )) {
@@ -705,7 +705,7 @@ function ventraip_SaveContactDetails($params) {
 	}
 
 
-	if (( isset( $params["contactdetails"]["Registrant"]["Fax"] ) && 1 < strlen( $params["contactdetails"]["Registrant"]["Fax"] ) )) {
+	if ( isset( $params["contactdetails"]["Registrant"]["Fax"] ) && 1 < strlen( $params["contactdetails"]["Registrant"]["Fax"] ) ) {
 		if ($country == "AU") {
 
 			if (!$fax = ventraip_formatAUPhone( $params["contactdetails"]["Registrant"]["Fax"] )) {
@@ -760,7 +760,7 @@ function ventraip_SaveContactDetails($params) {
 		}
 
 
-		if (( isset( $params["contactdetails"]["Admin"]["Fax"] ) && 1 < strlen( $params["contactdetails"]["Admin"]["Fax"] ) )) {
+		if ( isset( $params["contactdetails"]["Admin"]["Fax"] ) && 1 < strlen( $params["contactdetails"]["Admin"]["Fax"] ) ) {
 			if ($country == "AU") {
 
 				if (!$fax = ventraip_formatAUPhone( $params["contactdetails"]["Admin"]["Fax"] )) {
@@ -816,7 +816,7 @@ function ventraip_SaveContactDetails($params) {
 		}
 
 
-		if (( isset( $params["contactdetails"]["Tech"]["Fax"] ) && 1 < strlen( $params["contactdetails"]["Tech"]["Fax"] ) )) {
+		if ( isset( $params["contactdetails"]["Tech"]["Fax"] ) && 1 < strlen( $params["contactdetails"]["Tech"]["Fax"] ) ) {
 			if ($country == "AU") {
 
 				if (!$fax = ventraip_formatAUPhone( $params["contactdetails"]["Tech"]["Fax"] )) {
@@ -872,7 +872,7 @@ function ventraip_SaveContactDetails($params) {
 		}
 
 
-		if (( isset( $params["contactdetails"]["Billing"]["Fax"] ) && 1 < strlen( $params["contactdetails"]["Billing"]["Fax"] ) )) {
+		if ( isset( $params["contactdetails"]["Billing"]["Fax"] ) && 1 < strlen( $params["contactdetails"]["Billing"]["Fax"] ) ) {
 			if ($country == "AU") {
 
 				if (!$fax = ventraip_formatAUPhone( $params["contactdetails"]["Billing"]["Fax"] )) {
@@ -1034,208 +1034,187 @@ function ventraip_APICall($command, $request, $params) {
 									$values["idProtect"] = "Disabled";
 								}
 							}
-							else {
-								if ($command == "geteppcode") {
-									$soapresult = get_object_vars( $client->domainInfo( $soaprequest ) );
-									$values["eppCode"] = $soapresult["domainPassword"];
-								}
-								else {
-									if ($command == "getcontacts") {
-										$soapresult = get_object_vars( $client->listContacts( $soaprequest ) );
-										$values["Registrant"]["First Name"] = $soapresult["registrant"]->firstname;
-										$values["Registrant"]["Last Name"] = $soapresult["registrant"]->lastname;
-										$values["Registrant"]["Address 1"] = $soapresult["registrant"]->address1;
-										$values["Registrant"]["Address 2"] = $soapresult["registrant"]->address2;
-										$values["Registrant"]["City"] = $soapresult["registrant"]->suburb;
-										$values["Registrant"]["State"] = $soapresult["registrant"]->state;
-										$values["Registrant"]["Postcode"] = $soapresult["registrant"]->postcode;
-										$values["Registrant"]["Country"] = $soapresult["registrant"]->country;
-										$values["Registrant"]["Phone"] = $soapresult["registrant"]->phone;
-										$values["Registrant"]["Fax"] = $soapresult["registrant"]->fax;
-										$values["Registrant"]["Email"] = $soapresult["registrant"]->email;
+else {
+  if ($command == "geteppcode") {
+    $soapresult = get_object_vars($client->domainInfo($soaprequest));
+    $values["eppCode"] = $soapresult["domainPassword"];
+  } else {
+    if ($command == "getcontacts") {
+      $soapresult = get_object_vars($client->listContacts($soaprequest));
+      $values["Registrant"]["First Name"] = $soapresult["registrant"]->firstname;
+      $values["Registrant"]["Last Name"] = $soapresult["registrant"]->lastname;
+      $values["Registrant"]["Address 1"] = $soapresult["registrant"]->address1;
+      $values["Registrant"]["Address 2"] = $soapresult["registrant"]->address2;
+      $values["Registrant"]["City"] = $soapresult["registrant"]->suburb;
+      $values["Registrant"]["State"] = $soapresult["registrant"]->state;
+      $values["Registrant"]["Postcode"] = $soapresult["registrant"]->postcode;
+      $values["Registrant"]["Country"] = $soapresult["registrant"]->country;
+      $values["Registrant"]["Phone"] = $soapresult["registrant"]->phone;
+      $values["Registrant"]["Fax"] = $soapresult["registrant"]->fax;
+      $values["Registrant"]["Email"] = $soapresult["registrant"]->email;
 
-										if (isset( $soapresult["admin"] )) {
-											$values["Admin"]["First Name"] = $soapresult["admin"]->firstname;
-											$values["Admin"]["Last Name"] = $soapresult["admin"]->lastname;
-											$values["Admin"]["Address 1"] = $soapresult["admin"]->address1;
-											$values["Admin"]["Address 2"] = $soapresult["admin"]->address2;
-											$values["Admin"]["City"] = $soapresult["admin"]->suburb;
-											$values["Admin"]["State"] = $soapresult["admin"]->state;
-											$values["Admin"]["Postcode"] = $soapresult["admin"]->postcode;
-											$values["Admin"]["Country"] = $soapresult["admin"]->country;
-											$values["Admin"]["Phone"] = $soapresult["admin"]->phone;
-											$values["Admin"]["Fax"] = $soapresult["admin"]->fax;
-											$values["Admin"]["Email"] = $soapresult["admin"]->email;
-										}
+      if (isset($soapresult["admin"])) {
+        $values["Admin"]["First Name"] = $soapresult["admin"]->firstname;
+        $values["Admin"]["Last Name"] = $soapresult["admin"]->lastname;
+        $values["Admin"]["Address 1"] = $soapresult["admin"]->address1;
+        $values["Admin"]["Address 2"] = $soapresult["admin"]->address2;
+        $values["Admin"]["City"] = $soapresult["admin"]->suburb;
+        $values["Admin"]["State"] = $soapresult["admin"]->state;
+        $values["Admin"]["Postcode"] = $soapresult["admin"]->postcode;
+        $values["Admin"]["Country"] = $soapresult["admin"]->country;
+        $values["Admin"]["Phone"] = $soapresult["admin"]->phone;
+        $values["Admin"]["Fax"] = $soapresult["admin"]->fax;
+        $values["Admin"]["Email"] = $soapresult["admin"]->email;
+      }
 
+      if (isset($soapresult["billing"])) {
+        $values["Billing"]["First Name"] = $soapresult["billing"]->firstname;
+        $values["Billing"]["Last Name"] = $soapresult["billing"]->lastname;
+        $values["Billing"]["Address 1"] = $soapresult["billing"]->address1;
+        $values["Billing"]["Address 2"] = $soapresult["billing"]->address2;
+        $values["Billing"]["City"] = $soapresult["billing"]->suburb;
+        $values["Billing"]["State"] = $soapresult["billing"]->state;
+        $values["Billing"]["Postcode"] = $soapresult["billing"]->postcode;
+        $values["Billing"]["Country"] = $soapresult["billing"]->country;
+        $values["Billing"]["Phone"] = $soapresult["billing"]->phone;
+        $values["Billing"]["Fax"] = $soapresult["billing"]->fax;
+        $values["Billing"]["Email"] = $soapresult["billing"]->email;
+      }
 
-										if (isset( $soapresult["billing"] )) {
-											$values["Billing"]["First Name"] = $soapresult["billing"]->firstname;
-											$values["Billing"]["Last Name"] = $soapresult["billing"]->lastname;
-											$values["Billing"]["Address 1"] = $soapresult["billing"]->address1;
-											$values["Billing"]["Address 2"] = $soapresult["billing"]->address2;
-											$values["Billing"]["City"] = $soapresult["billing"]->suburb;
-											$values["Billing"]["State"] = $soapresult["billing"]->state;
-											$values["Billing"]["Postcode"] = $soapresult["billing"]->postcode;
-											$values["Billing"]["Country"] = $soapresult["billing"]->country;
-											$values["Billing"]["Phone"] = $soapresult["billing"]->phone;
-											$values["Billing"]["Fax"] = $soapresult["billing"]->fax;
-											$values["Billing"]["Email"] = $soapresult["billing"]->email;
-										}
+      if (isset($soapresult["tech"])) {
+        $values["Tech"]["First Name"] = $soapresult["tech"]->firstname;
+        $values["Tech"]["Last Name"] = $soapresult["tech"]->lastname;
+        $values["Tech"]["Address 1"] = $soapresult["tech"]->address1;
+        $values["Tech"]["Address 2"] = $soapresult["tech"]->address2;
+        $values["Tech"]["City"] = $soapresult["tech"]->suburb;
+        $values["Tech"]["State"] = $soapresult["tech"]->state;
+        $values["Tech"]["Postcode"] = $soapresult["tech"]->postcode;
+        $values["Tech"]["Country"] = $soapresult["tech"]->country;
+        $values["Tech"]["Phone"] = $soapresult["tech"]->phone;
+        $values["Tech"]["Fax"] = $soapresult["tech"]->fax;
+        $values["Tech"]["Email"] = $soapresult["tech"]->email;
+      }
+    } else {
+      if ($command == "savecontacts") {
+        $soapresult = get_object_vars($client->updateContact($soaprequest));
+      } else {
+        if ($command == "addhost") {
+          $soapresult = get_object_vars($client->addHost($soaprequest));
+        } else {
+          if ($command == "delhost") {
+            $soapresult = get_object_vars($client->deleteHost($soaprequest));
+          } else {
+            if ($command == "addhostip") {
+              $soapresult = get_object_vars($client->addHostIP($soaprequest));
+            } else {
+              if ($command == "delhostip") {
+                $soapresult = get_object_vars($client->deleteHostIP($soaprequest));
+              } else {
+                if ($command == "sync") {
+                  $soapresult = get_object_vars($client->domainInfo($soaprequest));
 
+                  if (in_array($soapresult["domain_status"], array("ok", "clientTransferProhibited"))) {
+                    $values["status"] = "Active";
+                    $values["active"] = true;
+                  } else {
+                    if ($soapresult["domain_status"] == "Transferred Away") {
+                      update_query("tbldomains", array("status" => "Cancelled"), array("domain" => $params["sld"].".".$params["tld"]));
+                    }
+                  }
 
-										if (isset( $soapresult["tech"] )) {
-											$values["Tech"]["First Name"] = $soapresult["tech"]->firstname;
-											$values["Tech"]["Last Name"] = $soapresult["tech"]->lastname;
-											$values["Tech"]["Address 1"] = $soapresult["tech"]->address1;
-											$values["Tech"]["Address 2"] = $soapresult["tech"]->address2;
-											$values["Tech"]["City"] = $soapresult["tech"]->suburb;
-											$values["Tech"]["State"] = $soapresult["tech"]->state;
-											$values["Tech"]["Postcode"] = $soapresult["tech"]->postcode;
-											$values["Tech"]["Country"] = $soapresult["tech"]->country;
-											$values["Tech"]["Phone"] = $soapresult["tech"]->phone;
-											$values["Tech"]["Fax"] = $soapresult["tech"]->fax;
-											$values["Tech"]["Email"] = $soapresult["tech"]->email;
-										}
-									}
-									else {
-										if ($command == "savecontacts") {
-											$soapresult = get_object_vars( $client->updateContact( $soaprequest ) );
-										}
-										else {
-											if ($command == "addhost") {
-												$soapresult = get_object_vars( $client->addHost( $soaprequest ) );
-											}
-											else {
-												if ($command == "delhost") {
-													$soapresult = get_object_vars( $client->deleteHost( $soaprequest ) );
-												}
-												else {
-													if ($command == "addhostip") {
-														$soapresult = get_object_vars( $client->addHostIP( $soaprequest ) );
-													}
-													else {
-														if ($command == "delhostip") {
-															$soapresult = get_object_vars( $client->deleteHostIP( $soaprequest ) );
-														}
-														else {
-															if ($command == "sync") {
-																$soapresult = get_object_vars( $client->domainInfo( $soaprequest ) );
+                  $values["expirydate"] = substr($soapresult["domain_expiry"], 0, 10);
+                } else {
+                  if ($command == "lockdomain") {
+                    $soapresult = get_object_vars($client->lockDomain($soaprequest));
+                  } else {
+                    if ($command == "unlockdomain") {
+                      $soapresult = get_object_vars($client->unlockDomain($soaprequest));
+                    } else {
+                      if ($command == "idprotect") {
+                        $soapresult = get_object_vars($client->enableIDProtection($soaprequest));
 
-																if (in_array( $soapresult["domain_status"], array( "ok", "clientTransferProhibited" ) )) {
-																	$values["status"] = "Active";
-																	$values["active"] = true;
-																}
-																else {
-																	if ($soapresult["domain_status"] == "Transferred Away") {
-																		update_query( "tbldomains", array( "status" => "Cancelled" ), array( "domain" => $params["sld"] . "." . $params["tld"] ) );
-																	}
-																}
+                        if ($soapresult["status"] != "OK") {
+                          $values = array("error" => $soapresult["errorMessage"]);
+                        }
+                      } else {
+                        if ($command == "idunprotect") {
+                          $soapresult = get_object_vars($client->disableIDProtection($soaprequest));
 
-																$values["expirydate"] = substr( $soapresult["domain_expiry"], 0, 10 );
-															}
-															else {
-																if ($command == "lockdomain") {
-																	$soapresult = get_object_vars( $client->lockDomain( $soaprequest ) );
-																}
-																else {
-																	if ($command == "unlockdomain") {
-																		$soapresult = get_object_vars( $client->unlockDomain( $soaprequest ) );
-																	}
-																	else {
-																		if ($command == "idprotect") {
-																			$soapresult = get_object_vars( $client->enableIDProtection( $soaprequest ) );
+                          if ($soapresult["status"] != "OK") {
+                            $values = array("error" => $soapresult["errorMessage"]);
+                          }
+                        } else {
+                          if ($command == "releasedomain") {
+                            $soapresult = get_object_vars($client->domainReleaseUK($soaprequest));
+                          } else {
+                            if ($command == "listMailForwards") {
+                              $soapresult = get_object_vars($client->listMailForwards($soaprequest));
 
-																			if ($soapresult["status"] != "OK") {
-																				$values = array( "error" => $soapresult["errorMessage"] );
-																			}
-																		}
-																		else {
-																			if ($command == "idunprotect") {
-																				$soapresult = get_object_vars( $client->disableIDProtection( $soaprequest ) );
+                              if (is_array($soapresult["forwards"])) {
+                                foreach($soapresult["forwards"] as $forward) {
+                                  $forward = get_object_vars($forward);
+                                  $values[$forward["id"]]["prefix"] = str_replace("@".$request["domainName"], "", $forward["source"]);
+                                  $values[$forward["id"]]["forwardto"] = $forward["destination"];
+                                }
+                              }
+                            } else {
+                              if ($command == "addMailForward") {
+                                $soapresult = get_object_vars($client->addMailForward($soaprequest));
+                              } else {
+                                if ($command == "deleteMailForward") {
+                                  $soapresult = get_object_vars($client->deleteMailForward($soaprequest));
+                                } else {
+                                  if ($command == "deleteDNSRecord") {
+                                    $soapresult = get_object_vars($client->deleteDNSRecord($soaprequest));
+                                  } else {
+                                    if ($command == "addDNSRecord") {
+                                      $soapresult = get_object_vars($client->addDNSRecord($soaprequest));
+                                    } else {
+                                      if ($command == "listDNSZone") {
+                                        $soapresult = get_object_vars($client->listDNSZone($soaprequest));
 
-																				if ($soapresult["status"] != "OK") {
-																					$values = array( "error" => $soapresult["errorMessage"] );
-																				}
-																			}
-																			else {
-																				if ($command == "releasedomain") {
-																					$soapresult = get_object_vars( $client->domainReleaseUK( $soaprequest ) );
-																				}
-																				else {
-																					if ($command == "listMailForwards") {
-																						$soapresult = get_object_vars( $client->listMailForwards( $soaprequest ) );
+                                        if ($soapresult["status"] == "OK" && is_array($soapresult["records"])) {
+                                          $values = array();
+                                          foreach($soapresult["records"] as $record) {
+                                            $record = get_object_vars($record);
 
-																						if (is_array( $soapresult["forwards"] )) {
-																							foreach ($soapresult["forwards"] as $forward) {
-																								$forward = get_object_vars( $forward );
-																								$values[$forward["id"]]["prefix"] = str_replace( "@" . $request["domainName"], "", $forward["source"] );
-																								$values[$forward["id"]]["forwardto"] = $forward["destination"];
-																							}
-																						}
-																					}
-																					else {
-																						if ($command == "addMailForward") {
-																							$soapresult = get_object_vars( $client->addMailForward( $soaprequest ) );
-																						}
-																						else {
-																							if ($command == "deleteMailForward") {
-																								$soapresult = get_object_vars( $client->deleteMailForward( $soaprequest ) );
-																							}
-																							else {
-																								if ($command == "deleteDNSRecord") {
-																									$soapresult = get_object_vars( $client->deleteDNSRecord( $soaprequest ) );
-																								}
-																								else {
-																									if ($command == "addDNSRecord") {
-																										$soapresult = get_object_vars( $client->addDNSRecord( $soaprequest ) );
-																									}
-																									else {
-																										if ($command == "listDNSZone") {
-																											$soapresult = get_object_vars( $client->listDNSZone( $soaprequest ) );
+                                            if ($record["type"] != "SOA") {
+                                              if ($record["type"] == "MX") {
+                                                $values[] = array("hostname" => $record["hostName"], "type" => $record["type"], "address" => $record["content"], "priority" => $record["prio"], "recid" => $record["id"]);
+                                                continue;
+                                              }
 
-																											if (( $soapresult["status"] == "OK" && is_array( $soapresult["records"] ) )) {
-																												$values = array();
-																												foreach ($soapresult["records"] as $record) {
-																													$record = get_object_vars( $record );
-
-																													if ($record["type"] != "SOA") {
-																														if ($record["type"] == "MX") {
-																															$values[] = array( "hostname" => $record["hostName"], "type" => $record["type"], "address" => $record["content"], "priority" => $record["prio"], "recid" => $record["id"] );
-																															continue;
-																														}
-
-																														$values[] = array( "hostname" => $record["hostName"], "type" => $record["type"], "address" => $record["content"], "recid" => $record["id"] );
-																														continue;
-																													}
-																												}
-																											}
-																										}
-																									}
-																								}
-																							}
-																						}
-																					}
-																				}
-																			}
-																		}
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-	}
+                                              $values[] = array("hostname" => $record["hostName"], "type" => $record["type"], "address" => $record["content"], "recid" => $record["id"]);
+                                              continue;
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+}
+}
+}
+}
+}
+}
 
 	$not_in_status = array( "OK", "OK_PENDING_REGO", "OK_TRANSFER_PENDING", "OK_TRANSFER_EMAILPENDING", "OK_TRANSFER_EMAIL", "OK_TRANSFER_UK_PENDING", "OK_TRANSFER_WAITING_AUTH" );
 
@@ -1254,20 +1233,20 @@ function ventraip_APICall($command, $request, $params) {
 
 
 function ventraip_formatAUPhone($phoneNumber) {
-	$phoneNumber = preg_replace( "/^61/", "", $phoneNumber );
-	$phoneNumber = preg_replace( "/[^0-9]/", "", $phoneNumber );
-	$phoneNumber = preg_replace( "/^\+61/", "", $phoneNumber );
+	$phoneNumber = preg_replace( '/^61/', '', $phoneNumber );
+	$phoneNumber = preg_replace( '/[^0-9]/', '', $phoneNumber );
+	$phoneNumber = preg_replace( '/^\+61/', '', $phoneNumber );
 
 	if (strlen( $phoneNumber ) == 9) {
-		$phoneNumber = preg_replace( "/(^4[0-9]{2})([0-9]{3})([0-9]{3})/", "+61.", $phoneNumber );
-		$phoneNumber = preg_replace( "/(^[2378]{1})([0-9]{4})([0-9]{4})/", "+61.", $phoneNumber );
+		$phoneNumber = preg_replace( '/(^4[0-9]{2})([0-9]{3})([0-9]{3})/', '+61.', $phoneNumber );
+		$phoneNumber = preg_replace( '/(^[2378]{1})([0-9]{4})([0-9]{4})/', '+61.', $phoneNumber );
 		return $phoneNumber;
 	}
 
 
 	if (strlen( $phoneNumber ) == 10) {
-		$phoneNumber = preg_replace( "/0(4[0-9]{2})([0-9]{3})([0-9]{3})/", "+61.", $phoneNumber );
-		$phoneNumber = preg_replace( "/0([2378]{1})([0-9]{4})([0-9]{4})/", "+61.", $phoneNumber );
+		$phoneNumber = preg_replace( '/0(4[0-9]{2})([0-9]{3})([0-9]{3})/', '+61.', $phoneNumber );
+		$phoneNumber = preg_replace( '/0([2378]{1})([0-9]{4})([0-9]{4})/', '+61.', $phoneNumber );
 		return $phoneNumber;
 	}
 
@@ -1303,18 +1282,47 @@ function ventraip_validateCountry($country) {
 
 function ventraip_validateAUState($state) {
 	$state = trim( $state );
-	$state = preg_replace( "/ /", "", $state );
-	$state = preg_replace( "/\./", "", $state );
+	$state = preg_replace( '/ /', '', $state );
+	$state = preg_replace( '/\./', '', $state );
 	$state = strtoupper( $state );
-	switch ($state) {
-	case "VICTORIA": {
-		}
-
-	case "VIC": {
-		}
-	}
-
-	return "VIC";
+    switch ( $state )
+    {
+        case "VICTORIA" :
+        case "VIC" :
+    		return "VIC";
+    		break;
+        case "NEWSOUTHWALES" :
+        case "NSW" :
+    		return "NSW";
+    		break;
+        case "QUEENSLAND" :
+        case "QLD" :
+    		return "QLD";
+    		break;
+        case "AUSTRALIANCAPITALTERRITORY" :
+        case "AUSTRALIACAPITALTERRITORY" :
+        case "ACT" :
+    		return "ACT";
+    		break;
+        case "SOUTHAUSTRALIA" :
+        case "SA" :
+    		return "SA";
+    		break;
+        case "WESTERNAUSTRALIA" :
+        case "WA" :
+    		return "WA";
+    		break;
+        case "NORTHERNTERRITORY" :
+        case "NT" :
+    		return "NT";
+    		break;
+        case "TASMANIA" :
+        case "TAS" :
+            return "TAS";
+            break;
+        default :
+        return false;
+    }
 }
 
 
