@@ -1,5 +1,11 @@
 <?php
-require_once dirname(__FILE__) . "/../../../dbconnect.php";
+
+if(file_exists(dirname(__FILE__) . "/../../../init.php")){
+    require_once dirname(__FILE__) . "/../../../init.php";
+}else{
+    require_once dirname(__FILE__) . "/../../../dbconnect.php";
+}
+
 require_once dirname(__FILE__) . "/../../../includes/functions.php";
 require_once dirname(__FILE__) . "/../../../includes/registrarfunctions.php";
 

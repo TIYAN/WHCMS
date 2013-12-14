@@ -21,6 +21,92 @@ class NamecheapRegistrarApi
         684, 686, 687, 688, 689, 690, 691, 692, 850, 852, 853, 855, 856, 872, 880, 886, 960, 961, 962, 963, 965, 966,
         967, 968, 970, 971, 972, 973, 974, 975, 976, 977, 992, 993, 994, 995, 996, 998
     );
+    
+    public static $_caStateProvince = array(
+        'US' => array(
+            "ArmedForcesAmericas(exceptCanada)"=>"AA",
+            "ArmedForcesAfrica"=>"AE",
+            "ArmedForcesCanada"=>"AE",
+            "ArmedForcesEurope"=>"AE",
+            "ArmedForcesMiddleEast"=>"AE",
+            "Alaska"=>"AK",
+            "Alabama"=>"AL",
+            "ArmedForcesPacific"=>"AP",
+            "AmericanSamoa"=>"AS",
+            "Arizona"=>"AZ",
+            "Arkansas"=>"AR",
+            "California"=>"CA",
+            "Colorado"=>"CO",
+            "Connecticut"=>"CT",
+            "Delaware"=>"DE",
+            "DistrictofColumbia"=>"DC",
+            "FederatedStatesofMicronesia"=>"FM",
+            "Florida"=>"FL",
+            "Georgia"=>"GA",
+            "Guam"=>"GU",
+            "Hawaii"=>"HI",
+            "Idaho"=>"ID",
+            "Illinois"=>"IL",
+            "Indiana"=>"IN",
+            "Iowa"=>"IA",
+            "Kansas"=>"KS",
+            "Kentucky"=>"KY",
+            "Louisiana"=>"LA",
+            "Maine"=>"ME",
+            "MarshallIslands"=>"MH",
+            "Maryland"=>"MD",
+            "Massachusetts"=>"MA",
+            "Michigan"=>"MI",
+            "Minnesota"=>"MN",
+            "Mississippi"=>"MS",
+            "Missouri"=>"MO",
+            "Montana"=>"MT",
+            "Nebraska"=>"NE",
+            "Nevada"=>"NV",
+            "NewHampshire"=>"NH",
+            "NewJersey"=>"NJ",
+            "NewMexico"=>"NM",
+            "NewYork"=>"NY",
+            "NorthCarolina"=>"NC",
+            "NorthDakota"=>"ND",
+            "NorthernMarianaIslands"=>"MP",
+            "Ohio"=>"OH",
+            "Oklahoma"=>"OK",
+            "Oregon"=>"OR",
+            "Palau"=>"PW",
+            "Pennsylvania"=>"PA",
+            "PuertoRico"=>"PR",
+            "RhodeIsland"=>"RI",
+            "SouthCarolina"=>"SC",
+            "SouthDakota"=>"SD",
+            "Tennessee"=>"TN",
+            "Texas"=>"TX",
+            "Utah"=>"UT",
+            "Vermont"=>"VT",
+            "VirginIslands"=>"VI",
+            "Virginia"=>"VA",
+            "Washington"=>"WA",
+            "WestVirginia"=>"WV",
+            "Wisconsin"=>"WI",
+            "Wyoming"=>"WY",
+        ),
+        'CA' => array(
+            "Alberta" => "AB",
+            "BritishColumbia" => "BC",
+            "Manitoba" => "MB",
+            "NewBrunswick" => "NB",
+            "NewfoundlandandLabrador" => "NL",
+            "NorthwestTerritories" => "NT",
+            "NovaScotia" => "NS",
+            "Nunavut" => "NU",
+            "Ontario" => "ON",
+            "PrinceEdwardIsland" => "PE",
+            "Quebec" => "QC",
+            "Saskatchewan" => "SK",
+            "Yukon" => "YK"
+        ),
+    );
+    
     private $_apiUser;
     private $_apiKey;
 
@@ -78,9 +164,17 @@ class NamecheapRegistrarApi
         if ("ERROR" == $result['@attributes']['Status']) {
             $errors = isset($result['Errors']['Error'][0]) ? $result['Errors']['Error'] : array($result['Errors']['Error']);
 
-            $err = $errors[count($errors) - 1];
-            $err_msg = sprintf("[%s] %s", $err['@attributes']['Number'], $err['@value']) ;
-            throw new NamecheapRegistrarApiException($err_msg, $err['@attributes']['Number']);
+            
+            $msg = '';
+            //$err = $errors[count($errors) - 1];
+            
+            foreach ($errors as $err){
+                $err_msg = sprintf("[%s] %s", $err['@attributes']['Number'], $err['@value']) ;
+                $msg .= $err_msg;
+            }
+            
+            //throw new NamecheapRegistrarApiException($err_msg, $err['@attributes']['Number']);
+            throw new NamecheapRegistrarApiException($msg, $err['@attributes']['Number']);
         }
         return $result['CommandResponse'];
     }
@@ -118,6 +212,7 @@ class NamecheapRegistrarApi
         if (!$this->_response || $curl_error) {
             $this->_response = @file_get_contents($this->_requestUrl);
         }
+        
         
         // debug mode
         if ($this->_debugMode){
@@ -420,7 +515,11 @@ if(!class_exists('NamecheapRegistrarIDNA')){
                 $this->_tldInList = true;
 
                 $idna2 = new Net_IDNA2();
-                $this->_encodedSld = $idna2->encode($sld);
+                try{
+                    $this->_encodedSld = $idna2->encode($sld);
+                }catch(Exception $e){
+                    $this->_encodedSld=$sld;
+                }
                 if ($sld != $this->_encodedSld) {
                     $this->_sldWasEncoded = true;
                 }

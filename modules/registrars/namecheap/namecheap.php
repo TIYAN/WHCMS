@@ -2,7 +2,7 @@
 // ****************************************************************************
 // *                                                                          *
 // * NameCheap.com WHMCS Registrar Module                                     *
-// * Version 1.2.6                                                            *
+// * Version 1.2.7
 // * http://code.google.com/p/namecheap/                                      *
 // *                                                                          *
 // * Copyright 2008-2013 NameCheap.com                                        *
@@ -31,7 +31,15 @@
 // *                                                                          *
 // ****************************************************************************
 // * Changes:
-// * May 10, 2013
+// *
+// * October 21, 2013 (1.2.7)
+// * - Added .fr, .sg, .com.sg, .fr, .net.au, .org.au, .com.au, .es, .com.es, .nom.es, .org.es support
+// * - Removed error "Domain name not found" for domains in any status, except for not in "Active" or "Expired"
+// * - Added "Job Title" additional field for .ca and .au domains
+// * - All errors from API response are returned by the module (in case there is more than one error)
+// * - Fixed error with domains that have been added in punycode to WHMCS
+// * - Added conversion for registrant state/province and zip code fields for .ca domains according to the registry requirements
+// * May 10, 2013 (1.2.6)
 // * - Added IDN support
 // * - Added debug mode
 // * - Removed validation for empty phone/fax fields
@@ -136,9 +144,20 @@ function namecheap_GetNameservers($params)
     $tld = $params['tld'];
     $sld = $params['sld'];
     
+    // do not get nameservers for domains that not registered
+    $r = mysql_query('SELECT * from tbldomains WHERE id='.(int)$params['domainid']);
+    if (!mysql_num_rows($r)){
+        return;
+    }    
+    $row = mysql_fetch_assoc($r);    
+    if (!in_array($row['status'],array(/*'Pending','Pending Transfer',*/'Active','Expired',/*'Cancelled','Fraud'*/))){
+        return;
+    }
+    
+    
     $oIDNA = new NamecheapRegistrarIDNA($sld, $tld);
     $sld = $oIDNA->getEncodedSld();    
-
+    
     try
     {
         $request_params = array(
@@ -484,6 +503,8 @@ function namecheap_SaveDNS($params)
 
 function namecheap_RegisterDomain($params)
 {
+
+    
     require_once dirname(__FILE__) . "/namecheapapi.php";
 
     $testmode = (bool)$params['TestMode'];
@@ -495,13 +516,34 @@ function namecheap_RegisterDomain($params)
     
     $oIDNA = new NamecheapRegistrarIDNA($sld, $tld);
     $sld = $oIDNA->getEncodedSld();    
-
+    
+    
     $nameservers = array($params['ns1'], $params['ns2'], $params['ns3'], $params['ns4'],$params['ns5']);
     foreach ($nameservers as $k => $v) {
         if (!$v) { unset($nameservers[$k]); }
     }
     try
     {
+        
+        if('ca'==strtolower($tld)){
+            // change state province for US and CA countries            
+            if(!empty(NamecheapRegistrarApi::$_caStateProvince[$params['admincountry']][str_replace(' ', '', $params['adminstate'] )])){
+                $params['adminstate'] = NamecheapRegistrarApi::$_caStateProvince[$params['admincountry']][str_replace(' ', '', $params['adminstate'] )];
+            }
+            $params['adminpostcode'] =str_replace(' ','',$params['adminpostcode']);
+            // change zip code
+            if('CA'==$params['admincountry']){                
+                if(' ' != $params['adminpostcode'][3]){
+                    $params['adminpostcode'] = substr($params['adminpostcode'], 0, 3) . ' ' . substr($params['adminpostcode'], 3);
+                }
+            }
+            if('US'==$params['admincountry']){
+                if(strlen($params['adminpostcode'])>5){
+                    $params['adminpostcode'] = substr($params['adminpostcode'], 0, 5) . '-' . substr($params['adminpostcode'], 5);
+                }
+            }
+        }
+        
         $registrant = array(
             'RegistrantFirstName'        => $params['adminfirstname'],
             'RegistrantLastName'         => $params['adminlastname'],
@@ -513,8 +555,9 @@ function namecheap_RegisterDomain($params)
             'RegistrantPostalCode'       => $params['adminpostcode'],
             'RegistrantCountry'          => $params['admincountry'],
             'RegistrantPhone'            => $params['adminphonenumber'],
-            'RegistrantEmailAddress'     => $params['adminemail']
+            'RegistrantEmailAddress'     => $params['adminemail'],            
         );
+        
         $aux = $tech = $admin = array();
         foreach ($registrant as $k => $v) {
             $admin[str_replace("Registrant", "Admin", $k)] = $v;
@@ -586,11 +629,22 @@ function namecheap_RegisterDomain($params)
                     break;
             }
         } elseif ('ca' == strtolower($tld)) {
+            
             $request_params['CIRAWhoisDisplay']     = ("on" == $params['additionalfields']['WHOIS Opt-out']) ? "Private" : "Full";
             $request_params['CIRAAgreementVersion'] = "2.0";
             $request_params['CIRAAgreementValue']   = ("on" == $params['additionalfields']['CIRA Agreement']) ? "Y" : "";
             $request_params['CIRALanguage']         = "en";
 
+            if (!empty($params['additionalfields']['jobTitle'])||!empty($params['additionalfields']['Job Title'])){
+                
+                $jobTitle = !empty($params['additionalfields']['jobTitle']) ?  $params['additionalfields']['jobTitle'] : $params['additionalfields']['Job Title'];
+                $request_params['RegistrantJobTitle'] = $jobTitle;
+                $request_params['AdminJobTitle'] = $jobTitle;
+                $request_params['TechJobTitle'] = $jobTitle;
+                $request_params['AuxBillingJobTitle'] = $jobTitle;
+                
+            }
+            
             /**
              * missing from WHMCS:
              * "INB" - Indian Band
@@ -703,12 +757,80 @@ function namecheap_RegisterDomain($params)
             $request_params['ASIALegalEntityType'] = $params['additionalfields']['Legal Type'];
             $request_params['ASIAIdentForm'] = $params['additionalfields']['Identity Form'];
             $request_params['ASIAIdentNumber'] = $params['additionalfields']['Identity Number'];
+        } elseif('sg' == strtolower($tld)){
+            $request_params['SGRCBID'] = $params['additionalfields']['RCB Singapore ID'];
+        } elseif('com.sg' == strtolower($tld)){
+            $request_params['COMSGRCBID'] = $params['additionalfields']['RCB Singapore ID'];
+        } elseif ('com.au' == strtolower($tld) || 'net.au' == strtolower($tld) || 'org.au' == strtolower($tld)){
+            
+            $key_prefix = strtoupper(str_replace('.','',$tld));            
+            $request_params[$key_prefix.'RegistrantId'] = $params['additionalfields']['Registrant ID'];            
+            
+            if('Business Registration Number' == $params['additionalfields']['Registrant ID Type']){
+                $params['additionalfields']['Registrant ID Type'] = 'RBN';
+            }
+            $request_params[$key_prefix.'RegistrantIdType'] = $params['additionalfields']['Registrant ID Type'];
+            
+            
+            if (!empty($params['additionalfields']['jobTitle']) || !empty($params['additionalfields']['Job Title'])){
+                
+                $jobTitle = !empty($params['additionalfields']['jobTitle']) ?  $params['additionalfields']['jobTitle'] : $params['additionalfields']['Job Title'];
+                $request_params['RegistrantJobTitle'] = $jobTitle;
+                $request_params['AdminJobTitle'] = $jobTitle;
+                $request_params['TechJobTitle'] = $jobTitle;
+                $request_params['AuxBillingJobTitle'] = $jobTitle;
+                
+            }
+            
+            
+        } elseif('es' == strtolower($tld)||'com.es' == strtolower($tld)||'nom.es' == strtolower($tld)||'org.es' ==  strtolower($tld)){            
+            
+            $key_prefix = strtoupper(str_replace('.','',$tld));
+            $request_params[$key_prefix.'RegistrantId'] = $params['additionalfields']['ID Form Number'];            
+            
+        } elseif ('fr' == strtolower($tld)){
+            
+            if(!empty($params['additionalfields']['Legal Type'])){
+                $request_params['FRLegalType'] = $params['additionalfields']['Legal Type'];
+            }
+            if(!empty($params['additionalfields']['Date of Birth'])){
+                $request_params['FRRegistrantBirthDate'] = $params['additionalfields']['Date of Birth'];
+            }
+            if(!empty($params['additionalfields']['Place of Birth'])){
+                $request_params['FRRegistrantBirthPlace'] = $params['additionalfields']['Place of Birth'];
+            }
+            if(!empty($params['additionalfields']['Legal Id'])){
+                $request_params['FRRegistrantLegalId'] = $params['additionalfields']['Legal Id'];
+            }
+            if(!empty($params['additionalfields']['Trade Number'])){
+                $request_params['FRRegistrantTradeNumber'] = $params['additionalfields']['Trade Number'];
+            }
+            if(!empty($params['additionalfields']['Duns Number'])){
+                $request_params['FRRegistrantDunsNumber'] = $params['additionalfields']['Duns Number'];
+            }
+            if(!empty($params['additionalfields']['Local Id'])){
+                $request_params['FRRegistrantLocalId'] = $params['additionalfields']['Local Id'];
+            }
+            if(!empty($params['additionalfields']['Journal Date of Declaration'])){
+                $request_params['FRRegistrantJoDateDec'] = $params['additionalfields']['Journal Date of Declaration'];
+            }
+            if(!empty($params['additionalfields']['Journal Date of Publication'])){
+                $request_params['FRRegistrantJoDatePub'] = $params['additionalfields']['Journal Date of Publication'];
+            }
+            if(!empty($params['additionalfields']['Journal Number'])){
+                $request_params['FRRegistrantJoNumber'] = $params['additionalfields']['Journal Number'];
+            }
+            if(!empty($params['additionalfields']['Journal Page'])){
+                $request_params['FRRegistrantJoPage'] = $params['additionalfields']['Journal Page'];
+            }
+            
         }
         
-        $api = new NamecheapRegistrarApi($username, $password, $testmode, $debugmode);
-        $response = $api->request("namecheap.domains.create", $request_params);
-        $result = $api->parseResponse($response);
-
+        
+            $api = new NamecheapRegistrarApi($username, $password, $testmode, $debugmode);
+            $response = $api->request("namecheap.domains.create", $request_params);
+            $result = $api->parseResponse($response);
+        
         if (isset($result['DomainCreateResult']['warnings']['Warning'])) {
             $message = "Registering Domain warning<br />"
                      . "-----------------------------------------------------------------------------------------<br />"

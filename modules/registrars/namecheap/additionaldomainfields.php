@@ -1,5 +1,8 @@
 <?php
 
+
+// do not create function or classes here and use include_once
+
 $_LANG['idnCode'] = 'IDN Code Country';
 $_LANG['idnCodeDescription'] = 'Code of Internationalized Domain Name';
 
@@ -41,3 +44,29 @@ if ($showIdnCodeSelection) {
     }
 }
 
+
+// .ca tld additional fields
+$additionaldomainfields[".ca"][] = array("Name" => "Job Title", "LangVar"=>"cajobtitle", "Type" => "text", "Size" => "30", "Default" => "", "Required" => false, "Description"=>"Required for non-individual registrants only");
+
+// .fr tld additional fields
+$additionaldomainfields[".fr"][] = array("Name" => "Legal Type", "LangVar"=>"frlegaltype", "Type" => "dropdown", "Options"=>"Company,Individual", "Default" => "Individual", "Required" => true, "Description" => '');
+$additionaldomainfields[".fr"][] = array("Name" => "Date of Birth", "LangVar"=>"frregistrantbirthdate", "Type" => "text", "Size" => "30", "Default" => "", "Required" => false, "Description" => "The registrant's date of birth in the form YYYY-MM-DD");
+$additionaldomainfields[".fr"][] = array("Name" => "Place of Birth", "LangVar"=>"frregistrantbirthplace", "Type" => "text", "Size" => "30", "Default" => "", "Required" => false, "Description" => "The registrant's place of birth. French registrants have to provide the place of birth in the form [ZIP code,City] (e.g. \"78181, Saint Quentin en Yvelines Cedex\"). Non-French registrants simply have to provide the [TWO-LETTER COUNTRY CODE] of their country of birth (e.g. \"DE\")");
+$additionaldomainfields[".fr"][] = array("Name" => "Legal Id", "LangVar"=>"frregistrantlegalid", "Type" => "text", "Size" => "30", "Default" => "", "Required" => false, "Description" => "French company with a SIREN or SIRET number should continue to provide this number instead as legal id. The SIREN (Système d’Identification du Répertoire des Entreprises) number is the first part of the SIRET NUMBER and consists of 9 digits. The SIRET (Système d’Identification du Répertoire des Etablissements) number is a unique identification number with 14 digits");
+$additionaldomainfields[".fr"][] = array("Name" => "Trade Number", "LangVar"=>"frregistranttradenumber", "Type" => "text", "Size" => "30", "Default" => "", "Required" => false, "Description" => "Companies with a European trademark:For companies with a European trademark can additionally add their trademark number using this extension");
+$additionaldomainfields[".fr"][] = array("Name" => "Duns Number", "LangVar"=>"frregistrantdunsnumber", "Type" => "text", "Size" => "30", "Default" => "", "Required" => false, "Description" => "The DUNS number is a nine-digit number, issued by Dun & Bradstreet. DUNS is the abbreviation of Data Universal Numbering System. Companies with a valid DUNS number are still obliged having their head office in the territory of the European Union. The DUNS number can be provided using this extension");
+$additionaldomainfields[".fr"][] = array("Name" => "Local Id", "LangVar"=>"frregistrantlocalid", "Type" => "text", "Size" => "30", "Default" => "", "Required" => false, "Description" => "Companies with a local identifier specific to a country of the European Economic Area can provide their local identifier using this extension");
+$additionaldomainfields[".fr"][] = array("Name" => "Journal Date of Declaration", "LangVar"=>"frregistrantjodatedec", "Type" => "text", "Size" => "30", "Default" => "", "Required" => false, "Description" => "French associations listed with the Journal Officiel de la République Française - The official gazette of the French Republic: The Journal Official Associations publishes notices of creations, breakup or substantial changes with nonprofit associations in France. Using the website http://www.societe.com and the database they provide, query for the respective data below to register a .FR domain name. - The date of declaration of the association in the form YYYY-MM-DD");
+$additionaldomainfields[".fr"][] = array("Name" => "Journal Date of Publication", "LangVar"=>"frregistrantjodatepub", "Type" => "text", "Size" => "30", "Default" => "", "Required" => false, "Description" => "The date of publication in the Journal Officiel in the form YYYY-MM-DD");
+
+$additionaldomainfields[".fr"][] = array("Name" => "Journal Number", "LangVar"=>"frregistrantjonumber", "Type" => "text", "Size" => "30", "Default" => "", "Required" => false, 'Description' => 'The page of the announcement in the Journal Officiel');
+$additionaldomainfields[".fr"][] = array("Name" => "Journal Page", "LangVar"=>"frregistrantjopage", "Type" => "text", "Size" => "30", "Default" => "", "Required" => false, 'Description' => 'The page of the announcement in the Journal Officiel');
+
+// .au job title
+$additionaldomainfields[".com.au"][] = array("Name" => "Job Title", "LangVar"=>"aujobtitle", "Type" => "text", "Size" => "30", "Default" => "", "Required" => true, "Description"=>"");
+$additionaldomainfields[".net.au"] = $additionaldomainfields[".com.au"];
+$additionaldomainfields[".org.au"] = $additionaldomainfields[".com.au"];
+
+$additionaldomainfields['.com.es'] = $additionaldomainfields[".es"];
+$additionaldomainfields['.nom.es'] = $additionaldomainfields[".es"];
+$additionaldomainfields['.org.es'] = $additionaldomainfields[".es"];
