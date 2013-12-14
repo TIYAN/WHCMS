@@ -300,9 +300,9 @@ echo "<s";
 echo "elect name=\"billingcid\" tabindex=\"22\"><option value=\"0\">";
 echo $aInt->lang("global", "default");
 echo "</option>";
-select_query("tblcontacts", "", array("userid" => $userid), "firstname` ASC,`lastname", "ASC");
+$result = select_query("tblcontacts", "", array("userid" => $userid), "firstname` ASC,`lastname", "ASC");
 
-while ($data = $result = mysql_fetch_array($result)) {
+while ($data = mysql_fetch_array($result)) {
 	echo "<option value=\"" . $data['id'] . "\"";
 
 	if ($data['id'] == $billingcid) {
@@ -399,9 +399,9 @@ echo $aInt->lang("currencies", "currency");
 echo "</td><td class=\"fieldarea\">";
 echo "<s";
 echo "elect name=\"currency\" tabindex=\"25\">";
-select_query("tblcurrencies", "id,code", "", "code", "ASC");
+$result = select_query("tblcurrencies", "id,code", "", "code", "ASC");
 
-while ($data = $result = mysql_fetch_array($result)) {
+while ($data = mysql_fetch_array($result)) {
 	echo "<option value=\"" . $data['id'] . "\"";
 
 	if ($data['id'] == $currency) {
@@ -430,12 +430,12 @@ echo "elect name=\"groupid\" tabindex=\"27\"><option value=\"0\">";
 echo $aInt->lang("global", "none");
 echo "</option>
 ";
-select_query("tblclientgroups", "", "", "groupname", "ASC");
+$result = select_query("tblclientgroups", "", "", "groupname", "ASC");
 
-while ($data = $result = mysql_fetch_assoc($result)) {
-	$data['id'];
-	$data['groupname'];
-	$group_colour = $group_name = $group_id = $data['groupcolour'];
+while ($data = mysql_fetch_assoc($result)) {
+	$group_id = $data['id'];
+	$group_name = $data['groupname'];
+	$group_colour = $data['groupcolour'];
 	echo "<option style=\"background-color:" . $group_colour . "\" value=" . $group_id . "";
 
 	if ($group_id == $groupid) {
