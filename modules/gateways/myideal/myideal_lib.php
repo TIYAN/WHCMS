@@ -21,25 +21,25 @@ class Security {
 	 *  @return fingerprint
 	 */
 	function createCertFingerprint($filename) {
-		fopen( dirname( __FILE__ ) . '/security/' . $filename, 'r' );
+		$fp = fopen( dirname( __FILE__ ) . '/security/' . $filename, 'r' );
 
 		if (!$fp) {
 			return false;
 		}
 
 		$cert = fread( $fp, 8192 );
-		openssl_x509_read( $cert );
+		fclose( $fp );
+		$data = openssl_x509_read( $cert );
 
 		if (!openssl_x509_export( $data, $data )) {
 			return false;
 		}
 
-		$data = $data = $fp = $data = fclose( $fp );
+		$data = str_replace( '-----BEGIN CERTIFICATE-----', '', $data );
+		$data = str_replace( '-----END CERTIFICATE-----', '', $data );
 		$data = base64_decode( $data );
-		sha1( $data );
-		$fingerprint = str_replace( '-----BEGIN CERTIFICATE-----', '', $data );
-		strtoupper( $fingerprint );
-		$fingerprint = str_replace( '-----END CERTIFICATE-----', '', $data );
+		$fingerprint = sha1( $data );
+		$fingerprint = strtoupper( $fingerprint );
 		return $fingerprint;
 	}
 
@@ -52,11 +52,11 @@ class Security {
 	 * @return signature
 	 */
 	function signMessage($priv_keyfile, $key_pass, $data) {
-		$fp = $data = preg_replace( '/\s/', '', $data );
-		fread( $fp, 8192 );
-		$priv_key = fopen( dirname( __FILE__ ) . '/security/' . $priv_keyfile, 'r' );
-		openssl_get_privatekey( $priv_key, $key_pass );
-		$pkeyid = fclose( $fp );
+		$fp = fopen( dirname( __FILE__ ) . '/security/' . $priv_keyfile, 'r' );
+		$data = preg_replace( '/\s/', '', $data );
+		$priv_key = fread( $fp, 8192 );
+		fclose( $fp );
+		$pkeyid = openssl_get_privatekey( $priv_key, $key_pass );
 		openssl_sign( $data, $signature, $pkeyid );
 		openssl_free_key( $pkeyid );
 		return $signature;
@@ -72,7 +72,7 @@ class Security {
 	 * @return signature
 	 */
 	function verifyMessage($certfile, $data, $signature) {
-		$ok = 195;
+		$ok = false;
 		$fp = fopen( dirname( __FILE__ ) . '/security/' . $certfile, 'r' );
 
 		if (!$fp) {
@@ -96,7 +96,7 @@ class Security {
 	 * @return the filename of the certificate with this fingerprint
 	 */
 	function getCertificateName($fingerprint, $config) {
-		$count = 185;
+		$count = 0;
 		$certFilename = $config['CERTIFICATE' . $count];
 
 		while (isset( $certFilename )) {
@@ -106,7 +106,7 @@ class Security {
 				return $certFilename;
 			}
 
-			$count += 186;
+			$count += 1;
 			$certFilename = $config['CERTIFICATE' . $count];
 		}
 
@@ -228,7 +228,7 @@ class IdealRequest {
 	 * @return true if all fields are valid, otherwise returns false
 	 */
 	function checkMandatory() {
-		if (( ( 0 < strlen( $this->merchantID ) && 0 < strlen( $this->subID ) ) && 0 < strlen( $this->authentication ) )) {
+		if ( ( 0 < strlen( $this->merchantID ) && 0 < strlen( $this->subID ) ) && 0 < strlen( $this->authentication ) ) {
 			return true;
 		}
 
@@ -667,7 +667,7 @@ class AcquirerStatusRequest extends IdealRequest {
 	 * @return If done so, true is returned, otherwise false.
 	 */
 	function checkMandatory() {
-		if (( IdealRequest::checkmandatory(  ) && 0 < strlen( $this->transactionID ) )) {
+		if ( IdealRequest::checkmandatory(  ) && 0 < strlen( $this->transactionID ) ) {
 			return true;
 		}
 
@@ -1209,7 +1209,7 @@ class AcquirerTrxRequest extends IdealRequest {
 	 * @return If done so, true is returned, otherwise false.
 	 */
 	function checkMandatory() {
-		if (( ( ( ( ( ( ( ( ( IdealRequest::checkmandatory(  ) == true && 0 < strlen( $this->issuerID ) ) && 0 < strlen( $this->merchantReturnURL ) ) && 0 < strlen( $this->purchaseID ) ) && 0 < strlen( $this->amount ) ) && 0 < strlen( $this->currency ) ) && 0 < strlen( $this->expirationPeriod ) ) && 0 < strlen( $this->language ) ) && 0 < strlen( $this->entranceCode ) ) && 0 < strlen( $this->description ) )) {
+		if ( ( ( ( ( ( ( ( ( IdealRequest::checkmandatory(  ) == true && 0 < strlen( $this->issuerID ) ) && 0 < strlen( $this->merchantReturnURL ) ) && 0 < strlen( $this->purchaseID ) ) && 0 < strlen( $this->amount ) ) && 0 < strlen( $this->currency ) ) && 0 < strlen( $this->expirationPeriod ) ) && 0 < strlen( $this->language ) ) && 0 < strlen( $this->entranceCode ) ) && 0 < strlen( $this->description ) ) {
 			return true;
 		}
 
@@ -1471,76 +1471,62 @@ function LoadConfiguration() {
 	while ($row = mysql_fetch_array( $res )) {
 		$setting = $row['setting'];
 		switch ($setting) {
-		case 'merchantid': {
+		case 'merchantid':
 				$myideal_conf['MERCHANTID'] = $row['value'];
 				break;
-			}
 
-		case 'subid': {
+		case 'subid':
 				$myideal_conf['SUBID'] = $row['value'];
 				break;
-			}
 
-		case 'privatekey': {
+		case 'privatekey':
 				$myideal_conf['PRIVATEKEY'] = $row['value'];
 				break;
-			}
 
-		case 'privatekeypass': {
+		case 'privatekeypass':
 				$myideal_conf['PRIVATEKEYPASS'] = $row['value'];
 				break;
-			}
 
-		case 'privatecert': {
+		case 'privatecert':
 				$myideal_conf['PRIVATECERT'] = $row['value'];
 				break;
-			}
 
-		case 'certificate0': {
+		case 'certificate0':
 				$myideal_conf['CERTIFICATE0'] = $row['value'];
 				break;
-			}
 
-		case 'acquirertimeout': {
+		case 'acquirertimeout':
 				$myideal_conf['ACQUIRERTIMEOUT'] = $row['value'];
 				break;
-			}
 
-		case 'currency': {
+		case 'currency':
 				$myideal_conf['CURRENCY'] = $row['value'];
 				break;
-			}
 
-		case 'expirationperiod': {
+		case 'expirationperiod':
 				$myideal_conf['EXPIRATIONPERIOD'] = $row['value'];
 				break;
-			}
 
-		case 'language': {
+		case 'language':
 				$myideal_conf['LANGUAGE'] = $row['value'];
 				break;
-			}
 
-		case 'description': {
+		case 'description':
 				$myideal_conf['DESCRIPTION'] = $row['value'];
 				break;
-			}
 
-		case 'entrancecode': {
+		case 'entrancecode':
 				$myideal_conf['ENTRANCECODE'] = $row['value'];
 				break;
-			}
 
-		case 'logfile': {
+		case 'logfile':
 				$myideal_conf['LOGFILE'] = $row['value'];
 				break;
-			}
 
-		case 'testmode': {
+		case 'testmode':
 				if ($row['value'] == 'on') {
 					$testmode = true;
 				}
-			}
 		}
 	}
 
@@ -1565,10 +1551,4 @@ if (!defined( 'WHMCS' )) {
 	exit( 'This file cannot be accessed directly' );
 }
 
-IdealRequest;
-IdealResponse;
-IdealRequest;
-IdealResponse;
-IdealRequest;
-IdealResponse;
 ?>
