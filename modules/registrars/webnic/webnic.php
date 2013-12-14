@@ -206,7 +206,7 @@ function webnic_RegisterDomain($params) {
 	$postfields["custom_reg2"] = $params["additionalfields"]["Organization Type"];
 	$postfields["custom_reg3"] = $params["additionalfields"]["Registrant Type"];
 
-	if (preg_match( "/us$/i", $params["tld"] )) {
+	if (preg_match( '/us$/i', $params['tld'] )) {
 		$nexus = $params["additionalfields"]["Nexus Category"];
 		$countrycode = $params["additionalfields"]["Nexus Country"];
 		$purpose = $params["additionalfields"]["Application Purpose"];
@@ -264,7 +264,7 @@ function webnic_RegisterDomain($params) {
 	}
 
 
-	if (preg_match( "/sg$/i", $params["tld"] )) {
+	if (preg_match( '/sg$/i', $params['tld'] )) {
 		if ($params["additionalfields"]["Registrant Type"] == "Individual") {
 			$regtype = "2";
 		}
@@ -278,14 +278,14 @@ function webnic_RegisterDomain($params) {
 	}
 
 
-	if (preg_match( "/my$/i", $params["tld"] )) {
+	if (preg_match( '/my$/i', $params['tld'] )) {
 		$individual = ($params["companyname"] == "-" ? "I" : "O");
 		$postfields["ctxtype"] = $individual;
 	}
 
 
 	if (!$params["companyname"]) {
-		if (preg_match( "/sg$/i", $params["tld"] )) {
+		if (preg_match( '/sg$/i', $params['tld'] )) {
 			$postfields["reg_contact_type"] = $postfields["adm_contact_type"] = $postfields["tec_contact_type"] = $postfields["bil_contact_type"] = (int)"0";
 			$postfields["custom_reg1"] = $params["additionalfields"]["RCB Singapore ID"];
 			$postfields["custom_adm1"] = $params["additionalfields"]["RCB Singapore ID"];
@@ -337,40 +337,34 @@ function webnic_RegisterDomain($params) {
 	}
 
 
-	if (preg_match( "/(asia|tw)$/i", $params["tld"] )) {
+	if (preg_match( '/(asia|tw)$/i', $params['tld'] )) {
 		$reg1value = trim( $params["additionalfields"]["Identity Number"] );
 		$legaltype = strtolower( $params["additionalfields"]["Legal Type"] );
 		$reg2value = "";
 		switch ($legaltype) {
-		case "corporation": {
+		case "corporation":
 				$reg2value = "OTA000003";
 				break;
-			}
 
-		case "partnership": {
+		case "partnership":
 				$reg2value = "OTA000005";
 				break;
-			}
 
-		case "politicalParty": {
+		case "politicalParty":
 				$reg2value = "OTA000025";
 				break;
-			}
 
-		case "institution": {
+		case "institution":
 				$reg2value = "OTA000006";
 				break;
-			}
 
-		case "society": {
+		case "society":
 				$reg2value = "OTA000012";
 				break;
-			}
 
-		default: {
+		default:
 				$reg2value = "OTA000032";
 				break;
-			}
 		}
 
 		$postfields["custom_reg1"] = $postfields["custom_adm1"] = $postfields["custom_tec1"] = $postfields["custom_bil1"] = $reg1value;
@@ -380,7 +374,7 @@ function webnic_RegisterDomain($params) {
 		}
 
 
-		if (( preg_match( "/asia$/i", $params["tld"] ) && !webnic_isCountryInAsia( $postfields["reg_country"] ) )) {
+		if ( preg_match( '/asia$/i', $params['tld'] ) && !webnic_isCountryInAsia( $postfields["reg_country"] ) ) {
 			$postfields["proxy"] = 1;
 		}
 	}
@@ -482,7 +476,7 @@ function webnic_TransferDomain($params) {
 	$postfields["tec_email"] = $params["email"];
 	$postfields["reg_contact_type"] = $postfields["adm_contact_type"] = $postfields["tec_contact_type"] = $postfields["bil_contact_type"] = ($params["companyname"] ? (int)"0" : "1");
 
-	if (preg_match( "/us$/i", $params["tld"] )) {
+	if (preg_match( '/us$/i', $params['tld'] )) {
 		$nexus = $params["additionalfields"]["Nexus Category"];
 		$countrycode = $params["additionalfields"]["Nexus Country"];
 		$purpose = $params["additionalfields"]["Application Purpose"];
@@ -540,7 +534,7 @@ function webnic_TransferDomain($params) {
 	}
 
 
-	if (preg_match( "/sg$/i", $params["tld"] )) {
+	if (preg_match( '/sg$/i', $params['tld'] )) {
 		if ($params["additionalfields"]["Registrant Type"] == "Individual") {
 			$regtype = "2";
 		}
@@ -554,7 +548,7 @@ function webnic_TransferDomain($params) {
 	}
 
 
-	if (preg_match( "/my$/i", $params["tld"] )) {
+	if (preg_match( '/my$/i', $params['tld'] )) {
 		$individual = ($params["companyname"] == "-" ? "I" : "O");
 		$postfields["ctxtype"] = $individual;
 	}
@@ -582,7 +576,7 @@ function webnic_RenewDomain($params) {
 	$postfields["domainname"] = $params["sld"] . "." . $params["tld"];
 	$postfields["term"] = $params["regperiod"];
 
-	if (preg_match( "/asia$/i", $params["tld"] )) {
+	if (preg_match( '/asia$/i', $params['tld'] )) {
 		$postfields["proxy"] = 1;
 	}
 
@@ -677,7 +671,7 @@ function webnic_SaveContactDetails($params) {
 	$postfields["bil_country"] = $params["contactdetails"]["Billing"]["Country"];
 	$postfields["bil_email"] = $params["contactdetails"]["Billing"]["Email Address"];
 
-	if (preg_match( "/us$/i", $params["tld"] )) {
+	if (preg_match( '/us$/i', $params['tld'] )) {
 		$nexus = $params["additionalfields"]["Nexus Category"];
 		$countrycode = $params["additionalfields"]["Nexus Country"];
 		$purpose = $params["additionalfields"]["Application Purpose"];
@@ -757,7 +751,7 @@ function webnic_SaveContactDetails($params) {
 	}
 
 
-	if (preg_match( "/sg$/i", $params["tld"] )) {
+	if (preg_match( '/sg$/i', $params['tld'] )) {
 		if ($params["additionalfields"]["Registrant Type"] == "Individual") {
 			$regtype = "2";
 		}
@@ -775,7 +769,7 @@ function webnic_SaveContactDetails($params) {
 	}
 
 
-	if (preg_match( "/hk$/i", $params["tld"] )) {
+	if (preg_match( '/hk$/i', $params['tld'] )) {
 		$individual = ($params["companyname"] == "-" ? "I" : "O");
 		$postfields["ctxtype"] = $individual;
 
@@ -785,7 +779,7 @@ function webnic_SaveContactDetails($params) {
 	}
 
 
-	if (preg_match( "/my$/i", $params["tld"] )) {
+	if (preg_match( '/my$/i', $params['tld'] )) {
 		$individual = ($params["companyname"] == "-" ? "I" : "O");
 		$postfields["ctxtype"] = $individual;
 
@@ -848,8 +842,7 @@ function webnic_call($url, $rtype, $postfields, $params) {
 
 	curl_close( $ch );
 	$res_data = trim( $res_data );
-	$res_array = explode( "
-", $res_data );
+	$res_array = explode( "\n", $res_data );
 
 	logModuleCall( "webnic", $rtype, $query_string, $res_data, $res_array, array( $params["Source"] ) );
 	return $res_array;
