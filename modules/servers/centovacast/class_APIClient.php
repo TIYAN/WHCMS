@@ -11,16 +11,16 @@
  * */
 
 class CCBaseAPIClient {
-	var $debug = false;
-	var $encoding = "UTF-8";
-	var $debugconsole = false;
-	var $raw_response = "";
-	var $raw_request = "";
-	var $remote_version = false;
-	var $message = "";
-	var $data = null;
-	var $success = false;
-	var $error = "";
+    public $debug = false;
+    public $encoding = "UTF-8";
+    public $debugconsole = false;
+    public $raw_response = "";
+    public $raw_request = "";
+    public $remote_version = false;
+    public $message = "";
+    public $data = null;
+    public $success = false;
+    public $error = "";
 	private $classname = "";
 	private $methodname = "";
 	private $ccurl = "";
@@ -78,7 +78,7 @@ class CCBaseAPIClient {
 	 * @return bool|string the HTTP response string on success, or false on failure
 	 */
 	function http_request($url, $postdata) {
-		if (( function_exists( "stream_context_create" ) && function_exists( "stream_get_meta_data" ) )) {
+		if ( function_exists( "stream_context_create" ) && function_exists( "stream_get_meta_data" ) ) {
 			return $this->http_request_php( $url, $postdata );
 		}
 
@@ -107,8 +107,7 @@ class CCBaseAPIClient {
 	 */
 	function http_request_php($url, $postdata) {
 		stream_context_create( array( "http" => array( "method" => "POST", "user_agent" => "Centova Cast PHP API Client", "header" => "Connection: close
-			$ctx = Content-Length: " . strlen( $postdata ) . "
-", "max_redirects" => "0", "ignore_errors" => "1", "content" => $postdata ) ) );
+			$ctx = Content-Length: " . strlen( $postdata ) . "\n", "max_redirects" => "0", "ignore_errors" => "1", "content" => $postdata ) ) );
 
 		set_error_handler( array( $this, "handle_http_error" ) );
 		$fp = @fopen( $url, "rb", false, $ctx );
@@ -222,7 +221,7 @@ class CCBaseAPIClient {
 	 * @return array an array representing the XML <data> element
 	 */
 	function parse_data($data) {
-		if (!preg_match( "/<data[^\>]*?>([\s\S]+)<\/data>/i", $data, $matches )) {
+		if (!preg_match( '/<data[^\>]*?>([\s\S]+)<\/data>/i', $data, $matches )) {
 			return false;
 		}
 
@@ -240,13 +239,14 @@ class CCBaseAPIClient {
 	 * @return bool true on success, false on error
 	 */
 	function parse_response_packet($packet) {
-		if (!preg_match( "/<centovacast([^\>]+)>([\s\S]+)<\/centovacast>/i", $packet, $matches )) {
+		$this->raw_response = $packet;
+		if (!preg_match( '/<centovacast([^\>]+)>([\s\S]+)<\/centovacast>/i', $packet, $matches )) {
 			return $this->set_error( "Invalid response packet received from API server" );
 		}
 
 		$cctags = $matches[1];
 
-		if (preg_match( "/version=\"([^\\"]+)\"/i", $cctags, $tagmatches )) {
+		if (preg_match( '/version="([^\"]+)"/i', $cctags, $tagmatches )) {
 		$this->remote_version = $tagmatches[1];
 	}
 	else {
@@ -255,27 +255,31 @@ class CCBaseAPIClient {
 
 	$payload = $matches[2];
 
-	if (!preg_match( "/<response.*?type\s*=\s*\"([^\"]+)\"[^\>]*>([\s\S]+)<\/response>/i", $payload, $matches )) {
+	if (!preg_match( '/<response.*?type\s*=\s*"([^"]+)"[^\>]*>([\s\S]+)<\/response>/i', $payload, $matches )) {
 		return $this->set_error( "Empty or unrecognized response packet received from API server" );
 	}
 
-	$data = $this->raw_response = $packet = $matches[2];
-	$type = $matches[1];
+	list($type,$data) = $matches;
 
-	if (preg_match( "/<message[^\>]*>([\s\S]+)<\/message>/i", $data, $matches )) {
+	if (preg_match( '/<message[^\>]*>([\s\S]+)<\/message>/i', $data, $matches )) {
 		$this->message = CCAPIXML::xml_entity_decode( $matches[1] );
 	}
 	else {
 		$this->message = "(Message not provided by API server)";
 	}
 
-	switch (strtolower( $type )) {
-	case "error": {
-			$this->set_error( $this->message );
-		}
-	}
+    switch ( strtolower( $type ) )
+    {
+        case "error" :
+            return $this->set_error( $this->message );
+        case "success" :
+            $this->data = $this->parse_data( $data );
+            $this->success = true;
+            return true;
+        default :
+        	return $this->set_error( "Invalid response type received from API server" );
+    }
 
-	return ;
 }
 
 
@@ -304,9 +308,10 @@ function api_request($packet) {
 	if ($this->raw_response = $this->http_request( $url, $postdata ) === false) {
 		return null;
 	}
-
-	$this->parse_response_packet( $this->raw_response );
-	$this->raw_request = $packet;
+	else {
+		$this->parse_response_packet( $this->raw_response );
+		$this->raw_request = $packet;
+	}
 }
 
 
@@ -348,7 +353,7 @@ class CCServerAPIClient extends CCBaseAPIClient {
 private $classname = "server";
 
 
-* * * * /** Constructor
+/** Constructor
  *
  * @param string  $ccurl the URL to Centova Cast
  *
@@ -359,7 +364,7 @@ function __construct($ccurl) {
 }
 
 
-* * * * /** @inherited */
+/** @inherited */
 function build_argument_payload($functionargs) {
 	if (count( $functionargs ) < 3) {
 		trigger_error( sprintf( "Function %s requires a minimum of 3 arguments, %d given", $this->methodname, count( $functionargs ) ), E_USER_WARNING );
@@ -429,7 +434,7 @@ function build_request_packet($methodname, $payload) {
  * @return bool|string the HTTP response string on success, or false on failure
  */
 function http_request($url, $postdata) {
-	if (( function_exists( "stream_context_create" ) && function_exists( "stream_get_meta_data" ) )) {
+	if ( function_exists( "stream_context_create" ) && function_exists( "stream_get_meta_data" ) ) {
 		return $this->http_request_php( $url, $postdata );
 	}
 
@@ -458,8 +463,7 @@ function handle_http_error($errno, $errstr, $errfile, $errline) {
  */
 function http_request_php($url, $postdata) {
 	stream_context_create( array( "http" => array( "method" => "POST", "user_agent" => "Centova Cast PHP API Client", "header" => "Connection: close
-			$ctx = Content-Length: " . strlen( $postdata ) . "
-", "max_redirects" => "0", "ignore_errors" => "1", "content" => $postdata ) ) );
+			$ctx = Content-Length: " . strlen( $postdata ) . "\n", "max_redirects" => "0", "ignore_errors" => "1", "content" => $postdata ) ) );
 
 	set_error_handler( array( $this, "handle_http_error" ) );
 	$fp = @fopen( $url, "rb", false, $ctx );
@@ -562,12 +566,12 @@ function build_argument_xml($args) {
  * @return array an array representing the XML <data> element
  */
 function parse_data($data) {
-	if (!preg_match( "/<data[^\>]*?>([\s\S]+)<\/data>/i", $data, $matches )) {
+	if (!preg_match( '/<data[^\>]*?>([\s\S]+)<\/data>/i', $data, $matches )) {
 		return false;
 	}
 
-	$matches[1];
-	$xml = $rowxml = new CCAPIXML();
+	$rowxml = $matches[1];
+	$xml = new CCAPIXML();
 	return $xml->parse( $rowxml );
 }
 
@@ -580,13 +584,14 @@ function parse_data($data) {
  * @return bool true on success, false on error
  */
 function parse_response_packet($packet) {
-	if (!preg_match( "/<centovacast([^\>]+)>([\s\S]+)<\/centovacast>/i", $packet, $matches )) {
+	$this->raw_response = $packet;
+	if (!preg_match( '/<centovacast([^\>]+)>([\s\S]+)<\/centovacast>/i', $packet, $matches )) {
 		return $this->set_error( "Invalid response packet received from API server" );
 	}
 
 	$cctags = $matches[1];
 
-	if (preg_match( "/version=\"([^\\"]+)\"/i", $cctags, $tagmatches )) {
+	if (preg_match( '/version="([^\"]+)"/i', $cctags, $tagmatches )) {
 	$this->remote_version = $tagmatches[1];
 }
 else {
@@ -595,21 +600,31 @@ else {
 
 $payload = $matches[2];
 
-if (!preg_match( "/<response.*?type\s*=\s*\"([^\"]+)\"[^\>]*>([\s\S]+)<\/response>/i", $payload, $matches )) {
+if (!preg_match( '/<response.*?type\s*=\s*"([^"]+)"[^\>]*>([\s\S]+)<\/response>/i', $payload, $matches )) {
 	return $this->set_error( "Empty or unrecognized response packet received from API server" );
 }
 
-$data = $this->raw_response = $packet = $matches[2];
-$type = $matches[1];
+list($type,$data) = $matches;
 
-if (preg_match( "/<message[^\>]*>([\s\S]+)<\/message>/i", $data, $matches )) {
+if (preg_match( '/<message[^\>]*>([\s\S]+)<\/message>/i', $data, $matches )) {
 	$this->message = CCAPIXML::xml_entity_decode( $matches[1] );
 }
 else {
 	$this->message = "(Message not provided by API server)";
 }
 
-(bool);
+switch ( strtolower( $type ) )
+{
+    case "error" :
+        return $this->set_error( $this->message );
+    case "success" :
+        $this->data = $this->parse_data( $data );
+        $this->success = true;
+        return true;
+    default :
+    	return $this->set_error( "Invalid response type received from API server" );
+}
+
 }
 
 
@@ -620,10 +635,27 @@ else {
  *
  * @return void
  */
-function api_request() {
-switch () {
-case "error": {
-		$packet;
+function api_request($packet) {
+	$url = $this->ccurl;
+	$apiscript = "api.php";
+
+	if (substr( $url, 0 - strlen( $apiscript ) - 1 ) != "/" . $apiscript) {
+		if (substr( $url, 0 - 1 ) != "/") {
+			$url .= "/";
+		}
+
+		$url .= $apiscript;
+	}
+
+	$this->success = false;
+	$postdata = $packet;
+
+	if ($this->raw_response = $this->http_request( $url, $postdata ) === false) {
+		return null;
+	}
+	else {
+		$this->parse_response_packet( $this->raw_response );
+		$this->raw_request = $packet;
 	}
 }
 
@@ -635,7 +667,7 @@ case "error": {
  *
  * @return bool always returns false
  */
-function set_error(, $msg) {
+function set_error($msg) {
 	$this->success = false;
 	$this->error = $msg;
 	return false;
@@ -666,7 +698,7 @@ class CCSystemAPIClient extends CCBaseAPIClient {
 private $classname = "system";
 
 
-* * * * /** Constructor
+/** Constructor
  *
  * @param string  $ccurl the URL to Centova Cast
  *
@@ -677,7 +709,7 @@ function __construct($ccurl) {
 }
 
 
-* * * * /** @inherited */
+/** @inherited */
 function build_argument_payload($functionargs) {
 	if (count( $functionargs ) < 2) {
 		trigger_error( sprintf( "Function %s requires a minimum of 2 arguments, %d given", $this->methodname, count( $functionargs ) ), E_USER_WARNING );
@@ -746,7 +778,7 @@ function build_request_packet($methodname, $payload) {
  * @return bool|string the HTTP response string on success, or false on failure
  */
 function http_request($url, $postdata) {
-	if (( function_exists( "stream_context_create" ) && function_exists( "stream_get_meta_data" ) )) {
+	if ( function_exists( "stream_context_create" ) && function_exists( "stream_get_meta_data" ) ) {
 		return $this->http_request_php( $url, $postdata );
 	}
 
@@ -775,8 +807,7 @@ function handle_http_error($errno, $errstr, $errfile, $errline) {
  */
 function http_request_php($url, $postdata) {
 	stream_context_create( array( "http" => array( "method" => "POST", "user_agent" => "Centova Cast PHP API Client", "header" => "Connection: close
-				$ctx = Content-Length: " . strlen( $postdata ) . "
-", "max_redirects" => "0", "ignore_errors" => "1", "content" => $postdata ) ) );
+				$ctx = Content-Length: " . strlen( $postdata ) . "\n", "max_redirects" => "0", "ignore_errors" => "1", "content" => $postdata ) ) );
 
 	set_error_handler( array( $this, "handle_http_error" ) );
 	$fp = @fopen( $url, "rb", false, $ctx );
@@ -879,12 +910,12 @@ function build_argument_xml($args) {
  * @return array an array representing the XML <data> element
  */
 function parse_data($data) {
-	if (!preg_match( "/<data[^\>]*?>([\s\S]+)<\/data>/i", $data, $matches )) {
+	if (!preg_match( '/<data[^\>]*?>([\s\S]+)<\/data>/i', $data, $matches )) {
 		return false;
 	}
 
-	$matches[1];
-	$xml = $rowxml = new CCAPIXML();
+	$rowxml = $matches[1];
+	$xml = new CCAPIXML();
 	return $xml->parse( $rowxml );
 }
 
@@ -897,13 +928,14 @@ function parse_data($data) {
  * @return bool true on success, false on error
  */
 function parse_response_packet($packet) {
-	if (!preg_match( "/<centovacast([^\>]+)>([\s\S]+)<\/centovacast>/i", $packet, $matches )) {
+	$this->raw_response = $packet;
+	if (!preg_match( '/<centovacast([^\>]+)>([\s\S]+)<\/centovacast>/i', $packet, $matches )) {
 		return $this->set_error( "Invalid response packet received from API server" );
 	}
 
 	$cctags = $matches[1];
 
-	if (preg_match( "/version=\"([^\\"]+)\"/i", $cctags, $tagmatches )) {
+	if (preg_match( '/version="([^\"]+)"/i', $cctags, $tagmatches )) {
 	$this->remote_version = $tagmatches[1];
 }
 else {
@@ -912,21 +944,31 @@ else {
 
 $payload = $matches[2];
 
-if (!preg_match( "/<response.*?type\s*=\s*\"([^\"]+)\"[^\>]*>([\s\S]+)<\/response>/i", $payload, $matches )) {
+if (!preg_match( '/<response.*?type\s*=\s*"([^"]+)"[^\>]*>([\s\S]+)<\/response>/i', $payload, $matches )) {
 	return $this->set_error( "Empty or unrecognized response packet received from API server" );
 }
 
-$data = $this->raw_response = $packet = $matches[2];
-$type = $matches[1];
+list($type,$data) = $matches;
 
-if (preg_match( "/<message[^\>]*>([\s\S]+)<\/message>/i", $data, $matches )) {
+if (preg_match( '/<message[^\>]*>([\s\S]+)<\/message>/i', $data, $matches )) {
 	$this->message = CCAPIXML::xml_entity_decode( $matches[1] );
 }
 else {
 	$this->message = "(Message not provided by API server)";
 }
 
-(bool);
+switch ( strtolower( $type ) )
+{
+    case "error" :
+        return $this->set_error( $this->message );
+    case "success" :
+        $this->data = $this->parse_data( $data );
+        $this->success = true;
+        return true;
+    default :
+    	return $this->set_error( "Invalid response type received from API server" );
+}
+
 }
 
 
@@ -937,10 +979,27 @@ else {
  *
  * @return void
  */
-function api_request() {
-switch () {
-case "error": {
-		$packet;
+function api_request($packet) {
+	$url = $this->ccurl;
+	$apiscript = "api.php";
+
+	if (substr( $url, 0 - strlen( $apiscript ) - 1 ) != "/" . $apiscript) {
+		if (substr( $url, 0 - 1 ) != "/") {
+			$url .= "/";
+		}
+
+		$url .= $apiscript;
+	}
+
+	$this->success = false;
+	$postdata = $packet;
+
+	if ($this->raw_response = $this->http_request( $url, $postdata ) === false) {
+		return null;
+	}
+	else {
+		$this->parse_response_packet( $this->raw_response );
+		$this->raw_request = $packet;
 	}
 }
 
@@ -1018,12 +1077,11 @@ function parse($xml) {
 			}
 
 			$tagcontents = $xmlcontents[1];
-			[0];
-			$tagend = $this->get_xml_tag_contents( $xml, $tag );
+			list($tagend) = $this->get_xml_tag_contents( $xml, $tag );
 		}
 
 
-		if (( isset( $rows[$tagname] ) && !$multi[$tagname] )) {
+		if ( isset( $rows[$tagname] ) && !$multi[$tagname] ) {
 			$rows[$tagname] = array( $rows[$tagname] );
 			$multi[$tagname] = true;
 		}
@@ -1087,7 +1145,7 @@ function xml_entity_decode($string) {
  *       or false on failure
  */
 function get_first_tag($xml) {
-	if (preg_match( "/<\s*([a-zA-Z0-9_:\.-]+)([^\>]*?)(\/)?\s*>/", $xml, $matches, PREG_OFFSET_CAPTURE )) {
+	if (preg_match( '/<\s*([a-zA-Z0-9_:\.-]+)([^\>]*?)(\/)?\s*>/', $xml, $matches, PREG_OFFSET_CAPTURE )) {
 		$tagoffset = $matches[0][1];
 		$taglength = strlen( $matches[0][0] );
 		$tagname = $matches[1][0];
@@ -1112,16 +1170,16 @@ function get_first_tag($xml) {
  *       or false on failure
  */
 function get_xml_tag_contents($xml, $tag) {
-	$tagoffset = $taglength = 489;
+	$tagoffset = $taglength = 0;
 	$startoffset = $beginoffset = $tag[0] + $tag[1];
 
 	if ($tag[4]) {
 		return array( $startoffset, "" );
 	}
 
-	$nest = 489;
-	$iterations = 489;
-	$regex = "/<\s*(\/)?\s*" . preg_quote( $tag[2], "/" ) . "(\s+[^\>]*)?>/i";
+	$nest = 0;
+	$iterations = 0;
+	$regex = '/<\s*(\/)?\s*' . preg_quote( $tag[2], '/' ) . '(\s+[^\>]*)?>/i';
 
 	if (true) {
 		if (100 < ++$iterations) {
@@ -1155,15 +1213,6 @@ function get_xml_tag_contents($xml, $tag) {
 
 	$endoffset = $tagoffset;
 	return array( $endoffset + $taglength, substr( $xml, $beginoffset, $endoffset - $beginoffset ) );
-}
-
-
-}
-
-
-CCBaseAPIClient;
-CCBaseAPIClient;
-return 1;
 }
 
 

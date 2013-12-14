@@ -33,7 +33,8 @@ function centovacast_ConfigOptions() {
  *
  * @return array|bool An associative result row array on success, FALSE on failure.
  */
-$args = function centovacast_QueryOneRow() {;
+function centovacast_QueryOneRow() {
+	$args = func_get_args();
 
 	if (!count( $args )) {
 		return false;
@@ -55,8 +56,7 @@ $args = function centovacast_QueryOneRow() {;
 		return false;
 	}
 
-	mysql_fetch_assoc( $rsh );
-	$row = func_get_args();
+	$row = mysql_fetch_assoc( $rsh );
 
 	if (!is_array( $row )) {
 		return false;
@@ -153,7 +153,7 @@ function centovacast_GeneratePassword($maxlength = 8) {
 		$type = rand( 0, 1 );
 
 		if ($type == 1) {
-			if (( ( $i == 1 || $i == $maxlength - 1 ) && 0 < $concount )) {
+			if ( ( $i == 1 || $i == $maxlength - 1 ) && 0 < $concount ) {
 				$type = 0;
 			}
 
@@ -195,7 +195,7 @@ function centovacast_GeneratePassword($maxlength = 8) {
  */
 function centovacast_UniqueUsername($client, $minlength = 4, $maxlength = 8) {
 	if (strlen( $client["companyname"] )) {
-		$companyname = preg_replace( "/[^a-z]+/i", "", strtolower( $client["companyname"] ) );
+		$companyname = preg_replace( '/[^a-z]+/i', '', strtolower( $client['companyname'] ) );
 		$username = substr( $companyname, 0, $maxlength );
 
 		while (strlen( $username ) < $minlength) {
@@ -208,8 +208,8 @@ function centovacast_UniqueUsername($client, $minlength = 4, $maxlength = 8) {
 		}
 	}
 
-	$firstname = preg_replace( "/[^a-z]+/i", "", strtolower( $client["firstname"] ) );
-	$lastname = preg_replace( "/[^a-z]+/i", "", strtolower( $client["lastname"] ) );
+	$firstname = preg_replace( '/[^a-z]+/i', '', strtolower( $client['firstname'] ) );
+	$lastname = preg_replace( '/[^a-z]+/i', '', strtolower( $client['lastname'] ) );
 	$username = substr( substr( $firstname, 0, max( 1, $maxlength - strlen( $lastname ) ) ) . $lastname, 0, $maxlength );
 
 	if (!centovacast_UserExists( $username )) {
@@ -217,7 +217,7 @@ function centovacast_UniqueUsername($client, $minlength = 4, $maxlength = 8) {
 	}
 
 	$baseusername = substr( $username, 0, $maxlength - 2 );
-	$i = 309;
+	$i = 0;
 
 	while ($i < 100) {
 		$username = $baseusername . sprintf( "%02d", $i );
@@ -255,7 +255,7 @@ function centovacast_GetCCURL(&$params, $error) {
 	$error = false;
 	$ccurl = $params["serverhostname"];
 
-	if (!preg_match( "#^https?://#", $ccurl )) {
+	if (!preg_match( '#^https?://#', $ccurl )) {
 		$error = "Invalid 'Hostname' setting in WHMCS configuration for Centova Cast.  Per the documentation the 'Hostname' field must contain the complete URL to Centova Cast, not just a hostname.";
 		return false;
 	}
@@ -278,7 +278,7 @@ function centovacast_GetServerCredentials($params, $serverapi = false) {
 	$serverusername = $params["serverusername"];
 	$serverpassword = $params["serverpassword"];
 
-	if (( $serverusername != "admin" || $serverapi )) {
+	if ( $serverusername != "admin" || $serverapi ) {
 		$serverpassword = $serverusername . "|" . $serverpassword;
 	}
 
@@ -398,7 +398,7 @@ function centovacast_CreateAccount($params) {
 	$username = $serverusername = centovacast_GetServerCredentials( $params )[0];
 	$password = $params["password"];
 
-	if (( !strlen( $username ) || is_numeric( $username ) )) {
+	if ( !strlen( $username ) || is_numeric( $username ) ) {
 		$params["username"] = $username = centovacast_UniqueUsername( $params["clientsdetails"] );
 		$query = sprintf( "UPDATE tblhosting SET username=\"%s\"", mysql_real_escape_string( $username ) );
 
@@ -479,8 +479,7 @@ function centovacast_CreateAccount($params) {
  * @return string
  */
 function centovacast_ChangePackage($params) {
-	$serverpassword = centovacast_GetServerCredentials( $params, true )[1];
-	$serverusername = centovacast_GetServerCredentials( $params, true )[0];
+	list($serverusername,$serverpassword) = centovacast_GetServerCredentials( $params, true );
 	$username = $params["username"];
 	$password = $params["password"];
 
@@ -497,13 +496,13 @@ function centovacast_ChangePackage($params) {
 	}
 
 
-	if (( !is_array( $server->data ) || !count( $server->data ) )) {
+	if ( !is_array( $server->data ) || !count( $server->data ) ) {
 		return "Error fetching account information from Centova Cast";
 	}
 
 	$account = $server->data["account"];
 
-	if (( !is_array( $account ) || !isset( $account["username"] ) )) {
+	if ( !is_array( $account ) || !isset( $account["username"] ) ) {
 		return "Account does not exist in Centova Cast";
 	}
 
@@ -530,8 +529,7 @@ function centovacast_ChangePackage($params) {
  * @return string
  */
 function centovacast_TerminateAccount($params) {
-	$serverpassword = centovacast_GetServerCredentials( $params )[1];
-	$serverusername = centovacast_GetServerCredentials( $params )[0];
+	list($serverusername,$serverpassword) = centovacast_GetServerCredentials( $params );
 	$username = $params["username"];
 
 	if (false === $ccurl = centovacast_GetCCURL( $params, &$urlerror )) {
@@ -556,8 +554,7 @@ function centovacast_TerminateAccount($params) {
  * @return string
  */
 function centovacast_SuspendAccount($params) {
-	$serverpassword = centovacast_GetServerCredentials( $params )[1];
-	$serverusername = centovacast_GetServerCredentials( $params )[0];
+	list($serverusername,$serverpassword) = centovacast_GetServerCredentials( $params );
 	$username = $params["username"];
 
 	if (false === $ccurl = centovacast_GetCCURL( $params, &$urlerror )) {
@@ -582,8 +579,7 @@ function centovacast_SuspendAccount($params) {
  * @return string
  */
 function centovacast_UnsuspendAccount($params) {
-	$serverpassword = centovacast_GetServerCredentials( $params )[1];
-	$serverusername = centovacast_GetServerCredentials( $params )[0];
+	list($serverusername,$serverpassword) = centovacast_GetServerCredentials( $params );
 	$username = $params["username"];
 
 	if (false === $ccurl = centovacast_GetCCURL( $params, &$urlerror )) {
@@ -608,8 +604,7 @@ function centovacast_UnsuspendAccount($params) {
  * @return string
  */
 function centovacast_ChangePassword($params) {
-	$serverpassword = centovacast_GetServerCredentials( $params, true )[1];
-	$serverusername = centovacast_GetServerCredentials( $params, true )[0];
+	list($serverusername,$serverpassword) = centovacast_GetServerCredentials( $params, true );
 	$username = $params["username"];
 	$password = $params["password"];
 
@@ -626,13 +621,13 @@ function centovacast_ChangePassword($params) {
 	}
 
 
-	if (( !is_array( $server->data ) || !count( $server->data ) )) {
+	if ( !is_array( $server->data ) || !count( $server->data ) ) {
 		return "Error fetching account information from Centova Cast";
 	}
 
 	$account = $server->data["account"];
 
-	if (( !is_array( $account ) || !isset( $account["username"] ) )) {
+	if ( !is_array( $account ) || !isset( $account["username"] ) ) {
 		return "Account does not exist in Centova Cast";
 	}
 
@@ -684,7 +679,7 @@ function centovacast_ClientArea($params) {
 	$fn = dirname( __FILE__ ) . "/client_area.html";
 
 	if (file_exists( $fn )) {
-		$details = preg_replace( "/<!--[\s\S]*?-->/", "", str_replace( array( "[CCURL]", "[USERNAME]", "[TIME]", "[AUTH]" ), array( $ccurl, preg_replace( "/[^a-z0-9_]+/i", "", $username ), $time, $authtoken ), file_get_contents( $fn ) ) );
+		$details = preg_replace( '/<!--[\s\S]*?-->/', '', str_replace( array( '[CCURL]', '[USERNAME]', '[TIME]', '[AUTH]' ), array( $ccurl, preg_replace( '/[^a-z0-9_]+/i', '', $username ), $time, $authtoken ), file_get_contents( $fn ) ) );
 	}
 	else {
 		$details = "";
@@ -747,8 +742,7 @@ function centovacast_SetState($params, $newstate) {
 		return "Invalid state";
 	}
 
-	$serverpassword = centovacast_GetServerCredentials( $params, true )[1];
-	$serverusername = centovacast_GetServerCredentials( $params, true )[0];
+	list($serverusername,$serverpassword) = centovacast_GetServerCredentials( $params, true );
 	$username = $params["username"];
 
 	if (false === $ccurl = centovacast_GetCCURL( $params, &$urlerror )) {
@@ -815,8 +809,7 @@ function centovacast_RestartStream($params) {
  * @return string
  */
 function centovacast_UsageUpdate($params) {
-	$serverpassword = centovacast_GetServerCredentials( $params )[1];
-	$serverusername = centovacast_GetServerCredentials( $params )[0];
+	list($serverusername,$serverpassword) = centovacast_GetServerCredentials( $params );
 
 	if (false === $ccurl = centovacast_GetCCURL( $params, &$urlerror )) {
 		return $urlerror;
@@ -837,13 +830,13 @@ function centovacast_UsageUpdate($params) {
 	}
 
 
-	if (( !is_array( $system->data ) || !count( $system->data ) )) {
+	if ( !is_array( $system->data ) || !count( $system->data ) ) {
 		return "Error fetching account information from Centova Cast";
 	}
 
 	$accounts = $system->data["row"];
 
-	if (( !is_array( $accounts ) || !count( $accounts ) )) {
+	if ( !is_array( $accounts ) || !count( $accounts ) ) {
 		return "No accounts in Centova Cast";
 	}
 
