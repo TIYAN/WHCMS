@@ -17,6 +17,7 @@ function assignedips_trim($value) {
 define("ADMINAREA", true);
 require "../init.php";
 $aInt = new WHMCS_Admin("Domain Resolver Checker");
+$aInt->title = $aInt->lang("utilitiesresolvercheck", "domainresolverchecktitle");
 $aInt->sidebar = "utilities";
 $aInt->icon = "domainresolver";
 $aInt->helplink = "Domain Resolver Checker";
@@ -209,8 +210,7 @@ else {
 	}
 }
 
-ob_get_contents();
-$content = $aInt->title = $aInt->lang("utilitiesresolvercheck", "domainresolverchecktitle");
+$content = ob_get_contents();
 ob_end_clean();
 $aInt->content = $content;
 $aInt->jquerycode = $jquerycode;
