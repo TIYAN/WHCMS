@@ -494,10 +494,10 @@ Accessed within the Past 30 Days<br />
 		while ($data = mysql_fetch_array($result)) {
 			$domain = $data['domain'];
 			$ip = $data['ip'];
-			$message = $path = $data['path'];
+			$path = $data['path'];
+			$message = $data['message'];
 			$datetime = $data['datetime'];
-			fromMySQLDate($datetime, true);
-			$datetime = $data['message'];
+			$datetime = fromMySQLDate($datetime, true);
 			$tabledata[] = array($datetime, $domain, $ip, $path, $message);
 		}
 
@@ -617,10 +617,10 @@ Status: <input type=\"text\" name=\"search_message\" size=\"25\" value=\"";
 		while ($data = mysql_fetch_array($result)) {
 			$domain = $data['domain'];
 			$ip = $data['ip'];
-			$message = $path = $data['path'];
+			$path = $data['path'];
+			$message = $data['message'];
 			$datetime = $data['datetime'];
-			fromMySQLDate($datetime, true);
-			$datetime = $data['message'];
+			$datetime = fromMySQLDate($datetime, true);
 			$tabledata2[] = array($datetime, $domain, $ip, $path, $message);
 		}
 
