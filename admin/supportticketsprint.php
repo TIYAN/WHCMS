@@ -14,6 +14,7 @@ define("ADMINAREA", true);
 require "../init.php";
 require "../includes/customfieldfunctions.php";
 $aInt = new WHMCS_Admin("List Support Tickets");
+$aInt->title = $aInt->lang("support", "printticketversion");
 $aInt->requiredFiles(array("ticketfunctions"));
 $result = select_query("tbltickets", "", array("id" => $id));
 $data = mysql_fetch_array($result);
@@ -171,8 +172,7 @@ while ($data = mysql_fetch_array($result)) {
 }
 
 echo "<p align=center style=\"font-size:10px;\">" . $aInt->lang("support", "outputgenby") . " WHMCompleteSolution (www.whmcs.com)</p>";
-ob_get_contents();
-$content = $aInt->title = $aInt->lang("support", "printticketversion");
+$content = ob_get_contents();
 ob_end_clean();
 $aInt->content = $content;
 $aInt->displayPopUp();
