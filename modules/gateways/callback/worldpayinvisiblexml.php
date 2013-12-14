@@ -53,10 +53,11 @@ else {
 	$merchantCode = $params['merchantcode1'];
 }
 
-$params['merchantpw'];
+$password = $params['merchantpw'];
 $instId = $params['instid'];
 $cookiestore = $params['cookiestore'];
 $orderDescription = "Invoice #" . $params['invoiceid'];
+$orderAmount = $params['amount'] * 100;
 $raworderAmount = $params['amount'];
 $invoiceID = $params['invoiceid'];
 $orderShopperEmail = $params['clientdetails']['email'];
@@ -65,12 +66,11 @@ $orderShopperFirstName = $params['clientdetails']['firstname'];
 $orderShopperSurname = $params = $params['clientdetails']['lastname'];
 $orderShopperStreet = $params['clientdetails']['address1'];
 $orderShopperPostcode = $params['clientdetails']['postcode'];
-$params['clientdetails']['city'];
+$orderShopperCity = $params['clientdetails']['city'];
 $orderShopperCountryCode = $params['clientdetails']['country'];
 $orderShopperTel = $params['clientdetails']['phonenumber'];
 $acceptHeader = $_SERVER['HTTP_ACCEPT'];
-$_SERVER['HTTP_USER_AGENT'];
-$userAgentHeader = $orderAmount = $params['amount'] * 100;
+$userAgentHeader = $_SERVER['HTTP_USER_AGENT'];
 $shopperIPAddress = (is_null($_SERVER['REMOTE_ADDR']) ? "127.0.0.1" : $_SERVER['REMOTE_ADDR']);
 
 if ($params['cardtype'] == "American Express") {
@@ -105,7 +105,7 @@ else {
 	}
 }
 
-$id = $orderShopperCity = $password = time();
+$id = time();
 $xml = "<?xml version='1.0' encoding='UTF-8'?><!DOCTYPE paymentService PUBLIC '-//WorldPay/DTD WorldPay PaymentService v1//EN' 'http://dtd.worldpay.com/paymentService_v1.dtd'>";
 $xml .= "<paymentService version='1.4' merchantCode='" . $merchantCode . "'>";
 $xml .= "<submit>";
