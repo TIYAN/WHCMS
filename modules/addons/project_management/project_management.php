@@ -49,17 +49,17 @@ function project_management_activate() {
 
 function project_management_deactivate() {
 	$query = "DROP TABLE `mod_project`";
-	full_query($query);
+	$result = full_query($query);
 	$query = "DROP TABLE `mod_projectmessages`";
-	full_query($query);
+	$result = full_query($query);
 	$query = "DROP TABLE `mod_projecttasks`";
-	full_query($query);
+	$result = full_query($query);
 	$query = "DROP TABLE `mod_projecttimes`";
-	full_query($query);
+	$result = full_query($query);
 	$query = "DROP TABLE `mod_projecttasktpls`";
-	$result = $result = $result = full_query($query);
+	$result = full_query($query);
 	$query = "DROP TABLE `mod_projectlog`";
-	$result = $result = $result = full_query($query);
+	$result = full_query($query);
 }
 
 function project_management_upgrade() {
