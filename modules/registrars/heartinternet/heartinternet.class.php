@@ -117,7 +117,7 @@ class HeartInternetReg_API {
 			$svcs_element->appendChild( $element );
 		}
 
-		$doc->createElement( "svcExtension" );
+		$svcs_extensions = $doc->createElement( "svcExtension" );
 		foreach ($extensions as $extension) {
 			$element = $doc->createElement( "extURI" );
 			$element->appendChild( $doc->createTextNode( "" . $extension ) );
@@ -126,7 +126,7 @@ class HeartInternetReg_API {
 
 		$svcs_element->appendChild( $svcs_extensions );
 		$content->appendChild( $svcs_element );
-		$xml = $svcs_extensions = $this->buildXML( $content );
+		$xml = $this->buildXML( $content );
 		$result = $this->sendMessage( $xml );
 		foreach ($result as $tag) {
 
