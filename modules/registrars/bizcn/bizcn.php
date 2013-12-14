@@ -93,8 +93,7 @@ function bizcn_SaveNameservers($params) {
 
 	$dnsHost = substr( $dnsHost, strlen( "ANDdns_hostEQU" ) );
 	$_params = array( "username" => $username, "password" => md5( $password ), "testmode" => $testmode, "module" => "moddomaindns", "domainname" => $sld . "." . $tld, "dns_host" => $dnsHost );
-	com_71_call( $_params, $testmode );
-	$result = $params["Username"];
+	$result = com_71_call( $_params, $testmode );
 
 	if (empty( $result )) {
 		$error = "return is null";
@@ -157,7 +156,7 @@ function bizcn_GetRegistrarLock($params) {
 
 function bizcn_SaveRegistrarLock($params) {
 	$username = $params["Username"];
-	$params["Password"];
+	$password = $params["Password"];
 	$testmode = $params["TestMode"];
 	$tld = $params["tld"];
 	$sld = $params["sld"];
@@ -171,7 +170,7 @@ function bizcn_SaveRegistrarLock($params) {
 
 	$domainname = $sld . "." . $tld;
 	$_params = array( "username" => $username, "password" => md5( $password ), "testmode" => $testmode, "module" => $lockstatus, "domainname" => $domainname );
-	$result = $password = com_71_call( $_params, $testmode );
+	$result = com_71_call( $_params, $testmode );
 
 	if (empty( $result )) {
 		$error = "return is null";
@@ -270,7 +269,7 @@ function bizcn_SaveDNS($params) {
 
 	$hostrecords = $tmpResult;
 
-	if (( !is_array( $hostrecords ) && !empty( $hostrecords ) )) {
+	if ( !is_array( $hostrecords ) && !empty( $hostrecords ) ) {
 		$hostrecords = (array)$hostrecords;
 	}
 
@@ -281,7 +280,7 @@ function bizcn_SaveDNS($params) {
 			$isExistHostname = false;
 			foreach ($dnsData as $_key1 => $_value1) {
 
-				if (( ( $oHostname == $_value1["hostname"] && $oType == $_value1["type"] ) && $oAddress == $_value1["address"] )) {
+				if ( ( $oHostname == $_value1["hostname"] && $oType == $_value1["type"] ) && $oAddress == $_value1["address"] ) {
 					$dnsData[$_key1]["func"] = "NULL";
 					$isExistHostname = true;
 					$trimDnsData[] = $dnsData[$_key1];
@@ -290,7 +289,7 @@ function bizcn_SaveDNS($params) {
 				}
 
 
-				if (( $oHostname == $_value1["hostname"] && $oType == $_value1["type"] )) {
+				if ( $oHostname == $_value1["hostname"] && $oType == $_value1["type"] ) {
 					$dnsData[$_key1]["func"] = "MOD";
 					$dnsData[$_key1]["oldAddress"] = $oAddress;
 					$isExistHostname = true;
@@ -526,13 +525,13 @@ function bizcn_TransferDomain($params) {
 
 function bizcn_RenewDomain($params) {
 	$username = $params["Username"];
-	$testmode = $password = $params["Password"];
+	$password = $params["Password"];
+	$testmode = $params["TestMode"];
 	$tld = $params["tld"];
 	$sld = $params["sld"];
 	$regperiod = $params["regperiod"];
 	$_params = array( "username" => $username, "password" => md5( $password ), "module" => "renewdomain", "domain" => $sld . "." . $tld, "term" => $regperiod );
-	com_71_call( $_params, $testmode );
-	$result = $params["TestMode"];
+	$result = com_71_call( $_params, $testmode );
 
 	if (substr( $result, 0, 3 ) == 200) {
 		return true;
@@ -720,8 +719,7 @@ function bizcn_RegisterNameserver($params) {
 	$nameserver = $params["nameserver"];
 	$ipaddress = $params["ipaddress"];
 	$_params = array( "username" => $username, "password" => md5( $password ), "testmode" => $testmode, "tld" => $tld, "sld" => $sld, "module" => "createnameserver", "hostname" => $nameserver, "ip" => $ipaddress );
-	com_71_call( $_params, $testmode );
-	$result = $params["Username"];
+	$result = com_71_call( $_params, $testmode );
 
 	if (empty( $result )) {
 		$error = "return is null";
@@ -750,8 +748,7 @@ function bizcn_ModifyNameserver($params) {
 	$currentipaddress = $params["currentipaddress"];
 	$newipaddress = $params["newipaddress"];
 	$_params = array( "username" => $username, "password" => md5( $password ), "testmode" => $testmode, "tld" => $tld, "sld" => $sld, "module" => "modnameserver", "hostname" => $nameserver, "oldip" => $currentipaddress, "newip" => $newipaddress );
-	com_71_call( $_params, $testmode );
-	$result = $params["Username"];
+	$result = com_71_call( $_params, $testmode );
 
 	if (empty( $result )) {
 		$error = "return is null";
@@ -778,8 +775,7 @@ function bizcn_DeleteNameserver($params) {
 	$sld = $params["sld"];
 	$nameserver = $params["nameserver"];
 	$_params = array( "username" => $username, "password" => md5( $password ), "testmode" => $testmode, "tld" => $tld, "sld" => $sld, "module" => "delnameserver", "hostname" => $nameserver );
-	com_71_call( $_params, $testmode );
-	$result = $params["Username"];
+	$result = com_71_call( $_params, $testmode );
 
 	if (empty( $result )) {
 		$error = "return is null";
