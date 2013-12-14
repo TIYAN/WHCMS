@@ -322,7 +322,7 @@ function calctotals() {
 							$optionhidden = $configoption['hidden'];
 							$optionname = ($optionhidden ? $configoption['optionname'] . " <i>(" . $aInt->lang("fields", "hidden") . ")</i>" : $configoption['optionname']);
 							$optiontype = $configoption['optiontype'];
-							$selectedvalue = $configoption = $configoption['selectedvalue'];
+							$selectedvalue = $configoption['selectedvalue'];
 							$selectedqty = $configoption['selectedqty'];
 							echo "<tr><td class=\"fieldlabel\">" . $optionname . "</td><td class=\"fieldarea\">";
 
