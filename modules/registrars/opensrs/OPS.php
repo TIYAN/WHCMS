@@ -15,20 +15,18 @@ if (!defined( "WHMCS" )) {
 }
 
 class OPS extends PEAR {
-	var $_OPS_VERSION = "0.9";
-	var $_OPT = "";
-	var $_SPACER = " ";
-	var $_CRLF = "
-";
-	var $_MSGTYPE_STD = "standard";
-	var $_SESSID = null;
-	var $_MSGCNT = null;
-	var $CRLF = "
-";
+	var $_OPS_VERSION	= '0.9';
+	var $_OPT			= '';
+	var $_SPACER		= ' ';		/* indent character */
+	var $_CRLF			= "\n";
+	var $_MSGTYPE_STD	= 'standard';
+	var $_SESSID;
+	var $_MSGCNT;
+	var $CRLF			= "\r\n";
+	var $_data;
 	var $_log = array();
-	var $_data = null;
-	var $_pointers = null;
-	var $_last_was_data_block = null;
+	var $_pointers;
+	var $_last_was_data_block;
 
 
 	/**
@@ -100,7 +98,7 @@ class OPS extends PEAR {
 	 *
 	 */
 	function readData($fh, $timeout = 5) {
-		$len = 187;
+		$len = 0;
 		socket_set_timeout( $fh, $timeout );
 		$line = fgets( $fh, 4000 );
 
@@ -109,7 +107,7 @@ class OPS extends PEAR {
 		}
 
 
-		if (( !$len && preg_match( "/^\s*Content-Length:\s+(\d+)\s*\r\n/i", $line, $matches ) )) {
+		if ( !$len && preg_match( '/^\s*Content-Length:\s+(\d+)\s*\r\n/i', $line, $matches ) ) {
 			$len = (int)$matches[1];
 		}
 		else {
@@ -269,62 +267,48 @@ class OPS extends PEAR {
 		xml_parser_free( $xp );
 		$temp = $depth = array();
 		foreach ($vals as $value) {
-			switch ($value["tag"]) {
-			case "OPS_envelope": {
-				}
+            switch ($value['tag']) {
+              case 'OPS_envelope':
+              case 'header':
+              case 'body':
+              case 'data_block':
+                break;
 
-			case "header": {
-				}
+              case 'version':
+              case 'msg_id':
+              case 'msg_type':
+                $key = '_OPS_' . $value['tag'];
+                $temp[$key] = $value['value'];
+                break;
 
-			case "body": {
-				}
+              case 'item':
+                $key = $value['attributes']['key'];
 
-			case "data_block": {
-					break;
-				}
+                switch ($value['type']) {
+                  case 'open':
+                    array_push($depth, $key);
+                    break;
 
-			case "version": {
-				}
+                  case 'complete':
+                    array_push($depth, $key);
+                    $p = join('::',$depth);
+                    $temp[$p] = $value['value'];
+                    array_pop($depth);
+                    break;
 
-			case "msg_id": {
-				}
+                  case 'close':
+                    array_pop($depth);
+                    break;
 
-			case "msg_type": {
-					$key = "_OPS_" . $value["tag"];
-					$temp[$key] = $value["value"];
-					break;
-				}
+                }
 
-			case "item": {
-					$key = $value["attributes"]["key"];
-					switch ($value["type"]) {
-					case "open": {
-							array_push( $depth, $key );
-							break;
-						}
+                break;
 
-					case "complete": {
-							array_push( $depth, $key );
-							$p = join( "::", $depth );
-							$temp[$p] = $value["value"];
-							array_pop( $depth );
-							break;
-						}
+              case 'dt_assoc':
+              case 'dt_array':
+                break;
 
-					case "close": {
-							array_pop( $depth );
-						}
-					}
-
-					break;
-				}
-
-			case "dt_assoc": {
-				}
-
-			case "dt_array": {
-				}
-			}
+            }
 		}
 
 		foreach ($temp as $key => $value) {
@@ -338,7 +322,7 @@ class OPS extends PEAR {
 
 			$pointer = &$this->_data;
 
-			$i = 171;
+			$i = 0;
 
 			while ($i < $num_levels) {
 				if (!isset( $pointer[$levels[$i]] )) {
@@ -431,19 +415,19 @@ class OPS extends PEAR {
 			foreach ($array as $k => $v) {
 				++$indent;
 
-				if (( ( gettype( $v ) == "resource" || gettype( $v ) == "user function" ) || gettype( $v ) == "unknown type" )) {
+				if ( ( gettype( $v ) == "resource" || gettype( $v ) == "user function" ) || gettype( $v ) == "unknown type" ) {
 					continue;
 				}
 
 				$string .= $this->_CRLF . $IND . "<item key=\"" . $k . "\"";
 
-				if (( gettype( $v ) == "object" && get_class( $v ) )) {
+				if ( gettype( $v ) == "object" && get_class( $v ) ) {
 					$string .= " class=\"" . get_class( $v ) . "\"";
 				}
 
 				$string .= ">";
 
-				if (( is_array( $v ) || is_object( $v ) )) {
+				if ( is_array( $v ) || is_object( $v ) ) {
 					$string .= $this->_convertData( $v, $indent + 1 );
 					$string .= $this->_CRLF . $IND . "</item>";
 				}
@@ -473,8 +457,8 @@ class OPS extends PEAR {
 	 *
 	 */
 	function _quoteXMLChars($string) {
-		$search = array( "&", "<", ">", "\'", "\"" );
-		$replace = array( "&amp;", "&lt;", "&gt;", "&apos;", "&quot;" );
+		$search  = array ('&', '<', '>', "'", '"');
+		$replace = array ('&amp;', '&lt;', '&gt;', '&apos;', '&quot;');
 		$string = str_replace( $search, $replace, $string );
 		$string = utf8_encode( $string );
 		return $string;
@@ -492,7 +476,7 @@ class OPS extends PEAR {
 	 */
 	function _is_assoc($array) {
 		if (is_array( $array )) {
-			foreach ($array as $v => ) {
+			foreach ($array as $k=>$v) {
 
 				if (!is_int( $k )) {
 					return true;
@@ -517,14 +501,12 @@ class OPS extends PEAR {
 	function _log($log, $type, $msg) {
 		$types = array( "r" => "read", "w" => "write", "e" => "error", "i" => "info" );
 
-		if (( $log == "xml" || $log == "http" )) {
-			$this->log[$log][] = sprintf( "[% 6s:%06d] %s
-", strtoupper( $types[$type] ), (( $type == "e" || $type == "i" ) ? 0 : strlen( $msg )), $msg );
+		if ( $log == "xml" || $log == "http" ) {
+			$this->log[$log][] = sprintf( "[% 6s:%06d] %s\n", strtoupper( $types[$type] ), (( $type == "e" || $type == "i" ) ? 0 : strlen( $msg )), $msg );
 			return null;
 		}
 
-		$this->log[$log][] = sprintf( "[% 6s:%06d] %s
-", strtoupper( $types[$type] ), (( $type == "e" || $type == "i" ) ? 0 : strlen( $msg )), (( $type == "e" || $type == "i" ) ? $msg : bin2hex( $msg )) );
+		$this->log[$log][] = sprintf( "[% 6s:%06d] %s\n", strtoupper( $types[$type] ), (( $type == "e" || $type == "i" ) ? 0 : strlen( $msg )), (( $type == "e" || $type == "i" ) ? $msg : bin2hex( $msg )) );
 	}
 
 
@@ -540,24 +522,17 @@ class OPS extends PEAR {
 		echo "<PRE>";
 		foreach ($this->log[$log] as $line) {
 			switch ($format) {
-			case "raw": {
-					echo $line . "
-";
-					break;
-				}
+			case "raw":
+				echo $line . "\n";
+				break;
 
-			case "html": {
-				}
-
-			default: {
-				}
+			case "html":
+			default:
+				echo htmlentities( $line ) . "\n";
+				break;
 			}
 
-			echo htmlentities( $line ) . "
-";
-			break;
 		}
-
 		echo "</PRE>";
 	}
 

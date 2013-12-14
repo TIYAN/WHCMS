@@ -27,56 +27,56 @@ if (!class_exists( "PEAR" )) {
 require_once "OPS.php";
 require_once "country_codes.php";
 class openSRS_base extends PEAR {
-	var $USERNAME = "";
-	var $HRS_USERNAME = "";
-	var $PRIVATE_KEY = "";
-	var $TEST_PRIVATE_KEY = "";
-	var $LIVE_PRIVATE_KEY = "";
-	var $HRS_PRIVATE_KEY = "";
-	var $VERSION = "XML:0.1";
-	var $base_class_version = "2.8.0";
-	var $environment = "LIVE";
-	var $protocol = "XCP";
-	var $LIVE_host = "rr-n1-tor.opensrs.net";
-	var $LIVE_port = 55000;
-	var $LIVE_sslport = 55443;
-	var $TEST_host = "horizon.opensrs.net";
-	var $TEST_port = 55000;
-	var $TEST_sslport = 55443;
-	var $HRS_host = null;
-	var $HRS_port = null;
-	var $HRS_sslport = null;
-	var $REMOTE_HOST = null;
-	var $REMOTE_PORT = null;
-	var $connect_timeout = 20;
-	var $read_timeout = 20;
-	var $log = array();
-	var $_socket = var $CRLF = "
-";
+    public $USERNAME = "";
+    public $HRS_USERNAME = "";
+    public $PRIVATE_KEY = "";
+    public $TEST_PRIVATE_KEY = "";
+    public $LIVE_PRIVATE_KEY = "";
+    public $HRS_PRIVATE_KEY = "";
+    public $VERSION = "XML:0.1";
+    public $base_class_version = "2.8.0";
+    public $environment = "LIVE";
+    public $protocol = "XCP";
+    public $LIVE_host = "rr-n1-tor.opensrs.net";
+    public $LIVE_port = 55000;
+    public $LIVE_sslport = 55443;
+    public $TEST_host = "horizon.opensrs.net";
+    public $TEST_port = 55000;
+    public $TEST_sslport = 55443;
+    public $HRS_host;
+    public $HRS_port;
+    public $HRS_sslport;
+    public $REMOTE_HOST;
+    public $REMOTE_PORT;
+    public $connect_timeout = 20;
+    public $read_timeout = 20;
+    public $log = array( );
+	public $_socket = false;
+	public $CRLF= "\r\n";
 
-	var $_socket_error_num = ;
-	var $_socket_error_msg = ;
-	var $_session_key = ;
-	var $_authenticated = ;
-	var $_OPS = null;
-	var $_CBC = null;
-	var $lookup_all_tlds = ;
-	var $_CRYPT = null;
-	var $_iv = null;
-	var $crypt_type = "SSL";
-	var $crypt_mode = "CBC";
-	var $crypt_rand_source = ;
-	var $affiliate_id = null;
-	var $PERMISSIONS = array( "f_modify_owner" => 1, "f_modify_admin" => 2, "f_modify_billing" => 4, "f_modify_tech" => 8, "f_modify_nameservers" => 16 );
-	var $REG_PERIODS = array( 1 => "1 Year", 2 => "2 Years", 3 => "3 Years", 4 => "4 Years", 5 => "5 Years", 6 => "6 Years", 7 => "7 Years", 8 => "8 Years", 9 => "9 Years", 10 => "10 Years" );
-	var $UK_REG_PERIODS = array( 2 => "2 Years" );
-	var $TV_REG_PERIODS = array( 1 => "1 Year", 2 => "2 Years", 3 => "3 Years", 5 => "5 Years", 10 => "10 Years" );
-	var $TRANSFER_PERIODS = array( 1 => "1 Year" );
-	var $OPENSRS_TLDS_REGEX = "(\.ca|\.(bc|ab|sk|mb|on|qc|nb|ns|pe|nf|nt|nv|yk)\.ca|\.com|\.net|\.org|\.co\.uk|\.org\.uk|\.tv|\.vc|\.cc|\.info|\.biz|\.name|\.us)";
-	var $CA_LEGAL_TYPES = array( "ABO" => "Aboriginal", "ASS" => "Association", "CCO" => "Canadian Corporation", "CCT" => "Canadian Citizen", "EDU" => "Educational Institute", "GOV" => "Government", "HOP" => "Hospital", "INB" => "Indian Band", "LAM" => "Library, Archive or Museum", "LGR" => "Legal Respresentative", "MAJ" => "Her Majesty the Queen", "OMK" => "Protected by Trade-marks Act", "PLT" => "Political Party", "PRT" => "Partnership", "RES" => "Permanent Resident", "TDM" => "Trade-mark Owner", "TRD" => "Trade Union", "TRS" => "Trust" );
-	var $CA_LANGUAGE_TYPES = array( "EN" => "English", "FR" => "French" );
-	var $CA_NATIONALITIES = array( "CND" => "Canadian citizen", "OTH" => "Foreign citizenship", "RES" => "Canadian permanent resident" );
-	var $OPENSRS_ACTIONS = array( "get_domain" => , "get_userinfo" => , "modify_domain" => , "renew_domain" => , "register_domain" => , "get_nameserver" => , "create_nameserver" => , "modify_nameserver" => , "delete_nameserver" => , "get_subuser" => , "add_subuser" => , "modify_subuser" => , "delete_subuser" => , "change_password" => , "change_ownership" => , "set_cookie" => , "delete_cookie" => , "update_cookie" => , "sw_register_domain" => , "bulk_transfer_domain" => , "lookup_domain" => , "get_price_domain" => , "check_transfer_domain" => , "quit_session" => , "buy_webcert" => , "refund_webcert" => , "query_webcert" => , "cprefget_webcert" => , "cprefset_webcert" => , "cancel_pending_webcert" => , "update_webcert" =>  );
+    public $_socket_error_num = false;
+    public $_socket_error_msg = false;
+    public $_session_key = false;
+    public $_authenticated = false;
+    public $_OPS;
+    public $_CBC;
+    public $lookup_all_tlds = false;
+    public $_CRYPT;
+    public $_iv;
+    public $crypt_type = "SSL";
+    public $crypt_mode = "CBC";
+    public $crypt_rand_source = MCRYPT_DEV_URANDOM;
+    public $affiliate_id;
+	public $PERMISSIONS = array( "f_modify_owner" => 1, "f_modify_admin" => 2, "f_modify_billing" => 4, "f_modify_tech" => 8, "f_modify_nameservers" => 16 );
+	public $REG_PERIODS = array( 1 => "1 Year", 2 => "2 Years", 3 => "3 Years", 4 => "4 Years", 5 => "5 Years", 6 => "6 Years", 7 => "7 Years", 8 => "8 Years", 9 => "9 Years", 10 => "10 Years" );
+	public $UK_REG_PERIODS = array( 2 => "2 Years" );
+	public $TV_REG_PERIODS = array( 1 => "1 Year", 2 => "2 Years", 3 => "3 Years", 5 => "5 Years", 10 => "10 Years" );
+	public $TRANSFER_PERIODS = array( 1 => "1 Year" );
+	public $OPENSRS_TLDS_REGEX = "(\\.ca|\\.(bc|ab|sk|mb|on|qc|nb|ns|pe|nf|nt|nv|yk)\\.ca|\\.com|\\.net|\\.org|\\.co\\.uk|\\.org\\.uk|\\.tv|\\.vc|\\.cc|\\.info|\\.biz|\\.name|\\.us)";
+	public $CA_LEGAL_TYPES = array( "ABO" => "Aboriginal", "ASS" => "Association", "CCO" => "Canadian Corporation", "CCT" => "Canadian Citizen", "EDU" => "Educational Institute", "GOV" => "Government", "HOP" => "Hospital", "INB" => "Indian Band", "LAM" => "Library, Archive or Museum", "LGR" => "Legal Respresentative", "MAJ" => "Her Majesty the Queen", "OMK" => "Protected by Trade-marks Act", "PLT" => "Political Party", "PRT" => "Partnership", "RES" => "Permanent Resident", "TDM" => "Trade-mark Owner", "TRD" => "Trade Union", "TRS" => "Trust" );
+	public $CA_LANGUAGE_TYPES = array( "EN" => "English", "FR" => "French" );
+	public $CA_NATIONALITIES = array( "CND" => "Canadian citizen", "OTH" => "Foreign citizenship", "RES" => "Canadian permanent resident" );
+	public $OPENSRS_ACTIONS = array( "get_domain" => true, "get_userinfo" => true, "modify_domain" => true, "renew_domain" => true, "register_domain" => true, "get_nameserver" => true, "create_nameserver" => true, "modify_nameserver" => true, "delete_nameserver" => true, "get_subuser" => true, "add_subuser" => true, "modify_subuser" => true, "delete_subuser" => true, "change_password" => true, "change_ownership" => true, "set_cookie" => true, "delete_cookie" => true, "update_cookie" => true, "sw_register_domain" => true, "bulk_transfer_domain" => true, "lookup_domain" => true, "get_price_domain" => true, "check_transfer_domain" => true, "quit_session" => true, "buy_webcert" => true, "refund_webcert" => true, "query_webcert" => true, "cprefget_webcert" => true, "cprefset_webcert" => true, "cancel_pending_webcert" => true, "update_webcert" => true );
 
 
 	/**
@@ -111,8 +111,7 @@ class openSRS_base extends PEAR {
 
 		$this->_log( "i", "OpenSRS Log:" );
 		$this->_log( "i", "Initialized: " . date( "r" ) );
-		OPS;
-		$this->_OPS = new ();
+		$this->_OPS = new OPS();
 
 		if ($environment) {
 			$this->environment = strtoupper( $environment );
@@ -133,18 +132,19 @@ class openSRS_base extends PEAR {
 
 	function setProtocol($proto) {
 		$proto = trim( strtoupper( $proto ) );
-		switch ($proto) {
-		case "XCP": {
-			}
+        switch ( $proto )
+        {
+            case "XCP" :
+            case "TPP" :
+                $this->protocol = $proto;
+                $this->_log( "i", "Set protocol: ".$this->protocol );
+                return true;
+                break;
+            default :
+            	return array( "is_success" => false, "error" => "Invalid protocol: ".$proto );
+            	break;
+        }
 
-		case "TPP": {
-				$this->protocol = $proto;
-				$this->_log( "i", "Set protocol: " . $this->protocol );
-				true;
-			}
-		}
-
-		return ;
 	}
 
 
@@ -221,7 +221,7 @@ class openSRS_base extends PEAR {
 		}
 
 
-		if (( isset( $params["custom_nameservers"] ) && $data["reg_type"] == "new" )) {
+		if ( isset( $params["custom_nameservers"] ) && $data["reg_type"] == "new" ) {
 			if (!$data["fqdn1"]) {
 				$missing_fields[] = "Primary DNS Hostname";
 			}
@@ -266,7 +266,7 @@ class openSRS_base extends PEAR {
 			}
 
 
-			if (!preg_match( "/^\+?[\d\s\-\.\(\)]+$/", $data[$type . "_phone"] )) {
+			if (!preg_match( '/^\+?[\d\s\-\.\(\)]+$/', $data[$type . "_phone"] )) {
 				$problem_fields[$contact_type . " Phone"] = $data[$type . "_phone"];
 				continue;
 			}
@@ -287,10 +287,9 @@ class openSRS_base extends PEAR {
 			}
 
 
-			if (( ( ( ( $field == "first_name" || $field == "last_name" ) || $field == "org_name" ) || $field == "city" ) || $field == "state" )) {
+			if ( ( ( ( $field == "first_name" || $field == "last_name" ) || $field == "org_name" ) || $field == "city" ) || $field == "state" ) {
 				if (!preg_match( "/[a-zA-Z]/", $value )) {
-					$error_msg .= "Field " . $field . " must contain at least 1 alpha character.<br>
-";
+					$error_msg .= "Field " . $field . " must contain at least 1 alpha character.<br>\n";
 					continue;
 				}
 
@@ -299,8 +298,7 @@ class openSRS_base extends PEAR {
 		}
 
 		foreach ($missing_fields as $field) {
-			$error_msg .= "Missing field: " . $field . ".<br>
-";
+			$error_msg .= "Missing field: " . $field . ".<br>\n";
 		}
 
 		$domains = explode( "", $data["domain"] );
@@ -318,8 +316,7 @@ class openSRS_base extends PEAR {
 			foreach ($problem_fields as $field => $problem) {
 
 				if ($problem != "") {
-					$error_msg .= "The field \"" . $field . "\" contained invalid characters: <i>" . $problem . "</i><br>
-";
+					$error_msg .= "The field \"" . $field . "\" contained invalid characters: <i>" . $problem . "</i><br>\n";
 					continue;
 				}
 			}
@@ -397,7 +394,7 @@ class openSRS_base extends PEAR {
 		}
 
 
-		if (( !preg_match( "/OpenSRS\sSERVER/", $prompt["attributes"]["sender"] ) || substr( $prompt["attributes"]["version"], 0, 3 ) != "XML" )) {
+		if ( !preg_match( "/OpenSRS\sSERVER/", $prompt["attributes"]["sender"] ) || substr( $prompt["attributes"]["version"], 0, 3 ) != "XML" ) {
 			return array( "is_success" => false, "error" => "Unrecognized Peer" );
 		}
 
@@ -406,8 +403,7 @@ class openSRS_base extends PEAR {
 		$cmd = array( "action" => "authenticate", "object" => "user", "attributes" => array( "crypt_type" => strtolower( $this->crypt_type ), "username" => $username, "password" => $username ) );
 		$this->send_data( $cmd );
 		$challenge = $this->read_data( array( "no_xml" => true, "binary" => true ) );
-		Crypt_CBC;
-		$this->_CBC = new ( "H*", $private_key )( , $this->crypt_type );
+		$this->_CBC = new Crypt_CBC( "H*", $private_key )( , $this->crypt_type );
 		$response = pack( "H*", md5( $challenge ) );
 		$this->send_data( $response, array( "no_xml" => true, "binary" => true ) );
 		$answer = $this->read_data();
@@ -433,18 +429,18 @@ class openSRS_base extends PEAR {
 		$syntaxError = $this->check_domain_syntax( $domain );
 
 		if ($syntaxError) {
-			$code = 506;
+			$code = 499;
 
 			if (strstr( $syntaxError, "Top level domain in" )) {
-				$code = 498;
+				$code = 491;
 			}
 			else {
 				if (strstr( $syntaxError, "Domain name exceeds maximum length" )) {
-					$code = 499;
+					$code = 492;
 				}
 				else {
 					if (strstr( $syntaxError, "Invalid domain format" )) {
-						$code = 500;
+						$code = 493;
 					}
 				}
 			}
@@ -454,12 +450,12 @@ class openSRS_base extends PEAR {
 		}
 
 		$domains = array();
-		preg_match( "/(.+)" . $this->OPENSRS_TLDS_REGEX . "$/", $domain, $temp );
+		preg_match( '/(.+)' . $this->OPENSRS_TLDS_REGEX . '$/', $domain, $temp );
 		$base = $temp[1];
 		$tld = $temp[2];
 		$relatedTLDs = $this->getRelatedTLDs( $tld );
 
-		if (( $this->lookup_all_tlds && is_array( $relatedTLDs ) )) {
+		if ( $this->lookup_all_tlds && is_array( $relatedTLDs ) ) {
 			$domains = array();
 			foreach ($relatedTLDs as $stem) {
 				$domains[] = $base . $stem;
@@ -475,7 +471,7 @@ class openSRS_base extends PEAR {
 			$this->send_data( $lookupData );
 			$answer = $this->read_data();
 
-			if (( ( $answer["attributes"]["status"] && stristr( $answer["attributes"]["status"], "available" ) ) && !stristr( $local_domain, $domain ) )) {
+			if ( ( $answer["attributes"]["status"] && stristr( $answer["attributes"]["status"], "available" ) ) && !stristr( $local_domain, $domain ) ) {
 				$data["attributes"]["matches"][] = $local_domain;
 			}
 
@@ -567,7 +563,7 @@ class openSRS_base extends PEAR {
 
 
 	function check_email_syntax($email) {
-		if (( preg_match( "/(@.*@)|(\.\.)|(@\.)|(\.@)|(^\.)/", $email ) || !preg_match( "/^\S+\@(\[?)[a-zA-Z0-9\-\.]+\.([a-zA-Z]{2,3}|[0-9]{1,3})(\]?)$/", $email ) )) {
+		if ( preg_match('/(@.*@)|(\.\.)|(@\.)|(\.@)|(^\.)/', $email) || !preg_match('/^\S+\@(\[?)[a-zA-Z0-9\-\.]+\.([a-zA-Z]{2,3}|[0-9]{1,3})(\]?)$/', $email) ) {
 			return false;
 		}
 
@@ -577,8 +573,8 @@ class openSRS_base extends PEAR {
 
 	function check_domain_syntax($domain) {
 		$domain = strtolower( $domain );
-		$MAX_UK_LENGTH = 66;
-		$MAX_NSI_LENGTH = 72;
+		$MAX_UK_LENGTH = 61;
+		$MAX_NSI_LENGTH = 67;
 
 		if (substr( $domain, 0 - 3 ) == ".uk") {
 			$maxLengthForThisCase = $MAX_UK_LENGTH;
@@ -593,12 +589,12 @@ class openSRS_base extends PEAR {
 		}
 
 
-		if (!preg_match( "/" . $OPENSRS_TLDS_REGEX . "$/", $domain )) {
+		if (!preg_match( '/' . $OPENSRS_TLDS_REGEX . '$/', $domain )) {
 			return "Top level domain in \"" . $domain . "\" is unavailable";
 		}
 
 
-		if (!preg_match( "/^[a-zA-Z0-9][.a-zA-Z0-9\-]*[a-zA-Z0-9]" . $this->OPENSRS_TLDS_REGEX . "$/", $domain )) {
+		if (!preg_match( '/^[a-zA-Z0-9][.a-zA-Z0-9\-]*[a-zA-Z0-9]' . $this->OPENSRS_TLDS_REGEX . '$/', $domain )) {
 			return "Invalid domain format (try something similar to \"yourname.com\")";
 		}
 
@@ -607,7 +603,7 @@ class openSRS_base extends PEAR {
 
 
 	function prune_private_keys($data) {
-		if (( is_array( $data ) || is_object( $data ) )) {
+		if ( is_array( $data ) || is_object( $data ) ) {
 			foreach ($data as $value => ) {
 
 				if (substr( $key, 0, 2 ) == "p_") {
@@ -644,12 +640,13 @@ class openSRS_base extends PEAR {
 
 	function _log($type, $data) {
 		$types = array( "i" => "Info", "r" => "Read", "s" => "Sent" );
-		sprintf( "[ %s%s ]
-			$temp = ", strtoupper( $types[$type] ), (( $type != "i" && $this->_CBC ) ? " - " . $this->crypt_type . " ENCRYPTED" : "") );
+        $temp = sprintf("[ %s%s ]\n",
+            strtoupper($types[$type]),
+            (($type!='i' && $this->_CBC) ? ' - '.$this->crypt_type.' ENCRYPTED' : '')
+        );
 		ob_start();
 		print_r( $data );
-		$temp .= ob_get_contents() . "
-";
+		$temp .= ob_get_contents() . "\n";
 		ob_end_clean();
 		$this->log[] = $temp;
 	}
@@ -658,8 +655,7 @@ class openSRS_base extends PEAR {
 	function showlog() {
 		echo "<PRE>";
 		foreach ($this->log as $line) {
-			echo htmlentities( $line ) . "
-";
+			echo htmlentities( $line ) . "\n";
 		}
 
 		echo "</PRE>";
@@ -678,29 +674,22 @@ class openSRS_base extends PEAR {
 		$header = "";
 		$len = strlen( $msg );
 		switch ($this->crypt_type) {
-		case "SSL": {
-				
-				$signature = md5( md5( $msg . $this->PRIVATE_KEY ) . $this->PRIVATE_KEY );
-				$header .= "POST / HTTP/1.0" . $this->CRLF;
-				$header .= "Content-Type: text/xml" . $this->CRLF;
-				$header .= "X-Username: " . $this->USERNAME . $this->CRLF;
-				$header .= "X-Signature: " . $signature . $this->CRLF;
-				$header .= "Content-Length: " . $len . $this->CRLF . $this->CRLF;
-				break;
-			}
+		case "SSL":				
+			$signature = md5( md5( $msg . $this->PRIVATE_KEY ) . $this->PRIVATE_KEY );
+			$header .= "POST / HTTP/1.0" . $this->CRLF;
+			$header .= "Content-Type: text/xml" . $this->CRLF;
+			$header .= "X-Username: " . $this->USERNAME . $this->CRLF;
+			$header .= "X-Signature: " . $signature . $this->CRLF;
+			$header .= "Content-Length: " . $len . $this->CRLF . $this->CRLF;
+			break;
 
-		case "BLOWFISH": {
-			}
-
-		case "DES": {
-			}
-
-		default: {
-			}
+		case "BLOWFISH":
+		case "DES":
+		default:
+			$header .= "Content-Length: " . $len . $this->CRLF . $this->CRLF;
+			break;
 		}
 
-		$header .= "Content-Length: " . $len . $this->CRLF . $this->CRLF;
-		break;
 		fputs( $fh, $header );
 		fputs( $fh, $msg, $len );
 
@@ -725,12 +714,12 @@ class openSRS_base extends PEAR {
 	function readHeader($fh, $timeout = 5) {
 		$header = array();
 		switch ($this->crypt_type) {
-		case "SSL": {
+		case "SSL":
 				$http_log = "";
 				$line = fgets( $fh, 4000 );
 				$http_log .= $line;
 
-				if (!preg_match( "/^HTTP\/1.1 ([0-9]{0,3}) (.*)\r\n$/", $line, $matches )) {
+				if (!preg_match( '/^HTTP\/1.1 ([0-9]{0,3}) (.*)\r\n$/', $line, $matches )) {
 					$this->_OPS->_log( "raw", "e", "UNEXPECTED READ: Unable to parse HTTP response code" );
 					$this->_OPS->_log( "raw", "r", $line );
 					return false;
@@ -759,48 +748,43 @@ class openSRS_base extends PEAR {
 
 				$header["full_header"] = $http_log;
 				break;
+
+		case "BLOWFISH":
+		case "DES":
+		default:
+			$line = fgets( $fh, 4000 );
+
+			if ($this->_OPS->socketStatus( $fh )) {
+				return false;
 			}
 
-		case "BLOWFISH": {
+
+			if (preg_match( '/^\s*Content-Length:\s+(\d+)\s*\r\n/i', $line, $matches )) {
+				$header["content-length"] = (int)$matches[1];
+			}
+			else {
+				$this->_OPS->_log( "raw", "e", "UNEXPECTED READ: No Content-Length" );
+				$this->_OPS->_log( "raw", "r", $line );
+				return false;
 			}
 
-		case "DES": {
+			$line = fread( $fh, 2 );
+
+			if ($this->_OPS->socketStatus( $fh )) {
+				return false;
 			}
 
-		default: {
+
+			if ($line != $this->CRLF) {
+				$this->_OPS->_log( "raw", "e", "UNEXPECTED READ: No CRLF" );
+				$this->_OPS->_log( "raw", "r", $line );
+				return false;
 			}
-		}
 
-		$line = fgets( $fh, 4000 );
-
-		if ($this->_OPS->socketStatus( $fh )) {
-			return false;
+			break;
 		}
 
 
-		if (preg_match( "/^\s*Content-Length:\s+(\d+)\s*\r\n/i", $line, $matches )) {
-			$header["content-length"] = (int)$matches[1];
-		}
-		else {
-			$this->_OPS->_log( "raw", "e", "UNEXPECTED READ: No Content-Length" );
-			$this->_OPS->_log( "raw", "r", $line );
-			return false;
-		}
-
-		$line = fread( $fh, 2 );
-
-		if ($this->_OPS->socketStatus( $fh )) {
-			return false;
-		}
-
-
-		if ($line != $this->CRLF) {
-			$this->_OPS->_log( "raw", "e", "UNEXPECTED READ: No CRLF" );
-			$this->_OPS->_log( "raw", "r", $line );
-			return false;
-		}
-
-		break;
 		return $header;
 	}
 
@@ -816,11 +800,11 @@ class openSRS_base extends PEAR {
 	 *
 	 */
 	function readData($fh, $timeout = 5) {
-		$len = 187;
+		$len = 0;
 		socket_set_timeout( $fh, $timeout );
 		$header = $this->readHeader( $fh, $timeout );
 
-		if (( ( !$header || !isset( $header["content-length"] ) ) || empty( $header["content-length"] ) )) {
+		if ( ( !$header || !isset( $header["content-length"] ) ) || empty( $header["content-length"] ) ) {
 			$this->_OPS->_log( "raw", "e", "UNEXPECTED ERROR: No Content-Length header provided!" );
 		}
 

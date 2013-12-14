@@ -294,7 +294,7 @@ function opensrs_RegisterDomain($params) {
 	}
 
 
-	if (preg_match( "/uk$/i", $params["tld"] )) {
+	if (preg_match( '/uk$/i', $params['tld'] )) {
 		if ($params["additionalfields"]["Legal Type"] == "UK Limited Company") {
 			$legaltype = "LTD";
 		}
@@ -328,7 +328,7 @@ function opensrs_RegisterDomain($params) {
 		}
 	}
 	else {
-		if (preg_match( "/ca$/i", $params["tld"] )) {
+		if (preg_match( '/ca$/i', $params['tld'] )) {
 			if ($legaltype == "Corporation") {
 				$legaltype = "CCO";
 			}
@@ -372,7 +372,7 @@ function opensrs_RegisterDomain($params) {
 			}
 		}
 		else {
-			if (preg_match( "/de$/i", $params["tld"] )) {
+			if (preg_match( '/de$/i', $params['tld'] )) {
 				$params["admincountry"] = "DE";
 			}
 		}
@@ -433,7 +433,7 @@ function opensrs_RegisterDomain($params) {
 	$opensrspassword = substr( sha1( $params["domainid"] . mt_rand( 1000000, 9999999 ) ), 0, 10 );
 	$attributes = array( "f_lock_domain" => "1", "domain" => $domain, "period" => $params["regperiod"], "reg_type" => "new", "reg_username" => $opensrsusername, "reg_password" => $opensrspassword, "custom_tech_contact" => "0", "legal_type" => $legaltype, "isa_trademark" => $isatrademark, "lang_pref" => "EN", "link_domains" => "0", "custom_nameservers" => "1", "f_whois_privacy" => $f_whois_privacy, "nameserver_list" => $nameserverslist, "contact_set" => array( "admin" => array( "first_name" => $params["adminfirstname"], "state" => $params["adminstate"], "country" => $params["admincountry"], "address1" => $params["adminaddress1"], "address2" => $params["adminaddress2"], "last_name" => $params["adminlastname"], "address3" => "", "city" => $params["admincity"], "fax" => $params["additionalfields"]["Fax Number"], "postal_code" => $params["adminpostcode"], "email" => $params["adminemail"], "phone" => $params["adminfullphonenumber"], "org_name" => $params["admincompanyname"], "lang_pref" => "EN" ), "billing" => array( "first_name" => $params["adminfirstname"], "state" => $params["adminstate"], "country" => $params["admincountry"], "address1" => $params["adminaddress1"], "address2" => $params["adminaddress2"], "last_name" => $params["adminlastname"], "address3" => "", "city" => $params["admincity"], "fax" => $params["additionalfields"]["Fax Number"], "postal_code" => $params["adminpostcode"], "email" => $params["adminemail"], "phone" => $params["adminfullphonenumber"], "org_name" => $params["admincompanyname"], "lang_pref" => "EN" ), "tech" => array( "first_name" => $params["adminfirstname"], "state" => $params["adminstate"], "country" => $params["admincountry"], "address1" => $params["adminaddress1"], "address2" => $params["adminaddress2"], "last_name" => $params["adminlastname"], "address3" => "", "city" => $params["admincity"], "fax" => $params["additionalfields"]["Fax Number"], "postal_code" => $params["adminpostcode"], "email" => $params["adminemail"], "phone" => $params["adminfullphonenumber"], "org_name" => $params["admincompanyname"], "lang_pref" => "EN" ), "owner" => array( "first_name" => $params["firstname"], "state" => $params["state"], "country" => $params["country"], "address1" => $params["address1"], "address2" => $params["address2"], "last_name" => $params["lastname"], "address3" => "", "city" => $params["city"], "fax" => $params["additionalfields"]["Fax Number"], "postal_code" => $params["postcode"], "email" => $params["email"], "phone" => $params["fullphonenumber"], "org_name" => $params["companyname"], "lang_pref" => "EN" ) ) );
 
-	if (preg_match( "/au$/i", $params["tld"] )) {
+	if (preg_match( '/au$/i', $params['tld'] )) {
 		$eligibilitytype = $params["additionalfields"]["Eligibility ID Type"];
 
 		if ($eligibilitytype == "Australian Company Number (ACN)") {
@@ -495,7 +495,7 @@ function opensrs_RegisterDomain($params) {
 		$attributes["tld_data"]["au_registrant_info"]["registrant_name"] = $params["additionalfields"]["Registrant Name"];
 	}
 	else {
-		if (preg_match( "/us$/i", $params["tld"] )) {
+		if (preg_match( '/us$/i', $params['tld'] )) {
 			$purpose = $params["additionalfields"]["Application Purpose"];
 
 			if ($purpose == "Business use for profit") {
@@ -540,7 +540,7 @@ function opensrs_RegisterDomain($params) {
 			$attributes["tld_data"] = array( "nexus" => array( "category" => $params["additionalfields"]["Nexus Category"], "app_purpose" => $purpose ) );
 		}
 		else {
-			if (preg_match( "/it$/i", $params["tld"] )) {
+			if (preg_match( '/it$/i', $params['tld'] )) {
 				$purpose = $params["additionalfields"]["Application Purpose"];
 
 				if ($purpose == "Business use for profit") {
@@ -672,14 +672,14 @@ function opensrs_TransferDomain($params) {
 	$opensrsusername = opensrs_getusername( $params["sld"] . "." . $params["tld"] );
 	$opensrspassword = substr( sha1( $params["domainid"] . mt_rand( 1000000, 9999999 ) ), 0, 10 );
 
-	if (preg_match( "/au$/i", $params["tld"] )) {
+	if (preg_match( '/au$/i', $params['tld'] )) {
 		$params["regperiod"] = "0";
 	}
 
 	$domain = $params["sld"] . "." . $params["tld"];
 	$cmd = array( "action" => "SW_REGISTER", "object" => "DOMAIN", "registrant_ip" => $server_ip, "attributes" => array( "f_lock_domain" => "1", "domain" => $domain, "period" => $params["regperiod"], "reg_type" => "transfer", "reg_username" => $opensrsusername, "reg_password" => $opensrspassword, "custom_tech_contact" => "0", "link_domains" => "0", "custom_nameservers" => "1", "nameserver_list" => $nameserverslist, "f_whois_privacy" => $f_whois_privacy, "contact_set" => array( "admin" => array( "first_name" => $params["adminfirstname"], "state" => $params["adminstate"], "country" => $params["admincountry"], "address1" => $params["adminaddress1"], "address2" => $params["adminaddress2"], "last_name" => $params["adminlastname"], "address3" => "", "city" => $params["admincity"], "fax" => $params["additionalfields"]["Fax Number"], "postal_code" => $params["adminpostcode"], "email" => $params["adminemail"], "phone" => $params["adminfullphonenumber"], "org_name" => $params["admincompanyname"] ), "billing" => array( "first_name" => $params["adminfirstname"], "state" => $params["adminstate"], "country" => $params["admincountry"], "address1" => $params["adminaddress1"], "address2" => $params["adminaddress2"], "last_name" => $params["adminlastname"], "address3" => "", "city" => $params["admincity"], "fax" => $params["additionalfields"]["Fax Number"], "postal_code" => $params["adminpostcode"], "email" => $params["adminemail"], "phone" => $params["adminfullphonenumber"], "org_name" => $params["admincompanyname"] ), "tech" => array( "first_name" => $params["adminfirstname"], "state" => $params["adminstate"], "country" => $params["admincountry"], "address1" => $params["adminaddress1"], "address2" => $params["adminaddress2"], "last_name" => $params["adminlastname"], "address3" => "", "city" => $params["admincity"], "fax" => $params["additionalfields"]["Fax Number"], "postal_code" => $params["adminpostcode"], "email" => $params["adminemail"], "phone" => $params["adminfullphonenumber"], "org_name" => $params["admincompanyname"] ), "owner" => array( "first_name" => $params["firstname"], "state" => $params["state"], "country" => $params["country"], "address1" => $params["address1"], "address2" => $params["address2"], "last_name" => $params["lastname"], "address3" => "", "city" => $params["city"], "fax" => $params["additionalfields"]["Fax Number"], "postal_code" => $params["postcode"], "email" => $params["email"], "phone" => $params["fullphonenumber"], "org_name" => $params["companyname"] ) ) ) );
 
-	if (( ( ( ( preg_match( "/au$/i", $params["tld"] ) || preg_match( "/de$/i", $params["tld"] ) ) || preg_match( "/be$/i", $params["tld"] ) ) || preg_match( "/eu$/i", $params["tld"] ) ) || preg_match( "/it$/i", $params["tld"] ) )) {
+	if ( ( ( ( preg_match( '/au$/i', $params['tld'] ) || preg_match( '/de$/i', $params['tld'] ) ) || preg_match( '/be$/i', $params['tld'] ) ) || preg_match( '/eu$/i', $params['tld'] ) ) || preg_match( '/it$/i', $params['tld'] ) ) {
 		$cmd["attributes"]["owner_confirm_address"] = $params["email"];
 	}
 
@@ -804,7 +804,7 @@ function opensrs_GetContactDetails($params) {
 	$values["Admin"]["Phone"] = $admindata["phone"];
 	$values["Admin"]["Fax"] = $admindata["fax"];
 
-	if (!preg_match( "/ca$/i", $params["tld"] )) {
+	if (!preg_match( '/ca$/i', $params['tld'] )) {
 		$values["Billing"]["First Name"] = $billingdata["first_name"];
 		$values["Billing"]["Last Name"] = $billingdata["last_name"];
 		$values["Billing"]["Organisation Name"] = $billingdata["org_name"];
@@ -877,7 +877,7 @@ function opensrs_SaveContactDetails($params) {
 	if ($opensrscookie) {
 		$cmd = array( "object" => "domain", "action" => "modify", "cookie" => $opensrscookie, "registrant_ip" => $server_ip, "attributes" => array( "data" => "contact_info", "affect_domains" => "0", "lang_pref" => "EN", "report_email" => $params["Owner"]["Email"], "contact_set" => array( "owner" => array( "first_name" => $params["contactdetails"]["Owner"]["First Name"], "state" => $params["contactdetails"]["Owner"]["State"], "country" => $params["contactdetails"]["Owner"]["Country"], "address1" => $params["contactdetails"]["Owner"]["Address 1"], "address2" => $params["contactdetails"]["Owner"]["Address 2"], "last_name" => $params["contactdetails"]["Owner"]["Last Name"], "address3" => "", "city" => $params["contactdetails"]["Owner"]["City"], "fax" => $params["contactdetails"]["Owner"]["Fax"], "postal_code" => $params["contactdetails"]["Owner"]["Postcode"], "email" => $params["contactdetails"]["Owner"]["Email"], "phone" => $params["contactdetails"]["Owner"]["Phone"], "org_name" => $params["contactdetails"]["Owner"]["Organisation Name"], "lang_pref" => "EN" ), "admin" => array( "first_name" => $params["contactdetails"]["Admin"]["First Name"], "state" => $params["contactdetails"]["Admin"]["State"], "country" => $params["contactdetails"]["Admin"]["Country"], "address1" => $params["contactdetails"]["Admin"]["Address 1"], "address2" => $params["contactdetails"]["Admin"]["Address 2"], "last_name" => $params["contactdetails"]["Admin"]["Last Name"], "address3" => "", "city" => $params["contactdetails"]["Admin"]["City"], "fax" => $params["contactdetails"]["Admin"]["Fax"], "postal_code" => $params["contactdetails"]["Admin"]["Postcode"], "email" => $params["contactdetails"]["Admin"]["Email"], "phone" => $params["contactdetails"]["Admin"]["Phone"], "org_name" => $params["contactdetails"]["Admin"]["Organisation Name"], "lang_pref" => "EN" ), "tech" => array( "first_name" => $params["contactdetails"]["Technical"]["First Name"], "state" => $params["contactdetails"]["Technical"]["State"], "country" => $params["contactdetails"]["Technical"]["Country"], "address1" => $params["contactdetails"]["Technical"]["Address 1"], "address2" => $params["contactdetails"]["Technical"]["Address 2"], "last_name" => $params["contactdetails"]["Technical"]["Last Name"], "address3" => "", "city" => $params["contactdetails"]["Technical"]["City"], "fax" => $params["contactdetails"]["Technical"]["Fax"], "postal_code" => $params["contactdetails"]["Technical"]["Postcode"], "email" => $params["contactdetails"]["Technical"]["Email"], "phone" => $params["contactdetails"]["Technical"]["Phone"], "org_name" => $params["contactdetails"]["Technical"]["Organisation Name"], "lang_pref" => "EN" ) ) ) );
 
-		if (!preg_match( "/ca$/i", $params["tld"] )) {
+		if (!preg_match( '/ca$/i', $params['tld'] )) {
 			$cmd["attributes"]["contact_set"]["billing"] = array( "first_name" => $params["contactdetails"]["Billing"]["First Name"], "state" => $params["contactdetails"]["Billing"]["State"], "country" => $params["contactdetails"]["Billing"]["Country"], "address1" => $params["contactdetails"]["Billing"]["Address 1"], "address2" => $params["contactdetails"]["Billing"]["Address 2"], "last_name" => $params["contactdetails"]["Billing"]["Last Name"], "address3" => "", "city" => $params["contactdetails"]["Billing"]["City"], "fax" => $params["contactdetails"]["Billing"]["Fax"], "postal_code" => $params["contactdetails"]["Billing"]["Postcode"], "email" => $params["contactdetails"]["Billing"]["Email"], "phone" => $params["contactdetails"]["Billing"]["Phone"], "org_name" => $params["contactdetails"]["Billing"]["Organisation Name"], "lang_pref" => "EN" );
 		}
 
@@ -1176,9 +1176,9 @@ function opensrs_AdminDomainsTabFieldsSave($params) {
 
 
 function opensrs_Sync($params) {
-	$params["Username"];
-	$params["Password"];
-	$params["PrivateKey"];
+	$regusername = $params["Username"];
+	$regpassword = $params["Password"];
+	$regprivatekey = $params["PrivateKey"];
 
 	if ($params["TestMode"]) {
 		$mode = "test";
@@ -1207,9 +1207,9 @@ function opensrs_Sync($params) {
 	}
 
 	$opensrscookie = $result["attributes"]["cookie"];
-	$expirydate = $regusername = $result["attributes"]["expiredate"];
-	$expirydate = $regpassword = explode( " ", $expirydate );
-	$expirydate = $regprivatekey = $expirydate[0];
+	$expirydate = $result["attributes"]["expiredate"];
+	$expirydate = explode( " ", $expirydate );
+	$expirydate = $expirydate[0];
 	$rtn = array();
 	$rtn["active"] = true;
 	$rtn["expirydate"] = $expirydate;
@@ -1218,9 +1218,9 @@ function opensrs_Sync($params) {
 
 
 function opensrs_TransferSync($params) {
-	$params["Username"];
-	$params["Password"];
-	$params["PrivateKey"];
+	$regusername = $params["Username"];
+	$regpassword = $params["Password"];
+	$regprivatekey = $params["PrivateKey"];
 
 	if ($params["TestMode"]) {
 		$mode = "test";
@@ -1249,9 +1249,9 @@ function opensrs_TransferSync($params) {
 	}
 
 	$opensrscookie = $result["attributes"]["cookie"];
-	$expirydate = $regusername = $result["attributes"]["expiredate"];
-	$expirydate = $regpassword = explode( " ", $expirydate );
-	$expirydate = $regprivatekey = $expirydate[0];
+	$expirydate = $result["attributes"]["expiredate"];
+	$expirydate = explode( " ", $expirydate );
+	$expirydate = $expirydate[0];
 	$rtn = array();
 	$rtn["active"] = true;
 	$rtn["expirydate"] = $expirydate;
