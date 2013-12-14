@@ -277,15 +277,20 @@ function heartinternet_curlcall($xml, $verbose = "off", $params) {
 
 	$objects = array( "http://www.heartinternet.co.uk/whapi/null-1.1", "http://www.heartinternet.co.uk/whapi/package-1.4" );
 	$extensions = array( "http://www.heartinternet.co.uk/whapi/ext-package-1.1", "http://www.heartinternet.co.uk/whapi/ext-whapi-1.0" );
-	$hi_api->logIn( $params["serverusername"], $params["serverpassword"], $objects, $extensions );
-	Exception {
+    try
+    {
+		$hi_api->logIn( $params["serverusername"], $params["serverpassword"], $objects, $extensions );
+	}
+	catch ( Exception $e ) {
 		logModuleCall( "heartinternet", $params["action"], $xml, $e->getMessage() );
 		return "Caught exception: " . $e->getMessage();
-		$data = $hi_api->sendMessage( $xml, true );
-		$retxml = ($verbose == "on" ? heartinternet_xml2array( $data ) : XMLtoArray( $data ));
-		logModuleCall( "heartinternet", $params["action"], $xml, $data, $retxml );
-		return $retxml;
 	}
+	
+	$data = $hi_api->sendMessage( $xml, true );
+	$retxml = ($verbose == "on" ? heartinternet_xml2array( $data ) : XMLtoArray( $data ));
+	logModuleCall( "heartinternet", $params["action"], $xml, $data, $retxml );
+	return $retxml;
+
 }
 
 
@@ -349,7 +354,7 @@ function heartinternet_xml2array($contents, $get_attributes = 1) {
 		if ($type == "open") {
 			$parent[$level - 1] = &$current;
 
-			if (( !is_array( $current ) || !in_array( $tag, array_keys( $current ) ) )) {
+			if ( !is_array( $current ) || !in_array( $tag, array_keys( $current ) ) ) {
 				$current[$tag] = $result;
 				$current = &$current[$tag];
 
@@ -378,7 +383,7 @@ function heartinternet_xml2array($contents, $get_attributes = 1) {
 			}
 
 
-			if (( ( is_array( $current[$tag] ) && $get_attributes == 0 ) || ( ( isset( $current[$tag][0] ) && is_array( $current[$tag][0] ) ) && $get_attributes == 1 ) )) {
+			if ( ( is_array( $current[$tag] ) && $get_attributes == 0 ) || ( ( isset( $current[$tag][0] ) && is_array( $current[$tag][0] ) ) && $get_attributes == 1 ) ) {
 				array_push( $current[$tag], $result );
 				continue;
 			}

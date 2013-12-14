@@ -72,8 +72,7 @@ class HeartInternet_API {
 			return $result;
 		}
 
-		Exception;
-		throw new ( "Communication failure" );
+		throw new Exception( "Communication failure" );
 	}
 
 
@@ -86,15 +85,13 @@ class HeartInternet_API {
 	 * @param array   $extensions the extension namespaces to load.
 	 */
 	function logIn($userid, $password, $objects, $extensions) {
-		if (!preg_match( "/^[a-f0-9]+$/", $userid )) {
-			Exception;
-			throw new ( "Invalid username, should look like '9cf2cdbcce5e00c0'" );
+		if (!preg_match( '/^[a-f0-9]+$/', $userid )) {
+			throw new Exception( "Invalid username, should look like '9cf2cdbcce5e00c0'" );
 		}
 
 
-		if (( !$objects || empty( $objects ) )) {
-			Exception;
-			throw new ( "You must provide some object namespaces, please see the login examples in the documentation" );
+		if ( !$objects || empty( $objects ) ) {
+			throw new Exception( "You must provide some object namespaces, please see the login examples in the documentation" );
 		}
 
 		$doc = new DOMDocument();
@@ -102,14 +99,14 @@ class HeartInternet_API {
 		$clID_element = $doc->createElement( "clID" );
 		$clID_element->appendChild( $doc->createTextNode( $userid ) );
 		$content->appendChild( $clID_element );
-		$doc->createElement( "pw" );
+		$pw_element = $doc->createElement( "pw" );
 		$pw_element->appendChild( $doc->createTextNode( $password ) );
 		$content->appendChild( $pw_element );
 		$options_element = $doc->createElement( "options" );
 		$version_element = $doc->createElement( "version" );
 		$version_element->appendChild( $doc->createTextNode( "1.0" ) );
 		$options_element->appendChild( $version_element );
-		$lang_element = $pw_element = $doc->createElement( "lang" );
+		$lang_element = $doc->createElement( "lang" );
 		$lang_element->appendChild( $doc->createTextNode( "en" ) );
 		$options_element->appendChild( $lang_element );
 		$content->appendChild( $options_element );
@@ -120,7 +117,7 @@ class HeartInternet_API {
 			$svcs_element->appendChild( $element );
 		}
 
-		$doc->createElement( "svcExtension" );
+		$svcs_extensions = $doc->createElement( "svcExtension" );
 		foreach ($extensions as $extension) {
 			$element = $doc->createElement( "extURI" );
 			$element->appendChild( $doc->createTextNode( "" . $extension ) );
@@ -129,13 +126,12 @@ class HeartInternet_API {
 
 		$svcs_element->appendChild( $svcs_extensions );
 		$content->appendChild( $svcs_element );
-		$xml = $svcs_extensions = $this->buildXML( $content );
+		$xml = $this->buildXML( $content );
 		$result = $this->sendMessage( $xml );
 		foreach ($result as $tag) {
 
-			if (( ( $tag["tag"] == "result" && $tag["type"] != "close" ) && $tag["attributes"]["code"] != 1000 )) {
-				Exception;
-				throw new ( "Failed to log in!: " . $tag["attributes"]["code"] );
+			if ( ( $tag["tag"] == "result" && $tag["type"] != "close" ) && $tag["attributes"]["code"] != 1000 ) {
+				throw new Exception( "Failed to log in!: " . $tag["attributes"]["code"] );
 			}
 
 
