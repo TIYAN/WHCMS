@@ -268,7 +268,7 @@ function getClientsStats($userid) {
 	}
 
 	$result = select_query("tblaffiliatesaccounts", "COUNT(*)", array("clientid" => $userid), "", "", "", "tblaffiliates ON tblaffiliatesaccounts.affiliateid=tblaffiliates.id");
-	$data = $result = mysql_fetch_array($result);
+	$data = mysql_fetch_array($result);
 	$stats['numaffiliatesignups'] = $data[0];
 	return $stats;
 }

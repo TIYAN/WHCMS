@@ -49,8 +49,8 @@ function globalsignssl_AdminCustomButtonArray() {
 
 
 function globalsignssl_cancel($params) {
-	select_query( "tblsslorders", "COUNT(*)", array( "serviceid" => $params["serviceid"], "status" => "Awaiting Configuration" ) );
-	$data = $result = mysql_fetch_array( $result );
+	$result = select_query( "tblsslorders", "COUNT(*)", array( "serviceid" => $params["serviceid"], "status" => "Awaiting Configuration" ) );
+	$data = mysql_fetch_array( $result );
 
 	if (!$data[0]) {
 		return "No Incomplete SSL Order exists for this order";
