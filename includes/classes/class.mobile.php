@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -22,7 +22,7 @@ class WHMCS_Mobile extends WHMCS_Admin {
 	public function output() {
 		$this->smarty->display("header.tpl");
 		$content = $this->smarty->fetch($this->template . ".tpl");
-		$content = preg_replace("/(<form\W[^>]*\bmethod=('|\"|)POST('|\"|)\b[^>]*>)/i", "$1" . "\r\n" . generate_token(), $content);
+		$content = preg_replace('/(<form\W[^>]*\bmethod=(\'|"|)POST(\'|"|)\b[^>]*>)/i', '$1' . "\n" . generate_token(), $content);
 
 
 		if ($this->exitmsg) {

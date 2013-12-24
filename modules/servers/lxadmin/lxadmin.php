@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -153,20 +153,20 @@ function lxadmin_ConfigOptions() {
 
 
 function lxadmin_CreateAccount($params) {
-	$serverip = $params["serverip"];
-	$serverusername = $params["serverusername"];
-	$serverpassword = $params["serverpassword"];
-	$secure = $params["serversecure"];
-	$domain = $params["domain"];
-	$username = $params["username"];
-	$password = $params["password"];
-	$clientsdetails = $params["clientsdetails"];
-	$resourcePlan = $params["configoption2"];
-	$dnsTemplate = $params["configoption3"];
-	$webServer = $params["configoption4"];
-	$mailServer = $params["configoption5"];
-	$mysqlServer = $params["configoption6"];
-	$dnsServers = $params["configoption7"];
+	$serverip = $params['serverip'];
+	$serverusername = $params['serverusername'];
+	$serverpassword = $params['serverpassword'];
+	$secure = $params['serversecure'];
+	$domain = $params['domain'];
+	$username = $params['username'];
+	$password = $params['password'];
+	$clientsdetails = $params['clientsdetails'];
+	$resourcePlan = $params['configoption2'];
+	$dnsTemplate = $params['configoption3'];
+	$webServer = $params['configoption4'];
+	$mailServer = $params['configoption5'];
+	$mysqlServer = $params['configoption6'];
+	$dnsServers = $params['configoption7'];
 	$lxHelper = new LxHelper( $serverip, $serverusername, $serverpassword, $secure );
 	$json = $lxHelper->callLxApi_getResourcePlans();
 
@@ -175,7 +175,7 @@ function lxadmin_CreateAccount($params) {
 	}
 
 	$resourcePlanInternal = LxHelper::getinternalresourcename( $json->result, $resourcePlan );
-	$json = $lxHelper->callLxApi( "action=add" . "&class=client" . "&name=" . $username . "&v-password=" . $password . "&v-plan_name=" . $resourcePlanInternal . "&v-type=customer" . "&v-contactemail=" . $clientsdetails["email"] . "&v-send_welcome_f=off" . "&v-domain_name=" . $domain . "&v-dnstemplate_name=" . $dnsTemplate . "&v-websyncserver=" . $webServer . "&v-mmailsyncserver=" . $mailServer . "&v-mysqldbsyncserver=" . $mysqlServer . "&v-dnssyncserver_list=" . $dnsServers );
+	$json = $lxHelper->callLxApi( "action=add" . "&class=client" . "&name=" . $username . "&v-password=" . $password . "&v-plan_name=" . $resourcePlanInternal . "&v-type=customer" . "&v-contactemail=" . $clientsdetails['email'] . "&v-send_welcome_f=off" . "&v-domain_name=" . $domain . "&v-dnstemplate_name=" . $dnsTemplate . "&v-websyncserver=" . $webServer . "&v-mmailsyncserver=" . $mailServer . "&v-mysqldbsyncserver=" . $mysqlServer . "&v-dnssyncserver_list=" . $dnsServers );
 
 	if ($json->return === "error") {
 		$result = $json->message;
@@ -189,11 +189,11 @@ function lxadmin_CreateAccount($params) {
 
 
 function lxadmin_TerminateAccount($params) {
-	$serverip = $params["serverip"];
-	$serverusername = $params["serverusername"];
-	$serverpassword = $params["serverpassword"];
-	$secure = $params["serversecure"];
-	$username = $params["username"];
+	$serverip = $params['serverip'];
+	$serverusername = $params['serverusername'];
+	$serverpassword = $params['serverpassword'];
+	$secure = $params['serversecure'];
+	$username = $params['username'];
 	$lxHelper = new LxHelper( $serverip, $serverusername, $serverpassword, $secure );
 	$json = $lxHelper->callLxApi( "action=delete" . "&class=client" . "&name=" . $username );
 
@@ -209,11 +209,11 @@ function lxadmin_TerminateAccount($params) {
 
 
 function lxadmin_SuspendAccount($params) {
-	$serverip = $params["serverip"];
-	$serverusername = $params["serverusername"];
-	$serverpassword = $params["serverpassword"];
-	$secure = $params["serversecure"];
-	$username = $params["username"];
+	$serverip = $params['serverip'];
+	$serverusername = $params['serverusername'];
+	$serverpassword = $params['serverpassword'];
+	$secure = $params['serversecure'];
+	$username = $params['username'];
 	$lxHelper = new LxHelper( $serverip, $serverusername, $serverpassword, $secure );
 	$json = $lxHelper->callLxApi( "action=update" . "&subaction=disable" . "&class=client" . "&name=" . $username );
 
@@ -229,11 +229,11 @@ function lxadmin_SuspendAccount($params) {
 
 
 function lxadmin_UnsuspendAccount($params) {
-	$serverip = $params["serverip"];
-	$serverusername = $params["serverusername"];
-	$serverpassword = $params["serverpassword"];
-	$secure = $params["serversecure"];
-	$username = $params["username"];
+	$serverip = $params['serverip'];
+	$serverusername = $params['serverusername'];
+	$serverpassword = $params['serverpassword'];
+	$secure = $params['serversecure'];
+	$username = $params['username'];
 	$lxHelper = new LxHelper( $serverip, $serverusername, $serverpassword, $secure );
 	$json = $lxHelper->callLxApi( "action=update" . "&subaction=enable" . "&class=client" . "&name=" . $username );
 
@@ -249,12 +249,12 @@ function lxadmin_UnsuspendAccount($params) {
 
 
 function lxadmin_ChangePassword($params) {
-	$serverip = $params["serverip"];
-	$serverusername = $params["serverusername"];
-	$serverpassword = $params["serverpassword"];
-	$secure = $params["serversecure"];
-	$username = $params["username"];
-	$password = $params["password"];
+	$serverip = $params['serverip'];
+	$serverusername = $params['serverusername'];
+	$serverpassword = $params['serverpassword'];
+	$secure = $params['serversecure'];
+	$username = $params['username'];
+	$password = $params['password'];
 	$lxHelper = new LxHelper( $serverip, $serverusername, $serverpassword, $secure );
 	$json = $lxHelper->callLxApi( "action=update" . "&subaction=password" . "&class=client" . "&name=" . $username . "&v-password=" . $password );
 
@@ -270,12 +270,12 @@ function lxadmin_ChangePassword($params) {
 
 
 function lxadmin_ChangePackage($params) {
-	$serverip = $params["serverip"];
-	$serverusername = $params["serverusername"];
-	$serverpassword = $params["serverpassword"];
-	$secure = $params["serversecure"];
-	$username = $params["username"];
-	$resourcePlan = $params["configoption2"];
+	$serverip = $params['serverip'];
+	$serverusername = $params['serverusername'];
+	$serverpassword = $params['serverpassword'];
+	$secure = $params['serversecure'];
+	$username = $params['username'];
+	$resourcePlan = $params['configoption2'];
 	$lxHelper = new LxHelper( $serverip, $serverusername, $serverpassword, $secure );
 	$json = $lxHelper->callLxApi_getResourcePlans();
 
@@ -298,7 +298,7 @@ function lxadmin_ChangePackage($params) {
 
 
 function lxadmin_LoginLink($params) {
-	if ($params["serversecure"]) {
+	if ($params['serversecure']) {
 		$protocol = "https";
 		$port = 7782;
 	}
@@ -307,7 +307,7 @@ function lxadmin_LoginLink($params) {
 		$port = 7783;
 	}
 
-	$code = "<a href=\"" . $protocol . "://" . $params["serverip"] . ":" . $port . "/htmllib/phplib/?frm_clientname=" . $params["username"] . "&amp;frm_password=" . $params["password"] . "\" target=\"_blank\" class=\"moduleloginlink\">login to LxAdmin</a>";
+	$code = "<a href=\"" . $protocol . "://" . $params['serverip'] . ":" . $port . "/htmllib/phplib/?frm_clientname=" . $params['username'] . "&amp;frm_password=" . $params['password'] . "\" target=\"_blank\" class=\"moduleloginlink\">login to LxAdmin</a>";
 	return $code;
 }
 

@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -22,11 +22,11 @@ function gmointernet_getConfigArray() {
  * @param unknown $params
  */
 function gmointernet_GetNameservers($params) {
-	$username = $params["Username"];
-	$password = $params["Password"];
-	$testmode = $params["TestMode"];
-	$tld = $params["tld"];
-	$sld = $params["sld"];
+	$username = $params['Username'];
+	$password = $params['Password'];
+	$testmode = $params['TestMode'];
+	$tld = $params['tld'];
+	$sld = $params['sld'];
 	$onamaeReqParamArray = array( ONAMAEAPI_KEY_REQ_LOGINID => $username, ONAMAEAPI_KEY_REQ_LOGINPASSWORD => $password, ONAMAEAPI_KEY_REQ_ACTIONTYPE => ONAMAEAPI_ACTIONTYPE_DOMAININFO, ONAMAEAPI_KEY_REQ_DOMAINNAME => $sld . "." . $tld );
 	$result = onamaeSendHttpRequest( $testmode, $onamaeReqParamArray );
 	$resultArray = onamaeReplaceResult( $result );
@@ -35,7 +35,7 @@ function gmointernet_GetNameservers($params) {
 	if (isOnamaeSuccess( $resultArray )) {
 		global $DUPLICATON_KEY_ARRAY;
 
-		$nsNumMax = $DUPLICATON_KEY_ARRAY[ONAMAEAPI_KEY_RES_NS];
+		$nsNumMax = $DUPLICATON_KEY_ARRAY['ONAMAEAPI_KEY_RES_NS'];
 		$i = 66;
 
 		while (( $i < $nsNumMax && $i < 5 )) {
@@ -49,7 +49,7 @@ function gmointernet_GetNameservers($params) {
 		}
 	}
 	else {
-		$values["error"] = $resultArray[ONAMAEAPI_KEY_RES_RESULTMESSAGE];
+		$values['error'] = $resultArray['ONAMAEAPI_KEY_RES_RESULTMESSAGE'];
 	}
 
 	return $values;
@@ -62,15 +62,15 @@ function gmointernet_GetNameservers($params) {
  * @param unknown $params
  */
 function gmointernet_SaveNameservers($params) {
-	$username = $params["Username"];
-	$password = $params["Password"];
-	$testmode = $params["TestMode"];
-	$tld = $params["tld"];
-	$sld = $params["sld"];
-	$nameserver1 = $params["ns1"];
-	$nameserver2 = $params["ns2"];
-	$nameserver3 = $params["ns3"];
-	$nameserver4 = $params["ns4"];
+	$username = $params['Username'];
+	$password = $params['Password'];
+	$testmode = $params['TestMode'];
+	$tld = $params['tld'];
+	$sld = $params['sld'];
+	$nameserver1 = $params['ns1'];
+	$nameserver2 = $params['ns2'];
+	$nameserver3 = $params['ns3'];
+	$nameserver4 = $params['ns4'];
 	$onamaeReqParamArray = array( ONAMAEAPI_KEY_REQ_LOGINID => $username, ONAMAEAPI_KEY_REQ_LOGINPASSWORD => $password, ONAMAEAPI_KEY_REQ_ACTIONTYPE => ONAMAEAPI_ACTIONTYPE_DOMAINUPDATE, ONAMAEAPI_KEY_REQ_DOMAINNAME => $sld . "." . $tld );
 	$onamaeNsParamArray = array( $nameserver1, $nameserver2, $nameserver3, $nameserver4 );
 	$result = onamaeSendHttpRequest( $testmode, $onamaeReqParamArray, $onamaeNsParamArray );
@@ -78,7 +78,7 @@ function gmointernet_SaveNameservers($params) {
 	$values = array();
 
 	if (!isOnamaeSuccess( $resultArray )) {
-		$values["error"] = $resultArray[ONAMAEAPI_KEY_RES_RESULTMESSAGE];
+		$values['error'] = $resultArray['ONAMAEAPI_KEY_RES_RESULTMESSAGE'];
 	}
 
 	return $values;
@@ -91,11 +91,11 @@ function gmointernet_SaveNameservers($params) {
  * @param unknown $params
  */
 function gmointernet_GetRegistrarLock($params) {
-	$username = $params["Username"];
-	$password = $params["Password"];
-	$testmode = $params["TestMode"];
-	$tld = $params["tld"];
-	$sld = $params["sld"];
+	$username = $params['Username'];
+	$password = $params['Password'];
+	$testmode = $params['TestMode'];
+	$tld = $params['tld'];
+	$sld = $params['sld'];
 	$onamaeReqParamArray = array( ONAMAEAPI_KEY_REQ_LOGINID => $username, ONAMAEAPI_KEY_REQ_LOGINPASSWORD => $password, ONAMAEAPI_KEY_REQ_ACTIONTYPE => ONAMAEAPI_ACTIONTYPE_DOMAININFO, ONAMAEAPI_KEY_REQ_DOMAINNAME => $sld . "." . $tld );
 	$result = onamaeSendHttpRequest( $testmode, $onamaeReqParamArray );
 	$resultArray = onamaeReplaceResult( $result );
@@ -105,7 +105,7 @@ function gmointernet_GetRegistrarLock($params) {
 	if (isOnamaeSuccess( $resultArray )) {
 		global $DUPLICATON_KEY_ARRAY;
 
-		$statusNumMax = $DUPLICATON_KEY_ARRAY[ONAMAEAPI_KEY_RES_STATUS];
+		$statusNumMax = $DUPLICATON_KEY_ARRAY['ONAMAEAPI_KEY_RES_STATUS'];
 		$resultStatusArray = array();
 		$i = 66;
 
@@ -138,13 +138,13 @@ function gmointernet_GetRegistrarLock($params) {
  * @param unknown $params
  */
 function gmointernet_SaveRegistrarLock($params) {
-	$username = $params["Username"];
-	$password = $params["Password"];
-	$testmode = $params["TestMode"];
-	$tld = $params["tld"];
-	$sld = $params["sld"];
+	$username = $params['Username'];
+	$password = $params['Password'];
+	$testmode = $params['TestMode'];
+	$tld = $params['tld'];
+	$sld = $params['sld'];
 
-	if ($params["lockenabled"]) {
+	if ($params['lockenabled']) {
 		$lockstatus = "yes";
 	}
 	else {
@@ -157,7 +157,7 @@ function gmointernet_SaveRegistrarLock($params) {
 	$values = array();
 
 	if (!isOnamaeSuccess( $resultArray )) {
-		$values["error"] = $resultArray[ONAMAEAPI_KEY_RES_RESULTMESSAGE];
+		$values['error'] = $resultArray['ONAMAEAPI_KEY_RES_RESULTMESSAGE'];
 	}
 
 	return $values;
@@ -170,46 +170,46 @@ function gmointernet_SaveRegistrarLock($params) {
  * @param unknown $params
  */
 function gmointernet_RegisterDomain($params) {
-	$username = $params["Username"];
-	$password = $params["Password"];
-	$testmode = $params["TestMode"];
-	$tld = $params["tld"];
-	$sld = $params["sld"];
-	$regperiod = $params["regperiod"];
-	$nameserver1 = $params["ns1"];
-	$nameserver2 = $params["ns2"];
-	$nameserver3 = $params["ns3"];
-	$nameserver4 = $params["ns4"];
-	$RegistrantFirstName = $params["firstname"];
-	$RegistrantLastName = $params["lastname"];
-	$RegistrantAddress1 = $params["address1"];
-	$RegistrantAddress2 = $params["address2"];
-	$RegistrantCity = $params["city"];
-	$RegistrantStateProvince = $params["state"];
-	$RegistrantPostalCode = $params["postcode"];
-	$RegistrantCountry = $params["country"];
-	$RegistrantEmailAddress = $params["email"];
-	$RegistrantPhone = $params["phonenumber"];
-	$AdminFirstName = $params["adminfirstname"];
-	$AdminLastName = $params["adminlastname"];
-	$AdminAddress1 = $params["adminaddress1"];
-	$AdminAddress2 = $params["adminaddress2"];
-	$AdminCity = $params["admincity"];
-	$AdminStateProvince = $params["adminstate"];
-	$AdminPostalCode = $params["adminpostcode"];
-	$AdminCountry = $params["admincountry"];
-	$AdminEmailAddress = $params["adminemail"];
-	$AdminPhone = $params["adminphonenumber"];
+	$username = $params['Username'];
+	$password = $params['Password'];
+	$testmode = $params['TestMode'];
+	$tld = $params['tld'];
+	$sld = $params['sld'];
+	$regperiod = $params['regperiod'];
+	$nameserver1 = $params['ns1'];
+	$nameserver2 = $params['ns2'];
+	$nameserver3 = $params['ns3'];
+	$nameserver4 = $params['ns4'];
+	$RegistrantFirstName = $params['firstname'];
+	$RegistrantLastName = $params['lastname'];
+	$RegistrantAddress1 = $params['address1'];
+	$RegistrantAddress2 = $params['address2'];
+	$RegistrantCity = $params['city'];
+	$RegistrantStateProvince = $params['state'];
+	$RegistrantPostalCode = $params['postcode'];
+	$RegistrantCountry = $params['country'];
+	$RegistrantEmailAddress = $params['email'];
+	$RegistrantPhone = $params['phonenumber'];
+	$AdminFirstName = $params['adminfirstname'];
+	$AdminLastName = $params['adminlastname'];
+	$AdminAddress1 = $params['adminaddress1'];
+	$AdminAddress2 = $params['adminaddress2'];
+	$AdminCity = $params['admincity'];
+	$AdminStateProvince = $params['adminstate'];
+	$AdminPostalCode = $params['adminpostcode'];
+	$AdminCountry = $params['admincountry'];
+	$AdminEmailAddress = $params['adminemail'];
+	$AdminPhone = $params['adminphonenumber'];
 	$onamaeReqParamArray = array( ONAMAEAPI_KEY_REQ_LOGINID => $username, ONAMAEAPI_KEY_REQ_LOGINPASSWORD => $password, ONAMAEAPI_KEY_REQ_ACTIONTYPE => ONAMAEAPI_ACTIONTYPE_DOMAINCHECK, ONAMAEAPI_KEY_REQ_DOMAIN => $sld, ONAMAEAPI_KEY_REQ_TLD => $tld );
 	$result = onamaeSendHttpRequest( $testmode, $onamaeReqParamArray );
 	$resultArray = onamaeReplaceResult( $result );
 	$values = array();
 
 	if (!isOnamaeSuccess( $resultArray )) {
-		$values["error"] = $resultArray[ONAMAEAPI_KEY_RES_RESULTMESSAGE];
+		$values['error'] = $resultArray['ONAMAEAPI_KEY_RES_RESULTMESSAGE'];
 	}
 	else {
-		$domainCheckArray = explode( ":", $resultArray[ONAMAEAPI_KEY_RES_DOMAINNAME] );
+		$domainCheckArray = explode( ":", $resultArray['ONAMAEAPI_KEY_RES_DOMAINNAME'] );
 		$domainCheckResult = 0 - 1;
 		$i = 106;
 
@@ -223,7 +223,7 @@ function gmointernet_RegisterDomain($params) {
 		}
 
 
-		if (( $domainCheckResult == 0 || $domainCheckResult == 1 )) {
+		if ($domainCheckResult == 0 || $domainCheckResult == 1) {
 			$onamaeReq2ParamArray = null;
 			$onamaeReq2BaseParamArray = null;
 			$onamaeReq2AddParamArray = null;
@@ -244,21 +244,21 @@ function gmointernet_RegisterDomain($params) {
 			$result2Array = onamaeReplaceResult( $result2 );
 
 			if (isOnamaeSuccess( $result2Array )) {
-				$idProtection = (( !empty( $params["idprotection"] ) && $params["idprotection"] == 1 ) ? "y" : "n");
+				$idProtection = (( !empty( $params['idprotection'] ) && $params['idprotection'] == 1 ) ? "y" : "n");
 				$onamaeReqParam3Array = array( ONAMAEAPI_KEY_REQ_LOGINID => $username, ONAMAEAPI_KEY_REQ_LOGINPASSWORD => $password, ONAMAEAPI_KEY_REQ_ACTIONTYPE => ONAMAEAPI_ACTIONTYPE_WHOISPROXY, ONAMAEAPI_KEY_REQ_DOMAINNAME => $sld . "." . $tld, ONAMAEAPI_KEY_REQ_PROXYFLG => $idProtection );
 				$result3 = onamaeSendHttpRequest( $testmode, $onamaeReqParam3Array );
 				$result3Array = onamaeReplaceResult( $result3 );
 
 				if (!isOnamaeSuccess( $result3Array )) {
-					$values["error"] = $result3Array[ONAMAEAPI_KEY_RES_RESULTMESSAGE];
+					$values['error'] = $result3Array[ONAMAEAPI_KEY_RES_RESULTMESSAGE];
 				}
 			}
 			else {
-				$values["error"] = $result2Array[ONAMAEAPI_KEY_RES_RESULTMESSAGE];
+				$values['error'] = $result2Array[ONAMAEAPI_KEY_RES_RESULTMESSAGE];
 			}
 		}
 		else {
-			$values["error"] = "Domain not available (domain register check error)";
+			$values['error'] = "Domain not available (domain register check error)";
 		}
 	}
 
@@ -273,12 +273,12 @@ function gmointernet_RegisterDomain($params) {
  * @param unknown $params
  */
 function gmointernet_TransferDomain($params) {
-	$username = $params["Username"];
-	$password = $params["Password"];
-	$testmode = $params["TestMode"];
-	$tld = $params["tld"];
-	$sld = $params["sld"];
-	$transfersecret = $params["transfersecret"];
+	$username = $params['Username'];
+	$password = $params['Password'];
+	$testmode = $params['TestMode'];
+	$tld = $params['tld'];
+	$sld = $params['sld'];
+	$transfersecret = $params['transfersecret'];
 	$onamaeReqParamArray = array( ONAMAEAPI_KEY_REQ_LOGINID => $username, ONAMAEAPI_KEY_REQ_LOGINPASSWORD => $password, ONAMAEAPI_KEY_REQ_ACTIONTYPE => ONAMAEAPI_ACTIONTYPE_TRANSFERCHECK, ONAMAEAPI_KEY_REQ_DOMAINNAME => $sld . "." . $tld );
 	$result = onamaeSendHttpRequest( $testmode, $onamaeReqParamArray );
 	$resultArray = onamaeReplaceResult( $result );
@@ -293,12 +293,12 @@ function gmointernet_TransferDomain($params) {
 		$result2Array = onamaeReplaceResult( $result2 );
 
 		if (!isOnamaeSuccess( $result2Array, ONAMAEAPI_RESCODE_SUCCESS_TRANSFER )) {
-			$values["error"] = $result2Array[ONAMAEAPI_KEY_RES_RESULTMESSAGE];
+			$values['error'] = $result2Array[ONAMAEAPI_KEY_RES_RESULTMESSAGE];
 		}
 	}
 	else {
-		$values["error"] = $resultArray[ONAMAEAPI_KEY_RES_RESULTMESSAGE] . "<br>
-" . $resultArray[ONAMAEAPI_KEY_RES_CHECKRESULTMESSAGE];
+		$values['error'] = $resultArray['ONAMAEAPI_KEY_RES_RESULTMESSAGE'] . "<br>
+" . $resultArray['ONAMAEAPI_KEY_RES_CHECKRESULTMESSAGE'];
 	}
 
 	return $values;
@@ -311,29 +311,29 @@ function gmointernet_TransferDomain($params) {
  * @param unknown $params
  */
 function gmointernet_RenewDomain($params) {
-	$username = $params["Username"];
-	$password = $params["Password"];
-	$testmode = $params["TestMode"];
-	$tld = $params["tld"];
-	$sld = $params["sld"];
-	$regperiod = $params["regperiod"];
+	$username = $params['Username'];
+	$password = $params['Password'];
+	$testmode = $params['TestMode'];
+	$tld = $params['tld'];
+	$sld = $params['sld'];
+	$regperiod = $params['regperiod'];
 	$onamaeReqParamArray = array( ONAMAEAPI_KEY_REQ_LOGINID => $username, ONAMAEAPI_KEY_REQ_LOGINPASSWORD => $password, ONAMAEAPI_KEY_REQ_ACTIONTYPE => ONAMAEAPI_ACTIONTYPE_DOMAININFO, ONAMAEAPI_KEY_REQ_DOMAINNAME => $sld . "." . $tld );
 	$resultInfo = onamaeSendHttpRequest( $testmode, $onamaeReqParamArray );
 	$resultArray = onamaeReplaceResult( $resultInfo );
 	$values = array();
 
-	if (!empty( $resultArray[ONAMAEAPI_KEY_RES_EXPDATE] )) {
-		$curexpdate = vsprintf( "%d/%02d/%02d", sscanf( $resultArray[ONAMAEAPI_KEY_RES_EXPDATE], "%d/%d/%d" ) );
+	if (!empty( $resultArray['ONAMAEAPI_KEY_RES_EXPDATE'] )) {
+		$curexpdate = vsprintf( "%d/%02d/%02d", sscanf( $resultArray['ONAMAEAPI_KEY_RES_EXPDATE'], "%d/%d/%d" ) );
 		$onamaeReqParam2Array = array( ONAMAEAPI_KEY_REQ_LOGINID => $username, ONAMAEAPI_KEY_REQ_LOGINPASSWORD => $password, ONAMAEAPI_KEY_REQ_ACTIONTYPE => ONAMAEAPI_ACTIONTYPE_DOMAINRENEW, ONAMAEAPI_KEY_REQ_DOMAINNAME => $sld . "." . $tld, ONAMAEAPI_KEY_REQ_CUREXPDATE => $curexpdate, ONAMAEAPI_KEY_REQ_PERIOD => $regperiod );
 		$result2 = onamaeSendHttpRequest( $testmode, $onamaeReqParam2Array );
 		$result2Array = onamaeReplaceResult( $result2 );
 
 		if (!isOnamaeSuccess( $result2Array )) {
-			$values["error"] = $result2Array[ONAMAEAPI_KEY_RES_RESULTMESSAGE];
+			$values['error'] = $result2Array[ONAMAEAPI_KEY_RES_RESULTMESSAGE];
 		}
 	}
 	else {
-		$values["error"] = $resultArray[ONAMAEAPI_KEY_RES_RESULTMESSAGE];
+		$values['error'] = $resultArray['ONAMAEAPI_KEY_RES_RESULTMESSAGE'];
 	}
 
 	return $values;
@@ -346,68 +346,68 @@ function gmointernet_RenewDomain($params) {
  * @param unknown $params
  */
 function gmointernet_GetContactDetails($params) {
-	$username = $params["Username"];
-	$password = $params["Password"];
-	$testmode = $params["TestMode"];
-	$tld = $params["tld"];
-	$sld = $params["sld"];
+	$username = $params['Username'];
+	$password = $params['Password'];
+	$testmode = $params['TestMode'];
+	$tld = $params['tld'];
+	$sld = $params['sld'];
 	$onamaeReqParamArray = array( ONAMAEAPI_KEY_REQ_LOGINID => $username, ONAMAEAPI_KEY_REQ_LOGINPASSWORD => $password, ONAMAEAPI_KEY_REQ_ACTIONTYPE => ONAMAEAPI_ACTIONTYPE_DOMAININFO, ONAMAEAPI_KEY_REQ_DOMAINNAME => $sld . "." . $tld );
 	$result = onamaeSendHttpRequest( $testmode, $onamaeReqParamArray );
 	$resultArray = onamaeReplaceResult( $result );
 	$values = array();
 
 	if (isOnamaeSuccess( $resultArray )) {
-		$values["Registrant"]["First Name"] = $resultArray[ONAMAEAPI_KEY_RES_REGFNAME];
-		$values["Registrant"]["Last Name"] = $resultArray[ONAMAEAPI_KEY_RES_REGLNAME];
-		$values["Registrant"]["Email Address"] = $resultArray[ONAMAEAPI_KEY_RES_REGEMAIL];
-		$values["Registrant"]["Company Name"] = $resultArray[ONAMAEAPI_KEY_RES_REGORGANIZATION];
-		$values["Registrant"]["Address 1"] = $resultArray[ONAMAEAPI_KEY_RES_REGSTREET1];
-		$values["Registrant"]["Address 2"] = $resultArray[ONAMAEAPI_KEY_RES_REGSTREET2];
-		$values["Registrant"]["City"] = $resultArray[ONAMAEAPI_KEY_RES_REGCITY];
-		$values["Registrant"]["State/Region"] = $resultArray[ONAMAEAPI_KEY_RES_REGSP];
-		$values["Registrant"]["Postcode"] = $resultArray[ONAMAEAPI_KEY_RES_REGPC];
-		$values["Registrant"]["Country Code"] = $resultArray[ONAMAEAPI_KEY_RES_REGCC];
-		$values["Registrant"]["Phone Number"] = $resultArray[ONAMAEAPI_KEY_RES_REGPHONE];
-		$values["Registrant"]["Fax Number"] = $resultArray[ONAMAEAPI_KEY_RES_REGFAX];
-		$values["Admin"]["First Name"] = $resultArray[ONAMAEAPI_KEY_RES_ADMFNAME];
-		$values["Admin"]["Last Name"] = $resultArray[ONAMAEAPI_KEY_RES_ADMLNAME];
-		$values["Admin"]["Email Address"] = $resultArray[ONAMAEAPI_KEY_RES_ADMEMAIL];
-		$values["Admin"]["Company Name"] = $resultArray[ONAMAEAPI_KEY_RES_ADMORGANIZATION];
-		$values["Admin"]["Address 1"] = $resultArray[ONAMAEAPI_KEY_RES_ADMSTREET1];
-		$values["Admin"]["Address 2"] = $resultArray[ONAMAEAPI_KEY_RES_ADMSTREET2];
-		$values["Admin"]["City"] = $resultArray[ONAMAEAPI_KEY_RES_ADMCITY];
-		$values["Admin"]["State/Region"] = $resultArray[ONAMAEAPI_KEY_RES_ADMSP];
-		$values["Admin"]["Postcode"] = $resultArray[ONAMAEAPI_KEY_RES_ADMPC];
-		$values["Admin"]["Country Code"] = $resultArray[ONAMAEAPI_KEY_RES_ADMCC];
-		$values["Admin"]["Phone Number"] = $resultArray[ONAMAEAPI_KEY_RES_ADMPHONE];
-		$values["Admin"]["Fax Number"] = $resultArray[ONAMAEAPI_KEY_RES_ADMFAX];
-		$values["Tech"]["First Name"] = $resultArray[ONAMAEAPI_KEY_RES_TECFNAME];
-		$values["Tech"]["Last Name"] = $resultArray[ONAMAEAPI_KEY_RES_TECLNAME];
-		$values["Tech"]["Email Address"] = $resultArray[ONAMAEAPI_KEY_RES_TECEMAIL];
-		$values["Tech"]["Company Name"] = $resultArray[ONAMAEAPI_KEY_RES_TECORGANIZATION];
-		$values["Tech"]["Address 1"] = $resultArray[ONAMAEAPI_KEY_RES_TECSTREET1];
-		$values["Tech"]["Address 2"] = $resultArray[ONAMAEAPI_KEY_RES_TECSTREET2];
-		$values["Tech"]["City"] = $resultArray[ONAMAEAPI_KEY_RES_TECCITY];
-		$values["Tech"]["State/Region"] = $resultArray[ONAMAEAPI_KEY_RES_TECSP];
-		$values["Tech"]["Postcode"] = $resultArray[ONAMAEAPI_KEY_RES_TECPC];
-		$values["Tech"]["Country Code"] = $resultArray[ONAMAEAPI_KEY_RES_TECCC];
-		$values["Tech"]["Phone Number"] = $resultArray[ONAMAEAPI_KEY_RES_TECPHONE];
-		$values["Tech"]["Fax Number"] = $resultArray[ONAMAEAPI_KEY_RES_TECFAX];
-		$values["Bil"]["First Name"] = $resultArray[ONAMAEAPI_KEY_RES_BILFNAME];
-		$values["Bil"]["Last Name"] = $resultArray[ONAMAEAPI_KEY_RES_BILLNAME];
-		$values["Bil"]["Email Address"] = $resultArray[ONAMAEAPI_KEY_RES_BILEMAIL];
-		$values["Bil"]["Company Name"] = $resultArray[ONAMAEAPI_KEY_RES_BILORGANIZATION];
-		$values["Bil"]["Address 1"] = $resultArray[ONAMAEAPI_KEY_RES_BILSTREET1];
-		$values["Bil"]["Address 2"] = $resultArray[ONAMAEAPI_KEY_RES_BILSTREET2];
-		$values["Bil"]["City"] = $resultArray[ONAMAEAPI_KEY_RES_BILCITY];
-		$values["Bil"]["State/Region"] = $resultArray[ONAMAEAPI_KEY_RES_BILSP];
-		$values["Bil"]["Postcode"] = $resultArray[ONAMAEAPI_KEY_RES_BILPC];
-		$values["Bil"]["Country Code"] = $resultArray[ONAMAEAPI_KEY_RES_BILCC];
-		$values["Bil"]["Phone Number"] = $resultArray[ONAMAEAPI_KEY_RES_BILPHONE];
-		$values["Bil"]["Fax Number"] = $resultArray[ONAMAEAPI_KEY_RES_BILFAX];
+		$values['Registrant']["First Name"] = $resultArray['ONAMAEAPI_KEY_RES_REGFNAME'];
+		$values['Registrant']["Last Name"] = $resultArray['ONAMAEAPI_KEY_RES_REGLNAME'];
+		$values['Registrant']["Email Address"] = $resultArray['ONAMAEAPI_KEY_RES_REGEMAIL'];
+		$values['Registrant']["Company Name"] = $resultArray['ONAMAEAPI_KEY_RES_REGORGANIZATION'];
+		$values['Registrant']["Address 1"] = $resultArray[ONAMAEAPI_KEY_RES_REGSTREET1];
+		$values['Registrant']["Address 2"] = $resultArray[ONAMAEAPI_KEY_RES_REGSTREET2];
+		$values['Registrant']['City'] = $resultArray['ONAMAEAPI_KEY_RES_REGCITY'];
+		$values['Registrant']["State/Region"] = $resultArray['ONAMAEAPI_KEY_RES_REGSP'];
+		$values['Registrant']['Postcode'] = $resultArray['ONAMAEAPI_KEY_RES_REGPC'];
+		$values['Registrant']["Country Code"] = $resultArray['ONAMAEAPI_KEY_RES_REGCC'];
+		$values['Registrant']["Phone Number"] = $resultArray['ONAMAEAPI_KEY_RES_REGPHONE'];
+		$values['Registrant']["Fax Number"] = $resultArray['ONAMAEAPI_KEY_RES_REGFAX'];
+		$values['Admin']["First Name"] = $resultArray['ONAMAEAPI_KEY_RES_ADMFNAME'];
+		$values['Admin']["Last Name"] = $resultArray['ONAMAEAPI_KEY_RES_ADMLNAME'];
+		$values['Admin']["Email Address"] = $resultArray['ONAMAEAPI_KEY_RES_ADMEMAIL'];
+		$values['Admin']["Company Name"] = $resultArray['ONAMAEAPI_KEY_RES_ADMORGANIZATION'];
+		$values['Admin']["Address 1"] = $resultArray[ONAMAEAPI_KEY_RES_ADMSTREET1];
+		$values['Admin']["Address 2"] = $resultArray[ONAMAEAPI_KEY_RES_ADMSTREET2];
+		$values['Admin']['City'] = $resultArray['ONAMAEAPI_KEY_RES_ADMCITY'];
+		$values['Admin']["State/Region"] = $resultArray['ONAMAEAPI_KEY_RES_ADMSP'];
+		$values['Admin']['Postcode'] = $resultArray['ONAMAEAPI_KEY_RES_ADMPC'];
+		$values['Admin']["Country Code"] = $resultArray['ONAMAEAPI_KEY_RES_ADMCC'];
+		$values['Admin']["Phone Number"] = $resultArray['ONAMAEAPI_KEY_RES_ADMPHONE'];
+		$values['Admin']["Fax Number"] = $resultArray['ONAMAEAPI_KEY_RES_ADMFAX'];
+		$values['Tech']["First Name"] = $resultArray['ONAMAEAPI_KEY_RES_TECFNAME'];
+		$values['Tech']["Last Name"] = $resultArray['ONAMAEAPI_KEY_RES_TECLNAME'];
+		$values['Tech']["Email Address"] = $resultArray['ONAMAEAPI_KEY_RES_TECEMAIL'];
+		$values['Tech']["Company Name"] = $resultArray['ONAMAEAPI_KEY_RES_TECORGANIZATION'];
+		$values['Tech']["Address 1"] = $resultArray[ONAMAEAPI_KEY_RES_TECSTREET1];
+		$values['Tech']["Address 2"] = $resultArray[ONAMAEAPI_KEY_RES_TECSTREET2];
+		$values['Tech']['City'] = $resultArray['ONAMAEAPI_KEY_RES_TECCITY'];
+		$values['Tech']["State/Region"] = $resultArray['ONAMAEAPI_KEY_RES_TECSP'];
+		$values['Tech']['Postcode'] = $resultArray['ONAMAEAPI_KEY_RES_TECPC'];
+		$values['Tech']["Country Code"] = $resultArray['ONAMAEAPI_KEY_RES_TECCC'];
+		$values['Tech']["Phone Number"] = $resultArray['ONAMAEAPI_KEY_RES_TECPHONE'];
+		$values['Tech']["Fax Number"] = $resultArray['ONAMAEAPI_KEY_RES_TECFAX'];
+		$values['Bil']["First Name"] = $resultArray['ONAMAEAPI_KEY_RES_BILFNAME'];
+		$values['Bil']["Last Name"] = $resultArray['ONAMAEAPI_KEY_RES_BILLNAME'];
+		$values['Bil']["Email Address"] = $resultArray['ONAMAEAPI_KEY_RES_BILEMAIL'];
+		$values['Bil']["Company Name"] = $resultArray['ONAMAEAPI_KEY_RES_BILORGANIZATION'];
+		$values['Bil']["Address 1"] = $resultArray[ONAMAEAPI_KEY_RES_BILSTREET1];
+		$values['Bil']["Address 2"] = $resultArray[ONAMAEAPI_KEY_RES_BILSTREET2];
+		$values['Bil']['City'] = $resultArray['ONAMAEAPI_KEY_RES_BILCITY'];
+		$values['Bil']["State/Region"] = $resultArray['ONAMAEAPI_KEY_RES_BILSP'];
+		$values['Bil']['Postcode'] = $resultArray['ONAMAEAPI_KEY_RES_BILPC'];
+		$values['Bil']["Country Code"] = $resultArray['ONAMAEAPI_KEY_RES_BILCC'];
+		$values['Bil']["Phone Number"] = $resultArray['ONAMAEAPI_KEY_RES_BILPHONE'];
+		$values['Bil']["Fax Number"] = $resultArray['ONAMAEAPI_KEY_RES_BILFAX'];
 	}
 	else {
-		$values["error"] = $resultArray[ONAMAEAPI_KEY_RES_RESULTMESSAGE];
+		$values['error'] = $resultArray['ONAMAEAPI_KEY_RES_RESULTMESSAGE'];
 	}
 
 	return $values;
@@ -420,66 +420,66 @@ function gmointernet_GetContactDetails($params) {
  * @param unknown $params
  */
 function gmointernet_SaveContactDetails($params) {
-	$username = $params["Username"];
-	$password = $params["Password"];
-	$testmode = $params["TestMode"];
-	$tld = $params["tld"];
-	$sld = $params["sld"];
-	$firstname = $params["contactdetails"]["Registrant"]["First Name"];
-	$lastname = $params["contactdetails"]["Registrant"]["Last Name"];
-	$emailaddress = $params["contactdetails"]["Registrant"]["Email Address"];
-	$companyname = $params["contactdetails"]["Registrant"]["Company Name"];
-	$address1 = $params["contactdetails"]["Registrant"]["Address 1"];
-	$address2 = $params["contactdetails"]["Registrant"]["Address 2"];
-	$city = $params["contactdetails"]["Registrant"]["City"];
-	$state = $params["contactdetails"]["Registrant"]["State/Region"];
-	$postcode = $params["contactdetails"]["Registrant"]["Postcode"];
-	$countrycode = $params["contactdetails"]["Registrant"]["Country Code"];
-	$phonenumber = $params["contactdetails"]["Registrant"]["Phone Number"];
-	$faxnumber = $params["contactdetails"]["Registrant"]["Fax Number"];
-	$adminfirstname = $params["contactdetails"]["Admin"]["First Name"];
-	$adminlastname = $params["contactdetails"]["Admin"]["Last Name"];
-	$adminemailaddress = $params["contactdetails"]["Admin"]["Email Address"];
-	$admincompanyname = $params["contactdetails"]["Admin"]["Company Name"];
-	$adminaddress1 = $params["contactdetails"]["Admin"]["Address 1"];
-	$adminaddress2 = $params["contactdetails"]["Admin"]["Address 2"];
-	$admincity = $params["contactdetails"]["Admin"]["City"];
-	$adminstate = $params["contactdetails"]["Admin"]["State/Region"];
-	$adminpostcode = $params["contactdetails"]["Admin"]["Postcode"];
-	$admincountrycode = $params["contactdetails"]["Admin"]["Country Code"];
-	$adminphonenumber = $params["contactdetails"]["Admin"]["Phone Number"];
-	$adminfaxnumber = $params["contactdetails"]["Admin"]["Fax Number"];
-	$techfirstname = $params["contactdetails"]["Tech"]["First Name"];
-	$techlastname = $params["contactdetails"]["Tech"]["Last Name"];
-	$techemailaddress = $params["contactdetails"]["Tech"]["Email Address"];
-	$techcompanyname = $params["contactdetails"]["Tech"]["Company Name"];
-	$techaddress1 = $params["contactdetails"]["Tech"]["Address 1"];
-	$techaddress2 = $params["contactdetails"]["Tech"]["Address 2"];
-	$techcity = $params["contactdetails"]["Tech"]["City"];
-	$techstate = $params["contactdetails"]["Tech"]["State/Region"];
-	$techpostcode = $params["contactdetails"]["Tech"]["Postcode"];
-	$techcountrycode = $params["contactdetails"]["Tech"]["Country Code"];
-	$techphonenumber = $params["contactdetails"]["Tech"]["Phone Number"];
-	$techfaxnumber = $params["contactdetails"]["Tech"]["Fax Number"];
-	$bilfirstname = $params["contactdetails"]["Bil"]["First Name"];
-	$billastname = $params["contactdetails"]["Bil"]["Last Name"];
-	$bilemailaddress = $params["contactdetails"]["Bil"]["Email Address"];
-	$bilcompanyname = $params["contactdetails"]["Bil"]["Company Name"];
-	$biladdress1 = $params["contactdetails"]["Bil"]["Address 1"];
-	$biladdress2 = $params["contactdetails"]["Bil"]["Address 2"];
-	$bilcity = $params["contactdetails"]["Bil"]["City"];
-	$bilstate = $params["contactdetails"]["Bil"]["State/Region"];
-	$bilpostcode = $params["contactdetails"]["Bil"]["Postcode"];
-	$bilcountrycode = $params["contactdetails"]["Bil"]["Country Code"];
-	$bilphonenumber = $params["contactdetails"]["Bil"]["Phone Number"];
-	$bilfaxnumber = $params["contactdetails"]["Bil"]["Fax Number"];
+	$username = $params['Username'];
+	$password = $params['Password'];
+	$testmode = $params['TestMode'];
+	$tld = $params['tld'];
+	$sld = $params['sld'];
+	$firstname = $params['contactdetails']['Registrant']["First Name"];
+	$lastname = $params['contactdetails']['Registrant']["Last Name"];
+	$emailaddress = $params['contactdetails']['Registrant']["Email Address"];
+	$companyname = $params['contactdetails']['Registrant']["Company Name"];
+	$address1 = $params['contactdetails']['Registrant']["Address 1"];
+	$address2 = $params['contactdetails']['Registrant']["Address 2"];
+	$city = $params['contactdetails']['Registrant']['City'];
+	$state = $params['contactdetails']['Registrant']["State/Region"];
+	$postcode = $params['contactdetails']['Registrant']['Postcode'];
+	$countrycode = $params['contactdetails']['Registrant']["Country Code"];
+	$phonenumber = $params['contactdetails']['Registrant']["Phone Number"];
+	$faxnumber = $params['contactdetails']['Registrant']["Fax Number"];
+	$adminfirstname = $params['contactdetails']['Admin']["First Name"];
+	$adminlastname = $params['contactdetails']['Admin']["Last Name"];
+	$adminemailaddress = $params['contactdetails']['Admin']["Email Address"];
+	$admincompanyname = $params['contactdetails']['Admin']["Company Name"];
+	$adminaddress1 = $params['contactdetails']['Admin']["Address 1"];
+	$adminaddress2 = $params['contactdetails']['Admin']["Address 2"];
+	$admincity = $params['contactdetails']['Admin']['City'];
+	$adminstate = $params['contactdetails']['Admin']["State/Region"];
+	$adminpostcode = $params['contactdetails']['Admin']['Postcode'];
+	$admincountrycode = $params['contactdetails']['Admin']["Country Code"];
+	$adminphonenumber = $params['contactdetails']['Admin']["Phone Number"];
+	$adminfaxnumber = $params['contactdetails']['Admin']["Fax Number"];
+	$techfirstname = $params['contactdetails']['Tech']["First Name"];
+	$techlastname = $params['contactdetails']['Tech']["Last Name"];
+	$techemailaddress = $params['contactdetails']['Tech']["Email Address"];
+	$techcompanyname = $params['contactdetails']['Tech']["Company Name"];
+	$techaddress1 = $params['contactdetails']['Tech']["Address 1"];
+	$techaddress2 = $params['contactdetails']['Tech']["Address 2"];
+	$techcity = $params['contactdetails']['Tech']['City'];
+	$techstate = $params['contactdetails']['Tech']["State/Region"];
+	$techpostcode = $params['contactdetails']['Tech']['Postcode'];
+	$techcountrycode = $params['contactdetails']['Tech']["Country Code"];
+	$techphonenumber = $params['contactdetails']['Tech']["Phone Number"];
+	$techfaxnumber = $params['contactdetails']['Tech']["Fax Number"];
+	$bilfirstname = $params['contactdetails']['Bil']["First Name"];
+	$billastname = $params['contactdetails']['Bil']["Last Name"];
+	$bilemailaddress = $params['contactdetails']['Bil']["Email Address"];
+	$bilcompanyname = $params['contactdetails']['Bil']["Company Name"];
+	$biladdress1 = $params['contactdetails']['Bil']["Address 1"];
+	$biladdress2 = $params['contactdetails']['Bil']["Address 2"];
+	$bilcity = $params['contactdetails']['Bil']['City'];
+	$bilstate = $params['contactdetails']['Bil']["State/Region"];
+	$bilpostcode = $params['contactdetails']['Bil']['Postcode'];
+	$bilcountrycode = $params['contactdetails']['Bil']["Country Code"];
+	$bilphonenumber = $params['contactdetails']['Bil']["Phone Number"];
+	$bilfaxnumber = $params['contactdetails']['Bil']["Fax Number"];
 	$onamaeReqParamArray = array( ONAMAEAPI_KEY_REQ_LOGINID => $username, ONAMAEAPI_KEY_REQ_LOGINPASSWORD => $password, ONAMAEAPI_KEY_REQ_ACTIONTYPE => ONAMAEAPI_ACTIONTYPE_DOMAINUPDATE, ONAMAEAPI_KEY_REQ_DOMAINNAME => $sld . "." . $tld, ONAMAEAPI_KEY_REQ_REGFNAME => $firstname, ONAMAEAPI_KEY_REQ_REGLNAME => $lastname, ONAMAEAPI_KEY_REQ_REGROLE => "R", ONAMAEAPI_KEY_REQ_REGORGANIZATION => $companyname, ONAMAEAPI_KEY_REQ_REGCC => $countrycode, ONAMAEAPI_KEY_REQ_REGPC => $postcode, ONAMAEAPI_KEY_REQ_REGSP => $state, ONAMAEAPI_KEY_REQ_REGCITY => $city, ONAMAEAPI_KEY_REQ_REGSTREET1 => $address1, ONAMAEAPI_KEY_REQ_REGSTREET2 => $address2, ONAMAEAPI_KEY_REQ_REGPHONE => $phonenumber, ONAMAEAPI_KEY_REQ_REGFAX => $faxnumber, ONAMAEAPI_KEY_REQ_REGEMAIL => $emailaddress, ONAMAEAPI_KEY_REQ_ADMFNAME => $adminfirstname, ONAMAEAPI_KEY_REQ_ADMLNAME => $adminlastname, ONAMAEAPI_KEY_REQ_ADMROLE => "R", ONAMAEAPI_KEY_REQ_ADMORGANIZATION => $admincompanyname, ONAMAEAPI_KEY_REQ_ADMCC => $admincountrycode, ONAMAEAPI_KEY_REQ_ADMPC => $adminpostcode, ONAMAEAPI_KEY_REQ_ADMSP => $adminstate, ONAMAEAPI_KEY_REQ_ADMCITY => $admincity, ONAMAEAPI_KEY_REQ_ADMSTREET1 => $adminaddress1, ONAMAEAPI_KEY_REQ_ADMSTREET2 => $adminaddress2, ONAMAEAPI_KEY_REQ_ADMPHONE => $adminphonenumber, ONAMAEAPI_KEY_REQ_ADMFAX => $adminfaxnumber, ONAMAEAPI_KEY_REQ_ADMEMAIL => $adminemailaddress, ONAMAEAPI_KEY_REQ_TECFNAME => $techfirstname, ONAMAEAPI_KEY_REQ_TECLNAME => $techlastname, ONAMAEAPI_KEY_REQ_TECROLE => "R", ONAMAEAPI_KEY_REQ_TECORGANIZATION => $techcompanyname, ONAMAEAPI_KEY_REQ_TECCC => $techcountrycode, ONAMAEAPI_KEY_REQ_TECPC => $techpostcode, ONAMAEAPI_KEY_REQ_TECSP => $techstate, ONAMAEAPI_KEY_REQ_TECCITY => $techcity, ONAMAEAPI_KEY_REQ_TECSTREET1 => $techaddress1, ONAMAEAPI_KEY_REQ_TECSTREET2 => $techaddress2, ONAMAEAPI_KEY_REQ_TECPHONE => $techphonenumber, ONAMAEAPI_KEY_REQ_TECFAX => $techfaxnumber, ONAMAEAPI_KEY_REQ_TECEMAIL => $techemailaddress, ONAMAEAPI_KEY_REQ_BILFNAME => $bilfirstname, ONAMAEAPI_KEY_REQ_BILLNAME => $billastname, ONAMAEAPI_KEY_REQ_BILROLE => "R", ONAMAEAPI_KEY_REQ_BILORGANIZATION => $bilcompanyname, ONAMAEAPI_KEY_REQ_BILCC => $bilcountrycode, ONAMAEAPI_KEY_REQ_BILPC => $bilpostcode, ONAMAEAPI_KEY_REQ_BILSP => $bilstate, ONAMAEAPI_KEY_REQ_BILCITY => $bilcity, ONAMAEAPI_KEY_REQ_BILSTREET1 => $biladdress1, ONAMAEAPI_KEY_REQ_BILSTREET2 => $biladdress2, ONAMAEAPI_KEY_REQ_BILPHONE => $bilphonenumber, ONAMAEAPI_KEY_REQ_BILFAX => $bilfaxnumber, ONAMAEAPI_KEY_REQ_BILEMAIL => $bilemailaddress );
 	$result = onamaeSendHttpRequest( $testmode, $onamaeReqParamArray );
 	$resultArray = onamaeReplaceResult( $result );
 	$values = array();
 
 	if (!isOnamaeSuccess( $resultArray )) {
-		$values["error"] = $resultArray[ONAMAEAPI_KEY_RES_RESULTMESSAGE];
+		$values['error'] = $resultArray['ONAMAEAPI_KEY_RES_RESULTMESSAGE'];
 	}
 
 	return $values;
@@ -492,21 +492,21 @@ function gmointernet_SaveContactDetails($params) {
  * @param unknown $params
  */
 function gmointernet_GetEPPCode($params) {
-	$username = $params["Username"];
-	$password = $params["Password"];
-	$testmode = $params["TestMode"];
-	$tld = $params["tld"];
-	$sld = $params["sld"];
+	$username = $params['Username'];
+	$password = $params['Password'];
+	$testmode = $params['TestMode'];
+	$tld = $params['tld'];
+	$sld = $params['sld'];
 	$onamaeReqParamArray = array( ONAMAEAPI_KEY_REQ_LOGINID => $username, ONAMAEAPI_KEY_REQ_LOGINPASSWORD => $password, ONAMAEAPI_KEY_REQ_ACTIONTYPE => ONAMAEAPI_ACTIONTYPE_DOMAININFO, ONAMAEAPI_KEY_REQ_DOMAINNAME => $sld . "." . $tld );
 	$result = onamaeSendHttpRequest( $testmode, $onamaeReqParamArray );
 	$resultArray = onamaeReplaceResult( $result );
 	$values = array();
 
 	if (isOnamaeSuccess( $resultArray )) {
-		$values["eppcode"] = $resultArray[ONAMAEAPI_KEY_RES_AUTHCODE];
+		$values['eppcode'] = $resultArray['ONAMAEAPI_KEY_RES_AUTHCODE'];
 	}
 	else {
-		$values["error"] = $resultArray[ONAMAEAPI_KEY_RES_RESULTMESSAGE];
+		$values['error'] = $resultArray['ONAMAEAPI_KEY_RES_RESULTMESSAGE'];
 	}
 
 	return $values;
@@ -520,7 +520,7 @@ function onamaeSendHttpRequest($testMode, $reqParamArray, $nsParamArray) {
 ";
 	$content = replaceArrayToStr( $reqParamArray );
 
-	if (( is_array( $nsParamArray ) && 0 < count( $nsParamArray ) )) {
+	if (is_array( $nsParamArray ) && 0 < count( $nsParamArray )) {
 		foreach ($nsParamArray as $nsVal) {
 
 			if (!empty( $nsVal )) {
@@ -564,7 +564,7 @@ function onamaeReplaceResult($result) {
 				$key = checkOnamaeDuplicationKey( substr( $resultStr, 0, $pos2 ) );
 				$value = substr( $resultStr, $pos2 + 1 );
 
-				if (( $key !== FALSE && $value !== FALSE )) {
+				if ($key !== FALSE && $value !== FALSE) {
 					$resultArray[$key] = $value;
 				}
 			}
@@ -595,7 +595,7 @@ function checkOnamaeDuplicationKey($key) {
 function isOnamaeSuccess($resultArray, $responseCode) {
 	$resCode = (empty( $responseCode ) ? ONAMAEAPI_RESCODE_SUCCESS : $responseCode);
 
-	if (( is_array( $resultArray ) && $resultArray[ONAMAEAPI_KEY_RES_RESULTCODE] == $resCode )) {
+	if (is_array( $resultArray ) && $resultArray['ONAMAEAPI_KEY_RES_RESULTCODE'] == $resCode) {
 		return true;
 	}
 
@@ -604,7 +604,7 @@ function isOnamaeSuccess($resultArray, $responseCode) {
 
 
 function isOnamaeTransferCheckResult($resultArray) {
-	if (( ( is_array( $resultArray ) && $resultArray[ONAMAEAPI_KEY_RES_RESULTCODE] == ONAMAEAPI_RESCODE_SUCCESS ) && $resultArray[ONAMAEAPI_KEY_RES_CHECKRESULTCODE] == ONAMAEAPI_RESCODE_SUCCESS )) {
+	if (( is_array( $resultArray ) && $resultArray['ONAMAEAPI_KEY_RES_RESULTCODE'] == ONAMAEAPI_RESCODE_SUCCESS ) && $resultArray['ONAMAEAPI_KEY_RES_CHECKRESULTCODE'] == ONAMAEAPI_RESCODE_SUCCESS) {
 		return true;
 	}
 

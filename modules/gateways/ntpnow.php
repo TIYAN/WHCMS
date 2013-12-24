@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -17,24 +17,24 @@ function ntpnow_activate() {
 
 function ntpnow_capture($params) {
 	$url = "https://ntpnow.com/NTPnow_V3_interface.asp";
-	$fields["NTPNowID"] = $params["merchantid"];
-	$fields["Amount"] = $params["amount"];
-	$fields["NameOnCard"] = $params["clientdetails"]["firstname"] . " " . $params["clientdetails"]["lastname"];
-	$fields["Street"] = $params["clientdetails"]["address1"];
-	$fields["City"] = $params["clientdetails"]["city"];
-	$fields["State"] = $params["clientdetails"]["state"];
-	$fields["Zip"] = $params["clientdetails"]["postcode"];
-	$fields["CreditCardNumber"] = $params["cardnum"];
-	$fields["Month"] = substr( $params["cardexp"], 0, 2 );
-	$fields["Year"] = substr( $params["cardexp"], 2, 2 );
-	$fields["AVS"] = "True";
+	$fields['NTPNowID'] = $params['merchantid'];
+	$fields['Amount'] = $params['amount'];
+	$fields['NameOnCard'] = $params['clientdetails']['firstname'] . " " . $params['clientdetails']['lastname'];
+	$fields['Street'] = $params['clientdetails']['address1'];
+	$fields['City'] = $params['clientdetails']['city'];
+	$fields['State'] = $params['clientdetails']['state'];
+	$fields['Zip'] = $params['clientdetails']['postcode'];
+	$fields['CreditCardNumber'] = $params['cardnum'];
+	$fields['Month'] = substr( $params['cardexp'], 0, 2 );
+	$fields['Year'] = substr( $params['cardexp'], 2, 2 );
+	$fields['AVS'] = "True";
 
-	if ($params["cccvv"]) {
-		$fields["CVV2"] = "True";
-		$fields["CVV2Number"] = $params["cccvv"];
+	if ($params['cccvv']) {
+		$fields['CVV2'] = "True";
+		$fields['CVV2Number'] = $params['cccvv'];
 	}
 
-	$fields["OrderNumber"] = $params["invoiceid"];
+	$fields['OrderNumber'] = $params['invoiceid'];
 	$poststring = "";
 	foreach ($fields as $k => $v) {
 		$poststring .= "" . $k . "=" . urlencode( $v ) . "&";
@@ -56,7 +56,7 @@ function ntpnow_capture($params) {
 	}
 
 	$desc = "Action => Auth_Capture
-Client => " . $params["clientdetails"]["firstname"] . " " . $params["clientdetails"]["lastname"] . "
+Client => " . $params['clientdetails']['firstname'] . " " . $params['clientdetails']['lastname'] . "
 ";
 	foreach ($resultsarray as $k => $v) {
 		$desc .= ( "" . $k . " => " . $v . "
@@ -64,7 +64,7 @@ Client => " . $params["clientdetails"]["firstname"] . " " . $params["clientdetai
 	}
 
 
-	if ($resultsarray["STATUS"] == "TRANSACTION SUCCESSFUL") {
+	if ($resultsarray['STATUS'] == "TRANSACTION SUCCESSFUL") {
 		return array( "status" => "success", "transid" => $resultsarray["Approval Code"], "rawdata" => $desc );
 	}
 
@@ -76,7 +76,7 @@ if (!defined( "WHMCS" )) {
 	exit( "This file cannot be accessed directly" );
 }
 
-$GATEWAYMODULE["ntpnowname"] = "ntpnow";
-$GATEWAYMODULE["ntpnowvisiblename"] = "NTPNow";
-$GATEWAYMODULE["ntpnowtype"] = "CC";
+$GATEWAYMODULE['ntpnowname'] = "ntpnow";
+$GATEWAYMODULE['ntpnowvisiblename'] = "NTPNow";
+$GATEWAYMODULE['ntpnowtype'] = "CC";
 ?>

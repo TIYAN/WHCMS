@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -195,7 +195,7 @@ server responds:
 	}
 
 	public function decodeXML($xmlstg) {
-		preg_match_all("/<(.*?)>(.*?)\</", $xmlstg, $out, PREG_SET_ORDER);
+		preg_match_all('/<(.*?)>(.*?)\</', $xmlstg, $out, PREG_SET_ORDER);
 		$n = 0;
 
 		while (isset($out[$n])) {

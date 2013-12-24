@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -1230,7 +1230,7 @@ else {
             $smartyvalues['error'] = $domains->getLastError();
           }
 
-          if (!preg_match("/uk$/i", $tld) && $domains->hasFunction("GetRegistrarLock")) {
+          if (!preg_match('/uk$/i', $tld) && $domains->hasFunction("GetRegistrarLock")) {
             $success = $domains->moduleCall("GetRegistrarLock");
 
             if ($success) {
@@ -1244,7 +1244,7 @@ else {
           $smartyvalues['emailforwarding'] = (($emailforwarding && $domains->hasFunction("GetEmailForwarding")) ? true: false);
           $smartyvalues['getepp'] = (($tlddata['eppcode'] && $domains->hasFunction("GetEPPCode")) ? true: false);
 
-          if (preg_match("/uk$/i", $tld) && $domains->hasFunction("ReleaseDomain")) {
+          if (preg_match('/uk$/i', $tld) && $domains->hasFunction("ReleaseDomain")) {
             $allowrelease = false;
 
             if (isset($params['AllowClientTAGChange'])) {

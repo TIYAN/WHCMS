@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -20,7 +20,7 @@ function moipapi_config() {
 function moipapi_activate() {
 	$username = full_query( "SELECT username FROM tbladmins WHERE id='1'" );
 	$username = mysql_fetch_array( $username );
-	$username = $username["username"];
+	$username = $username['username'];
 	defineGatewayField( "moipapi", "text", "username", "" . $username, "Usuário do Sistema", "30", "Nome do usuário administrador" );
 	defineGatewayField( "moipapi", "text", "emailpd", "", "ID*", "30", "ID Usuário cadastrado no Pagamento Moip" );
 	defineGatewayField( "moipapi", "textarea", "obs", "", "Observações", "10", "Insira um texto na fatura, Ex: Aceitamos Apenas Boleto..." );
@@ -50,12 +50,12 @@ function moipapiformata_data($data) {
 function moipapiformata_estado($estado) {
 	$estado = strtoupper( $estado );
 	$acentos = array( "A" => array( "Á", "À", "Â", "Ã", "Ä", "á", "à", "â", "ã", "ä" ), "E" => array( "É", "È", "Ê", "Ë", "é", "è", "ê", "ë" ), "I" => array( "Í", "Ì", "Î", "Ï", "í", "ì", "î", "ï" ), "O" => array( "Ó", "Ò", "Ô", "Õ", "Ö", "ó", "ò", "ô", "õ", "ö" ), "U" => array( "Ú", "Ù", "Û", "Ü", "ú", "ù", "û", "ü" ), "misc" => array( " ", ".", ",", ":", ";", "<", ">", "\\", "/", "\"", "'", "|", "?", "!", "@", "#", "\$", "%", "&", "*", "(", ")", "[", "]", "{", "}", "Ž", "`", "~", "^", "š", "-", "_", "=", "+", "1", "2", "4", "5", "6", "7", "8", "9", "0" ) );
-	$estado = str_ireplace( $acentos["A"], "A", $estado );
-	$estado = str_ireplace( $acentos["E"], "E", $estado );
-	$estado = str_ireplace( $acentos["I"], "I", $estado );
-	$estado = str_ireplace( $acentos["O"], "O", $estado );
-	$estado = str_ireplace( $acentos["U"], "U", $estado );
-	$estado = str_ireplace( $acentos["misc"], "", $estado );
+	$estado = str_ireplace( $acentos['A'], "A", $estado );
+	$estado = str_ireplace( $acentos['E'], "E", $estado );
+	$estado = str_ireplace( $acentos['I'], "I", $estado );
+	$estado = str_ireplace( $acentos['O'], "O", $estado );
+	$estado = str_ireplace( $acentos['U'], "U", $estado );
+	$estado = str_ireplace( $acentos['misc'], "", $estado );
 	switch ($estado) {
 	case "ACRE": {
 			$estado = "AC";
@@ -197,26 +197,26 @@ function moipapiformata_estado($estado) {
 
 
 function moipapi_link($params) {
-	$data_vencimento = moipapiformata_data( $params["duedate"] );
-	$estado = moipapiformata_estado( $params["clientdetails"]["state"] );
-	$taxa = $params["taxa_porc"] / 100 * $params["amount"] + $params["taxa_reais"];
-	$valor_total = $params["amount"] + $taxa;
+	$data_vencimento = moipapiformata_data( $params['duedate'] );
+	$estado = moipapiformata_estado( $params['clientdetails']['state'] );
+	$taxa = $params['taxa_porc'] / 100 * $params['amount'] + $params['taxa_reais'];
+	$valor_total = $params['amount'] + $taxa;
 	$valor_total = number_format( $valor_total, "2", ".", "" );
 	$valor = number_format( $valor_total, "2", ".", "" );
 	$taxa = number_format( $taxa, "2", ".", "" );
 	$cl_cpf = full_query( "SELECT id FROM tblcustomfields WHERE fieldname='CPF'" );
 	$cl_cpf = mysql_fetch_array( $cl_cpf );
-	$cl_cpf = $cl_cpf["id"];
+	$cl_cpf = $cl_cpf['id'];
 	$cl_cnpj = full_query( "SELECT id FROM tblcustomfields WHERE fieldname='CNPJ'" );
 	$cl_cnpj = mysql_fetch_array( $cl_cnpj );
-	$cl_cnpj = $cl_cnpj["id"];
-	$vl_cpf = $customfield["3"];
+	$cl_cnpj = $cl_cnpj['id'];
+	$vl_cpf = $customfield['3'];
 	$key_plata = rand( 0, 1000 );
-	$db_invoice_items = full_query( "SELECT * FROM tblinvoiceitems WHERE invoiceid=" . (int)$params["invoiceid"] . " AND userid=" . (int)$params["clientdetails"]["userid"] );
+	$db_invoice_items = full_query( "SELECT * FROM tblinvoiceitems WHERE invoiceid=" . (int)$params['invoiceid'] . " AND userid=" . (int)$params['clientdetails']['userid'] );
 
 	if ($dados = mysql_fetch_array( $db_invoice_items )) {
-		$db_id = $dados["id"];
-		$invoice_items["" . $db_id] = array( "description" => $dados["description"], "amount" => $dados["amount"] );
+		$db_id = $dados['id'];
+		$invoice_items["" . $db_id] = array( "description" => $dados['description'], "amount" => $dados['amount'] );
 	}
 
 	unset( $db_invoice_items );
@@ -226,41 +226,41 @@ function moipapi_link($params) {
 	if (0 < $taxa) {
 		$code .= "<br />Para pagamentos efetuados com o Moip será cobrada uma taxa adicional de ";
 
-		if (0 < $params["taxa_porc"]) {
-			$code .= "<strong>" . $params["taxa_porc"] . "%</strong>";
-			$code .= (0 < $params["taxa_reais"] ? " + " : "");
+		if (0 < $params['taxa_porc']) {
+			$code .= "<strong>" . $params['taxa_porc'] . "%</strong>";
+			$code .= (0 < $params['taxa_reais'] ? " + " : "");
 		}
 
-		$code .= (0 < $params["taxa_reais"] ? "<strong>R$ " . $params["taxa_reais"] . "</strong>" : "");
+		$code .= (0 < $params['taxa_reais'] ? "<strong>R$ " . $params['taxa_reais'] . "</strong>" : "");
 	}
 
-	$descricao = $params["description"];
+	$descricao = $params['description'];
 	$auth = "HMTE0EEQEIXZWZGTO5DHI5T4EIRTZFP9" . ":" . "GIC8GQ1F8HRYA9OBGWMDFNPTLRF8I1XZPQVKJ7LA";
-	$logradouro = $params["clientdetails"]["address1"];
-	$cidade = $params["clientdetails"]["city"];
-	$bairro = $params["clientdetails"]["address2"];
-	$telefone = str_replace( " ", "", str_replace( "-", "", $params["clientdetails"]["phonenumber"] ) );
-	$first_name = $params["clientdetails"]["firstname"];
-	$nome_pagador = $params["clientdetails"]["firstname"] . " " . $params["clientdetails"]["lastname"];
-	$cep = str_replace( "-", "", $params["clientdetails"]["postcode"] );
-	$email_pagador = $params["clientdetails"]["email"];
-	$trans_id = $params["invoiceid"];
-	$userid = $params["clientdetails"]["userid"];
+	$logradouro = $params['clientdetails']['address1'];
+	$cidade = $params['clientdetails']['city'];
+	$bairro = $params['clientdetails']['address2'];
+	$telefone = str_replace( " ", "", str_replace( "-", "", $params['clientdetails']['phonenumber'] ) );
+	$first_name = $params['clientdetails']['firstname'];
+	$nome_pagador = $params['clientdetails']['firstname'] . " " . $params['clientdetails']['lastname'];
+	$cep = str_replace( "-", "", $params['clientdetails']['postcode'] );
+	$email_pagador = $params['clientdetails']['email'];
+	$trans_id = $params['invoiceid'];
+	$userid = $params['clientdetails']['userid'];
 	$numeros = explode( ",", $logradouro );
 	$numero = $numeros[1];
-	$ct_moip = $params["emailpd"];
+	$ct_moip = $params['emailpd'];
 	$diasexp = "5";
-	$btipo = $params["tp_venc"];
-	$prz_venc = $params["prz_venc"];
-	$instboleto1 = $params["inst_boleto1"];
+	$btipo = $params['tp_venc'];
+	$prz_venc = $params['prz_venc'];
+	$instboleto1 = $params['inst_boleto1'];
 	$endereco = $numeros[0];
-	$companyname = $params["companyname"];
-	$layout = $params["layout"];
-	$inst_boleto1 = $params["inst_boleto1"];
-	$inst_boleto2 = $params["inst_boleto2"];
-	$inst_boleto3 = $params["inst_boleto3"];
-	$url_notifica = $params["systemurl"] . "/modules/gateways/callback/moipapi.php";
-	$url_retorno = $params["systemurl"] . "/viewinvoice.php?id=" . (int)$params["invoiceid"];
+	$companyname = $params['companyname'];
+	$layout = $params['layout'];
+	$inst_boleto1 = $params['inst_boleto1'];
+	$inst_boleto2 = $params['inst_boleto2'];
+	$inst_boleto3 = $params['inst_boleto3'];
+	$url_notifica = $params['systemurl'] . "/modules/gateways/callback/moipapi.php";
+	$url_retorno = $params['systemurl'] . "/viewinvoice.php?id=" . (int)$params['invoiceid'];
 	$xml = "<EnviarInstrucao>
 <InstrucaoUnica>
 <Razao>" . $companyname . " - Fatura: #" . $trans_id . " </Razao>
@@ -326,7 +326,7 @@ function moipapi_link($params) {
 	$erro_msg = $erro_msg_b[0];
 	$erro_msgiso = $erro_msg;
 
-	if ($params["func_dbg"] == Sim) {
+	if ($params['func_dbg'] == Sim) {
 		$code .= "erro = " . $err . ", " . $xmll . " = " . $xml2 . ", ret " . $ret . ", token= " . $token_link . " ";
 	}
 
@@ -343,8 +343,8 @@ function moipapi_link($params) {
 	$code .= "<form name=\"pagamentomoip\" action=\"https://www.moip.com.br/Instrucao.do?\" method=\"get\" accept-charset=\"ISO-8859-1\">
 <input name=\"token\" type=\"hidden\" value=\"" . $token_link . "\"> <input name=\"layout\" type=\"hidden\" value=\"" . $layout . "\">";
 
-	if ($params["obs"] != "") {
-		$code .= "Observações: <strong>" . $params["obs"] . "</strong>";
+	if ($params['obs'] != "") {
+		$code .= "Observações: <strong>" . $params['obs'] . "</strong>";
 	}
 
 	$code .= "<br />Total a pagar: <strong> R$ " . $valor_total . " </strong><br />";
@@ -360,20 +360,20 @@ function moipapi_link($params) {
 		$code .= " <font color=#FF0000> Erro: <strong> ' " . $erro_msgiso . "; ' Volte e corrija-o, caso necessário contate o suporte da cw2.</strong> </font>";
 	}
 	else {
-		if ($params["habimage"] != "") {
-			$code .= "<input type=\"image\" name=\"submit\" src=\"" . $params["url_image"] . "\" alt=\"Pagar\" border=\"0\">";
+		if ($params['habimage'] != "") {
+			$code .= "<input type=\"image\" name=\"submit\" src=\"" . $params['url_image'] . "\" alt=\"Pagar\" border=\"0\">";
 		}
 		else {
 			$code .= "
- <input type=\"submit\" value=\"" . $params["langpaynow"] . "\">";
+ <input type=\"submit\" value=\"" . $params['langpaynow'] . "\">";
 		}
 	}
 
 	$code .= "
 </form>";
-	$teste = $params["habredir"];
+	$teste = $params['habredir'];
 
-	if ($params["habredir"] == on) {
+	if ($params['habredir'] == on) {
 		header( "Location: https://www.moip.com.br/Instrucao.do?token=" . $token_link );
 	}
 

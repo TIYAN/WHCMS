@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -81,7 +81,7 @@ class WHMCS_Init {
 		$this->register_globals();
 
 		if (!$this->load_config_file()) {
-			exit( "<head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" /><title>WHMCS 5.2.13 时光人破解版安装</title><meta name=\"description\" content=\"WHMCS 5.2.13 完全解码破解 \" /><meta name=\"keywords\" content=\"whmcs,破解,解码,解密,时光人,系统,免费,安装,下载,5.2.13,中文版\" /><meta name=\"generator\" content=\"Mtimer CMS (http://www.mtimer.cn)\" /></head><div style=\"border: 1px dashed #cc0000;font-family:Tahoma;background-color:#FBEEEB;width:100%;padding:10px;color:#cc0000;\"><strong>欢迎来到 WHMCS 5.2.13 时光人破解版!</strong> <a href=\"https://me.alipay.com/whmcs5\" target=\"_blank\">捐助</a> 并通过邮件获得今后更新。<br>安装后才能使用。 <a href=\"" . (file_exists( "install/install.php" ) ? "" : "../") . "install/install.php\" style=\"color:#000;\">点此开始安装 ...</a></div>" );
+			exit( "<head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" /><title>WHMCS 5.2.14 时光人破解版安装</title><meta name=\"description\" content=\"WHMCS 5.2.14 完全解码破解 \" /><meta name=\"keywords\" content=\"whmcs,破解,解码,解密,时光人,系统,免费,安装,下载,5.2.14,中文版\" /><meta name=\"generator\" content=\"Mtimer CMS (http://www.mtimer.cn)\" /></head><div style=\"border: 1px dashed #cc0000;font-family:Tahoma;background-color:#FBEEEB;width:100%;padding:10px;color:#cc0000;\"><strong>欢迎来到 WHMCS 5.2.14 时光人破解版!</strong> <a href=\"https://me.alipay.com/whmcs5\" target=\"_blank\">捐助</a> 并通过邮件获得今后更新。<br>安装后才能使用。 <a href=\"" . (file_exists( "install/install.php" ) ? "" : "../") . "install/install.php\" style=\"color:#000;\">点此开始安装 ...</a></div>" );
 		}
 
 

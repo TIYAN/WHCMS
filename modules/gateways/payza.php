@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -31,7 +31,7 @@ function payza_config() {
 
 
 function payza_link($params) {
-	if ($params["testmode"] == "on") {
+	if ($params['testmode'] == "on") {
 		$code = "<form action=\"https://sandbox.payza.com/sandbox/checkout\" method=\"post\">";
 	}
 	else {
@@ -39,15 +39,15 @@ function payza_link($params) {
 	}
 
 	$code .= "<input type=\"hidden\" name=\"ap_purchasetype\" value=\"item\">
-<input type=\"hidden\" name=\"ap_merchant\" value=\"" . $params["email"] . "\">
-<input type=\"hidden\" name=\"ap_itemname\" value=\"" . $params["description"] . "\">
-<input type=\"hidden\" name=\"ap_currency\" value=\"" . $params["currency"] . "\">
+<input type=\"hidden\" name=\"ap_merchant\" value=\"" . $params['email'] . "\">
+<input type=\"hidden\" name=\"ap_itemname\" value=\"" . $params['description'] . "\">
+<input type=\"hidden\" name=\"ap_currency\" value=\"" . $params['currency'] . "\">
 <input type=\"hidden\" name=\"ap_quantity\" value=\"1\">
-<input type=\"hidden\" name=\"ap_description\" value=\"" . $params["description"] . "\">
-<input type=\"hidden\" name=\"ap_amount\" value=\"" . $params["amount"] . "\">
-<input type=\"hidden\" name=\"apc_1\" value= \"" . $params["invoiceid"] . "\">
-<input type=\"hidden\" name=\"ap_returnurl\" value=\"" . $params["returnurl"] . "\">
-<input type=\"hidden\" name=\"ap_cancelurl\" value=\"" . $params["returnurl"] . "\">
+<input type=\"hidden\" name=\"ap_description\" value=\"" . $params['description'] . "\">
+<input type=\"hidden\" name=\"ap_amount\" value=\"" . $params['amount'] . "\">
+<input type=\"hidden\" name=\"apc_1\" value= \"" . $params['invoiceid'] . "\">
+<input type=\"hidden\" name=\"ap_returnurl\" value=\"" . $params['returnurl'] . "\">
+<input type=\"hidden\" name=\"ap_cancelurl\" value=\"" . $params['returnurl'] . "\">
 <input type=\"image\" name=\"ap_image\" src=\"https://www.payza.com/images/payza-buy-now.png\"/>
 </form>";
 	return $code;
@@ -55,18 +55,18 @@ function payza_link($params) {
 
 
 function payza_refund($params) {
-	if ($params["testmode"] == "on") {
+	if ($params['testmode'] == "on") {
 		$url = "https://sandbox.Payza.com/api/api.svc/RefundTransaction";
 	}
 	else {
 		$url = "https://api.payza.com/svc/api.svc/RefundTransaction";
 	}
 
-	$username = $params["email"];
-	$password = $params["apipassword"];
-	$testmode = ($params["testmode"] ? "1" : "0");
+	$username = $params['email'];
+	$password = $params['apipassword'];
+	$testmode = ($params['testmode'] ? "1" : "0");
 	$results = "";
-	$postdata = "USER=" . urlencode( $username ) . "&PASSWORD=" . urlencode( $password ) . "&TRANSACTIONREFERENCE=" . urlencode( $params["transid"] ) . "&AMOUNT=" . urlencode( $params["amount"] ) . "&TESTMODE=" . $testmode;
+	$postdata = "USER=" . urlencode( $username ) . "&PASSWORD=" . urlencode( $password ) . "&TRANSACTIONREFERENCE=" . urlencode( $params['transid'] ) . "&AMOUNT=" . urlencode( $params['amount'] ) . "&TESTMODE=" . $testmode;
 	$ch = curl_init();
 	curl_setopt( $ch, CURLOPT_URL, $url );
 	curl_setopt( $ch, CURLOPT_POST, true );
@@ -79,8 +79,8 @@ function payza_refund($params) {
 	curl_close( $ch );
 	parse_str( $data, $results );
 
-	if ($results["RETURNCODE"] == "100") {
-		return array( "status" => "success", "transid" => $results["REFERENCENUMBER"], "rawdata" => $results );
+	if ($results['RETURNCODE'] == "100") {
+		return array( "status" => "success", "transid" => $results['REFERENCENUMBER'], "rawdata" => $results );
 	}
 
 	return array( "status" => "failed", "rawdata" => $results );

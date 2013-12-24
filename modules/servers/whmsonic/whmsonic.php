@@ -3,10 +3,10 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
- * @ Website  : http://www.mtimer.net
+ * @ Release on : 2013-11-28
+ * @ Website  : http://www.mtimer.cn
  *
  * */
 
@@ -17,19 +17,19 @@ function whmsonic_ConfigOptions() {
 
 
 function whmsonic_CreateAccount($params) {
-	$ctype = $params["configoption1"];
-	$listeners = $params["configoption2"];
-	$radioip = $params["serverip"];
-	$bitrate = $params["configoption3"];
-	$autodj = $params["configoption4"];
-	$hspace = $params["configoption5"];
-	$bandwidth = $params["configoption6"];
-	$serverp = $params["serverpassword"];
-	$connection = $params["serverip"];
+	$ctype = $params['configoption1'];
+	$listeners = $params['configoption2'];
+	$radioip = $params['serverip'];
+	$bitrate = $params['configoption3'];
+	$autodj = $params['configoption4'];
+	$hspace = $params['configoption5'];
+	$bandwidth = $params['configoption6'];
+	$serverp = $params['serverpassword'];
+	$connection = $params['serverip'];
 	$auth = "root:" . $serverp;
-	$orderid = $params["serviceid"];
+	$orderid = $params['serviceid'];
 
-	if ($params["serversecure"] == "on") {
+	if ($params['serversecure'] == "on") {
 		$serverport = "2087";
 		$ht = "https";
 	}
@@ -38,11 +38,11 @@ function whmsonic_CreateAccount($params) {
 		$ht = "http";
 	}
 
-	$client_email = $params["clientsdetails"]["email"];
-	$client_name = $params["clientsdetails"]["firstname"];
+	$client_email = $params['clientsdetails']['email'];
+	$client_name = $params['clientsdetails']['firstname'];
 
-	if ($params["configoption1"] == "internal") {
-		$radiousername = $params["customfields"]["cpanel username"];
+	if ($params['configoption1'] == "internal") {
+		$radiousername = $params['customfields']["cpanel username"];
 	}
 	else {
 		$chars = "abcdefghijkmnpqrstuvwxyz0123456789";
@@ -72,7 +72,7 @@ function whmsonic_CreateAccount($params) {
 		++$i;
 	}
 
-	$query3 = "UPDATE tblhosting SET username='" . db_escape_string( $radiousername ) . "', password='" . db_escape_string( $pass ) . "' WHERE id=" . (int)$params["accountid"];
+	$query3 = "UPDATE tblhosting SET username='" . db_escape_string( $radiousername ) . "', password='" . db_escape_string( $pass ) . "' WHERE id=" . (int)$params['accountid'];
 	$result3 = full_query( $query3 );
 	$url = "" . $ht . "://" . $connection . ":" . $serverport . "/whmsonic/modules/api.php?";
 	$data = "cmd=setup&ctype=" . $ctype . "&ip=" . $radioip . "&bitrate=" . $bitrate . "&autodj=" . $autodj . "&bw=" . $bandwidth . "&semail=" . $wemail . "&limit=" . $listeners . "&cemail=" . $client_email . "&cname=" . $client_name . "&rad_username=" . $radiousername . "&pass=" . $pass . "&hspace=" . $hspace;
@@ -111,12 +111,12 @@ function whmsonic_CreateAccount($params) {
 
 
 function whmsonic_TerminateAccount($params) {
-	$connection = $params["serverip"];
-	$rad_username = $params["username"];
-	$serverp = $params["serverpassword"];
+	$connection = $params['serverip'];
+	$rad_username = $params['username'];
+	$serverp = $params['serverpassword'];
 	$auth = "root:" . $serverp;
 
-	if ($params["serversecure"] == "on") {
+	if ($params['serversecure'] == "on") {
 		$serverport = "2087";
 		$ht = "https";
 	}
@@ -157,12 +157,12 @@ function whmsonic_TerminateAccount($params) {
 
 
 function whmsonic_SuspendAccount($params) {
-	$connection = $params["serverip"];
-	$rad_username = $params["username"];
-	$serverp = $params["serverpassword"];
+	$connection = $params['serverip'];
+	$rad_username = $params['username'];
+	$serverp = $params['serverpassword'];
 	$auth = "root:" . $serverp;
 
-	if ($params["serversecure"] == "on") {
+	if ($params['serversecure'] == "on") {
 		$serverport = "2087";
 		$ht = "https";
 	}
@@ -203,12 +203,12 @@ function whmsonic_SuspendAccount($params) {
 
 
 function whmsonic_UnsuspendAccount($params) {
-	$connection = $params["serverip"];
-	$rad_username = $params["username"];
-	$serverp = $params["serverpassword"];
+	$connection = $params['serverip'];
+	$rad_username = $params['username'];
+	$serverp = $params['serverpassword'];
 	$auth = "root:" . $serverp;
 
-	if ($params["serversecure"] == "on") {
+	if ($params['serversecure'] == "on") {
 		$serverport = "2087";
 		$ht = "https";
 	}
@@ -251,16 +251,16 @@ function whmsonic_UnsuspendAccount($params) {
 function whmsonic_ClientArea($params) {
 	global $_LANG;
 
-	$connection = $params["serverip"];
-	$code = "<form action=http://" . $connection . "/cpanel/ method=post target=_blank><input type=hidden name=ip value=" . $licenseip . "><input type=submit value=\"" . $_LANG["whmsoniclogin"] . "\"></form>";
+	$connection = $params['serverip'];
+	$code = "<form action=http://" . $connection . "/cpanel/ method=post target=_blank><input type=hidden name=ip value=" . $licenseip . "><input type=submit value=\"" . $_LANG['whmsoniclogin'] . "\"></form>";
 	return $code;
 }
 
 
 function whmsonic_AdminLink($params) {
-	$connection = $params["serverip"];
+	$connection = $params['serverip'];
 
-	if ($params["serversecure"] == "on") {
+	if ($params['serversecure'] == "on") {
 		$serverport = "2087";
 		$ht = "https";
 	}
@@ -269,7 +269,7 @@ function whmsonic_AdminLink($params) {
 		$ht = "http";
 	}
 
-	$code = "<form action=\"" . $ht . "://" . $connection . ":" . $serverport . "/whmsonic/main.php\" method=\"post\" target=\"_blank\"><input type=\"hidden\" name=\"username\" value=\"" . $params["serverusername"] . "\"><input type=\"hidden\" name=\"password\" value=\"" . $params["serverpassword"] . "\"><input type=\"submit\" value=\"WHMSonic Login\"></form>";
+	$code = "<form action=\"" . $ht . "://" . $connection . ":" . $serverport . "/whmsonic/main.php\" method=\"post\" target=\"_blank\"><input type=\"hidden\" name=\"username\" value=\"" . $params['serverusername'] . "\"><input type=\"hidden\" name=\"password\" value=\"" . $params['serverpassword'] . "\"><input type=\"submit\" value=\"WHMSonic Login\"></form>";
 	return $code;
 }
 

@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -25,8 +25,8 @@ function widget_staffboard_overview($vars) {
 		$new = true;
 	}
 
-	$lastviewed = $lastviews[$_SESSION["adminid"]];
-	$lastviews[$_SESSION["adminid"]] = time();
+	$lastviewed = $lastviews[$_SESSION['adminid']];
+	$lastviews[$_SESSION['adminid']] = time();
 
 	if ($new) {
 		insert_query( "tbladdonmodules", array( "module" => "staffboard", "setting" => "lastviewed", "value" => serialize( $lastviews ) ) );
@@ -80,7 +80,7 @@ function widget_staffboard_overview($vars) {
 	$result = select_query( "mod_staffboard", "", "", "date", "DESC" );
 
 	while ($data = mysql_fetch_array( $result )) {
-		$content .= "<div class=\"" . $data["color"] . "\">" . fromMySQLDate( $data["date"], 1 ) . " - " . (100 < strlen( $data["note"] ) ? substr( $data["note"], 0, 100 ) . "..." : $data["note"]) . "</div>";
+		$content .= "<div class=\"" . $data['color'] . "\">" . fromMySQLDate( $data['date'], 1 ) . " - " . (100 < strlen( $data['note'] ) ? substr( $data['note'], 0, 100 ) . "..." : $data['note']) . "</div>";
 	}
 
 	$content .= "</div>";

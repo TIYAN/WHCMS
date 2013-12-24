@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -20,29 +20,29 @@ function kuveytturk_activate() {
 
 function kuveytturk_capture($params) {
 	$gateway_url = "https://netpos.kuveytturk.com.tr/servlet/cc5ApiServer";
-	$name = $params["merchantid"];
-	$password = $params["merchantpw"];
-	$clientid = $params["merchantnumber"];
-	$isokod = $params["isokod"];
+	$name = $params['merchantid'];
+	$password = $params['merchantpw'];
+	$clientid = $params['merchantnumber'];
+	$isokod = $params['isokod'];
 	$ip = gethostbyname( $REMOTE_ADDR );
 	$type = "Auth";
-	$email = $params["clientdetails"]["email"];
-	$oid = $params["invoiceid"];
-	$ccno = $params["cardnum"];
-	$ccay = substr( $params["cardexp"], 0, 2 );
-	$ccyil = substr( $params["cardexp"], 2, 2 );
-	$tutar = $params["amount"];
-	$cv2 = $params["cccvv"];
-	$fname = $params["clientdetails"]["firstname"];
-	$lname = $params["clientdetails"]["lastname"];
-	$firma = $params["clientdetails"]["companyname"];
-	$adres1 = $params["clientdetails"]["address1"];
-	$adres2 = $params["clientdetails"]["address2"];
-	$ilce = $params["clientdetails"]["city"];
-	$sehir = $params["clientdetails"]["state"];
-	$postkod = $params["clientdetails"]["postcode"];
-	$ulke = $params["clientdetails"]["country"];
-	$telno = $params["clientdetails"]["phonenumber"];
+	$email = $params['clientdetails']['email'];
+	$oid = $params['invoiceid'];
+	$ccno = $params['cardnum'];
+	$ccay = substr( $params['cardexp'], 0, 2 );
+	$ccyil = substr( $params['cardexp'], 2, 2 );
+	$tutar = $params['amount'];
+	$cv2 = $params['cccvv'];
+	$fname = $params['clientdetails']['firstname'];
+	$lname = $params['clientdetails']['lastname'];
+	$firma = $params['clientdetails']['companyname'];
+	$adres1 = $params['clientdetails']['address1'];
+	$adres2 = $params['clientdetails']['address2'];
+	$ilce = $params['clientdetails']['city'];
+	$sehir = $params['clientdetails']['state'];
+	$postkod = $params['clientdetails']['postcode'];
+	$ulke = $params['clientdetails']['country'];
+	$telno = $params['clientdetails']['phonenumber'];
 	$request = "DATA=<?xml version=\"1.0\" encoding=\"ISO-8859-9\"?>\n<CC5Request>
 <Name>{NAME}</Name>
 <Password>{PASSWORD}</Password>
@@ -121,7 +121,7 @@ function kuveytturk_capture($params) {
 	if (curl_errno( $ch )) {
 		$error = curl_error( $ch );
 		logTransaction( "Garanti Sanal Pos", "Error => " . $error, "Error" );
-		sendMessage( "Credit Card Payment Failed", $params["invoiceid"] );
+		sendMessage( "Credit Card Payment Failed", $params['invoiceid'] );
 		$result = "error";
 		return $result;
 	}
@@ -159,7 +159,7 @@ function kuveytturk_capture($params) {
 	$posf = $posf + strlen( $response_tag ) + 2;
 	$ErrMsg = substr( $result, $posf, $posl - $posf );
 	$debugdata = "Action => Auth
-Client => " . $params["clientdetails"]["firstname"] . " " . $params["clientdetails"]["lastname"] . ( "
+Client => " . $params['clientdetails']['firstname'] . " " . $params['clientdetails']['lastname'] . ( "
 Response => " . $Response . "
 OrderId => " . $OrderId . "
 AuthCode => " . $AuthCode . "
@@ -178,7 +178,7 @@ if (!defined( "WHMCS" )) {
 	exit( "This file cannot be accessed directly" );
 }
 
-$GATEWAYMODULE["kuveytturkname"] = "kuveytturk";
-$GATEWAYMODULE["kuveytturkvisiblename"] = "Kuveytturk Bank";
-$GATEWAYMODULE["kuveytturktype"] = "CC";
+$GATEWAYMODULE['kuveytturkname'] = "kuveytturk";
+$GATEWAYMODULE['kuveytturkvisiblename'] = "Kuveytturk Bank";
+$GATEWAYMODULE['kuveytturktype'] = "CC";
 ?>

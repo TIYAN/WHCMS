@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -18,33 +18,33 @@ function secpay_activate() {
 
 
 function secpay_capture($params) {
-	$url = $params["systemurl"] . "/modules/gateways/secpay.php";
-	$postfields["runcharge"] = "true";
-	$postfields["merchantid"] = $params["merchantid"];
-	$postfields["vpnpassword"] = $params["vpnpassword"];
-	$postfields["invoiceid"] = $params["invoiceid"];
-	$postfields["name"] = $params["clientdetails"]["firstname"] . " " . $params["clientdetails"]["lastname"];
-	$postfields["cardnum"] = $params["cardnum"];
-	$postfields["amount"] = $params["amount"];
-	$postfields["cardexp"] = $params["cardexp"];
-	$postfields["cardcvv"] = $params["cccvv"];
-	$postfields["issuenum"] = $params["cardissuenum"];
-	$postfields["startdate"] = $params["cardstart"];
-	$postfields["currencycode"] = $params["currency"];
-	$postfields["clientdetailsfirstname"] = $params["clientdetails"]["firstname"];
-	$postfields["clientdetailslastname"] = $params["clientdetails"]["lastname"];
-	$postfields["clientdetailscompanyname"] = $params["clientdetails"]["companyname"];
-	$postfields["clientdetailsaddress1"] = $params["clientdetails"]["address1"];
-	$postfields["clientdetailsaddress2"] = $params["clientdetails"]["address2"];
-	$postfields["clientdetailscity"] = $params["clientdetails"]["city"];
-	$postfields["clientdetailsstate"] = $params["clientdetails"]["state"];
-	$postfields["clientdetailspostcode"] = $params["clientdetails"]["postcode"];
-	$postfields["clientdetailsphonenumber"] = $params["clientdetails"]["phonenumber"];
-	$postfields["clientdetailsemail"] = $params["clientdetails"]["email"];
-	$postfields["ipaddress"] = $_SERVER["REMOTE_ADDR"];
+	$url = $params['systemurl'] . "/modules/gateways/secpay.php";
+	$postfields['runcharge'] = "true";
+	$postfields['merchantid'] = $params['merchantid'];
+	$postfields['vpnpassword'] = $params['vpnpassword'];
+	$postfields['invoiceid'] = $params['invoiceid'];
+	$postfields['name'] = $params['clientdetails']['firstname'] . " " . $params['clientdetails']['lastname'];
+	$postfields['cardnum'] = $params['cardnum'];
+	$postfields['amount'] = $params['amount'];
+	$postfields['cardexp'] = $params['cardexp'];
+	$postfields['cardcvv'] = $params['cccvv'];
+	$postfields['issuenum'] = $params['cardissuenum'];
+	$postfields['startdate'] = $params['cardstart'];
+	$postfields['currencycode'] = $params['currency'];
+	$postfields['clientdetailsfirstname'] = $params['clientdetails']['firstname'];
+	$postfields['clientdetailslastname'] = $params['clientdetails']['lastname'];
+	$postfields['clientdetailscompanyname'] = $params['clientdetails']['companyname'];
+	$postfields['clientdetailsaddress1'] = $params['clientdetails']['address1'];
+	$postfields['clientdetailsaddress2'] = $params['clientdetails']['address2'];
+	$postfields['clientdetailscity'] = $params['clientdetails']['city'];
+	$postfields['clientdetailsstate'] = $params['clientdetails']['state'];
+	$postfields['clientdetailspostcode'] = $params['clientdetails']['postcode'];
+	$postfields['clientdetailsphonenumber'] = $params['clientdetails']['phonenumber'];
+	$postfields['clientdetailsemail'] = $params['clientdetails']['email'];
+	$postfields['ipaddress'] = $_SERVER['REMOTE_ADDR'];
 
-	if ($params["testmode"]) {
-		$postfields["testmode"] = "true";
+	if ($params['testmode']) {
+		$postfields['testmode'] = "true";
 	}
 
 	$poststring = "";
@@ -75,10 +75,10 @@ function secpay_capture($params) {
 		$resultsarray[$tempvalue[0]] = $tempvalue[1];
 	}
 
-	$valid = $resultsarray["valid"];
-	$code = $resultsarray["code"];
-	$transid = $resultsarray["trans_id"];
-	$authcode = $resultsarray["auth_code"];
+	$valid = $resultsarray['valid'];
+	$code = $resultsarray['code'];
+	$transid = $resultsarray['trans_id'];
+	$authcode = $resultsarray['auth_code'];
 
 	if ($code == "A") {
 		return array( "status" => "success", "transid" => $authcode, "rawdata" => $resultsarray );
@@ -92,21 +92,21 @@ if (!defined( "WHMCS" )) {
 	exit( "This file cannot be accessed directly" );
 }
 
-$GATEWAYMODULE["secpayname"] = "secpay";
-$GATEWAYMODULE["secpayvisiblename"] = "SecPay";
-$GATEWAYMODULE["secpaytype"] = "CC";
+$GATEWAYMODULE['secpayname'] = "secpay";
+$GATEWAYMODULE['secpayvisiblename'] = "SecPay";
+$GATEWAYMODULE['secpaytype'] = "CC";
 
-if (isset( $_REQUEST["runcharge"] )) {
+if (isset( $_REQUEST['runcharge'] )) {
 	require "../../init.php";
 	$whmcs->load_function( "gateway" );
 	$GATEWAY = getGatewayVariables( "secpay" );
 
-	if (!$GATEWAY["type"]) {
+	if (!$GATEWAY['type']) {
 		exit( "Module Not Activated" );
 	}
 
 	require "../../includes/xmlrpc.php";
-	$testmode = $_REQUEST["testmode"];
+	$testmode = $_REQUEST['testmode'];
 
 	if (!$testmode) {
 		$testmode = "live";
@@ -114,25 +114,25 @@ if (isset( $_REQUEST["runcharge"] )) {
 
 	$repeattrans = "";
 
-	if (!$_REQUEST["cardcvv"]) {
+	if (!$_REQUEST['cardcvv']) {
 		$repeattrans = "usage_type=R,repeat=true,";
 	}
 
 	$f = new xmlrpcmsg( "SECVPN.validateCardFull" );
-	$f->addParam( new xmlrpcval($_REQUEST["merchantid"], "string" ) );
-	$f->addParam( new xmlrpcval( $_REQUEST["vpnpassword"], "string" ) );
-	$f->addParam( new xmlrpcval( $_REQUEST["invoiceid"], "string" ) );
-	$f->addParam( new xmlrpcval( $_REQUEST["ipaddress"], "string" ) );
-	$f->addParam( new xmlrpcval( $_REQUEST["name"], "string" ) );
-	$f->addParam( new xmlrpcval( $_REQUEST["cardnum"], "string" ) );
-	$f->addParam( new xmlrpcval( $_REQUEST["amount"], "string" ) );
-	$f->addParam( new xmlrpcval( "/" . substr( $_REQUEST["cardexp"], 2, 2 ), "string" ) );
-	$f->addParam( new xmlrpcval( $_REQUEST["issuenum"], "string" ) );
-	$f->addParam( new xmlrpcval( "/" . substr( $_REQUEST["startdate"], 2, 2 ), "string" ) );
+	$f->addParam( new xmlrpcval($_REQUEST['merchantid'], "string" ) );
+	$f->addParam( new xmlrpcval( $_REQUEST['vpnpassword'], "string" ) );
+	$f->addParam( new xmlrpcval( $_REQUEST['invoiceid'], "string" ) );
+	$f->addParam( new xmlrpcval( $_REQUEST['ipaddress'], "string" ) );
+	$f->addParam( new xmlrpcval( $_REQUEST['name'], "string" ) );
+	$f->addParam( new xmlrpcval( $_REQUEST['cardnum'], "string" ) );
+	$f->addParam( new xmlrpcval( $_REQUEST['amount'], "string" ) );
+	$f->addParam( new xmlrpcval( "/" . substr( $_REQUEST['cardexp'], 2, 2 ), "string" ) );
+	$f->addParam( new xmlrpcval( $_REQUEST['issuenum'], "string" ) );
+	$f->addParam( new xmlrpcval( "/" . substr( $_REQUEST['startdate'], 2, 2 ), "string" ) );
 	$f->addParam( new xmlrpcval( "", "string" ) );
 	$f->addParam( new xmlrpcval( "", "string" ) );
-	$f->addParam( new xmlrpcval( "name=" . $_REQUEST["clientdetailsfirstname"] . " " . $_REQUEST["clientdetailslastname"] . ",company=" . $_REQUEST["clientdetailscompanyname"] . ",addr_1=" . $_REQUEST["clientdetailsaddress1"] . ",addr_2=" . $_REQUEST["clientdetailsaddress2"] . ",city=" . $_REQUEST["clientdetailscity"] . ",state=" . $_REQUEST["clientdetailstate"] . ",post_code=" . $_REQUEST["clientdetailspostcode"] . ",tel=" . $_REQUEST["clientdetailsphonenumber"] . ",email=" . $_REQUEST["clientdetailsemail"] . "", "string" ) );
-	$f->addParam( new xmlrpcval( $repeattrans . ( "test_status=" . $testmode . ",dups=false,currency=" ) . $_REQUEST["currencycode"] . ",cv2=" . $_REQUEST["cardcvv"], "string" ) );
+	$f->addParam( new xmlrpcval( "name=" . $_REQUEST['clientdetailsfirstname'] . " " . $_REQUEST['clientdetailslastname'] . ",company=" . $_REQUEST['clientdetailscompanyname'] . ",addr_1=" . $_REQUEST['clientdetailsaddress1'] . ",addr_2=" . $_REQUEST['clientdetailsaddress2'] . ",city=" . $_REQUEST['clientdetailscity'] . ",state=" . $_REQUEST['clientdetailstate'] . ",post_code=" . $_REQUEST['clientdetailspostcode'] . ",tel=" . $_REQUEST['clientdetailsphonenumber'] . ",email=" . $_REQUEST['clientdetailsemail'] . "", "string" ) );
+	$f->addParam( new xmlrpcval( $repeattrans . ( "test_status=" . $testmode . ",dups=false,currency=" ) . $_REQUEST['currencycode'] . ",cv2=" . $_REQUEST['cardcvv'], "string" ) );
 	$c = new xmlrpc_client( "/secxmlrpc/make_call", "www.secpay.com", 443 );
 	$c->setSSLVerifyHost( 0 );
 	$c->setSSLVerifyPeer( 0 );

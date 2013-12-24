@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -85,13 +85,16 @@ class Services_JSON {
 			return mb_convert_encoding( $utf8, "UTF-16", "UTF-8" );
 		}
 
-		switch (strlen( $utf8 )) {
-		case 1: {
-				$utf8;
-			}
-		}
-
-		return ;
+        switch ( strlen( $utf8 ) )
+        {
+            case 1 :
+                return $utf8;
+            case 2 :
+                return chr( 7 & ord( $utf8[0] ) >> 2 ).chr( 192 & ord( $utf8[0] ) << 6 | 63 & ord( $utf8[1] ) );
+            case 3 :
+                return chr( 240 & ord( $utf8[0] ) << 4 | 15 & ord( $utf8[1] ) >> 2 ).chr( 192 & ord( $utf8[1] ) << 6 | 127 & ord( $utf8[2] ) );
+        }
+        return "";
 	}
 
 
@@ -107,13 +110,111 @@ class Services_JSON {
 	 * @access   public
 	 */
 	function encode($var) {
-		switch (gettype( $var )) {
-		case "boolean": {
-				($var ? "true" : "false");
-			}
-		}
-
-		return ;
+        switch ( gettype( $var ) )
+        {
+            case "boolean" :
+                return $var ? "true" : "false";
+            case "NULL" :
+                return "null";
+            case "integer" :
+                return ( integer );
+            case "double" :
+                break;
+            case "float" :
+        }
+        return ( double );
+        switch ( gettype( $var ) )
+        {
+            case "string" :
+                $ascii = "";
+                $c = 801;
+                while ( $c < $strlen_var )
+                {
+                    switch ( true )
+                    {
+                        case $ord_var_c == 8 :
+                            $ascii .= "\\b";
+                            break;
+                        case $ord_var_c == 9 :
+                            $ascii .= "\\t";
+                            break;
+                        case $ord_var_c == 10 :
+                            $ascii .= "\\n";
+                            break;
+                        case $ord_var_c == 12 :
+                            $ascii .= "\\f";
+                            break;
+                        case $ord_var_c == 13 :
+                            $ascii .= "\\r";
+                            break;
+                        case $ord_var_c == 34 :
+                            break;
+                        case $ord_var_c == 47 :
+                            break;
+                        case $ord_var_c == 92 :
+                    }
+                    $ascii .= "\\".$var[$c];
+                    break;
+                    switch ( true )
+                    {
+                        case 32 <= $ord_var_c && $ord_var_c <= 127 :
+                            break;
+                        case ( $ord_var_c & 224 ) == 192 :
+                            $c += 802;
+                            break;
+                        case ( $ord_var_c & 240 ) == 224 :
+                            $c += 803;
+                            break;
+                        case ( $ord_var_c & 248 ) == 240 :
+                            $c += 804;
+                            break;
+                        case ( $ord_var_c & 252 ) == 248 :
+                            $c += 805;
+                            break;
+                        case ( $ord_var_c & 254 ) == 252 :
+                            $char = $c;
+                            $c += 806;
+                            $utf16 = $ord_var_c;
+                    }
+                    ++$c;
+                }
+                return "\"".$ascii."\"";
+            case "array" :
+                if ( is_array( $var ) && count( $var ) && array_keys( $var ) !== range( 0, sizeof( $var ) - 1 ) )
+                {
+                    foreach ( $properties as $property )
+                    {
+                        if ( ( $property ) )
+                        {
+                            return $property;
+                            break;
+                        }
+                    }
+                    return "{".join( ",", $properties )."}";
+                }
+                $elements = $ord_var_c;
+                foreach ( $elements as $element )
+                {
+                    if ( ( $element ) )
+                    {
+                        return $element;
+                        break;
+                    }
+                }
+                return "[".join( ",", $elements )."]";
+            case "object" :
+                $properties = $char;
+                foreach ( $properties as $property )
+                {
+                    if ( ( $property ) )
+                    {
+                        return $property;
+                        break;
+                    }
+                }
+                return "{".join( ",", $properties )."}";
+        }
+        return $this->use & SERVICES_JSON_SUPPRESS_ERRORS ? "null" : new Services_JSON_Error( gettype( $var )." can not be encoded as JSON string" );
 	}
 
 
@@ -146,7 +247,7 @@ class Services_JSON {
 	 * @access   private
 	 */
 	function reduce_string($str) {
-		$str = preg_replace( array( "#^\s*//(.+)$#m", "#^\s*/\*(.+)\*/#Us", "#/\*(.+)\*/\s*$#Us" ), "", $str );
+		$str = preg_replace( array( '#^\s*//(.+)$#m', '#^\s*/\*(.+)\*/#Us', '#/\*(.+)\*/\s*$#Us' ), "", $str );
 		return trim( $str );
 	}
 
@@ -165,13 +266,211 @@ class Services_JSON {
 	 */
 	function decode($str) {
 		$str = $this->reduce_string( $str );
-		switch (strtolower( $str )) {
-		case "true": {
-				true;
-			}
-		}
+        switch ( strtolower( $str ) )
+        {
+            case "true" :
+                return true;
+            case "false" :
+                return false;
+            case "null" :
+                return null;
+        }
+        $m = array( );
+        if ( is_numeric( $str ) )
+        {
+            return ( double ) == ( integer ) ? ( integer ) : ( double );
+        }
+        if ( preg_match( "/^(\"|').*(\\1)$/s", $str, $m ) && $m[1] == $m[2] )
+        {
+            $utf8 = "";
+            $c = 0;
+            while ( $c < $strlen_chrs )
+            {
+                switch ( true )
+                {
+                    case $substr_chrs_c_2 == "\\b" :
+                        ++$c;
+                        break;
+                    case $substr_chrs_c_2 == "\\t" :
+                        ++$c;
+                        break;
+                    case $substr_chrs_c_2 == "\\n" :
+                        ++$c;
+                        break;
+                    case $substr_chrs_c_2 == "\\f" :
+                        ++$c;
+                        break;
+                    case $substr_chrs_c_2 == "\\r" :
+                        ++$c;
+                        break;
+                    case $substr_chrs_c_2 == "\\\"" :
+                        break;
+                    case $substr_chrs_c_2 == "\\'" :
+                        break;
+                    case $substr_chrs_c_2 == "\\\\" :
+                        break;
+                    case $substr_chrs_c_2 == "\\/" :
+                		if ( $delim == "\"" && $substr_chrs_c_2 != "\\'" || $delim == "'" && $substr_chrs_c_2 != "\\\"" )
+                		{
+                		}
+                	break;
+                }
 
-		return ;
+                switch ( true )
+                {
+                    case preg_match( "/\\\\u[0-9A-F]{4}/i", substr( $chrs, $c, 6 ) ) :
+                        $utf16 = chr( hexdec( substr( $chrs, $c + 2, 2 ) ) ).chr( hexdec( substr( $chrs, $c + 4, 2 ) ) );
+                        $c += 1104;
+                        break;
+                    case 32 <= $ord_chrs_c && $ord_chrs_c <= 127 :
+                        break;
+                    case ( $ord_chrs_c & 224 ) == 192 :
+                        ++$c;
+                        break;
+                    case ( $ord_chrs_c & 240 ) == 224 :
+                        $c += 1101;
+                        break;
+                    case ( $ord_chrs_c & 248 ) == 240 :
+                        $c += 1102;
+                        break;
+                    case ( $ord_chrs_c & 252 ) == 248 :
+                        $c += 1103;
+                        break;
+                    case ( $ord_chrs_c & 254 ) == 252 :
+                        $c += 1104;
+                }
+                ++$c;
+            }
+            return $utf8;
+        }
+        if ( preg_match( "/^\\[.*\\]$/s", $str ) || preg_match( "/^\\{.*\\}$/s", $str ) )
+        {
+            if ( $str[0] == "[" )
+            {
+                $stk = array( SERVICES_JSON_IN_ARR );
+                $arr = array( );
+            }
+            else if ( $this->use & SERVICES_JSON_LOOSE_TYPE )
+            {
+                $stk = array( SERVICES_JSON_IN_OBJ );
+                $obj = array( );
+            }
+            else
+            {
+                $stk = array( SERVICES_JSON_IN_OBJ );
+            }
+            array_push( $stk, array( "what" => SERVICES_JSON_SLICE, "where" => 0, "delim" => false ) );
+            if ( $chrs == "" )
+            {
+                if ( reset( $stk ) == SERVICES_JSON_IN_ARR )
+                {
+                    return $arr;
+                }
+                return $obj;
+            }
+            $c = 0;
+            while ( $c <= $strlen_chrs )
+            {
+                if ( $c == $strlen_chrs || $chrs[$c] == "," && $top['what'] == SERVICES_JSON_SLICE )
+                {
+                    array_push( $stk, array( "what" => SERVICES_JSON_SLICE, "where" => $c + 1, "delim" => false ) );
+                    if ( reset( $stk ) == SERVICES_JSON_IN_ARR )
+                    {
+                        array_push( $arr, $this->decode( $slice ) );
+                        break;
+                    }
+                    else
+                    {
+                        if ( reset( $stk ) == SERVICES_JSON_IN_OBJ )
+                        {
+                            $parts = array( );
+                            if ( preg_match( "/^\\s*([\"'].*[^\\\\][\"'])\\s*:\\s*(\\S.*),?$/Uis", $slice, $parts ) )
+                            {
+                                if ( $this->use & SERVICES_JSON_LOOSE_TYPE )
+                                {
+                                    $obj[$key] = $val;
+                                    break;
+                                }
+                                else
+                                {
+                                    $obj->$key = $val;
+                                    break;
+                                }
+                            }
+                            else
+                            {
+                                if ( preg_match( "/^\\s*(\\w+)\\s*:\\s*(\\S.*),?$/Uis", $slice, $parts ) )
+                                {
+                                    if ( $this->use & SERVICES_JSON_LOOSE_TYPE )
+                                    {
+                                        $obj[$key] = $val;
+                                        break;
+                                    }
+                                    else
+                                    {
+                                        $obj->$key = $val;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                else if ( ( $chrs[$c] == "\"" || $chrs[$c] == "'" ) && $top['what'] != SERVICES_JSON_IN_STR )
+                {
+                    array_push( $stk, array( "what" => SERVICES_JSON_IN_STR, "where" => $c, "delim" => $chrs[$c] ) );
+                }
+                else if ( $chrs[$c] == $top['delim'] && $top['what'] == SERVICES_JSON_IN_STR && ( strlen( substr( $chrs, 0, $c ) ) - strlen( rtrim( substr( $chrs, 0, $c ), "\\" ) ) ) % 2 != 1 )
+                {
+                    array_pop( $stk );
+                }
+                else if ( $chrs[$c] == "[" && in_array( $top['what'], array( SERVICES_JSON_SLICE, SERVICES_JSON_IN_ARR, SERVICES_JSON_IN_OBJ ) ) )
+                {
+                    array_push( $stk, array( "what" => SERVICES_JSON_IN_ARR, "where" => $c, "delim" => false ) );
+                }
+                else if ( $chrs[$c] == "]" && $top['what'] == SERVICES_JSON_IN_ARR )
+                {
+                    array_pop( $stk );
+                }
+                else if ( $chrs[$c] == "{" && in_array( $top['what'], array( SERVICES_JSON_SLICE, SERVICES_JSON_IN_ARR, SERVICES_JSON_IN_OBJ ) ) )
+                {
+                    array_push( $stk, array( "what" => SERVICES_JSON_IN_OBJ, "where" => $c, "delim" => false ) );
+                }
+                else if ( $chrs[$c] == "}" && $top['what'] == SERVICES_JSON_IN_OBJ )
+                {
+                    array_pop( $stk );
+                }
+                else if ( $substr_chrs_c_2 == "/*" && in_array( $top['what'], array( SERVICES_JSON_SLICE, SERVICES_JSON_IN_ARR, SERVICES_JSON_IN_OBJ ) ) )
+                {
+                    array_push( $stk, array( "what" => SERVICES_JSON_IN_CMT, "where" => $c, "delim" => false ) );
+                    ++$c;
+                }
+                else if ( $substr_chrs_c_2 == "*/" && $top['what'] == SERVICES_JSON_IN_CMT )
+                {
+                    do
+                    {
+                        array_pop( $stk );
+                        ++$c;
+                        $i = $this->reduce_string;
+                    } while ( 0 );
+                    while ( $i <= $c )
+                    {
+                        $chrs = $m;
+                        ++$i;
+                        break;
+                        break;
+                    }
+                }
+                ++$c;
+            }
+            if ( reset( $stk ) == SERVICES_JSON_IN_ARR )
+            {
+                return $arr;
+            }
+            if ( reset( $stk ) == SERVICES_JSON_IN_OBJ )
+            {
+                return $obj;
+            }
+        }
 	}
 
 
@@ -186,7 +485,7 @@ class Services_JSON {
 		}
 
 
-		if (( is_object( $data ) && ( get_class( $data ) == "services_json_error" || is_subclass_of( $data, "services_json_error" ) ) )) {
+		if (is_object( $data ) && ( get_class( $data ) == "services_json_error" || is_subclass_of( $data, "services_json_error" ) )) {
 			return true;
 		}
 
@@ -213,7 +512,7 @@ define( "SERVICES_JSON_IN_CMT", 5 );
 define( "SERVICES_JSON_LOOSE_TYPE", 16 );
 define( "SERVICES_JSON_SUPPRESS_ERRORS", 32 );
 
-if (class_exists( "PEAR_Error" )) {
+if (!class_exists( "PEAR_Error" )) {
 	class Services_JSON_Error extends PEAR_Error {
 		function Services_JSON_Error($message = "unknown error", $code = null, $mode = null, $options = null, $userinfo = null) {
 			parent::pear_error( $message, $code, $mode, $options, $userinfo );
@@ -221,9 +520,6 @@ if (class_exists( "PEAR_Error" )) {
 
 
 	}
-
-
-	return 1;
 }
 
 ?>

@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -17,7 +17,7 @@ function bluepayecheck_config() {
 
 
 function bluepayecheck_link($params) {
-	$code = "<input type=\"button\" value=\"" . $params["langpaynow"] . "\" onClick=\"window.open('modules/gateways/bluepayecheck.php?invoiceid=" . $params["invoiceid"] . "','authnetecheck','width=600,height=500,toolbar=0,location=0,menubar=1,resizeable=0,status=1,scrollbars=1')\">";
+	$code = "<input type=\"button\" value=\"" . $params['langpaynow'] . "\" onClick=\"window.open('modules/gateways/bluepayecheck.php?invoiceid=" . $params['invoiceid'] . "','authnetecheck','width=600,height=500,toolbar=0,location=0,menubar=1,resizeable=0,status=1,scrollbars=1')\">";
 	return $code;
 }
 
@@ -27,29 +27,29 @@ function bluepayecheck_nolocalcc() {
 
 
 function bluepayecheck_capture($params) {
-	update_query( "tblclients", array( "cardtype" => "", "cardnum" => "", "expdate" => "", "issuenumber" => "", "startdate" => "" ), array( "id" => $params["clientdetails"]["userid"] ) );
+	update_query( "tblclients", array( "cardtype" => "", "cardnum" => "", "expdate" => "", "issuenumber" => "", "startdate" => "" ), array( "id" => $params['clientdetails']['userid'] ) );
 	$url = "https://secure.bluepay.com/interfaces/bp20post";
 	$postfields = array();
-	$postfields["ACCOUNT_ID"] = $params["bpaccountid"];
-	$postfields["USER_ID"] = $params["bpuserid"];
-	$postfields["TRANS_TYPE"] = "SALE";
-	$postfields["PAYMENT_TYPE"] = "ACH";
-	$postfields["MODE"] = ($params["testmode"] ? "TEST" : "LIVE");
-	$postfields["AMOUNT"] = $params["amount"];
-	$postfields["INVOICE_ID"] = $params["invoiceid"];
-	$postfields["NAME1"] = $params["clientdetails"]["firstname"];
-	$postfields["NAME2"] = $params["clientdetails"]["lastname"];
-	$postfields["COMPANY_NAME"] = $params["clientdetails"]["companyname"];
-	$postfields["ADDR1"] = $params["clientdetails"]["address1"];
-	$postfields["ADDR2"] = $params["clientdetails"]["address2"];
-	$postfields["CITY"] = $params["clientdetails"]["city"];
-	$postfields["STATE"] = $params["clientdetails"]["state"];
-	$postfields["ZIP"] = $params["clientdetails"]["postcode"];
-	$postfields["COUNTRY"] = $params["clientdetails"]["country"];
-	$postfields["PHONE"] = $params["clientdetails"]["phonenumber"];
-	$postfields["EMAIL"] = $params["clientdetails"]["email"];
-	$postfields["MASTER_ID"] = $params["gatewayid"];
-	$postfields["TAMPER_PROOF_SEAL"] = md5( $params["bpsecretkey"] . $params["bpaccountid"] . $postfields["TRANS_TYPE"] . $postfields["AMOUNT"] . $postfields["MASTER_ID"] . $postfields["NAME1"] . $postfields["PAYMENT_ACCOUNT"] );
+	$postfields['ACCOUNT_ID'] = $params['bpaccountid'];
+	$postfields['USER_ID'] = $params['bpuserid'];
+	$postfields['TRANS_TYPE'] = "SALE";
+	$postfields['PAYMENT_TYPE'] = "ACH";
+	$postfields['MODE'] = ($params['testmode'] ? "TEST" : "LIVE");
+	$postfields['AMOUNT'] = $params['amount'];
+	$postfields['INVOICE_ID'] = $params['invoiceid'];
+	$postfields['NAME1'] = $params['clientdetails']['firstname'];
+	$postfields['NAME2'] = $params['clientdetails']['lastname'];
+	$postfields['COMPANY_NAME'] = $params['clientdetails']['companyname'];
+	$postfields['ADDR1'] = $params['clientdetails']['address1'];
+	$postfields['ADDR2'] = $params['clientdetails']['address2'];
+	$postfields['CITY'] = $params['clientdetails']['city'];
+	$postfields['STATE'] = $params['clientdetails']['state'];
+	$postfields['ZIP'] = $params['clientdetails']['postcode'];
+	$postfields['COUNTRY'] = $params['clientdetails']['country'];
+	$postfields['PHONE'] = $params['clientdetails']['phonenumber'];
+	$postfields['EMAIL'] = $params['clientdetails']['email'];
+	$postfields['MASTER_ID'] = $params['gatewayid'];
+	$postfields['TAMPER_PROOF_SEAL'] = md5( $params['bpsecretkey'] . $params['bpaccountid'] . $postfields['TRANS_TYPE'] . $postfields['AMOUNT'] . $postfields['MASTER_ID'] . $postfields['NAME1'] . $postfields['PAYMENT_ACCOUNT'] );
 	$data = curlCall( $url, $postfields );
 	$result = explode( "&", $data );
 	foreach ($result as $res) {
@@ -58,28 +58,28 @@ function bluepayecheck_capture($params) {
 	}
 
 
-	if ($resultarray["STATUS"] == "1") {
-		return array( "status" => "success", "transid" => $resultarray["TRANS_ID"], "rawdata" => $resultarray );
+	if ($resultarray['STATUS'] == "1") {
+		return array( "status" => "success", "transid" => $resultarray['TRANS_ID'], "rawdata" => $resultarray );
 	}
 
 	return array( "status" => "error", "rawdata" => $resultarray );
 }
 
 
-if (isset( $_GET["invoiceid"] )) {
+if (isset( $_GET['invoiceid'] )) {
 	require "../../init.php";
 	$whmcs->load_function( "gateway" );
 	$whmcs->load_function( "invoice" );
 	$GATEWAY = getGatewayVariables( "bluepayecheck" );
 
-	if (!$GATEWAY["type"]) {
+	if (!$GATEWAY['type']) {
 		exit( "Module Not Activated" );
 	}
 
-	$where = array( "id" => (int)$_GET["invoiceid"], "paymentmethod" => "bluepayecheck" );
+	$where = array( "id" => (int)$_GET['invoiceid'], "paymentmethod" => "bluepayecheck" );
 
-	if (!isset( $_SESSION["adminid"] )) {
-		$where["userid"] = $_SESSION["uid"];
+	if (!isset( $_SESSION['adminid'] )) {
+		$where['userid'] = $_SESSION['uid'];
 	}
 
 	$invoiceid = get_query_val( "tblinvoices", "id", $where );
@@ -141,19 +141,19 @@ h1 {
 
 
 		if (!$errormessage) {
-			$result = select_query( "tblinvoices", "tblclients.*,tblinvoices.id,tblinvoices.total", array( "tblinvoices.id" => $_GET["invoiceid"] ), "", "", "", "tblclients ON tblinvoices.userid=tblclients.id" );
+			$result = select_query( "tblinvoices", "tblclients.*,tblinvoices.id,tblinvoices.total", array( "tblinvoices.id" => $_GET['invoiceid'] ), "", "", "", "tblclients ON tblinvoices.userid=tblclients.id" );
 			$data = mysql_fetch_array( $result );
-			$invoiceid = $data["id"];
-			$userid = $data["userid"];
-			$firstname = $data["firstname"];
-			$lastname = $data["lastname"];
-			$address1 = $data["address1"];
-			$city = $data["city"];
-			$state = $data["state"];
-			$postcode = $data["postcode"];
-			$country = $data["country"];
-			$phonenumber = $data["phonenumber"];
-			$email = $data["email"];
+			$invoiceid = $data['id'];
+			$userid = $data['userid'];
+			$firstname = $data['firstname'];
+			$lastname = $data['lastname'];
+			$address1 = $data['address1'];
+			$city = $data['city'];
+			$state = $data['state'];
+			$postcode = $data['postcode'];
+			$country = $data['country'];
+			$phonenumber = $data['phonenumber'];
+			$email = $data['email'];
 			$result = select_query( "tblinvoices", "total", array( "id" => $invoiceid ) );
 			$data = mysql_fetch_array( $result );
 			$total = $data[0];
@@ -165,27 +165,27 @@ h1 {
 			$params = getGatewayVariables( "bluepayecheck" );
 			$url = "https://secure.bluepay.com/interfaces/bp20post";
 			$postfields = array();
-			$postfields["ACCOUNT_ID"] = $params["bpaccountid"];
-			$postfields["USER_ID"] = $params["bpuserid"];
-			$postfields["TRANS_TYPE"] = "SALE";
-			$postfields["PAYMENT_TYPE"] = "ACH";
-			$postfields["MODE"] = ($params["testmode"] ? "TEST" : "LIVE");
-			$postfields["AMOUNT"] = $balance;
-			$postfields["INVOICE_ID"] = $invoiceid;
-			$postfields["NAME1"] = $firstname;
-			$postfields["NAME2"] = $lastname;
-			$postfields["COMPANY_NAME"] = $companyname;
-			$postfields["ADDR1"] = $address1;
-			$postfields["ADDR2"] = $address2;
-			$postfields["CITY"] = $city;
-			$postfields["STATE"] = $state;
-			$postfields["ZIP"] = $postcode;
-			$postfields["COUNTRY"] = $country;
-			$postfields["PHONE"] = $phonenumber;
-			$postfields["EMAIL"] = $email;
-			$postfields["PAYMENT_ACCOUNT"] = strtoupper( substr( $bankaccttype, 0, 1 ) ) . ":" . $bankroutingcode . ":" . $bankacctnumber;
-			$postfields["DOC_TYPE"] = "WEB";
-			$postfields["TAMPER_PROOF_SEAL"] = md5( $params["bpsecretkey"] . $params["bpaccountid"] . $postfields["TRANS_TYPE"] . $postfields["AMOUNT"] . $postfields["MASTER_ID"] . $postfields["NAME1"] . $postfields["PAYMENT_ACCOUNT"] );
+			$postfields['ACCOUNT_ID'] = $params['bpaccountid'];
+			$postfields['USER_ID'] = $params['bpuserid'];
+			$postfields['TRANS_TYPE'] = "SALE";
+			$postfields['PAYMENT_TYPE'] = "ACH";
+			$postfields['MODE'] = ($params['testmode'] ? "TEST" : "LIVE");
+			$postfields['AMOUNT'] = $balance;
+			$postfields['INVOICE_ID'] = $invoiceid;
+			$postfields['NAME1'] = $firstname;
+			$postfields['NAME2'] = $lastname;
+			$postfields['COMPANY_NAME'] = $companyname;
+			$postfields['ADDR1'] = $address1;
+			$postfields['ADDR2'] = $address2;
+			$postfields['CITY'] = $city;
+			$postfields['STATE'] = $state;
+			$postfields['ZIP'] = $postcode;
+			$postfields['COUNTRY'] = $country;
+			$postfields['PHONE'] = $phonenumber;
+			$postfields['EMAIL'] = $email;
+			$postfields['PAYMENT_ACCOUNT'] = strtoupper( substr( $bankaccttype, 0, 1 ) ) . ":" . $bankroutingcode . ":" . $bankacctnumber;
+			$postfields['DOC_TYPE'] = "WEB";
+			$postfields['TAMPER_PROOF_SEAL'] = md5( $params['bpsecretkey'] . $params['bpaccountid'] . $postfields['TRANS_TYPE'] . $postfields['AMOUNT'] . $postfields['MASTER_ID'] . $postfields['NAME1'] . $postfields['PAYMENT_ACCOUNT'] );
 			$data = curlCall( $url, $postfields );
 			$result = explode( "&", $data );
 			foreach ($result as $res) {
@@ -194,9 +194,9 @@ h1 {
 			}
 
 
-			if ($resultarray["STATUS"] == "1") {
-				addInvoicePayment( $invoiceid, $resultarray["TRANS_ID"], "", "", "bluepayecheck" );
-				update_query( "tblclients", array( "gatewayid" => $resultarray["TRANS_ID"] ), array( "id" => $userid ) );
+			if ($resultarray['STATUS'] == "1") {
+				addInvoicePayment( $invoiceid, $resultarray['TRANS_ID'], "", "", "bluepayecheck" );
+				update_query( "tblclients", array( "gatewayid" => $resultarray['TRANS_ID'] ), array( "id" => $userid ) );
 				logTransaction( "BluePay Echeck", $resultarray, "Successful" );
 				echo "<br /><h1 class=\"sucessfull\">Payment Successful</h1><p align=\"center\"><a href=\"#\" onclick=\"close_child_window();\">Click here to close the window</a></p>
 <script language=\"javascript\">
@@ -214,12 +214,12 @@ function close_child_window(){
 	}
 
 
-	if (( !$submit || $errormessage )) {
+	if ( !$submit || $errormessage ) {
 		echo "
 <form method=\"post\" action=\"";
-		echo $_SERVER["PHP_SELF"];
+		echo $_SERVER['PHP_SELF'];
 		echo "?invoiceid=";
-		echo $_GET["invoiceid"];
+		echo $_GET['invoiceid'];
 		echo "\">
 <input type=\"hidden\" name=\"submit\" value=\"true\" />
 

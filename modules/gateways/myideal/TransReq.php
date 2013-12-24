@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -13,20 +13,20 @@
 $whmcs->load_function( "gateway" );
 $GATEWAY = getGatewayVariables( "myideal" );
 
-if (!$GATEWAY["type"]) {
+if (!$GATEWAY['type']) {
 	exit( "Module Not Activated" );
 }
 
 require_once dirname( __FILE__ ) . "/myideal_lib.php";
 require_once dirname( __FILE__ ) . "/ThinMPI.php";
 $conf = LoadConfiguration();
-$orderNumber = $_POST["ordernumber"];
-$description = $_POST["description"];
-$currency = $_POST["currency"];
-$amount = $_POST["grandtotal"];
+$orderNumber = $_POST['ordernumber'];
+$description = $_POST['description'];
+$currency = $_POST['currency'];
+$amount = $_POST['grandtotal'];
 $amount *= 104;
 $product1number = "1";
-$issuerID = $_POST["issuerID"];
+$issuerID = $_POST['issuerID'];
 
 if ($issuerID == 0) {
 	print "Kies uw bank uit de lijst om met iDEAL te betalen<br>";
@@ -35,15 +35,15 @@ if ($issuerID == 0) {
 
 $data = new AcquirerTrxRequest();
 $data->setIssuerID( $issuerID );
-$directory = "http://" . $_SERVER["HTTP_HOST"] . $_SERVER["PHP_SELF"];
+$directory = "http://" . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF'];
 $directory = substr( $directory, 0, strrpos( $directory, "/" ) + 1 );
 $returnURL = $directory . "StatReq.php";
 $data->setMerchantReturnURL( $returnURL );
 $data->setPurchaseID( $orderNumber );
 $data->setAmount( $amount );
 $data->setCurrency( $currency );
-$data->setExpirationPeriod( $conf["EXPIRATIONPERIOD"] );
-$data->setLanguage( $conf["LANGUAGE"] );
+$data->setExpirationPeriod( $conf['EXPIRATIONPERIOD'] );
+$data->setLanguage( $conf['LANGUAGE'] );
 $data->setDescription( $description );
 $rule = new ThinMPI();
 $result = new AcquirerTrxResponse();

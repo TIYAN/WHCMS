@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -19,24 +19,24 @@ function paymentexpress_config() {
 function paymentexpress_link($params) {
 	$url = "https://sec.paymentexpress.com/pxpay/pxaccess.aspx";
 	$xml = "<GenerateRequest>
-<PxPayUserId>" . $params["pxpayuserid"] . "</PxPayUserId>
-<PxPayKey>" . $params["pxpaykey"] . "</PxPayKey>
-<AmountInput>" . $params["amount"] . "</AmountInput>
-<CurrencyInput>" . $params["currency"] . "</CurrencyInput>
-<MerchantReference>" . $params["description"] . "</MerchantReference>
-<EmailAddress>" . $params["clientdetails"]["email"] . "</EmailAddress>
-<TxnData1>" . $params["invoiceid"] . "</TxnData1>
+<PxPayUserId>" . $params['pxpayuserid'] . "</PxPayUserId>
+<PxPayKey>" . $params['pxpaykey'] . "</PxPayKey>
+<AmountInput>" . $params['amount'] . "</AmountInput>
+<CurrencyInput>" . $params['currency'] . "</CurrencyInput>
+<MerchantReference>" . $params['description'] . "</MerchantReference>
+<EmailAddress>" . $params['clientdetails']['email'] . "</EmailAddress>
+<TxnData1>" . $params['invoiceid'] . "</TxnData1>
 <TxnType>Purchase</TxnType>
-<TxnId>" . substr( time() . $params["invoiceid"], 0, 16 ) . "</TxnId>
+<TxnId>" . substr( time() . $params['invoiceid'], 0, 16 ) . "</TxnId>
 <BillingId></BillingId>
 <EnableAddBillCard>0</EnableAddBillCard>
-<UrlSuccess>" . $params["systemurl"] . "/modules/gateways/callback/paymentexpress.php</UrlSuccess>
-<UrlFail>" . $params["systemurl"] . "/clientarea.php</UrlFail>
+<UrlSuccess>" . $params['systemurl'] . "/modules/gateways/callback/paymentexpress.php</UrlSuccess>
+<UrlFail>" . $params['systemurl'] . "/clientarea.php</UrlFail>
 </GenerateRequest>";
 	$data = curlCall( $url, $xml );
 	$xmlresponse = XMLtoArray( $data );
-	$uri = $xmlresponse["REQUEST"]["URI"];
-	$code = "<form method=\"post\" action=\"" . $uri . "\"><input type=\"submit\" value=\"" . $params["langpaynow"] . "\"></form>";
+	$uri = $xmlresponse['REQUEST']['URI'];
+	$code = "<form method=\"post\" action=\"" . $uri . "\"><input type=\"submit\" value=\"" . $params['langpaynow'] . "\"></form>";
 	return $code;
 }
 

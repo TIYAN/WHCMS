@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -17,7 +17,7 @@ function boleto_config() {
 
 
 function boleto_link($params) {
-	$code = "<input type=\"button\" value=\"" . $params["langpaynow"] . "\" onClick=\"window.location='" . $params["systemurl"] . "/modules/gateways/boleto/boleto.php?invoiceid=" . $params["invoiceid"] . "'\" />";
+	$code = "<input type=\"button\" value=\"" . $params['langpaynow'] . "\" onClick=\"window.location='" . $params['systemurl'] . "/modules/gateways/boleto/boleto.php?invoiceid=" . $params['invoiceid'] . "'\" />";
 	return $code;
 }
 

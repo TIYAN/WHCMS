@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -22,9 +22,9 @@ function heartinternet_CreateAccount($params) {
   <command>
     <create>
       <package:create>
-        <package:domainName>" . $params["domain"] . "</package:domainName>
-        <package:emailAddress name=\"" . $params["clientsdetails"]["firstname"] . " " . $params["clientsdetails"]["lastname"] . "\">" . $params["clientsdetails"]["email"] . "</package:emailAddress>
-        <package:type>" . $params["configoption2"] . "</package:type>
+        <package:domainName>" . $params['domain'] . "</package:domainName>
+        <package:emailAddress name=\"" . $params['clientsdetails']['firstname'] . " " . $params['clientsdetails']['lastname'] . "\">" . $params['clientsdetails']['email'] . "</package:emailAddress>
+        <package:type>" . $params['configoption2'] . "</package:type>
       </package:create>
     </create>
     <clTRID>" . $cltrid . "</clTRID>
@@ -37,13 +37,13 @@ function heartinternet_CreateAccount($params) {
 	}
 
 
-	if (trim( $xmldata["epp"]["response"]["result"]["attr"]["code"] ) != "1000") {
-		$result = $xmldata["epp"]["response"]["result"]["msg"]["value"];
+	if (trim( $xmldata['epp']['response']['result']['attr']['code'] ) != "1000") {
+		$result = $xmldata['epp']['response']['result']['msg']['value'];
 	}
 	else {
-		$username = $xmldata["epp"]["response"]["resData"]["package:creData"]["package:id"]["value"];
-		$password = $xmldata["epp"]["response"]["resData"]["package:creData"]["package:passwordSet"]["package:password"][0]["value"];
-		update_query( "tblhosting", array( "username" => $username, "password" => encrypt( $password ) ), array( "id" => $params["serviceid"] ) );
+		$username = $xmldata['epp']['response']['resData']["package:creData"]["package:id"]['value'];
+		$password = $xmldata['epp']['response']['resData']["package:creData"]["package:passwordSet"]["package:password"][0]['value'];
+		update_query( "tblhosting", array( "username" => $username, "password" => encrypt( $password ) ), array( "id" => $params['serviceid'] ) );
 		$result = "success";
 	}
 
@@ -57,7 +57,7 @@ function heartinternet_TerminateAccount($params) {
   <command>
     <delete>
       <package:delete>
-        <package:id>" . $params["username"] . "</package:id>
+        <package:id>" . $params['username'] . "</package:id>
       </package:delete>
     </delete>
     <clTRID>" . $cltrid . "</clTRID>
@@ -70,8 +70,8 @@ function heartinternet_TerminateAccount($params) {
 	}
 
 
-	if (trim( $xmldata["epp"]["response"]["result"]["attr"]["code"] ) != "1000") {
-		$result = $xmldata["epp"]["response"]["result"]["msg"]["value"];
+	if (trim( $xmldata['epp']['response']['result']['attr']['code'] ) != "1000") {
+		$result = $xmldata['epp']['response']['result']['msg']['value'];
 	}
 	else {
 		$result = "success";
@@ -87,7 +87,7 @@ function heartinternet_SuspendAccount($params) {
   <command>
     <update>
       <package:update>
-        <package:id>" . $params["username"] . "</package:id>
+        <package:id>" . $params['username'] . "</package:id>
         <package:add>
           <package:status s=\"inactive\"/>
         </package:add>
@@ -103,8 +103,8 @@ function heartinternet_SuspendAccount($params) {
 	}
 
 
-	if (trim( $xmldata["epp"]["response"]["result"]["attr"]["code"] ) != "1000") {
-		$result = $xmldata["epp"]["response"]["result"]["msg"]["value"];
+	if (trim( $xmldata['epp']['response']['result']['attr']['code'] ) != "1000") {
+		$result = $xmldata['epp']['response']['result']['msg']['value'];
 	}
 	else {
 		$result = "success";
@@ -120,7 +120,7 @@ function heartinternet_UnsuspendAccount($params) {
   <command>
     <update>
       <package:update>
-        <package:id>" . $params["username"] . "</package:id>
+        <package:id>" . $params['username'] . "</package:id>
         <package:rem>
           <package:status s=\"inactive\"/>
         </package:rem>
@@ -136,8 +136,8 @@ function heartinternet_UnsuspendAccount($params) {
 	}
 
 
-	if (trim( $xmldata["epp"]["response"]["result"]["attr"]["code"] ) != "1000") {
-		$result = $xmldata["epp"]["response"]["result"]["msg"]["value"];
+	if (trim( $xmldata['epp']['response']['result']['attr']['code'] ) != "1000") {
+		$result = $xmldata['epp']['response']['result']['msg']['value'];
 	}
 	else {
 		$result = "success";
@@ -153,7 +153,7 @@ function heartinternet_ChangePassword($params) {
   <command>
     <update>
       <package:update>
-        <package:id>" . $params["username"] . "</package:id>
+        <package:id>" . $params['username'] . "</package:id>
         <package:chg>
           <package:password type=\"control-panel\"/>
         </package:chg>
@@ -169,15 +169,15 @@ function heartinternet_ChangePassword($params) {
 	}
 
 
-	if (trim( $xmldata["epp"]["response"]["result"]["attr"]["code"] ) != "1000") {
-		$result = $xmldata["epp"]["response"]["result"]["msg"]["value"];
+	if (trim( $xmldata['epp']['response']['result']['attr']['code'] ) != "1000") {
+		$result = $xmldata['epp']['response']['result']['msg']['value'];
 	}
 	else {
-		$oldpassword = $params["password"];
-		$newpassword = $xmldata["epp"]["response"]["resData"]["package:password"]["value"];
+		$oldpassword = $params['password'];
+		$newpassword = $xmldata['epp']['response']['resData']["package:password"]['value'];
 
 		if ($newpassword != $oldpassword) {
-			update_query( "tblhosting", array( "password" => encrypt( $newpassword ) ), array( "id" => $params["serviceid"] ) );
+			update_query( "tblhosting", array( "password" => encrypt( $newpassword ) ), array( "id" => $params['serviceid'] ) );
 		}
 
 		$result = "success";
@@ -193,9 +193,9 @@ function heartinternet_ChangePackage($params) {
   <command>
     <update>
       <package:update>
-        <package:id>" . $params["username"] . "</package:id>
+        <package:id>" . $params['username'] . "</package:id>
         <package:chg>
-          <package:type>" . $params["configoption2"] . "</package:type>
+          <package:type>" . $params['configoption2'] . "</package:type>
         </package:chg>
       </package:update>
     </update>
@@ -209,8 +209,8 @@ function heartinternet_ChangePackage($params) {
 	}
 
 
-	if (trim( $xmldata["epp"]["response"]["result"]["attr"]["code"] ) != "1000") {
-		$result = $xmldata["epp"]["response"]["result"]["msg"]["value"];
+	if (trim( $xmldata['epp']['response']['result']['attr']['code'] ) != "1000") {
+		$result = $xmldata['epp']['response']['result']['msg']['value'];
 	}
 	else {
 		$result = "success";
@@ -228,7 +228,7 @@ function heartinternet_ClientArea($params) {
   <command>
     <info>
       <package:info>
-        <package:id>" . $params["domain"] . "</package:id>
+        <package:id>" . $params['domain'] . "</package:id>
       </package:info>
     </info>
 	<extension>
@@ -244,12 +244,12 @@ function heartinternet_ClientArea($params) {
 	}
 
 
-	if (trim( $xmldata["epp"]["response"]["result"]["attr"]["code"] ) != "1000") {
+	if (trim( $xmldata['epp']['response']['result']['attr']['code'] ) != "1000") {
 		$result = "";
 	}
 	else {
-		$url = $xmldata["epp"]["response"]["resData"]["ext-package:redirectURL"]["value"];
-		$result = "<a href=\"" . $url . "\" target=\"_blank\">" . $_LANG["heartinternetlogin"] . "</a>";
+		$url = $xmldata['epp']['response']['resData']["ext-package:redirectURL"]['value'];
+		$result = "<a href=\"" . $url . "\" target=\"_blank\">" . $_LANG['heartinternetlogin'] . "</a>";
 	}
 
 	return $result;
@@ -268,7 +268,7 @@ function heartinternet_curlcall($xml, $verbose = "off", $params) {
 
 	$hi_api = new HeartInternet_API();
 
-	if ($params["configoption1"] == "on") {
+	if ($params['configoption1'] == "on") {
 		$hi_api->connect( true );
 	}
 	else {
@@ -279,16 +279,16 @@ function heartinternet_curlcall($xml, $verbose = "off", $params) {
 	$extensions = array( "http://www.heartinternet.co.uk/whapi/ext-package-1.1", "http://www.heartinternet.co.uk/whapi/ext-whapi-1.0" );
     try
     {
-		$hi_api->logIn( $params["serverusername"], $params["serverpassword"], $objects, $extensions );
+		$hi_api->logIn( $params['serverusername'], $params['serverpassword'], $objects, $extensions );
 	}
 	catch ( Exception $e ) {
-		logModuleCall( "heartinternet", $params["action"], $xml, $e->getMessage() );
+		logModuleCall( "heartinternet", $params['action'], $xml, $e->getMessage() );
 		return "Caught exception: " . $e->getMessage();
 	}
 	
 	$data = $hi_api->sendMessage( $xml, true );
 	$retxml = ($verbose == "on" ? heartinternet_xml2array( $data ) : XMLtoArray( $data ));
-	logModuleCall( "heartinternet", $params["action"], $xml, $data, $retxml );
+	logModuleCall( "heartinternet", $params['action'], $xml, $data, $retxml );
 	return $retxml;
 
 }
@@ -330,7 +330,7 @@ function heartinternet_xml2array($contents, $get_attributes = 1) {
 			$result = array();
 
 			if (isset( $value )) {
-				$result["value"] = $value;
+				$result['value'] = $value;
 			}
 
 
@@ -338,7 +338,7 @@ function heartinternet_xml2array($contents, $get_attributes = 1) {
 				foreach ($attributes as $attr => $val) {
 
 					if ($get_attributes == 1) {
-						$result["attr"][$attr] = $val;
+						$result['attr'][$attr] = $val;
 						continue;
 					}
 				}

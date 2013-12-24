@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -20,7 +20,7 @@ class WHMCS_Yubikey {
 	protected $_curlTimeout = null;
 
 	function __construct($id, $signatureKey = null) {
-		if (( is_int( $id ) && 0 < $id )) {
+		if (is_int( $id ) && 0 < $id) {
 			$this->_id = $id;
 		}
 
@@ -40,7 +40,7 @@ class WHMCS_Yubikey {
 
 
 	function setTimestampTolerance($int) {
-		if (( 0 < $int && $int < 86400 )) {
+		if (0 < $int && $int < 86400) {
 			$this->_timestampTolerance = $int;
 			return true;
 		}
@@ -55,7 +55,7 @@ class WHMCS_Yubikey {
 
 
 	function setCurlTimeout($int) {
-		if (( 0 < $int && $int < 600 )) {
+		if (0 < $int && $int < 600) {
 			$this->_curlTimeout = $int;
 			return true;
 		}
@@ -195,12 +195,12 @@ class WHMCS_Yubikey {
 		$now = date( "U" );
 		$timestampSeconds = date_format( date_create( substr( $timestamp, 0, 0 - 4 ) ), "U" );
 
-		if (( !$timestamp || !$now )) {
+		if (!$timestamp || !$now) {
 			return false;
 		}
 
 
-		if (( $now < $timestampSeconds + $this->_timestampTolerance && $timestampSeconds - $this->_timestampTolerance < $now )) {
+		if ($now < $timestampSeconds + $this->_timestampTolerance && $timestampSeconds - $this->_timestampTolerance < $now) {
 			return true;
 		}
 
@@ -234,9 +234,9 @@ function yubico_config() {
 function yubico_activate($params) {
 	global $whmcs;
 
-	$apiID = (int)$params["settings"]["clientid"];
-	$signatureKey = $params["settings"]["secretkey"];
-	$otp = (isset( $params["post_vars"]["yubicoprefix"] ) ? $params["post_vars"]["yubicoprefix"] : "");
+	$apiID = (int)$params['settings']['clientid'];
+	$signatureKey = $params['settings']['secretkey'];
+	$otp = (isset( $params['post_vars']['yubicoprefix'] ) ? $params['post_vars']['yubicoprefix'] : "");
 	$invalid = false;
 
 	if ($otp) {
@@ -248,9 +248,9 @@ function yubico_activate($params) {
 		if ($token->verify( $otp )) {
 			$otp = substr( $otp, 0, 12 );
 			$output = array();
-			$output["completed"] = true;
-			$output["msg"] = "Yubico Key Detected & Saved Successfully!";
-			$output["settings"] = array( "yubicoprefix" => sha1( $otp ) );
+			$output['completed'] = true;
+			$output['msg'] = "Yubico Key Detected & Saved Successfully!";
+			$output['settings'] = array( "yubicoprefix" => sha1( $otp ) );
 			return $output;
 		}
 
@@ -290,10 +290,10 @@ function yubico_challenge($params) {
 
 
 function yubico_verify($params) {
-	$apiID = (int)$params["settings"]["clientid"];
-	$signatureKey = $params["settings"]["secretkey"];
-	$yubicoprefix = $params["user_settings"]["yubicoprefix"];
-	$otp = $params["post_vars"]["otp"];
+	$apiID = (int)$params['settings']['clientid'];
+	$signatureKey = $params['settings']['secretkey'];
+	$yubicoprefix = $params['user_settings']['yubicoprefix'];
+	$otp = $params['post_vars']['otp'];
 	$token = new WHMCS_Yubikey( $apiID, $signatureKey );
 	$token->setCurlTimeout( 20 );
 	$token->setTimestampTolerance( 500 );

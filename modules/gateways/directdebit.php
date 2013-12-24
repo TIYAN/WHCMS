@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -17,34 +17,34 @@ function directdebit_config() {
 
 
 function directdebit_link($params) {
-	$code = "<form method=\"post\" action=\"modules/gateways/directdebit.php?invoiceid=" . $params["invoiceid"] . "\">
-<input type=\"submit\" value=\"" . $params["langpaynow"] . "\" />
+	$code = "<form method=\"post\" action=\"modules/gateways/directdebit.php?invoiceid=" . $params['invoiceid'] . "\">
+<input type=\"submit\" value=\"" . $params['langpaynow'] . "\" />
 </form>";
 	return $code;
 }
 
 
-if (isset( $_GET["invoiceid"] )) {
+if (isset( $_GET['invoiceid'] )) {
 	require "../../init.php";
 	$whmcs->load_function( "gateway" );
 	$whmcs->load_function( "invoice" );
 	$GATEWAY = getGatewayVariables( "directdebit" );
 
-	if (!$GATEWAY["type"]) {
+	if (!$GATEWAY['type']) {
 		exit( "Module Not Activated" );
 	}
 
 
-	if ($_SESSION["adminid"]) {
+	if ($_SESSION['adminid']) {
 		$result = select_query( "tblinvoices", "id,userid", array( "id" => (int)$invoiceid ) );
 	}
 	else {
-		$result = select_query( "tblinvoices", "id,userid", array( "id" => (int)$invoiceid, "userid" => $_SESSION["uid"] ) );
+		$result = select_query( "tblinvoices", "id,userid", array( "id" => (int)$invoiceid, "userid" => $_SESSION['uid'] ) );
 	}
 
 	$data = mysql_fetch_array( $result );
-	$invoiceid = $data["id"];
-	$userid = $data["userid"];
+	$invoiceid = $data['id'];
+	$userid = $data['userid'];
 
 	if (!$invoiceid) {
 		exit( "Access Denied" );
@@ -54,7 +54,7 @@ if (isset( $_GET["invoiceid"] )) {
 <html lang=\"en\">
   <head>
     <meta http-equiv=\"content-type\" content=\"text/html; charset=";
-	echo $CONFIG["Charset"];
+	echo $CONFIG['Charset'];
 	echo "\" />
     <title>Direct Debit Payment</title>
     <link href=\"../../templates/default/css/invoice.css\" rel=\"stylesheet\">
@@ -64,9 +64,9 @@ if (isset( $_GET["invoiceid"] )) {
 <div class=\"wrapper\">
 
 <p><img src=\"";
-	echo $CONFIG["LogoURL"];
+	echo $CONFIG['LogoURL'];
 	echo "\" title=\"";
-	echo $CONFIG["CompanyName"];
+	echo $CONFIG['CompanyName'];
 	echo "\" /></p>
 
 <h1>Direct Debit Payment</h1>
@@ -115,14 +115,14 @@ if (isset( $_GET["invoiceid"] )) {
 	}
 
 
-	if (( !$submit || $errormessage )) {
+	if ( !$submit || $errormessage ) {
 		echo "
 <p>Please submit your bank account details below to pay by Direct Debit.</p>
 
 <form method=\"post\" action=\"";
-		echo $_SERVER["PHP_SELF"];
+		echo $_SERVER['PHP_SELF'];
 		echo "?invoiceid=";
-		echo (int)$_GET["invoiceid"];
+		echo (int)$_GET['invoiceid'];
 		echo "\">
 <input type=\"hidden\" name=\"submit\" value=\"true\" />
 
@@ -139,7 +139,7 @@ if (isset( $_GET["invoiceid"] )) {
 		echo "\" /></td></tr>
 <tr><td>Bank Account Type</td><td><label><input type=\"radio\" name=\"bankaccttype\" value=\"Checking\"";
 
-		if (( !$bankaccttype || $bankaccttype == "Checking" )) {
+		if ( !$bankaccttype || $bankaccttype == "Checking" ) {
 			echo " checked";
 		}
 

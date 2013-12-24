@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -18,16 +18,16 @@ function cloudmin_ConfigOptions() {
 	if ($packageconfigoption[6]) {
 		$result = select_query( "tblservers", "", array( "type" => "cloudmin", "active" => "1" ) );
 		$data = mysql_fetch_array( $result );
-		$params["serverip"] = $data["ipaddress"];
-		$params["serverhostname"] = $data["hostname"];
-		$params["serverusername"] = $data["username"];
-		$params["serverpassword"] = decrypt( $data["password"] );
-		$params["serveraccesshash"] = $data["accesshash"];
-		$params["serversecure"] = $data["secure"];
+		$params['serverip'] = $data['ipaddress'];
+		$params['serverhostname'] = $data['hostname'];
+		$params['serverusername'] = $data['username'];
+		$params['serverpassword'] = decrypt( $data['password'] );
+		$params['serveraccesshash'] = $data['accesshash'];
+		$params['serversecure'] = $data['secure'];
 
-		if ($params["serverusername"]) {
+		if ($params['serverusername']) {
 			$postfields = array();
-			$postfields["program"] = "list-images";
+			$postfields['program'] = "list-images";
 			$imagesresult = cloudmin_req( $params, $postfields );
 		}
 	}
@@ -35,10 +35,10 @@ function cloudmin_ConfigOptions() {
 	$configarray = array( "Type" => array( "Type" => "dropdown", "Options" => "xen,openvz,vservers,zones,real" ), "Xen Host" => array( "Type" => "text", "Size" => "30", "Description" => "(Optional)" ), "Setup Type" => array( "Type" => "dropdown", "Options" => "system,owner" ), "Plan Name" => array( "Type" => "text", "Size" => "20", "Description" => "" ) );
 
 	if (is_array( $imagesresult )) {
-		$configarray["Image"] = array( "Type" => "dropdown", "Options" => implode( ",", $imagesresult ) );
+		$configarray['Image'] = array( "Type" => "dropdown", "Options" => implode( ",", $imagesresult ) );
 	}
 	else {
-		$configarray["Image"] = array( "Type" => "text", "Size" => "30" );
+		$configarray['Image'] = array( "Type" => "text", "Size" => "30" );
 	}
 
 	$configarray["Get From Server"] = array( "Type" => "yesno", "Description" => "Tick this box to load Image options from default server" );
@@ -47,28 +47,28 @@ function cloudmin_ConfigOptions() {
 
 
 function cloudmin_CreateAccount($params) {
-	if ($params["configoption3"] == "owner") {
+	if ($params['configoption3'] == "owner") {
 		$postfields = array();
-		$postfields["program"] = "create-owner";
-		$postfields["name"] = $params["customfields"]["Username"];
-		$postfields["email"] = $params["clientsdetails"]["email"];
-		$postfields["pass"] = $params["password"];
-		$postfields["plan"] = $params["configoption4"];
+		$postfields['program'] = "create-owner";
+		$postfields['name'] = $params['customfields']['Username'];
+		$postfields['email'] = $params['clientsdetails']['email'];
+		$postfields['pass'] = $params['password'];
+		$postfields['plan'] = $params['configoption4'];
 		$result = cloudmin_req( $params, $postfields );
 	}
 	else {
 		$postfields = array();
-		$postfields["program"] = "create-system";
-		$postfields["type"] = $params["configoption1"];
+		$postfields['program'] = "create-system";
+		$postfields['type'] = $params['configoption1'];
 
-		if ($params["configoption2"]) {
-			$postfields["xen-host"] = $params["configoption2"];
+		if ($params['configoption2']) {
+			$postfields['xen-host'] = $params['configoption2'];
 		}
 
-		$postfields["host"] = $params["customfields"]["Hostname"];
-		$postfields["ssh-pass"] = $params["password"];
-		$postfields["image"] = $params["configoption5"];
-		$postfields["desc"] = "WHMCS Service ID " . $params["serviceid"];
+		$postfields['host'] = $params['customfields']['Hostname'];
+		$postfields['ssh-pass'] = $params['password'];
+		$postfields['image'] = $params['configoption5'];
+		$postfields['desc'] = "WHMCS Service ID " . $params['serviceid'];
 		$result = cloudmin_req( $params, $postfields );
 	}
 
@@ -77,17 +77,17 @@ function cloudmin_CreateAccount($params) {
 
 
 function cloudmin_SuspendAccount($params) {
-	if ($params["configoption3"] == "owner") {
+	if ($params['configoption3'] == "owner") {
 		$postfields = array();
-		$postfields["program"] = "modify-owner";
-		$postfields["name"] = $params["customfields"]["Username"];
-		$postfields["lock"] = "1";
+		$postfields['program'] = "modify-owner";
+		$postfields['name'] = $params['customfields']['Username'];
+		$postfields['lock'] = "1";
 		$result = cloudmin_req( $params, $postfields );
 	}
 	else {
 		$postfields = array();
-		$postfields["program"] = "pause-system";
-		$postfields["host"] = $params["domain"];
+		$postfields['program'] = "pause-system";
+		$postfields['host'] = $params['domain'];
 		$result = cloudmin_req( $params, $postfields );
 	}
 
@@ -96,17 +96,17 @@ function cloudmin_SuspendAccount($params) {
 
 
 function cloudmin_UnsuspendAccount($params) {
-	if ($params["configoption3"] == "owner") {
+	if ($params['configoption3'] == "owner") {
 		$postfields = array();
-		$postfields["program"] = "modify-owner";
-		$postfields["name"] = $params["customfields"]["Username"];
-		$postfields["lock"] = "0";
+		$postfields['program'] = "modify-owner";
+		$postfields['name'] = $params['customfields']['Username'];
+		$postfields['lock'] = "0";
 		$result = cloudmin_req( $params, $postfields );
 	}
 	else {
 		$postfields = array();
-		$postfields["program"] = "unpause-system";
-		$postfields["host"] = $params["domain"];
+		$postfields['program'] = "unpause-system";
+		$postfields['host'] = $params['domain'];
 		$result = cloudmin_req( $params, $postfields );
 	}
 
@@ -115,16 +115,16 @@ function cloudmin_UnsuspendAccount($params) {
 
 
 function cloudmin_TerminateAccount($params) {
-	if ($params["configoption3"] == "owner") {
+	if ($params['configoption3'] == "owner") {
 		$postfields = array();
-		$postfields["program"] = "delete-owner";
-		$postfields["name"] = $params["customfields"]["Username"];
+		$postfields['program'] = "delete-owner";
+		$postfields['name'] = $params['customfields']['Username'];
 		$result = cloudmin_req( $params, $postfields );
 	}
 	else {
 		$postfields = array();
-		$postfields["program"] = "delete-system";
-		$postfields["host"] = $params["domain"];
+		$postfields['program'] = "delete-system";
+		$postfields['host'] = $params['domain'];
 		$result = cloudmin_req( $params, $postfields );
 	}
 
@@ -146,8 +146,8 @@ function cloudmin_ClientAreaCustomButtonArray() {
 
 function cloudmin_reboot($params) {
 	$postfields = array();
-	$postfields["program"] = "reboot-system";
-	$postfields["host"] = $params["domain"];
+	$postfields['program'] = "reboot-system";
+	$postfields['host'] = $params['domain'];
 	$result = cloudmin_req( $params, $postfields );
 	return $result;
 }
@@ -155,8 +155,8 @@ function cloudmin_reboot($params) {
 
 function cloudmin_startup($params) {
 	$postfields = array();
-	$postfields["program"] = "startup-system";
-	$postfields["host"] = $params["domain"];
+	$postfields['program'] = "startup-system";
+	$postfields['host'] = $params['domain'];
 	$result = cloudmin_req( $params, $postfields );
 	return $result;
 }
@@ -164,16 +164,16 @@ function cloudmin_startup($params) {
 
 function cloudmin_shutdown($params) {
 	$postfields = array();
-	$postfields["program"] = "shutdown-system";
-	$postfields["host"] = $params["domain"];
+	$postfields['program'] = "shutdown-system";
+	$postfields['host'] = $params['domain'];
 	$result = cloudmin_req( $params, $postfields );
 	return $result;
 }
 
 
 function cloudmin_req($params, $postfields) {
-	$domain = ($params["serverhostname"] ? $params["serverhostname"] : $params["serverip"]);
-	$http = ($params["serversecure"] ? "https" : "http");
+	$domain = ($params['serverhostname'] ? $params['serverhostname'] : $params['serverip']);
+	$http = ($params['serversecure'] ? "https" : "http");
 	$url = $http . "://" . $domain . "/server-manager/remote.cgi?" . $fieldstring;
 	$fieldstring = "";
 	foreach ($postfields as $k => $v) {
@@ -187,7 +187,7 @@ function cloudmin_req($params, $postfields) {
 	curl_setopt( $ch, CURLOPT_SSL_VERIFYPEER, 0 );
 	curl_setopt( $ch, CURLOPT_SSL_VERIFYHOST, 0 );
 	curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 );
-	curl_setopt( $ch, CURLOPT_USERPWD, $params["serverusername"] . ":" . $params["serverpassword"] );
+	curl_setopt( $ch, CURLOPT_USERPWD, $params['serverusername'] . ":" . $params['serverpassword'] );
 	curl_setopt( $ch, CURLOPT_TIMEOUT, 300 );
 	$data = curl_exec( $ch );
 
@@ -196,7 +196,7 @@ function cloudmin_req($params, $postfields) {
 	}
 
 	curl_close( $ch );
-	logModuleCall( "cloudmin", $postfields["program"], $postfields, $data );
+	logModuleCall( "cloudmin", $postfields['program'], $postfields, $data );
 
 	if (strpos( $data, "Unauthorized" ) == true) {
 		return "Server Login Invalid";
@@ -208,7 +208,7 @@ function cloudmin_req($params, $postfields) {
 	if ($exitstatus == "0") {
 		$result = "success";
 
-		if ($postfields["program"] == "create-system") {
+		if ($postfields['program'] == "create-system") {
 			$pos1 = 6;
 			$matchstring = "Creation of Xen system ";
 			$pos1 = strpos( $data, $matchstring );
@@ -222,11 +222,11 @@ function cloudmin_req($params, $postfields) {
 			$hostname = substr( $data, $pos1 + strlen( $matchstring ), $pos2 - $pos1 - strlen( $matchstring ) );
 
 			if ($hostname) {
-				update_query( "tblhosting", array( "domain" => $hostname ), array( "id" => $params["serviceid"] ) );
+				update_query( "tblhosting", array( "domain" => $hostname ), array( "id" => $params['serviceid'] ) );
 			}
 		}
 		else {
-			if ($postfields["program"] == "list-images") {
+			if ($postfields['program'] == "list-images") {
 				
 				$array = explode( "------------------------------ ------------------------------------------------
 ", $data );

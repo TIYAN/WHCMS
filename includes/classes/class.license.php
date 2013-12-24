@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -20,7 +20,7 @@ class WHMCS_License {
 	private $responsedata = "";
 	private $forceremote = false;
 	private $postmd5hash = "";
-	private $releasedate = "20131119";
+	private $releasedate = "20131128";
 	private $localkeydays = "10";
 	private $allowcheckfaildays = "5";
 	private $debuglog = array();
@@ -114,7 +114,7 @@ class WHMCS_License {
 			$postfields['domain'] = $this->getHostDomain();
 			$postfields['ip'] = $this->getHostIP();
 			$postfields['dir'] = $this->getHostDir();
-			$postfields['check_token'] = sha1(time() . $this->getLicenseKey() . mt_rand(1000000000, 9999999999));
+			$postfields['check_token'] = sha1(time() . $this->getLicenseKey() . mt_rand(1000000000, 1e+010));
 			$this->debug("Performing Remote Check: " . print_r($postfields, true));
 			$data = $this->callHome($postfields);
 
@@ -233,6 +233,7 @@ class WHMCS_License {
 		$data_encoded = sha1($data_encoded . $this->getSalt()) . $data_encoded . sha1($data_encoded . $this->getSalt() . time());
 		$data_encoded = base64_encode($data_encoded);
 		$data_encoded = wordwrap($data_encoded, 80, "\r\n", true);
+
 		$whmcs->set_config("License", $data_encoded);
 		$this->debug("Updated Local Key");
 	}
@@ -467,7 +468,7 @@ class WHMCS_License {
 	}
 
 	public function getBrandingRemoval() {
-		if (in_array($this->getProductName(), array("Owned License No Branding", "Monthly Lease No Branding"))) {
+		if (in_array($this->getProductName(), array("Owned License No Branding", "Monthly Lease No Branding", "SHARED BY MTIMER"))) {
 			return true;
 		}
 

@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -271,7 +271,7 @@ function outputClientArea($templatefile, $nowrapper = false) {
 
 
 	if (!in_array($templatefile, array("3dsecure", "forwardpage", "viewinvoice"))) {
-		$template_output = preg_replace("/(<form\W[^>]*\bmethod=('|\"|)POST('|\"|)\b[^>]*>)/i", "$1" . "\r\n" . generate_token(), $template_output);
+		$template_output = preg_replace('/(<form\W[^>]*\bmethod=(\'|"|)POST(\'|"|)\b[^>]*>)/i', '$1' . "\n" . generate_token(), $template_output);
 
 	}
 

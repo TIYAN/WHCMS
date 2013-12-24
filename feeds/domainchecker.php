@@ -12,6 +12,10 @@ require("../includes/domainfunctions.php");
 
 $systemurl = (!empty($CONFIG["SystemSSLURL"])) ? $CONFIG["SystemSSLURL"] : $CONFIG["SystemURL"];
 
+/**
+ * NOTE: getTLDList() relies on $currency from global scope.
+ *       ensure it's set.  See case 3482
+ */
 $currency = getCurrency();
 $tlds = getTLDList();
 

@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -18,9 +18,9 @@ function protx_activate() {
 
 
 function protx_link($params) {
-	$code = "<form method=\"post\" action=\"" . $params["systemurl"] . "/creditcard.php\" name=\"paymentfrm\">
-<input type=\"hidden\" name=\"invoiceid\" value=\"" . $params["invoiceid"] . "\">
-<input type=\"submit\" value=\"" . $params["langpaynow"] . "\">
+	$code = "<form method=\"post\" action=\"" . $params['systemurl'] . "/creditcard.php\" name=\"paymentfrm\">
+<input type=\"hidden\" name=\"invoiceid\" value=\"" . $params['invoiceid'] . "\">
+<input type=\"submit\" value=\"" . $params['langpaynow'] . "\">
 </form>";
 	return $code;
 }
@@ -34,7 +34,7 @@ function protx_3dsecure($params) {
 		$VerifyServer = false;
 	}
 	else {
-		if ($params["testmode"] == "on") {
+		if ($params['testmode'] == "on") {
 			$TargetURL = "https://test.sagepay.com/gateway/service/vspdirect-register.vsp";
 			$VerifyServer = false;
 		}
@@ -44,57 +44,57 @@ function protx_3dsecure($params) {
 		}
 	}
 
-	$data["VPSProtocol"] = "2.23";
-	$data["TxType"] = "PAYMENT";
-	$data["Vendor"] = $params["vendorid"];
-	$data["VendorTxCode"] = date( "YmdHis" ) . $params["invoiceid"];
-	$data["Amount"] = $params["amount"];
-	$data["Currency"] = $params["currency"];
-	$data["Description"] = $params["companyname"] . " - Invoice #" . $params["invoiceid"];
-	$cardtype = protx_getcardtype( $params["cardtype"] );
-	$data["CardHolder"] = $params["clientdetails"]["firstname"] . " " . $params["clientdetails"]["lastname"];
-	$data["CardType"] = $cardtype;
-	$data["CardNumber"] = $params["cardnum"];
-	$data["ExpiryDate"] = $params["cardexp"];
-	$data["StartDate"] = $params["cardstart"];
-	$data["IssueNumber"] = $params["cardissuenum"];
+	$data['VPSProtocol'] = "2.23";
+	$data['TxType'] = "PAYMENT";
+	$data['Vendor'] = $params['vendorid'];
+	$data['VendorTxCode'] = date( "YmdHis" ) . $params['invoiceid'];
+	$data['Amount'] = $params['amount'];
+	$data['Currency'] = $params['currency'];
+	$data['Description'] = $params['companyname'] . " - Invoice #" . $params['invoiceid'];
+	$cardtype = protx_getcardtype( $params['cardtype'] );
+	$data['CardHolder'] = $params['clientdetails']['firstname'] . " " . $params['clientdetails']['lastname'];
+	$data['CardType'] = $cardtype;
+	$data['CardNumber'] = $params['cardnum'];
+	$data['ExpiryDate'] = $params['cardexp'];
+	$data['StartDate'] = $params['cardstart'];
+	$data['IssueNumber'] = $params['cardissuenum'];
 
-	if (!$params["cccvv"]) {
-		$params["cccvv"] = "000";
+	if (!$params['cccvv']) {
+		$params['cccvv'] = "000";
 	}
 
-	$data["CV2"] = $params["cccvv"];
-	$data["BillingSurname"] = $params["clientdetails"]["lastname"];
-	$data["BillingFirstnames"] = $params["clientdetails"]["firstname"];
-	$data["BillingAddress1"] = $params["clientdetails"]["address1"];
-	$data["BillingAddress2"] = $params["clientdetails"]["address2"];
-	$data["BillingCity"] = $params["clientdetails"]["city"];
+	$data['CV2'] = $params['cccvv'];
+	$data['BillingSurname'] = $params['clientdetails']['lastname'];
+	$data['BillingFirstnames'] = $params['clientdetails']['firstname'];
+	$data['BillingAddress1'] = $params['clientdetails']['address1'];
+	$data['BillingAddress2'] = $params['clientdetails']['address2'];
+	$data['BillingCity'] = $params['clientdetails']['city'];
 
-	if ($params["clientdetails"]["country"] == "US") {
-		$data["BillingState"] = $params["clientdetails"]["state"];
+	if ($params['clientdetails']['country'] == "US") {
+		$data['BillingState'] = $params['clientdetails']['state'];
 	}
 
-	$data["BillingPostCode"] = $params["clientdetails"]["postcode"];
-	$data["BillingCountry"] = $params["clientdetails"]["country"];
-	$data["BillingPhone"] = $params["clientdetails"]["phonenumber"];
-	$data["DeliverySurname"] = $params["clientdetails"]["lastname"];
-	$data["DeliveryFirstnames"] = $params["clientdetails"]["firstname"];
-	$data["DeliveryAddress1"] = $params["clientdetails"]["address1"];
-	$data["DeliveryAddress2"] = $params["clientdetails"]["address2"];
-	$data["DeliveryCity"] = $params["clientdetails"]["city"];
+	$data['BillingPostCode'] = $params['clientdetails']['postcode'];
+	$data['BillingCountry'] = $params['clientdetails']['country'];
+	$data['BillingPhone'] = $params['clientdetails']['phonenumber'];
+	$data['DeliverySurname'] = $params['clientdetails']['lastname'];
+	$data['DeliveryFirstnames'] = $params['clientdetails']['firstname'];
+	$data['DeliveryAddress1'] = $params['clientdetails']['address1'];
+	$data['DeliveryAddress2'] = $params['clientdetails']['address2'];
+	$data['DeliveryCity'] = $params['clientdetails']['city'];
 
-	if ($params["clientdetails"]["country"] == "US") {
-		$data["DeliveryState"] = $params["clientdetails"]["state"];
+	if ($params['clientdetails']['country'] == "US") {
+		$data['DeliveryState'] = $params['clientdetails']['state'];
 	}
 
-	$data["DeliveryPostCode"] = $params["clientdetails"]["postcode"];
-	$data["DeliveryCountry"] = $params["clientdetails"]["country"];
-	$data["DeliveryPhone"] = $params["clientdetails"]["phonenumber"];
-	$data["CustomerEMail"] = $params["clientdetails"]["email"];
-	$data["ClientIPAddress"] = $_SERVER["REMOTE_ADDR"];
+	$data['DeliveryPostCode'] = $params['clientdetails']['postcode'];
+	$data['DeliveryCountry'] = $params['clientdetails']['country'];
+	$data['DeliveryPhone'] = $params['clientdetails']['phonenumber'];
+	$data['CustomerEMail'] = $params['clientdetails']['email'];
+	$data['ClientIPAddress'] = $_SERVER['REMOTE_ADDR'];
 	$data = protx_formatData( $data );
 	$response = protx_requestPost( $TargetURL, $data );
-	$baseStatus = $response["Status"];
+	$baseStatus = $response['Status'];
 	$transdump = "";
 	foreach ($response as $key => $value) {
 		$transdump .= ( "" . $key . " => " . $value . "
@@ -104,11 +104,11 @@ function protx_3dsecure($params) {
 	switch ($baseStatus) {
 	case "3DAUTH": {
 			logTransaction( "SagePay 3DAuth", $transdump, "3D Auth Required" );
-			$_SESSION["protxinvoiceid"] = $params["invoiceid"];
-			$code = "<form method=\"post\" action=\"" . $response["ACSURL"] . "\" name=\"paymentfrm\">
-		<input type=\"hidden\" name=\"PaReq\" value=\"" . $response["PAReq"] . "\">
-		<input type=\"hidden\" name=\"TermUrl\" value=\"" . $params["systemurl"] . "/modules/gateways/callback/protxthreedsecure.php?invoiceid=" . $params["invoiceid"] . "\">
-		<input type=\"hidden\" name=\"MD\" value=\"" . $response["MD"] . "\">
+			$_SESSION['protxinvoiceid'] = $params['invoiceid'];
+			$code = "<form method=\"post\" action=\"" . $response['ACSURL'] . "\" name=\"paymentfrm\">
+		<input type=\"hidden\" name=\"PaReq\" value=\"" . $response['PAReq'] . "\">
+		<input type=\"hidden\" name=\"TermUrl\" value=\"" . $params['systemurl'] . "/modules/gateways/callback/protxthreedsecure.php?invoiceid=" . $params['invoiceid'] . "\">
+		<input type=\"hidden\" name=\"MD\" value=\"" . $response['MD'] . "\">
         <noscript>
         <div class=\"errorbox\"><b>JavaScript is currently disabled or is not supported by your browser.</b><br />Please click the continue button to proceed with the processing of your transaction.</div>
         <p align=\"center\"><input type=\"submit\" value=\"Continue >>\" /></p>
@@ -130,7 +130,7 @@ function protx_capture($params) {
 		$VerifyServer = false;
 	}
 	else {
-		if ($params["testmode"] == "on") {
+		if ($params['testmode'] == "on") {
 			$TargetURL = "https://test.sagepay.com/gateway/service/vspdirect-register.vsp";
 			$VerifyServer = false;
 		}
@@ -140,70 +140,70 @@ function protx_capture($params) {
 		}
 	}
 
-	$data["VPSProtocol"] = "2.23";
-	$data["TxType"] = "PAYMENT";
-	$data["Vendor"] = $params["recurringvendorid"];
-	$data["VendorTxCode"] = date( "YmdHis" ) . $params["invoiceid"];
-	$data["Amount"] = $params["amount"];
-	$data["Currency"] = $params["currency"];
-	$data["Description"] = $params["companyname"] . " - Invoice #" . $params["invoiceid"];
-	$cardtype = protx_getcardtype( $params["cardtype"] );
-	$data["CardHolder"] = $params["clientdetails"]["firstname"] . " " . $params["clientdetails"]["lastname"];
-	$data["CardType"] = $cardtype;
-	$data["CardNumber"] = $params["cardnum"];
-	$data["ExpiryDate"] = $params["cardexp"];
-	$data["StartDate"] = $params["cardstart"];
-	$data["IssueNumber"] = $params["cardissuenum"];
+	$data['VPSProtocol'] = "2.23";
+	$data['TxType'] = "PAYMENT";
+	$data['Vendor'] = $params['recurringvendorid'];
+	$data['VendorTxCode'] = date( "YmdHis" ) . $params['invoiceid'];
+	$data['Amount'] = $params['amount'];
+	$data['Currency'] = $params['currency'];
+	$data['Description'] = $params['companyname'] . " - Invoice #" . $params['invoiceid'];
+	$cardtype = protx_getcardtype( $params['cardtype'] );
+	$data['CardHolder'] = $params['clientdetails']['firstname'] . " " . $params['clientdetails']['lastname'];
+	$data['CardType'] = $cardtype;
+	$data['CardNumber'] = $params['cardnum'];
+	$data['ExpiryDate'] = $params['cardexp'];
+	$data['StartDate'] = $params['cardstart'];
+	$data['IssueNumber'] = $params['cardissuenum'];
 
-	if (!$params["cccvv"]) {
-		$params["cccvv"] = "000";
+	if (!$params['cccvv']) {
+		$params['cccvv'] = "000";
 	}
 
-	$data["CV2"] = $params["cccvv"];
-	$data["BillingSurname"] = $params["clientdetails"]["lastname"];
-	$data["BillingFirstnames"] = $params["clientdetails"]["firstname"];
-	$data["BillingAddress1"] = $params["clientdetails"]["address1"];
-	$data["BillingAddress2"] = $params["clientdetails"]["address2"];
-	$data["BillingCity"] = $params["clientdetails"]["city"];
+	$data['CV2'] = $params['cccvv'];
+	$data['BillingSurname'] = $params['clientdetails']['lastname'];
+	$data['BillingFirstnames'] = $params['clientdetails']['firstname'];
+	$data['BillingAddress1'] = $params['clientdetails']['address1'];
+	$data['BillingAddress2'] = $params['clientdetails']['address2'];
+	$data['BillingCity'] = $params['clientdetails']['city'];
 
-	if ($params["clientdetails"]["country"] == "US") {
-		$data["BillingState"] = $params["clientdetails"]["state"];
+	if ($params['clientdetails']['country'] == "US") {
+		$data['BillingState'] = $params['clientdetails']['state'];
 	}
 
-	$data["BillingPostCode"] = $params["clientdetails"]["postcode"];
-	$data["BillingCountry"] = $params["clientdetails"]["country"];
-	$data["BillingPhone"] = $params["clientdetails"]["phonenumber"];
-	$data["DeliverySurname"] = $params["clientdetails"]["lastname"];
-	$data["DeliveryFirstnames"] = $params["clientdetails"]["firstname"];
-	$data["DeliveryAddress1"] = $params["clientdetails"]["address1"];
-	$data["DeliveryAddress2"] = $params["clientdetails"]["address2"];
-	$data["DeliveryCity"] = $params["clientdetails"]["city"];
+	$data['BillingPostCode'] = $params['clientdetails']['postcode'];
+	$data['BillingCountry'] = $params['clientdetails']['country'];
+	$data['BillingPhone'] = $params['clientdetails']['phonenumber'];
+	$data['DeliverySurname'] = $params['clientdetails']['lastname'];
+	$data['DeliveryFirstnames'] = $params['clientdetails']['firstname'];
+	$data['DeliveryAddress1'] = $params['clientdetails']['address1'];
+	$data['DeliveryAddress2'] = $params['clientdetails']['address2'];
+	$data['DeliveryCity'] = $params['clientdetails']['city'];
 
-	if ($params["clientdetails"]["country"] == "US") {
-		$data["DeliveryState"] = $params["clientdetails"]["state"];
+	if ($params['clientdetails']['country'] == "US") {
+		$data['DeliveryState'] = $params['clientdetails']['state'];
 	}
 
-	$data["DeliveryPostCode"] = $params["clientdetails"]["postcode"];
-	$data["DeliveryCountry"] = $params["clientdetails"]["country"];
-	$data["DeliveryPhone"] = $params["clientdetails"]["phonenumber"];
-	$data["CustomerEMail"] = $params["clientdetails"]["email"];
-	$data["ClientIPAddress"] = $_SERVER["REMOTE_ADDR"];
-	$data["ApplyAVSCV2"] = "2";
-	$data["Apply3DSecure"] = "2";
-	$data["AccountType"] = "C";
+	$data['DeliveryPostCode'] = $params['clientdetails']['postcode'];
+	$data['DeliveryCountry'] = $params['clientdetails']['country'];
+	$data['DeliveryPhone'] = $params['clientdetails']['phonenumber'];
+	$data['CustomerEMail'] = $params['clientdetails']['email'];
+	$data['ClientIPAddress'] = $_SERVER['REMOTE_ADDR'];
+	$data['ApplyAVSCV2'] = "2";
+	$data['Apply3DSecure'] = "2";
+	$data['AccountType'] = "C";
 
-	if (( $params["cardtype"] == "Maestro" || $params["cardtype"] == "Solo" )) {
-		$data["AccountType"] = "M";
+	if ($params['cardtype'] == "Maestro" || $params['cardtype'] == "Solo") {
+		$data['AccountType'] = "M";
 	}
 
 
-	if (( $params["cardtype"] == "American Express" || $params["cardtype"] == "Laser" )) {
-		$data["AccountType"] = "E";
+	if ($params['cardtype'] == "American Express" || $params['cardtype'] == "Laser") {
+		$data['AccountType'] = "E";
 	}
 
 	$data = protx_formatData( $data );
 	$response = protx_requestPost( $TargetURL, $data );
-	$baseStatus = $response["Status"];
+	$baseStatus = $response['Status'];
 	$transdump = "";
 	foreach ($response as $key => $value) {
 		$transdump .= ( "" . $key . " => " . $value . "
@@ -212,9 +212,9 @@ function protx_capture($params) {
 
 	switch ($baseStatus) {
 	case "OK": {
-			addInvoicePayment( $params["invoiceid"], $response["VPSTxId"], "", "", "protx", "on" );
+			addInvoicePayment( $params['invoiceid'], $response['VPSTxId'], "", "", "protx", "on" );
 			logTransaction( "SagePay", $transdump, "Successful" );
-			sendMessage( "Credit Card Payment Confirmation", $params["invoiceid"] );
+			sendMessage( "Credit Card Payment Confirmation", $params['invoiceid'] );
 			$result = "success";
 			$result;
 		}
@@ -239,8 +239,8 @@ function protx_requestPost($url, $data) {
 	$response = explode( chr( 10 ), curl_exec( $curlSession ) );
 
 	if (curl_error( $curlSession )) {
-		$output["Status"] = "FAIL";
-		$output["StatusDetail"] = curl_error( $curlSession );
+		$output['Status'] = "FAIL";
+		$output['StatusDetail'] = curl_error( $curlSession );
 	}
 
 	curl_close( $curlSession );
@@ -355,7 +355,7 @@ if (!defined( "WHMCS" )) {
 	exit( "This file cannot be accessed directly" );
 }
 
-$GATEWAYMODULE["protxname"] = "protx";
-$GATEWAYMODULE["protxvisiblename"] = "SagePay";
-$GATEWAYMODULE["protxtype"] = "CC";
+$GATEWAYMODULE['protxname'] = "protx";
+$GATEWAYMODULE['protxvisiblename'] = "SagePay";
+$GATEWAYMODULE['protxtype'] = "CC";
 ?>

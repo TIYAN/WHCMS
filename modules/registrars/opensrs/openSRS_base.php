@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -93,7 +93,7 @@ class openSRS_base extends PEAR {
 		$this->crypt_type = strtoupper( $this->crypt_type );
 
 		if ("SSL" == $this->crypt_type) {
-			if (( !function_exists( "version_compare" ) || version_compare( "4.3", phpversion(), ">=" ) )) {
+			if (!function_exists( "version_compare" ) || version_compare( "4.3", phpversion(), ">=" )) {
 				$error_message = "PHP version must be v4.3+ (current version is " . phpversion() . ") to use \"SSL\" encryption";
 				trigger_error( $error_message, E_USER_ERROR );
 				$this->_log( "i", $error_message );
@@ -166,8 +166,8 @@ class openSRS_base extends PEAR {
 			return $data;
 		}
 
-		$action = $request["action"];
-		$object = $request["object"];
+		$action = $request['action'];
+		$object = $request['object'];
 		$this->prune_private_keys( $request );
 
 		if (!$this->init_socket()) {
@@ -185,19 +185,19 @@ class openSRS_base extends PEAR {
 		}
 
 
-		if (!$auth["is_success"]) {
+		if (!$auth['is_success']) {
 			if ($this->_socket) {
 				$this->close_socket();
 			}
 
-			$data = array( "is_success" => false, "response_code" => 400, "response_text" => "Authentication Error: " . $auth["error"] );
+			$data = array( "is_success" => false, "response_code" => 400, "response_text" => "Authentication Error: " . $auth['error'] );
 			$this->_log( "i", $data );
 			return $data;
 		}
 
-		$request["registrant_ip"] = $HTTP_SERVER_VARS["REMOTE_ADDR"];
+		$request['registrant_ip'] = $HTTP_SERVER_VARS['REMOTE_ADDR'];
 
-		if (strstr( $request["action"], "lookup" )) {
+		if (strstr( $request['action'], "lookup" )) {
 			$data = $this->lookup_domain( $request );
 		}
 		else {
@@ -216,18 +216,18 @@ class openSRS_base extends PEAR {
 		$contact_types = array( "owner" => "", "billing" => "Billing" );
 		$required_fields = array( "reg_username" => "Username", "reg_password" => "Password", "domain" => "Domain" );
 
-		if (isset( $params["custom_tech_contact"] )) {
-			$contact_types["tech"] = "Tech";
+		if (isset( $params['custom_tech_contact'] )) {
+			$contact_types['tech'] = "Tech";
 		}
 
 
-		if ( isset( $params["custom_nameservers"] ) && $data["reg_type"] == "new" ) {
-			if (!$data["fqdn1"]) {
+		if ( isset( $params['custom_nameservers'] ) && $data['reg_type'] == "new" ) {
+			if (!$data['fqdn1']) {
 				$missing_fields[] = "Primary DNS Hostname";
 			}
 
 
-			if (!$data["fqdn2"]) {
+			if (!$data['fqdn2']) {
 				$missing_fields[] = "Secondary DNS Hostname";
 			}
 		}
@@ -244,7 +244,7 @@ class openSRS_base extends PEAR {
 
 			$data[$type . "_country"] = strtolower( $data[$type . "_country"] );
 
-			if (( $data[$type . "_country"] == "us" || $data[$type . "_country"] == "ca" )) {
+			if ($data[$type . "_country"] == "us" || $data[$type . "_country"] == "ca") {
 				if ($data[$type . "_postal_code"] == "") {
 					$missing_fields[] = $contact_type . " Zip/Postal Code";
 				}
@@ -301,12 +301,12 @@ class openSRS_base extends PEAR {
 			$error_msg .= "Missing field: " . $field . ".<br>\n";
 		}
 
-		$domains = explode( "", $data["domain"] );
+		$domains = explode( "", $data['domain'] );
 		foreach ($domains as $domain) {
 			$syntaxError = $this->check_domain_syntax( $domain );
 
 			if ($syntaxError) {
-				$problem_fields["Domain"] = $domain . " - " . $syntaxError;
+				$problem_fields['Domain'] = $domain . " - " . $syntaxError;
 				continue;
 			}
 		}
@@ -373,7 +373,7 @@ class openSRS_base extends PEAR {
 
 
 	function authenticate($username = false, $private_key = false) {
-		if (( $this->_authenticated || "SSL" == $this->crypt_type )) {
+		if ($this->_authenticated || "SSL" == $this->crypt_type) {
 			return array( "is_success" => true );
 		}
 
@@ -389,12 +389,12 @@ class openSRS_base extends PEAR {
 
 		$prompt = $this->read_data();
 
-		if ($prompt["response_code"] == 555) {
-			return array( "is_success" => false, "error" => $prompt["response_text"] );
+		if ($prompt['response_code'] == 555) {
+			return array( "is_success" => false, "error" => $prompt['response_text'] );
 		}
 
 
-		if ( !preg_match( "/OpenSRS\sSERVER/", $prompt["attributes"]["sender"] ) || substr( $prompt["attributes"]["version"], 0, 3 ) != "XML" ) {
+		if ( !preg_match( "/OpenSRS\sSERVER/", $prompt['attributes']['sender'] ) || substr( $prompt['attributes']['version'], 0, 3 ) != "XML" ) {
 			return array( "is_success" => false, "error" => "Unrecognized Peer" );
 		}
 
@@ -408,7 +408,7 @@ class openSRS_base extends PEAR {
 		$this->send_data( $response, array( "no_xml" => true, "binary" => true ) );
 		$answer = $this->read_data();
 
-		if (substr( $answer["response_code"], 0, 1 ) == "2") {
+		if (substr( $answer['response_code'], 0, 1 ) == "2") {
 			$this->_authenticated = true;
 			return array( "is_success" => true );
 		}
@@ -418,8 +418,8 @@ class openSRS_base extends PEAR {
 
 
 	function lookup_domain($lookupData) {
-		$domain = strtolower( $lookupData["attributes"]["domain"] );
-		$affiliate_id = $lookupData["attributes"]["affiliate_id"];
+		$domain = strtolower( $lookupData['attributes']['domain'] );
+		$affiliate_id = $lookupData['attributes']['affiliate_id'];
 
 		if ($domain == "") {
 			$data = array( "is_success" => false, "response_code" => 490, "response_text" => "Invalid syntax: no domain given." );
@@ -467,22 +467,22 @@ class openSRS_base extends PEAR {
 
 		$data = array();
 		foreach ($domains as $local_domain) {
-			$lookupData["attributes"]["domain"] = $local_domain;
+			$lookupData['attributes']['domain'] = $local_domain;
 			$this->send_data( $lookupData );
 			$answer = $this->read_data();
 
-			if ( ( $answer["attributes"]["status"] && stristr( $answer["attributes"]["status"], "available" ) ) && !stristr( $local_domain, $domain ) ) {
-				$data["attributes"]["matches"][] = $local_domain;
+			if ( ( $answer['attributes']['status'] && stristr( $answer['attributes']['status'], "available" ) ) && !stristr( $local_domain, $domain ) ) {
+				$data['attributes']['matches'][] = $local_domain;
 			}
 
 
 			if ($local_domain == $domain) {
-				$data["is_success"] = $answer["is_success"];
-				$data["response_code"] = $answer["response_code"];
-				$data["response_text"] = $answer["response_text"];
-				$data["attributes"]["status"] = $answer["attributes"]["status"];
-				$data["attributes"]["upg_to_subdomain"] = $answer["attributes"]["upg_to_subdomain"];
-				$data["attributes"]["reason"] = $answer["attributes"]["reason"];
+				$data['is_success'] = $answer['is_success'];
+				$data['response_code'] = $answer['response_code'];
+				$data['response_text'] = $answer['response_text'];
+				$data['attributes']['status'] = $answer['attributes']['status'];
+				$data['attributes']['upg_to_subdomain'] = $answer['attributes']['upg_to_subdomain'];
+				$data['attributes']['reason'] = $answer['attributes']['reason'];
 				continue;
 			}
 		}
@@ -515,14 +515,14 @@ class openSRS_base extends PEAR {
 		else {
 			$data = ($this->_CBC ? $this->_CBC->decrypt( $buf ) : $buf);
 
-			if (!$args["no_xml"]) {
+			if (!$args['no_xml']) {
 				$data = $this->_OPS->decode( $data );
 			}
 
 
-			if ($args["binary"]) {
+			if ($args['binary']) {
 				$temp = unpack( "H*temp", $data );
-				$this->_log( "r", "BINARY: " . $temp["temp"] );
+				$this->_log( "r", "BINARY: " . $temp['temp'] );
 			}
 			else {
 				$this->_log( "r", $data );
@@ -534,20 +534,20 @@ class openSRS_base extends PEAR {
 
 
 	function send_data($message, $args = array()) {
-		if (!$args["no_xml"]) {
-			$message["protocol"] = $this->protocol;
+		if (!$args['no_xml']) {
+			$message['protocol'] = $this->protocol;
 			$data_to_send = $this->_OPS->encode( $message );
-			$message["action"] = strtolower( $message["action"] );
-			$message["object"] = strtolower( $message["object"] );
+			$message['action'] = strtolower( $message['action'] );
+			$message['object'] = strtolower( $message['object'] );
 		}
 		else {
 			$data_to_send = $message;
 		}
 
 
-		if ($args["binary"]) {
+		if ($args['binary']) {
 			$temp = unpack( "H*temp", $message );
-			$this->_log( "s", "BINARY: " . $temp["temp"] );
+			$this->_log( "s", "BINARY: " . $temp['temp'] );
 		}
 		else {
 			$this->_log( "s", $message );
@@ -725,8 +725,8 @@ class openSRS_base extends PEAR {
 					return false;
 				}
 
-				$header["http_response_code"] = $matches[1];
-				$header["http_response_text"] = $matches[2];
+				$header['http_response_code'] = $matches[1];
+				$header['http_response_text'] = $matches[2];
 
 				while ($line != $this->CRLF) {
 					$line = fgets( $fh, 4000 );
@@ -746,7 +746,7 @@ class openSRS_base extends PEAR {
 					}
 				}
 
-				$header["full_header"] = $http_log;
+				$header['full_header'] = $http_log;
 				break;
 
 		case "BLOWFISH":
@@ -760,7 +760,7 @@ class openSRS_base extends PEAR {
 
 
 			if (preg_match( '/^\s*Content-Length:\s+(\d+)\s*\r\n/i', $line, $matches )) {
-				$header["content-length"] = (int)$matches[1];
+				$header['content-length'] = (int)$matches[1];
 			}
 			else {
 				$this->_OPS->_log( "raw", "e", "UNEXPECTED READ: No Content-Length" );
@@ -804,11 +804,11 @@ class openSRS_base extends PEAR {
 		socket_set_timeout( $fh, $timeout );
 		$header = $this->readHeader( $fh, $timeout );
 
-		if ( ( !$header || !isset( $header["content-length"] ) ) || empty( $header["content-length"] ) ) {
+		if ( ( !$header || !isset( $header['content-length'] ) ) || empty( $header['content-length'] ) ) {
 			$this->_OPS->_log( "raw", "e", "UNEXPECTED ERROR: No Content-Length header provided!" );
 		}
 
-		$len = (int)$header["content-length"];
+		$len = (int)$header['content-length'];
 		$line = "";
 
 		while (strlen( $line ) < $len) {
@@ -832,7 +832,7 @@ class openSRS_base extends PEAR {
 
 
 		if ("SSL" == $this->crypt_type) {
-			$this->_OPS->_log( "http", "r", $header["full_header"] . $line );
+			$this->_OPS->_log( "http", "r", $header['full_header'] . $line );
 			$this->close_socket();
 		}
 

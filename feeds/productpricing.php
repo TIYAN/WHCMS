@@ -5,14 +5,15 @@ require("../init.php");
 /*
 *** USAGE SAMPLES ***
 
-<script language="javascript" src="feeds/productpricing.php?pid=1&currencyid=1"></script>
+<script language="javascript" src="feeds/productpricing.php?pid=1&currency=1"></script>
 
-<script language="javascript" src="feeds/productpricing.php?pid=5&currencyid=2"></script>
+<script language="javascript" src="feeds/productpricing.php?pid=5&currency=2"></script>
 
 */
-    $whmcs = WHMCS_Application::getInstance();
+    if (! $whmcs || !($whmcs instanceof WHMCS_Init)) {
+        die('Unable to instantiate application');
+    };
     $pid = $whmcs->get_req_var('pid');
-    $currencyid = $whmcs->get_req_var('currencyid');
 
     // Verify user input for pid exists, is numeric, and as is a valid id
     if (is_numeric($pid)) {
@@ -28,7 +29,14 @@ require("../init.php");
         widgetoutput('Product ID Not Found');
     }
 
-    // Verify user input for currency exists, is numeric, and as is a valid id
+    /**
+     * Case 3482: see documentation on formatCurrency()
+     */
+    $currencyid = $whmcs->get_req_var('currency');
+    // Support for older currencyid variable
+    if (!$currencyid) {
+        $currencyid = $whmcs->get_req_var('currencyid');
+    }
     if (!is_numeric($currencyid)) {
         $currency = array();
     } else {

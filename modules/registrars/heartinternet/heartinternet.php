@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -29,8 +29,8 @@ function heartinternet_RegisterDomain($params) {
 <command>
 <create>
 <domain:create>
-<domain:name>" . $params["sld"] . "." . $params["tld"] . "</domain:name>
-<domain:period unit=\"y\">" . $params["regperiod"] . "</domain:period>
+<domain:name>" . $params['sld'] . "." . $params['tld'] . "</domain:name>
+<domain:period unit=\"y\">" . $params['regperiod'] . "</domain:period>
 <domain:registrant>" . $registrantid . "</domain:registrant>
 <domain:authInfo>
 <domain:ext>
@@ -42,7 +42,7 @@ function heartinternet_RegisterDomain($params) {
 <extension>
 <ext-domain:createExtension>";
 
-	if ($params["idprotection"]) {
+	if ($params['idprotection']) {
 		$domainxml .= "<ext-domain:privacy/>";
 	}
 
@@ -54,8 +54,8 @@ function heartinternet_RegisterDomain($params) {
 </epp>";
 	$xmldata = heartinternetreg_curlcall( $domainxml, "off", $params );
 
-	if (trim( $xmldata["EPP"]["RESPONSE"]["RESULT"]["MSG"] ) != "Command completed successfully") {
-		$values->error .= $xmldata["EPP"]["RESPONSE"]["RESULT"]["MSG"];
+	if (trim( $xmldata['EPP']['RESPONSE']['RESULT']['MSG'] ) != "Command completed successfully") {
+		$values->error .= $xmldata['EPP']['RESPONSE']['RESULT']['MSG'];
 	}
 
 	return $values;
@@ -75,7 +75,7 @@ function heartinternet_TransferDomain($params) {
 <command>
 <transfer op=\"request\">
 <domain:transfer>
-<domain:name>" . $params["sld"] . "." . $params["tld"] . "</domain:name>
+<domain:name>" . $params['sld'] . "." . $params['tld'] . "</domain:name>
 <domain:authInfo>
 <domain:ext>
 <ext-domain:null/>
@@ -94,8 +94,8 @@ function heartinternet_TransferDomain($params) {
 </epp>";
 	$xmldata = heartinternetreg_curlcall( $transferxml, "on", $params );
 
-	if (trim( $xmldata["epp"]["response"]["result"]["attr"]["code"] ) != "1001") {
-		$values->error .= $xmldata["epp"]["response"]["result"]["msg"]["value"];
+	if (trim( $xmldata['epp']['response']['result']['attr']['code'] ) != "1001") {
+		$values->error .= $xmldata['epp']['response']['result']['msg']['value'];
 	}
 
 	return $values;
@@ -103,17 +103,17 @@ function heartinternet_TransferDomain($params) {
 
 
 function heartinternet_RenewDomain($params) {
-	$regperiod = $params["regperiod"];
+	$regperiod = $params['regperiod'];
 	$cltrid = md5( date( "YmdHis" ) );
 	$values = array();
-	$current_expiry_date = mysql_fetch_assoc( select_query( "tbldomains", "expirydate", array( "domain" => $params["sld"] . "." . $params["tld"] ) ) );
-	$current_expiry_date = $current_expiry_date["expirydate"];
+	$current_expiry_date = mysql_fetch_assoc( select_query( "tbldomains", "expirydate", array( "domain" => $params['sld'] . "." . $params['tld'] ) ) );
+	$current_expiry_date = $current_expiry_date['expirydate'];
 	$cltrid = md5( date( "YmdHis" ) . date( "sHdmiY" ) );
 	$renewxml = "<?xml version=\"1.0\"?>\n<epp xmlns=\"urn:ietf:params:xml:ns:epp-1.0\" xmlns:domain=\"urn:ietf:params:xml:ns:domain-1.0\" xmlns:ext-domain=\"http://www.heartinternet.co.uk/whapi/ext-domain-1.2\">
 <command>
 <renew>
 <domain:renew>
-<domain:name>" . $params["sld"] . "." . $params["tld"] . "</domain:name>
+<domain:name>" . $params['sld'] . "." . $params['tld'] . "</domain:name>
 <domain:curExpDate>" . $current_expiry_date . "</domain:curExpDate>
 <domain:period unit=\"y\">" . $regperiod . "</domain:period>
 </domain:renew>
@@ -128,8 +128,8 @@ function heartinternet_RenewDomain($params) {
 </epp>";
 	$xmldata = heartinternetreg_curlcall( $renewxml, "on", $params );
 
-	if (trim( $xmldata["epp"]["response"]["result"]["attr"]["code"] ) != "1000") {
-		$values->error .= $xmldata["epp"]["response"]["result"]["msg"]["value"];
+	if (trim( $xmldata['epp']['response']['result']['attr']['code'] ) != "1000") {
+		$values->error .= $xmldata['epp']['response']['result']['msg']['value'];
 	}
 
 	return $values;
@@ -143,7 +143,7 @@ function heartinternet_GetNameservers($params) {
 <command>
 <info>
 <domain:info>
-<domain:name>" . $params["sld"] . "." . $params["tld"] . "</domain:name>
+<domain:name>" . $params['sld'] . "." . $params['tld'] . "</domain:name>
 </domain:info>
 </info>
 <extension>
@@ -159,15 +159,15 @@ function heartinternet_GetNameservers($params) {
 	}
 
 
-	if (trim( $xmldata["epp"]["response"]["result"]["attr"]["code"] ) != "1000") {
-		$values->error .= $xmldata["epp"]["response"]["result"]["msg"]["value"];
+	if (trim( $xmldata['epp']['response']['result']['attr']['code'] ) != "1000") {
+		$values->error .= $xmldata['epp']['response']['result']['msg']['value'];
 	}
 	else {
-		$values["ns1"] = $xmldata["epp"]["response"]["resData"]["domain:infData"]["domain:ns"]["domain:hostAttr"][0]["domain:hostName"]["value"];
-		$values["ns2"] = $xmldata["epp"]["response"]["resData"]["domain:infData"]["domain:ns"]["domain:hostAttr"][1]["domain:hostName"]["value"];
-		$values["ns3"] = $xmldata["epp"]["response"]["resData"]["domain:infData"]["domain:ns"]["domain:hostAttr"][2]["domain:hostName"]["value"];
-		$values["ns4"] = $xmldata["epp"]["response"]["resData"]["domain:infData"]["domain:ns"]["domain:hostAttr"][3]["domain:hostName"]["value"];
-		$values["ns5"] = $xmldata["epp"]["response"]["resData"]["domain:infData"]["domain:ns"]["domain:hostAttr"][4]["domain:hostName"]["value"];
+		$values['ns1'] = $xmldata['epp']['response']['resData']["domain:infData"]["domain:ns"]["domain:hostAttr"][0]["domain:hostName"]['value'];
+		$values['ns2'] = $xmldata['epp']['response']['resData']["domain:infData"]["domain:ns"]["domain:hostAttr"][1]["domain:hostName"]['value'];
+		$values['ns3'] = $xmldata['epp']['response']['resData']["domain:infData"]["domain:ns"]["domain:hostAttr"][2]["domain:hostName"]['value'];
+		$values['ns4'] = $xmldata['epp']['response']['resData']["domain:infData"]["domain:ns"]["domain:hostAttr"][3]["domain:hostName"]['value'];
+		$values['ns5'] = $xmldata['epp']['response']['resData']["domain:infData"]["domain:ns"]["domain:hostAttr"][4]["domain:hostName"]['value'];
 	}
 
 	return $values;
@@ -225,7 +225,7 @@ function heartinternet_SaveNameservers($params) {
 <command>
 <update>
 <domain:update>
-<domain:name>" . $params["sld"] . "." . $params["tld"] . "</domain:name>
+<domain:name>" . $params['sld'] . "." . $params['tld'] . "</domain:name>
 " . $addnsxml . "
 </domain:update>
 </update>
@@ -234,8 +234,8 @@ function heartinternet_SaveNameservers($params) {
 </epp>";
 		$xmldata = heartinternetreg_curlcall( $updatexml, "on", $params );
 
-		if (trim( $xmldata["epp"]["response"]["result"]["attr"]["code"] ) != "1000") {
-			$values->error .= $xmldata["epp"]["response"]["result"]["msg"]["value"];
+		if (trim( $xmldata['epp']['response']['result']['attr']['code'] ) != "1000") {
+			$values->error .= $xmldata['epp']['response']['result']['msg']['value'];
 		}
 	}
 
@@ -245,7 +245,7 @@ function heartinternet_SaveNameservers($params) {
 <command>
 <update>
 <domain:update>
-<domain:name>" . $params["sld"] . "." . $params["tld"] . "</domain:name>
+<domain:name>" . $params['sld'] . "." . $params['tld'] . "</domain:name>
 " . $removensxml . "
 </domain:update>
 </update>
@@ -254,8 +254,8 @@ function heartinternet_SaveNameservers($params) {
 </epp>";
 		$xmldata = heartinternetreg_curlcall( $updatexml, "on", $params );
 
-		if (trim( $xmldata["epp"]["response"]["result"]["attr"]["code"] ) != "1000") {
-			$values->error .= $xmldata["epp"]["response"]["result"]["msg"]["value"];
+		if (trim( $xmldata['epp']['response']['result']['attr']['code'] ) != "1000") {
+			$values->error .= $xmldata['epp']['response']['result']['msg']['value'];
 		}
 	}
 
@@ -270,7 +270,7 @@ function heartinternet_ClientArea($params) {
 <command>
 <info>
 <domain:info>
-<domain:name>" . $params["sld"] . "." . $params["tld"] . "</domain:name>
+<domain:name>" . $params['sld'] . "." . $params['tld'] . "</domain:name>
 </domain:info>
 </info>
 <extension>
@@ -286,11 +286,11 @@ function heartinternet_ClientArea($params) {
 	}
 
 
-	if (trim( $xmldata["epp"]["response"]["result"]["attr"]["code"] ) != "1000") {
+	if (trim( $xmldata['epp']['response']['result']['attr']['code'] ) != "1000") {
 		$result = "";
 	}
 	else {
-		$url = $xmldata["epp"]["response"]["resData"]["ext-domain:redirectURL"]["value"];
+		$url = $xmldata['epp']['response']['resData']["ext-domain:redirectURL"]['value'];
 		$result = "<a href=\"" . $url . "\" target=\"_blank\">Login to Control Panel</a>";
 	}
 
@@ -304,7 +304,7 @@ function heartinternet_Sync($params) {
 <command>
 <info>
 <domain:info>
-<domain:name>" . $params["domain"] . "</domain:name>
+<domain:name>" . $params['domain'] . "</domain:name>
 </domain:info>
 </info>
 <extension>
@@ -316,16 +316,16 @@ function heartinternet_Sync($params) {
 	$xmldata = heartinternetreg_curlcall( $infoxml, "on", $params );
 	$rtn = array();
 
-	if (trim( $xmldata["epp"]["response"]["result"]["attr"]["code"] ) != "1000") {
-		$rtn["error"] = $xmldata["epp"]["response"]["result"]["msg"]["value"];
+	if (trim( $xmldata['epp']['response']['result']['attr']['code'] ) != "1000") {
+		$rtn['error'] = $xmldata['epp']['response']['result']['msg']['value'];
 	}
 	else {
-		$expirydate = $xmldata["epp"]["response"]["resData"]["domain:infData"]["domain:exDate"]["value"];
+		$expirydate = $xmldata['epp']['response']['resData']["domain:infData"]["domain:exDate"]['value'];
 
 		if (trim( $expirydate )) {
 			$expirydate = substr( $expirydate, 0, 10 );
-			$rtn["active"] = true;
-			$rtn["expirydate"] = $expirydate;
+			$rtn['active'] = true;
+			$rtn['expirydate'] = $expirydate;
 		}
 	}
 
@@ -340,7 +340,7 @@ function heartinternetreg_curlcall($xml, $verbose = "off", $params) {
 
 	$hi_api = new HeartInternetReg_API();
 
-	if ($params["TestMode"] == "on") {
+	if ($params['TestMode'] == "on") {
 		$hi_api->connect( true );
 	}
 	else {
@@ -350,14 +350,14 @@ function heartinternetreg_curlcall($xml, $verbose = "off", $params) {
 	$objects = array( "urn:ietf:params:xml:ns:contact-1.0", "urn:ietf:params:xml:ns:domain-1.0", "http://www.heartinternet.co.uk/whapi/null-1.1" );
 	$extensions = array( "http://www.heartinternet.co.uk/whapi/ext-domain-1.2", "http://www.heartinternet.co.uk/whapi/ext-contact-1.0", "http://www.heartinternet.co.uk/whapi/ext-host-1.0", "http://www.heartinternet.co.uk/whapi/ext-null-1.0", "http://www.heartinternet.co.uk/whapi/ext-whapi-1.0" );
 	try{
-	$hi_api->logIn( $params["Username"], $params["Password"], $objects, $extensions );
+	$hi_api->logIn( $params['Username'], $params['Password'], $objects, $extensions );
 	}
 	catch ( Exception $e ) {
 		return "Caught exception: " . $e->getMessage();
 	}
 
 	$data = $hi_api->sendMessage( $xml, true );
-	logModuleCall( "heartinternet", $action, $xml, $data, "", array( $params["Username"], $params["Password"] ) );
+	logModuleCall( "heartinternet", $action, $xml, $data, "", array( $params['Username'], $params['Password'] ) );
 
 	if ($verbose == "on") {
 		return heartinternetreg_xml2array( $data );
@@ -376,17 +376,17 @@ function heartinternetreg_createContact($params) {
 <contact:create>
 <contact:id>IGNORED</contact:id>
 <contact:postalInfo type=\"loc\">
-<contact:name>" . $params["firstname"] . " " . $params["lastname"] . "</contact:name>
+<contact:name>" . $params['firstname'] . " " . $params['lastname'] . "</contact:name>
 <contact:addr>
-<contact:street>" . $params["address1"] . "</contact:street>
-<contact:city>" . $params["city"] . "</contact:city>
-<contact:sp>" . $params["state"] . "</contact:sp>
-<contact:pc>" . $params["postcode"] . "</contact:pc>
-<contact:cc>" . $params["country"] . "</contact:cc>
+<contact:street>" . $params['address1'] . "</contact:street>
+<contact:city>" . $params['city'] . "</contact:city>
+<contact:sp>" . $params['state'] . "</contact:sp>
+<contact:pc>" . $params['postcode'] . "</contact:pc>
+<contact:cc>" . $params['country'] . "</contact:cc>
 </contact:addr>
 </contact:postalInfo>
-<contact:voice>+" . $countrycallingcodes[$params["country"]] . "." . preg_replace( "/[^0-9]/", "", $params["phonenumber"] ) . "</contact:voice>
-<contact:email>" . $params["email"] . "</contact:email>
+<contact:voice>+" . $countrycallingcodes[$params['country']] . "." . preg_replace( "/[^0-9]/", "", $params['phonenumber'] ) . "</contact:voice>
+<contact:email>" . $params['email'] . "</contact:email>
 <contact:authInfo>
 <contact:ext>
 <ext-contact:null/>
@@ -398,11 +398,11 @@ function heartinternetreg_createContact($params) {
   <ext-contact:createExtension>
 	<ext-contact:person>
 	  <ext-contact:salutation gender=\"male\">Mr</ext-contact:salutation>
-	  <ext-contact:surname>" . $params["lastname"] . "</ext-contact:surname>
-	  <ext-contact:otherNames>" . $params["firstname"] . "</ext-contact:otherNames>
+	  <ext-contact:surname>" . $params['lastname'] . "</ext-contact:surname>
+	  <ext-contact:otherNames>" . $params['firstname'] . "</ext-contact:otherNames>
       <ext-contact:dateOfBirth>1980-12-20</ext-contact:dateOfBirth>
 	</ext-contact:person>
-	<ext-contact:telephone type=\"mobile\">+" . $countrycallingcodes[$params["country"]] . "." . preg_replace( "/[^0-9]/", "", $params["phonenumber"] ) . "</ext-contact:telephone>
+	<ext-contact:telephone type=\"mobile\">+" . $countrycallingcodes[$params['country']] . "." . preg_replace( "/[^0-9]/", "", $params['phonenumber'] ) . "</ext-contact:telephone>
   </ext-contact:createExtension>
 </extension>
 <clTRID>" . $cltrid . "</clTRID>
@@ -410,11 +410,11 @@ function heartinternetreg_createContact($params) {
 </epp>";
 	$xmldata = heartinternetreg_curlcall( $xml, "off", $params );
 
-	if (trim( $xmldata["EPP"]["RESPONSE"]["RESULT"]["MSG"] ) == "Command completed successfully") {
-		$registrantid = trim( $xmldata["EPP"]["RESPONSE"]["RESDATA"]["CONTACT:CREDATA"]["CONTACT:ID"] );
+	if (trim( $xmldata['EPP']['RESPONSE']['RESULT']['MSG'] ) == "Command completed successfully") {
+		$registrantid = trim( $xmldata['EPP']['RESPONSE']['RESDATA']["CONTACT:CREDATA"]["CONTACT:ID"] );
 	}
 	else {
-		$registrantid = $xmldata["error"];
+		$registrantid = $xmldata['error'];
 	}
 
 	return $registrantid;
@@ -457,7 +457,7 @@ function heartinternetreg_xml2array($contents, $get_attributes = 1) {
 			$result = array();
 
 			if (isset( $value )) {
-				$result["value"] = $value;
+				$result['value'] = $value;
 			}
 
 
@@ -465,7 +465,7 @@ function heartinternetreg_xml2array($contents, $get_attributes = 1) {
 				foreach ($attributes as $attr => $val) {
 
 					if ($get_attributes == 1) {
-						$result["attr"][$attr] = $val;
+						$result['attr'][$attr] = $val;
 						continue;
 					}
 				}
@@ -481,7 +481,7 @@ function heartinternetreg_xml2array($contents, $get_attributes = 1) {
 		if ($type == "open") {
 			$parent[$level - 1] = &$current;
 
-			if (( !is_array( $current ) || !in_array( $tag, array_keys( $current ) ) )) {
+			if (!is_array( $current ) || !in_array( $tag, array_keys( $current ) )) {
 				$current[$tag] = $result;
 				$current = &$current[$tag];
 
@@ -510,7 +510,7 @@ function heartinternetreg_xml2array($contents, $get_attributes = 1) {
 			}
 
 
-			if (( ( is_array( $current[$tag] ) && $get_attributes == 0 ) || ( ( isset( $current[$tag][0] ) && is_array( $current[$tag][0] ) ) && $get_attributes == 1 ) )) {
+			if (( is_array( $current[$tag] ) && $get_attributes == 0 ) || ( ( isset( $current[$tag][0] ) && is_array( $current[$tag][0] ) ) && $get_attributes == 1 )) {
 				array_push( $current[$tag], $result );
 				continue;
 			}

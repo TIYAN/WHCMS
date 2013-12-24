@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -34,13 +34,13 @@ if (!class_exists("WHMCS_Init")) {
 $whmcs = new WHMCS_Init();
 $whmcs = $whmcs->init();
 
-if ($CONFIG['Version'] == "5.2.12") {
-	update_query("tblconfiguration", array("value" => "5.2.13"), array("setting" => "Version"));
-	$CONFIG['Version'] = "5.2.13";
+if ($CONFIG['Version'] == "5.2.13") {
+	update_query("tblconfiguration", array("value" => "5.2.14"), array("setting" => "Version"));
+	$CONFIG['Version'] = "5.2.14";
 }
 
 
-if ($CONFIG['Version'] != "5.2.13") {
+if ($CONFIG['Version'] != "5.2.14") {
 	if (file_exists("../install/install.php")) {
 		header("Location: ../install/install.php");
 		exit();

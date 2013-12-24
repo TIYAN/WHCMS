@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -109,14 +109,14 @@ function planetauthorize_capture($params) {
 	global $CONFIG;
 
 	$auth = new planetauthorize_class();
-	$gateway_url = $params["submissionurl"];
+	$gateway_url = $params['submissionurl'];
 	$auth->seturl( $gateway_url );
-	$auth->add_field( "x_login", $params["loginid"] );
-	$auth->add_field( "x_tran_key", $params["transkey"] );
+	$auth->add_field( "x_login", $params['loginid'] );
+	$auth->add_field( "x_tran_key", $params['transkey'] );
 	$auth->add_field( "x_version", "3.1" );
 	$auth->add_field( "x_type", "AUTH_CAPTURE" );
 
-	if ($params["testmode"] == "on") {
+	if ($params['testmode'] == "on") {
 		$auth->add_field( "x_test_request", "TRUE" );
 	}
 
@@ -124,24 +124,24 @@ function planetauthorize_capture($params) {
 	$auth->add_field( "x_delim_data", "TRUE" );
 	$auth->add_field( "x_delim_char", "|" );
 	$auth->add_field( "x_encap_char", "" );
-	$auth->add_field( "x_invoice_num", $params["invoiceid"] );
-	$auth->add_field( "x_description", $CONFIG["CompanyName"] . " Invoice #" . $params["invoiceid"] );
-	$auth->add_field( "x_first_name", $params["clientdetails"]["firstname"] );
-	$auth->add_field( "x_last_name", $params["clientdetails"]["lastname"] );
-	$auth->add_field( "x_address", $params["clientdetails"]["address1"] );
-	$auth->add_field( "x_city", $params["clientdetails"]["city"] );
-	$auth->add_field( "x_state", $params["clientdetails"]["state"] );
-	$auth->add_field( "x_zip", $params["clientdetails"]["postcode"] );
-	$auth->add_field( "x_country", $params["clientdetails"]["country"] );
-	$auth->add_field( "x_phone", $params["clientdetails"]["phonenumber"] );
-	$auth->add_field( "x_email", $params["clientdetails"]["email"] );
+	$auth->add_field( "x_invoice_num", $params['invoiceid'] );
+	$auth->add_field( "x_description", $CONFIG['CompanyName'] . " Invoice #" . $params['invoiceid'] );
+	$auth->add_field( "x_first_name", $params['clientdetails']['firstname'] );
+	$auth->add_field( "x_last_name", $params['clientdetails']['lastname'] );
+	$auth->add_field( "x_address", $params['clientdetails']['address1'] );
+	$auth->add_field( "x_city", $params['clientdetails']['city'] );
+	$auth->add_field( "x_state", $params['clientdetails']['state'] );
+	$auth->add_field( "x_zip", $params['clientdetails']['postcode'] );
+	$auth->add_field( "x_country", $params['clientdetails']['country'] );
+	$auth->add_field( "x_phone", $params['clientdetails']['phonenumber'] );
+	$auth->add_field( "x_email", $params['clientdetails']['email'] );
 	$auth->add_field( "x_email_customer", "FALSE" );
 	$auth->add_field( "x_method", "CC" );
-	$auth->add_field( "x_card_num", $params["cardnum"] );
-	$auth->add_field( "x_amount", $params["amount"] );
-	$auth->add_field( "x_exp_date", $params["cardexp"] );
-	$auth->add_field( "x_card_code", $params["cccvv"] );
-	$auth->add_field( "x_currency_code", $params["currency"] );
+	$auth->add_field( "x_card_num", $params['cardnum'] );
+	$auth->add_field( "x_amount", $params['amount'] );
+	$auth->add_field( "x_exp_date", $params['cardexp'] );
+	$auth->add_field( "x_card_code", $params['cccvv'] );
+	$auth->add_field( "x_currency_code", $params['currency'] );
 	switch ($auth->process()) {
 	case 1: {
 			array( "status" => "success", "transid" => $auth->response["Transaction ID"], "rawdata" => $auth->dump_response() );
@@ -156,14 +156,14 @@ function planetauthorize_refund($params) {
 	global $CONFIG;
 
 	$auth = new planetauthorize_class();
-	$gateway_url = $params["submissionurl"];
+	$gateway_url = $params['submissionurl'];
 	$auth->seturl( $gateway_url );
-	$auth->add_field( "x_login", $params["loginid"] );
-	$auth->add_field( "x_tran_key", $params["transkey"] );
+	$auth->add_field( "x_login", $params['loginid'] );
+	$auth->add_field( "x_tran_key", $params['transkey'] );
 	$auth->add_field( "x_version", "3.1" );
 	$auth->add_field( "x_type", "CREDIT" );
 
-	if ($params["testmode"] == "on") {
+	if ($params['testmode'] == "on") {
 		$auth->add_field( "x_test_request", "TRUE" );
 	}
 
@@ -171,24 +171,24 @@ function planetauthorize_refund($params) {
 	$auth->add_field( "x_delim_data", "TRUE" );
 	$auth->add_field( "x_delim_char", "|" );
 	$auth->add_field( "x_encap_char", "" );
-	$auth->add_field( "x_invoice_num", $params["invoiceid"] );
-	$auth->add_field( "x_description", $CONFIG["CompanyName"] . " Invoice #" . $params["invoiceid"] );
-	$auth->add_field( "x_first_name", $params["clientdetails"]["firstname"] );
-	$auth->add_field( "x_last_name", $params["clientdetails"]["lastname"] );
-	$auth->add_field( "x_address", $params["clientdetails"]["address1"] );
-	$auth->add_field( "x_city", $params["clientdetails"]["city"] );
-	$auth->add_field( "x_state", $params["clientdetails"]["state"] );
-	$auth->add_field( "x_zip", $params["clientdetails"]["postcode"] );
-	$auth->add_field( "x_country", $params["clientdetails"]["country"] );
-	$auth->add_field( "x_phone", $params["clientdetails"]["phonenumber"] );
-	$auth->add_field( "x_email", $params["clientdetails"]["email"] );
+	$auth->add_field( "x_invoice_num", $params['invoiceid'] );
+	$auth->add_field( "x_description", $CONFIG['CompanyName'] . " Invoice #" . $params['invoiceid'] );
+	$auth->add_field( "x_first_name", $params['clientdetails']['firstname'] );
+	$auth->add_field( "x_last_name", $params['clientdetails']['lastname'] );
+	$auth->add_field( "x_address", $params['clientdetails']['address1'] );
+	$auth->add_field( "x_city", $params['clientdetails']['city'] );
+	$auth->add_field( "x_state", $params['clientdetails']['state'] );
+	$auth->add_field( "x_zip", $params['clientdetails']['postcode'] );
+	$auth->add_field( "x_country", $params['clientdetails']['country'] );
+	$auth->add_field( "x_phone", $params['clientdetails']['phonenumber'] );
+	$auth->add_field( "x_email", $params['clientdetails']['email'] );
 	$auth->add_field( "x_email_customer", "FALSE" );
 	$auth->add_field( "x_method", "CC" );
-	$auth->add_field( "x_card_num", $params["cardnum"] );
-	$auth->add_field( "x_amount", $params["amount"] );
-	$auth->add_field( "x_exp_date", $params["cardexp"] );
-	$auth->add_field( "x_card_code", $params["cccvv"] );
-	$auth->add_field( "x_trans_id", $params["transid"] );
+	$auth->add_field( "x_card_num", $params['cardnum'] );
+	$auth->add_field( "x_amount", $params['amount'] );
+	$auth->add_field( "x_exp_date", $params['cardexp'] );
+	$auth->add_field( "x_card_code", $params['cccvv'] );
+	$auth->add_field( "x_trans_id", $params['transid'] );
 	switch ($auth->process()) {
 	case 1: {
 			array( "status" => "success", "transid" => $auth->response["Transaction ID"], "rawdata" => $auth->dump_response() );

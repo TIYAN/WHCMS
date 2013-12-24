@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -14,7 +14,7 @@ function totp_config() {
 	global $licensing;
 
 	$licensedata = $licensing->getKeyData( "configoptions" );
-	$totpenabled = (array_key_exists( "TOTP", $licensedata ) ? $licensedata["TOTP"] : 0);
+	$totpenabled = (array_key_exists( "TOTP", $licensedata ) ? $licensedata['TOTP'] : 0);
 	$configarray = array( "FriendlyName" => array( "Type" => "System", "Value" => "Time-based HMAC One-Time Password (TOTP)" ), "Description" => array( "Type" => "System", "Value" => "TOTP requires that a user enter a 6 digit code that changes every 30 seconds to complete login. This works with mobile apps such as OATH Token and Google Authenticator.<br /><br />For more information about Time Based Tokens, please <a href=\"http://go.whmcs.com/114/totp\" target=\"_blank\">click here</a>." . ($totpenabled ? "" : "<br /><br /><strong>Just $1.50 per month (unlimited users)</strong>") ), "Licensed" => array( "Type" => "System", "Value" => ($totpenabled ? true : false) ), "SubscribeLink" => array( "Type" => "System", "Value" => "http://go.whmcs.com/114/totp" ) );
 	return $configarray;
 }
@@ -24,17 +24,17 @@ function totp_activate($params) {
 	global $whmcs;
 
 	if ($whmcs->get_req_var( "showqrimage" )) {
-		if (!isset( $_SESSION["totpqrurl"] )) {
+		if (!isset( $_SESSION['totpqrurl'] )) {
 			exit();
 		}
 
 		include ROOTDIR . "/modules/security/totp/phpqrcode.php";
-		QRcode::png( $_SESSION["totpqrurl"], false, 6, 6 );
+		QRcode::png( $_SESSION['totpqrurl'], false, 6, 6 );
 		exit();
 	}
 
-	$username = $params["user_info"]["username"];
-	$tokendata = (isset( $params["user_settings"]["tokendata"] ) ? $params["user_settings"]["tokendata"] : "");
+	$username = $params['user_info']['username'];
+	$tokendata = (isset( $params['user_settings']['tokendata'] ) ? $params['user_settings']['tokendata'] : "");
 	totp_loadgaclass();
 	$gaotp = new MyOauth();
 	$username = $whmcs->sanitize( "a-z", $whmcs->get_config( "CompanyName" ) ) . ":" . $username;
@@ -47,9 +47,9 @@ function totp_activate($params) {
 
 			if ($ans) {
 				$output = array();
-				$output["completed"] = true;
-				$output["msg"] = "Key Verified Successfully!";
-				$output["settings"] = array( "tokendata" => $tokendata );
+				$output['completed'] = true;
+				$output['msg'] = "Key Verified Successfully!";
+				$output['settings'] = array( "tokendata" => $tokendata );
 				return $output;
 			}
 
@@ -73,7 +73,7 @@ function totp_activate($params) {
 	else {
 		$key = $gaotp->setUser( $username, "TOTP" );
 		$url = $gaotp->createUrl( $username );
-		$_SESSION["totpqrurl"] = $url;
+		$_SESSION['totpqrurl'] = $url;
 		$output = "<h2>Time-based One-Time Password</h2>
 <p>This authentication option get's it's second factor using a time based algorithm.  Your mobile phone can be used to generate the codes.  If you don't already have an app that can do this, we recommend Google Authenticator which is available for iOS, Android and Windows mobile devices.</p>
 <p>To configure your authenticator app:</p>
@@ -82,7 +82,7 @@ function totp_activate($params) {
 <li>Then use your app to scan the barcode below, or alternatively enter this secret key manually: \"" . $gaotp->getKey( $username ) . "\"</li>
 </ul>
 
-<div align=\"center\">" . (function_exists( "imagecreate" ) ? "<img src=\"" . $_SERVER["PHP_SELF"] . "?2fasetup=1&module=totp&showqrimage=1\" />" : "<em>GD is missing from the PHP build on your server so unable to generate image</em>") . "</div>
+<div align=\"center\">" . (function_exists( "imagecreate" ) ? "<img src=\"" . $_SERVER['PHP_SELF'] . "?2fasetup=1&module=totp&showqrimage=1\" />" : "<em>GD is missing from the PHP build on your server so unable to generate image</em>") . "</div>
 
 <form onsubmit=\"dialogSubmit();return false\">
 <input type=\"hidden\" name=\"2fasetup\" value=\"1\" />
@@ -125,9 +125,9 @@ function totp_get_used_otps() {
 function totp_verify($params) {
 	global $whmcs;
 
-	$username = $params["admin_info"]["username"];
-	$tokendata = $params["admin_settings"]["tokendata"];
-	$key = $params["post_vars"]["key"];
+	$username = $params['admin_info']['username'];
+	$tokendata = $params['admin_settings']['tokendata'];
+	$key = $params['post_vars']['key'];
 	totp_loadgaclass();
 	$gaotp = new MyOauth();
 	$gaotp->setTokenData( $tokendata );

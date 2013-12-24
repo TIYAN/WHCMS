@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -27,34 +27,34 @@ function trustcommerce_capture($params) {
 	}
 
 	$tc_params = array( "action" => "sale" );
-	$tc_params["custid"] = $params["username"];
-	$tc_params["password"] = $params["password"];
-	$tc_params["demo"] = ($params["testmode"] ? "y" : "n");
-	$tc_params["ticket"] = $params["invoiceid"];
-	$tc_params["amount"] = $params["amount"] * 100;
-	$tc_params["name"] = $params["clientdetails"]["firstname"] . " " . $params["clientdetails"]["lastname"];
-	$tc_params["email"] = $params["clientdetails"]["email"];
-	$tc_params["address1"] = $params["clientdetails"]["address1"];
-	$tc_params["address2"] = $params["clientdetails"]["address2"];
-	$tc_params["city"] = $params["clientdetails"]["city"];
-	$tc_params["state"] = $params["clientdetails"]["state"];
-	$tc_params["zip"] = $params["clientdetails"]["postcode"];
-	$tc_params["country"] = $params["clientdetails"]["country"];
-	$tc_params["phone"] = $params["clientdetails"]["phone"];
-	$tc_params["cc"] = $params["cardnum"];
-	$tc_params["exp"] = $params["cardexp"];
-	$tc_params["avs"] = "n";
+	$tc_params['custid'] = $params['username'];
+	$tc_params['password'] = $params['password'];
+	$tc_params['demo'] = ($params['testmode'] ? "y" : "n");
+	$tc_params['ticket'] = $params['invoiceid'];
+	$tc_params['amount'] = $params['amount'] * 100;
+	$tc_params['name'] = $params['clientdetails']['firstname'] . " " . $params['clientdetails']['lastname'];
+	$tc_params['email'] = $params['clientdetails']['email'];
+	$tc_params['address1'] = $params['clientdetails']['address1'];
+	$tc_params['address2'] = $params['clientdetails']['address2'];
+	$tc_params['city'] = $params['clientdetails']['city'];
+	$tc_params['state'] = $params['clientdetails']['state'];
+	$tc_params['zip'] = $params['clientdetails']['postcode'];
+	$tc_params['country'] = $params['clientdetails']['country'];
+	$tc_params['phone'] = $params['clientdetails']['phone'];
+	$tc_params['cc'] = $params['cardnum'];
+	$tc_params['exp'] = $params['cardexp'];
+	$tc_params['avs'] = "n";
 	$tc_result = tclink_send( $tc_params );
 
-	if (( $tc_result["status"] == "approved" || $tc_result["status"] == "accepted" )) {
-		$result = array( "status" => "success", "transid" => $tc_result["transid"], "rawdata" => $tc_result );
+	if ($tc_result['status'] == "approved" || $tc_result['status'] == "accepted") {
+		$result = array( "status" => "success", "transid" => $tc_result['transid'], "rawdata" => $tc_result );
 	}
 	else {
-		if (( $tc_result["status"] == "decline" || $tc_result["status"] == "rejected" )) {
+		if ($tc_result['status'] == "decline" || $tc_result['status'] == "rejected") {
 			$result = array( "status" => "declined", "rawdata" => $tc_result );
 		}
 		else {
-			if ($tc_result["status"] == "baddata") {
+			if ($tc_result['status'] == "baddata") {
 				$result = array( "status" => "baddata", "rawdata" => $tc_result );
 			}
 			else {
@@ -78,22 +78,22 @@ function trustcommerce_refund($params) {
 	}
 
 	$tc_params = array( "action" => "credit" );
-	$tc_params["custid"] = $params["username"];
-	$tc_params["password"] = $params["password"];
-	$tc_params["demo"] = ($params["testmode"] ? "y" : "n");
-	$tc_params["transid"] = $params["transid"];
-	$tc_params["amount"] = $params["amount"] * 100;
+	$tc_params['custid'] = $params['username'];
+	$tc_params['password'] = $params['password'];
+	$tc_params['demo'] = ($params['testmode'] ? "y" : "n");
+	$tc_params['transid'] = $params['transid'];
+	$tc_params['amount'] = $params['amount'] * 100;
 	$tc_result = tclink_send( $tc_params );
 
-	if (( $tc_result["status"] == "approved" || $tc_result["status"] == "accepted" )) {
-		$result = array( "status" => "success", "transid" => $tc_result["transid"], "rawdata" => $tc_result );
+	if ($tc_result['status'] == "approved" || $tc_result['status'] == "accepted") {
+		$result = array( "status" => "success", "transid" => $tc_result['transid'], "rawdata" => $tc_result );
 	}
 	else {
-		if (( $tc_result["status"] == "decline" || $tc_result["status"] == "rejected" )) {
+		if ($tc_result['status'] == "decline" || $tc_result['status'] == "rejected") {
 			$result = array( "status" => "declined", "rawdata" => $tc_result );
 		}
 		else {
-			if ($tc_result["status"] == "baddata") {
+			if ($tc_result['status'] == "baddata") {
 				$result = array( "status" => "baddata", "rawdata" => $tc_result );
 			}
 			else {

@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -18,13 +18,13 @@ function bidpay_activate() {
 function bidpay_link($params) {
 	$code = "
 <form action=\"https://sandbox.bidpay.com/DirectPayment/Process.aspx\" method=\"post\">
-<input type=\"hidden\" name=\"sellerToken\" value=\"" . $params["sellertoken"] . "\" />
-<input type=\"hidden\" name=\"referenceNumber\" value=\"" . $params["invoiceid"] . "\" />
-<input type=\"hidden\" name=\"item_0_ItemNumber\" value=\"" . $params["invoiceid"] . "\" />
-<input type=\"hidden\" name=\"item_0_ItemDescription\" value=\"" . $params["description"] . "\" />
-<input type=\"hidden\" name=\"item_0_Site\" value=\"" . $params["systemurl"] . "\" />
+<input type=\"hidden\" name=\"sellerToken\" value=\"" . $params['sellertoken'] . "\" />
+<input type=\"hidden\" name=\"referenceNumber\" value=\"" . $params['invoiceid'] . "\" />
+<input type=\"hidden\" name=\"item_0_ItemNumber\" value=\"" . $params['invoiceid'] . "\" />
+<input type=\"hidden\" name=\"item_0_ItemDescription\" value=\"" . $params['description'] . "\" />
+<input type=\"hidden\" name=\"item_0_Site\" value=\"" . $params['systemurl'] . "\" />
 <input type=\"hidden\" name=\"item_0_ItemType\" value=\"WebsitePurchase\" />
-<input type=\"hidden\" name=\"item_0_Amount\" value=\"" . $params["amount"] . "\" />
+<input type=\"hidden\" name=\"item_0_Amount\" value=\"" . $params['amount'] . "\" />
 <input type=\"image\" src=\"http://www.bidpay.com/images/PaymentButton/88x31-PayNow.jpg\" alt=\"Pay Now\" />
 </form>
 ";
@@ -36,7 +36,7 @@ if (!defined( "WHMCS" )) {
 	exit( "This file cannot be accessed directly" );
 }
 
-$GATEWAYMODULE["bidpayname"] = "bidpay";
-$GATEWAYMODULE["bidpayvisiblename"] = "BidPay";
-$GATEWAYMODULE["bidpaytype"] = "Invoices";
+$GATEWAYMODULE['bidpayname'] = "bidpay";
+$GATEWAYMODULE['bidpayvisiblename'] = "BidPay";
+$GATEWAYMODULE['bidpaytype'] = "Invoices";
 ?>

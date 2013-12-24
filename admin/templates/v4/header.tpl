@@ -37,8 +37,8 @@ var datepickerformat = "{$datepickerformat}";
           <input type="hidden" name="intellisearch" value="1" />
           <input type="hidden" name="token" value="{$csrfToken}" />
           <input type="text" id="intellisearchval" name="value" />
-          </form>
           <img src="images/icons/delete.png" alt="Cancel" width="16" height="16" class="absmiddle" id="intellisearchcancel" />
+          </form>
           </div>
         <div align="left" id="searchresults"></div>
       </div>

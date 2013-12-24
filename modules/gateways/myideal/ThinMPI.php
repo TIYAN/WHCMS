@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -137,11 +137,11 @@ class ThinMPI {
 	 * This method logs the message given to a file.
 	 */
 	function log($message) {
-		if ($this->conf["LOGFILE"] == "") {
+		if ($this->conf['LOGFILE'] == "") {
 			return null;
 		}
 
-		$file = fopen( dirname( __FILE__ ) . "/logs/" . $this->conf["LOGFILE"], "a" );
+		$file = fopen( dirname( __FILE__ ) . "/logs/" . $this->conf['LOGFILE'], "a" );
 		fputs( $file, $message, strlen( $message ) );
 		fputs( $file, "
 
@@ -225,17 +225,17 @@ class ThinMPI {
 	 */
 	function processDirRequest($req) {
 		if ($req->getMerchantID() == "") {
-			$req->setMerchantID( $this->conf["MERCHANTID"] );
+			$req->setMerchantID( $this->conf['MERCHANTID'] );
 		}
 
 
 		if ($req->getSubID() == "") {
-			$req->setSubID( $this->conf["SUBID"] );
+			$req->setSubID( $this->conf['SUBID'] );
 		}
 
 
 		if ($req->getAuthentication() == "") {
-			$req->setAuthentication( $this->conf["AUTHENTICATIONTYPE"] );
+			$req->setAuthentication( $this->conf['AUTHENTICATIONTYPE'] );
 		}
 
 		$res = new DirectoryResponse();
@@ -252,8 +252,8 @@ class ThinMPI {
 		if ("SHA1_RSA" == $req->getAuthentication()) {
 			$message = $timestamp . $req->getMerchantID() . $req->getSubID();
 			$message = $this->strip( $message );
-			$token = $this->security->createCertFingerprint( $this->conf["PRIVATECERT"] );
-			$tokenCode = $this->security->signMessage( $this->conf["PRIVATEKEY"], $this->conf["PRIVATEKEYPASS"], $message );
+			$token = $this->security->createCertFingerprint( $this->conf['PRIVATECERT'] );
+			$tokenCode = $this->security->signMessage( $this->conf['PRIVATEKEY'], $this->conf['PRIVATEKEYPASS'], $message );
 			$tokenCode = base64_encode( $tokenCode );
 		}
 
@@ -268,11 +268,11 @@ class ThinMPI {
 " . "</Merchant>
 " . "</DirectoryReq>";
 
-		if ($this->conf["PROXY"] == "") {
-			$answer = $this->PostToHost( $this->conf["ACQUIRERURL"], $this->conf["ACQUIRERTIMEOUT"], $reqMsg );
+		if ($this->conf['PROXY'] == "") {
+			$answer = $this->PostToHost( $this->conf['ACQUIRERURL'], $this->conf['ACQUIRERTIMEOUT'], $reqMsg );
 		}
 		else {
-			$answer = $this->PostToHostProxy( $this->conf["PROXY"], $this->conf["PROXYACQURL"], $this->conf["ACQUIRERTIMEOUT"], $reqMsg );
+			$answer = $this->PostToHostProxy( $this->conf['PROXY'], $this->conf['PROXYACQURL'], $this->conf['ACQUIRERTIMEOUT'], $reqMsg );
 		}
 
 
@@ -317,47 +317,47 @@ class ThinMPI {
 	 */
 	function processTrxRequest($req) {
 		if ($req->getMerchantID() == "") {
-			$req->setMerchantID( $this->conf["MERCHANTID"] );
+			$req->setMerchantID( $this->conf['MERCHANTID'] );
 		}
 
 
 		if ($req->getSubID() == "") {
-			$req->setSubID( $this->conf["SUBID"] );
+			$req->setSubID( $this->conf['SUBID'] );
 		}
 
 
 		if ($req->getAuthentication() == "") {
-			$req->setAuthentication( $this->conf["AUTHENTICATIONTYPE"] );
+			$req->setAuthentication( $this->conf['AUTHENTICATIONTYPE'] );
 		}
 
 
 		if ($req->getMerchantReturnURL() == "") {
-			$req->setMerchantReturnURL( $this->conf["MERCHANTRETURNURL"] );
+			$req->setMerchantReturnURL( $this->conf['MERCHANTRETURNURL'] );
 		}
 
 
 		if ($req->getCurrency() == "") {
-			$req->setCurrency( $this->conf["CURRENCY"] );
+			$req->setCurrency( $this->conf['CURRENCY'] );
 		}
 
 
 		if ($req->getExpirationPeriod() == "") {
-			$req->setExpirationPeriod( $this->conf["EXPIRATIONPERIOD"] );
+			$req->setExpirationPeriod( $this->conf['EXPIRATIONPERIOD'] );
 		}
 
 
 		if ($req->getLanguage() == "") {
-			$req->setLanguage( $this->conf["LANGUAGE"] );
+			$req->setLanguage( $this->conf['LANGUAGE'] );
 		}
 
 
 		if ($req->getEntranceCode() == "") {
-			$req->setEntranceCode( $this->conf["ENTRANCECODE"] );
+			$req->setEntranceCode( $this->conf['ENTRANCECODE'] );
 		}
 
 
 		if ($req->getDescription() == "") {
-			$req->setDescription( $this->conf["DESCRIPTION"] );
+			$req->setDescription( $this->conf['DESCRIPTION'] );
 		}
 
 		$res = new AcquirerTrxResponse();
@@ -374,8 +374,8 @@ class ThinMPI {
 		if ("SHA1_RSA" == $req->getAuthentication()) {
 			$message = $timestamp . $req->getIssuerID() . $req->getMerchantID() . $req->getSubID() . $req->getMerchantReturnURL() . $req->getPurchaseID() . $req->getAmount() . $req->getCurrency() . $req->getLanguage() . $req->getDescription() . $req->getEntranceCode();
 			$message = $this->strip( $message );
-			$token = $this->security->createCertFingerprint( $this->conf["PRIVATECERT"] );
-			$tokenCode = $this->security->signMessage( $this->conf["PRIVATEKEY"], $this->conf["PRIVATEKEYPASS"], $message );
+			$token = $this->security->createCertFingerprint( $this->conf['PRIVATECERT'] );
+			$tokenCode = $this->security->signMessage( $this->conf['PRIVATEKEY'], $this->conf['PRIVATEKEYPASS'], $message );
 			$tokenCode = base64_encode( $tokenCode );
 		}
 
@@ -399,11 +399,11 @@ class ThinMPI {
 " . "<entranceCode>" . utf8_encode( $this->encode_html( $req->getEntranceCode() ) ) . "</entranceCode>
 " . "</Transaction>" . "</AcquirerTrxReq>";
 
-		if ($this->conf["PROXY"] == "") {
-			$answer = $this->PostToHost( $this->conf["ACQUIRERURL"], $this->conf["ACQUIRERTIMEOUT"], $reqMsg );
+		if ($this->conf['PROXY'] == "") {
+			$answer = $this->PostToHost( $this->conf['ACQUIRERURL'], $this->conf['ACQUIRERTIMEOUT'], $reqMsg );
 		}
 		else {
-			$answer = $this->PostToHostProxy( $this->conf["PROXY"], $this->conf["PROXYACQURL"], $this->conf["ACQUIRERTIMEOUT"], $reqMsg );
+			$answer = $this->PostToHostProxy( $this->conf['PROXY'], $this->conf['PROXYACQURL'], $this->conf['ACQUIRERTIMEOUT'], $reqMsg );
 		}
 
 
@@ -437,17 +437,17 @@ class ThinMPI {
 	 */
 	function processStatusRequest($req) {
 		if ($req->getMerchantID() == "") {
-			$req->setMerchantID( $this->conf["MERCHANTID"] );
+			$req->setMerchantID( $this->conf['MERCHANTID'] );
 		}
 
 
 		if ($req->getSubID() == "") {
-			$req->setSubID( $this->conf["SUBID"] );
+			$req->setSubID( $this->conf['SUBID'] );
 		}
 
 
 		if ($req->getAuthentication() == "") {
-			$req->setAuthentication( $this->conf["AUTHENTICATIONTYPE"] );
+			$req->setAuthentication( $this->conf['AUTHENTICATIONTYPE'] );
 		}
 
 		$res = new AcquirerStatusResponse();
@@ -464,8 +464,8 @@ class ThinMPI {
 		if ("SHA1_RSA" == $req->getAuthentication()) {
 			$message = $timestamp . $req->getMerchantID() . $req->getSubID() . $req->getTransactionID();
 			$message = $this->strip( $message );
-			$token = $this->security->createCertFingerprint( $this->conf["PRIVATECERT"] );
-			$tokenCode = $this->security->signMessage( $this->conf["PRIVATEKEY"], $this->conf["PRIVATEKEYPASS"], $message );
+			$token = $this->security->createCertFingerprint( $this->conf['PRIVATECERT'] );
+			$tokenCode = $this->security->signMessage( $this->conf['PRIVATEKEY'], $this->conf['PRIVATEKEYPASS'], $message );
 			$tokenCode = base64_encode( $tokenCode );
 		}
 
@@ -480,11 +480,11 @@ class ThinMPI {
 " . "<Transaction>" . "<transactionID>" . utf8_encode( $this->encode_html( $req->getTransactionID() ) ) . "</transactionID>
 " . "</Transaction>" . "</AcquirerStatusReq>";
 
-		if ($this->conf["PROXY"] == "") {
-			$answer = $this->PostToHost( $this->conf["ACQUIRERURL"], $this->conf["ACQUIRERTIMEOUT"], $reqMsg );
+		if ($this->conf['PROXY'] == "") {
+			$answer = $this->PostToHost( $this->conf['ACQUIRERURL'], $this->conf['ACQUIRERTIMEOUT'], $reqMsg );
 		}
 		else {
-			$answer = $this->PostToHostProxy( $this->conf["PROXY"], $this->conf["PROXYACQURL"], $this->conf["ACQUIRERTIMEOUT"], $reqMsg );
+			$answer = $this->PostToHostProxy( $this->conf['PROXY'], $this->conf['PROXYACQURL'], $this->conf['ACQUIRERTIMEOUT'], $reqMsg );
 		}
 
 

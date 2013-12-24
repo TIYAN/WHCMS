@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -13,8 +13,8 @@
 function currencyUpdateRates() {
 	global $cron;
 
-	$stuff = curlCall("http://www.ecb.int/stats/eurofxref/eurofxref-daily.xml", array());
-	$stuff = explode("\n", $stuff);
+	$stuff = curlCall("http://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml", array());
+	$stuff = explode("\r\n", $stuff);
 
 	$exchrate = array();
 	$exchrate['EUR'] = 1;

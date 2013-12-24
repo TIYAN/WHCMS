@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -48,9 +48,9 @@ function get_invoice_status($pars) {
 
 		@fclose($fp);
 		$result = $str;
-		$result = preg_split("/^\r?$/m", $result, 2);
+		$result = preg_split('/^\r?$/m', $result, 2);
 		$result = trim($result[1]);
-		$result = preg_split("/\n/m", $result);
+		$result = preg_split('/\n/m', $result);
 
 		if (1 < count($result)) {
 			$result = trim($result[1]);

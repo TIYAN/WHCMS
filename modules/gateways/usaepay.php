@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -21,18 +21,18 @@ function usaepay_capture($params) {
 
 	$url = "https://www.usaepay.com/gate";
 	$postfields = array();
-	$postfields["UMcommand"] = "cc:sale";
-	$postfields["UMkey"] = $params["key"];
-	$postfields["UMignoreDuplicate"] = "yes";
-	$postfields["UMcard"] = $params["cardnum"];
-	$postfields["UMexpir"] = $params["cardexp"];
-	$postfields["UMamount"] = $params["amount"];
-	$postfields["UMinvoice"] = $params["invoiceid"];
-	$postfields["UMname"] = $params["clientdetails"]["firstname"] . " " . $params["clientdetails"]["lastname"];
-	$postfields["UMstreet"] = $params["clientdetails"]["address1"];
-	$postfields["UMzip"] = $params["clientdetails"]["postcode"];
-	$postfields["UMcvv2"] = $params["cccvv"];
-	$postfields["UMip"] = $remote_ip;
+	$postfields['UMcommand'] = "cc:sale";
+	$postfields['UMkey'] = $params['key'];
+	$postfields['UMignoreDuplicate'] = "yes";
+	$postfields['UMcard'] = $params['cardnum'];
+	$postfields['UMexpir'] = $params['cardexp'];
+	$postfields['UMamount'] = $params['amount'];
+	$postfields['UMinvoice'] = $params['invoiceid'];
+	$postfields['UMname'] = $params['clientdetails']['firstname'] . " " . $params['clientdetails']['lastname'];
+	$postfields['UMstreet'] = $params['clientdetails']['address1'];
+	$postfields['UMzip'] = $params['clientdetails']['postcode'];
+	$postfields['UMcvv2'] = $params['cccvv'];
+	$postfields['UMip'] = $remote_ip;
 	$query_string = "";
 	foreach ($postfields as $k => $v) {
 		$query_string .= "" . $k . "=" . urlencode( $v ) . "&";
@@ -57,8 +57,8 @@ function usaepay_capture($params) {
 	$result = $tmp[count( $tmp ) - 1];
 	parse_str( $result, $tmp );
 
-	if ($tmp["UMresult"] == "A") {
-		return array( "status" => "success", "transid" => $tmp["UMrefNum"], "rawdata" => $tmp );
+	if ($tmp['UMresult'] == "A") {
+		return array( "status" => "success", "transid" => $tmp['UMrefNum'], "rawdata" => $tmp );
 	}
 
 	return array( "status" => "declined", "rawdata" => $tmp );
@@ -69,7 +69,7 @@ if (!defined( "WHMCS" )) {
 	exit( "This file cannot be accessed directly" );
 }
 
-$GATEWAYMODULE["usaepayname"] = "usaepay";
-$GATEWAYMODULE["usaepayvisiblename"] = "USA ePay";
-$GATEWAYMODULE["usaepaytype"] = "CC";
+$GATEWAYMODULE['usaepayname'] = "usaepay";
+$GATEWAYMODULE['usaepayvisiblename'] = "USA ePay";
+$GATEWAYMODULE['usaepaytype'] = "CC";
 ?>

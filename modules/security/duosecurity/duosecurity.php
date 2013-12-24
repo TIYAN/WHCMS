@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -46,22 +46,22 @@ class WHMCS_DuoSecurity {
 
 
 	function signRequest($ikey, $skey, $akey, $username) {
-		if (( !isset( $username ) || strlen( $username ) == 0 )) {
+		if (!isset( $username ) || strlen( $username ) == 0) {
 			return ERR_USER;
 		}
 
 
-		if (( !isset( $ikey ) || strlen( $ikey ) != IKEY_LEN )) {
+		if (!isset( $ikey ) || strlen( $ikey ) != IKEY_LEN) {
 			return ERR_IKEY;
 		}
 
 
-		if (( !isset( $skey ) || strlen( $skey ) != SKEY_LEN )) {
+		if (!isset( $skey ) || strlen( $skey ) != SKEY_LEN) {
 			return ERR_SKEY;
 		}
 
 
-		if (( !isset( $akey ) || strlen( $akey ) < AKEY_LEN )) {
+		if (!isset( $akey ) || strlen( $akey ) < AKEY_LEN) {
 			return ERR_AKEY;
 		}
 
@@ -131,9 +131,9 @@ function duosecurity_challenge($params) {
 	global $whmcs;
 
 	$appsecretkey = sha1( "Duo" . $whmcs->get_hash() );
-	$adminid = $params["user_info"]["id"];
-	$username = $params["user_info"]["username"];
-	$email = $params["user_info"]["email"];
+	$adminid = $params['user_info']['id'];
+	$username = $params['user_info']['username'];
+	$email = $params['user_info']['email'];
 	$integrationkey = "DILXRHE92017KPRVVM4T";
 	$secretkey = "lUQE5dQlJn69ime5PtWJ8f8A0oMjmVXZY6wA5tqT";
 	$apihostname = "api-3ce575d8.duosecurity.com";
@@ -167,7 +167,7 @@ function duosecurity_verify($params) {
 	$secretkey = "lUQE5dQlJn69ime5PtWJ8f8A0oMjmVXZY6wA5tqT";
 	$apihostname = "api-3ce575d8.duosecurity.com";
 
-	if (WHMCS_DuoSecurity::verifyresponse( $integrationkey, $secretkey, $appsecretkey, $_POST["sig_response"] )) {
+	if (WHMCS_DuoSecurity::verifyresponse( $integrationkey, $secretkey, $appsecretkey, $_POST['sig_response'] )) {
 		return true;
 	}
 

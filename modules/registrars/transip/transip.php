@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -49,10 +49,10 @@ function transip_getConfigArray() {
  * @param array   $params
  */
 function transip_initialize($params) {
-	Transip_ApiSettings::$login = $params["Login"];
-	Transip_ApiSettings::$privateKey = $params["PrivateKey"];
-	Transip_ApiSettings::$mode = ($params["ReadOnlyMode"] ? "readonly" : "readwrite");
-	Transip_ApiSettings::$endpoint = $params["Endpoint"];
+	Transip_ApiSettings::$login = $params['Login'];
+	Transip_ApiSettings::$privateKey = $params['PrivateKey'];
+	Transip_ApiSettings::$mode = ($params['ReadOnlyMode'] ? "readonly" : "readwrite");
+	Transip_ApiSettings::$endpoint = $params['Endpoint'];
 }
 
 
@@ -134,7 +134,7 @@ function transip_convertAddress($address) {
 	}
 
 
-	if (( !preg_match( "/(.*)[^0-9][0-9]+?[^\s]*$/Usi", $address, $matches ) && $maxLoop == 0 )) {
+	if (!preg_match( "/(.*)[^0-9][0-9]+?[^\s]*$/Usi", $address, $matches ) && $maxLoop == 0) {
 		throw new Exception( "Hit limit of 10 rounds while trying to convert address line '" . $address . "'" );
 	}
 
@@ -152,45 +152,45 @@ function transip_convertAddress($address) {
  * @return array
  */
 function transip_getContactsForRegisterAndTransfer($data) {
-	$address = transip_splitAddress( $data["address1"] );
+	$address = transip_splitAddress( $data['address1'] );
 	$reg = new Transip_WhoisContact();
 	$reg->type = "registrant";
-	$reg->firstName = $data["firstname"];
-	$reg->lastName = $data["lastname"];
-	$reg->companyName = $data["companyname"];
-	$reg->postalCode = $data["postcode"];
-	$reg->city = $data["city"];
+	$reg->firstName = $data['firstname'];
+	$reg->lastName = $data['lastname'];
+	$reg->companyName = $data['companyname'];
+	$reg->postalCode = $data['postcode'];
+	$reg->city = $data['city'];
 	$reg->street = $address[0];
 	$reg->number = $address[1];
-	$reg->country = $data["country"];
-	$reg->phoneNumber = $data["phonenumber"];
-	$reg->email = $data["email"];
-	$adminAddress = transip_splitAddress( $data["adminaddress1"] );
+	$reg->country = $data['country'];
+	$reg->phoneNumber = $data['phonenumber'];
+	$reg->email = $data['email'];
+	$adminAddress = transip_splitAddress( $data['adminaddress1'] );
 	$admin = new Transip_WhoisContact();
 	$admin->type = "administrative";
-	$admin->firstName = $data["adminfirstname"];
-	$admin->lastName = $data["adminlastname"];
-	$admin->companyName = $data["admincompanyname"];
-	$admin->postalCode = $data["adminpostcode"];
-	$admin->city = $data["admincity"];
+	$admin->firstName = $data['adminfirstname'];
+	$admin->lastName = $data['adminlastname'];
+	$admin->companyName = $data['admincompanyname'];
+	$admin->postalCode = $data['adminpostcode'];
+	$admin->city = $data['admincity'];
 	$admin->street = $adminAddress[0];
 	$admin->number = $adminAddress[1];
-	$admin->country = $data["admincountry"];
-	$admin->phoneNumber = $data["adminphonenumber"];
-	$admin->email = $data["adminemail"];
-	$techAddress = transip_splitAddress( $data["adminaddress1"] );
+	$admin->country = $data['admincountry'];
+	$admin->phoneNumber = $data['adminphonenumber'];
+	$admin->email = $data['adminemail'];
+	$techAddress = transip_splitAddress( $data['adminaddress1'] );
 	$tech = new Transip_WhoisContact();
 	$tech->type = "technical";
-	$tech->firstName = $data["adminfirstname"];
-	$tech->lastName = $data["adminlastname"];
-	$tech->companyName = $data["admincompanyname"];
-	$tech->postalCode = $data["adminpostcode"];
-	$tech->city = $data["admincity"];
+	$tech->firstName = $data['adminfirstname'];
+	$tech->lastName = $data['adminlastname'];
+	$tech->companyName = $data['admincompanyname'];
+	$tech->postalCode = $data['adminpostcode'];
+	$tech->city = $data['admincity'];
 	$tech->street = $techAddress[0];
 	$tech->number = $techAddress[1];
-	$tech->country = $data["admincountry"];
-	$tech->phoneNumber = $data["adminphonenumber"];
-	$tech->email = $data["adminemail"];
+	$tech->country = $data['admincountry'];
+	$tech->phoneNumber = $data['adminphonenumber'];
+	$tech->email = $data['adminemail'];
 	return array( $reg, $admin, $tech );
 }
 
@@ -273,7 +273,7 @@ function transip_contactDetailsToWhoisContacts($contactDetails) {
 function transip_GetNameservers($params) {
 	transip_initialize( $params );
 	$domain = null;
-	$domainName = $params["sld"] . "." . $params["tld"];
+	$domainName = $params['sld'] . "." . $params['tld'];
 	$domain = Transip_DomainService::getinfo( $domainName );
 	$nameservers = array();
 	foreach ($domain->nameservers as $index => $nameserver) {
@@ -294,11 +294,11 @@ function transip_GetNameservers($params) {
  */
 function transip_SaveNameservers($params) {
 	transip_initialize( $params );
-	$domainName = $params["sld"] . "." . $params["tld"];
+	$domainName = $params['sld'] . "." . $params['tld'];
 	$nameservers = array();
 	foreach ($params as $key => $value) {
 
-		if (( preg_match( "/^ns([0-9]+)$/", $key, $matches ) && !empty( $value ) )) {
+		if (preg_match( "/^ns([0-9]+)$/", $key, $matches ) && !empty( $value )) {
 			$nameservers[$matches[1] - 1] = new Transip_Nameserver( $value );
 			continue;
 		}
@@ -319,7 +319,7 @@ function transip_SaveNameservers($params) {
  */
 function transip_GetRegistrarLock($params) {
 	transip_initialize( $params );
-	$domainName = $params["sld"] . "." . $params["tld"];
+	$domainName = $params['sld'] . "." . $params['tld'];
 	$isLocked = Transip_DomainService::getislocked( $domainName );
 	$result = ($isLocked ? "locked" : "unlocked");
 	logModuleCall( "transip", "GetRegistrarLock", $domainName, $isLocked, $result );
@@ -336,9 +336,9 @@ function transip_GetRegistrarLock($params) {
  */
 function transip_SaveRegistrarLock($params) {
 	transip_initialize( $params );
-	$domainName = $params["sld"] . "." . $params["tld"];
+	$domainName = $params['sld'] . "." . $params['tld'];
 
-	if ($params["lockenabled"] == "locked") {
+	if ($params['lockenabled'] == "locked") {
 		logModuleCall( "transip", "SaveRegistrarLock", array( "setLock()", $domainName ) );
 		Transip_DomainService::setlock( $domainName );
 	}
@@ -360,7 +360,7 @@ function transip_SaveRegistrarLock($params) {
  */
 function transip_GetDNS($params) {
 	transip_initialize( $params );
-	$domainName = $params["sld"] . "." . $params["tld"];
+	$domainName = $params['sld'] . "." . $params['tld'];
 	$domain = Transip_DomainService::getinfo( $domainName );
 	$records = array();
 	foreach ($domain->dnsEntries as $dnsEntry) {
@@ -381,15 +381,15 @@ function transip_GetDNS($params) {
  */
 function transip_SaveDNS($params) {
 	transip_initialize( $params );
-	$domainName = $params["sld"] . "." . $params["tld"];
+	$domainName = $params['sld'] . "." . $params['tld'];
 	$dnsEntries = array();
-	foreach ($params["dnsrecords"] as $dnsRecord) {
+	foreach ($params['dnsrecords'] as $dnsRecord) {
 
-		if (( empty( $dnsRecord["hostname"] ) || empty( $dnsRecord["address"] ) )) {
+		if (empty( $dnsRecord['hostname'] ) || empty( $dnsRecord['address'] )) {
 			continue;
 		}
 
-		$dnsEntries[] = new Transip_DnsEntry( $dnsRecord["hostname"], 86400, $dnsRecord["type"], $dnsRecord["address"] );
+		$dnsEntries[] = new Transip_DnsEntry( $dnsRecord['hostname'], 86400, $dnsRecord['type'], $dnsRecord['address'] );
 	}
 
 	logModuleCall( "transip", "SaveDNS", array( $domainName, $dnsEntries ) );
@@ -407,11 +407,11 @@ function transip_SaveDNS($params) {
  */
 function transip_RegisterDomain($params) {
 	transip_initialize( $params );
-	$domain = new Transip_Domain( $params["sld"] . "." . $params["tld"] );
+	$domain = new Transip_Domain( $params['sld'] . "." . $params['tld'] );
 	$domain->nameservers = array();
 	foreach ($params as $key => $value) {
 
-		if (( preg_match( "/^ns([0-9]+)$/", $key, $matches ) && !empty( $value ) )) {
+		if (preg_match( "/^ns([0-9]+)$/", $key, $matches ) && !empty( $value )) {
 			$domain->nameservers[$matches[1] - 1] = new Transip_Nameserver( $value );
 			continue;
 		}
@@ -433,18 +433,18 @@ function transip_RegisterDomain($params) {
  */
 function transip_TransferDomain($params) {
 	transip_initialize( $params );
-	$domain = new Transip_Domain( $params["sld"] . "." . $params["tld"] );
+	$domain = new Transip_Domain( $params['sld'] . "." . $params['tld'] );
 	$domain->nameservers = array();
 	foreach ($params as $key => $value) {
 
-		if (( preg_match( "/^ns([0-9]+)$/", $key, $matches ) && !empty( $value ) )) {
+		if (preg_match( "/^ns([0-9]+)$/", $key, $matches ) && !empty( $value )) {
 			$domain->nameservers[$matches[1] - 1] = new Transip_Nameserver( $value );
 			continue;
 		}
 	}
 
 	$domain->contacts = transip_getContactsForRegisterAndTransfer( $params );
-	$authCode = $params["transfersecret"];
+	$authCode = $params['transfersecret'];
 	logModuleCall( "transip", "TransferDomain", array( $domain, $authCode ) );
 
 	if (preg_match( "/\.(\w+)$/", $domain->name, $matches )) {
@@ -491,7 +491,7 @@ function transip_RenewDomain($params) {
  */
 function transip_GetContactDetails($params) {
 	transip_initialize( $params );
-	$domainName = $params["sld"] . "." . $params["tld"];
+	$domainName = $params['sld'] . "." . $params['tld'];
 	$domain = Transip_DomainService::getinfo( $domainName );
 	$result = transip_whoisContactsToContactDetails( $domain->contacts );
 	logModuleCall( "transip", "GetContactDetails", $domainName, (array)$domain, $result );
@@ -508,8 +508,8 @@ function transip_GetContactDetails($params) {
  */
 function transip_SaveContactDetails($params) {
 	transip_initialize( $params );
-	$domainName = $params["sld"] . "." . $params["tld"];
-	$contacts = transip_contactDetailsToWhoisContacts( $params["contactdetails"] );
+	$domainName = $params['sld'] . "." . $params['tld'];
+	$contacts = transip_contactDetailsToWhoisContacts( $params['contactdetails'] );
 	logModuleCall( "transip", "SaveContactDetails", array( $domainName, $contacts ) );
 	Transip_DomainService::setcontacts( $domainName, $contacts );
 	return array();
@@ -525,7 +525,7 @@ function transip_SaveContactDetails($params) {
  */
 function transip_GetEPPCode($params) {
 	transip_initialize( $params );
-	$domainName = $params["sld"] . "." . $params["tld"];
+	$domainName = $params['sld'] . "." . $params['tld'];
 	$authCode = array( "eppcode" => Transip_DomainService::getauthcode( $domainName ) );
 	logModuleCall( "transip", "GetEPPCode", $domainName, $authCode );
 	return $authCode;

@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -125,26 +125,26 @@ function xpanel_ConfigOptions() {
 
 
 function xpanel_CreateAccount($params) {
-	$serviceid = $params["serviceid"];
-	$pid = $params["pid"];
-	$producttype = $params["producttype"];
-	$domain = $params["domain"];
-	$username = $params["username"];
-	$password = $params["password"];
-	$clientsdetails = $params["clientsdetails"];
-	$customfields = $params["customfields"];
-	$configoptions = $params["configoptions"];
-	$package_id = $params["configoption2"];
-	$configoption3 = $params["configoption3"];
-	$configoption4 = $params["configoption4"];
-	$server = $params["server"];
-	$serverid = $params["serverid"];
-	$serverip = $params["serverip"];
-	$serverhostname = $params["serverhostname"];
-	$serverusername = $params["serverusername"];
-	$serverpassword = $params["serverpassword"];
-	$serveraccesshash = $params["serveraccesshash"];
-	$serversecure = $params["serversecure"];
+	$serviceid = $params['serviceid'];
+	$pid = $params['pid'];
+	$producttype = $params['producttype'];
+	$domain = $params['domain'];
+	$username = $params['username'];
+	$password = $params['password'];
+	$clientsdetails = $params['clientsdetails'];
+	$customfields = $params['customfields'];
+	$configoptions = $params['configoptions'];
+	$package_id = $params['configoption2'];
+	$configoption3 = $params['configoption3'];
+	$configoption4 = $params['configoption4'];
+	$server = $params['server'];
+	$serverid = $params['serverid'];
+	$serverip = $params['serverip'];
+	$serverhostname = $params['serverhostname'];
+	$serverusername = $params['serverusername'];
+	$serverpassword = $params['serverpassword'];
+	$serveraccesshash = $params['serveraccesshash'];
+	$serversecure = $params['serversecure'];
 	$curl = curlInit( $serverip, $serverhostname, $serverusername, $serverpassword, $serversecure );
 	$result = full_query( "SELECT `orderid`, `billingcycle`, `paymentmethod`, `nextduedate` FROM `tblhosting` WHERE `id` = " . (int)$serviceid . " LIMIT 1" );
 	$row = mysql_fetch_object( $result );
@@ -189,8 +189,8 @@ function xpanel_CreateAccount($params) {
 	}
 
 
-	if ($clientsdetails["companyname"]) {
-		$organization = "&organization=" . $clientsdetails["companyname"];
+	if ($clientsdetails['companyname']) {
+		$organization = "&organization=" . $clientsdetails['companyname'];
 		$account_type = 1;
 	}
 	else {
@@ -198,7 +198,7 @@ function xpanel_CreateAccount($params) {
 		$organization = "";
 	}
 
-	$data = "action=createacct" . "&customer_id=" . $clientsdetails["userid"] . "&login_name=" . $clientsdetails["email"] . "&password=" . $password . "&first_name=" . $clientsdetails["firstname"] . "&last_name=" . $clientsdetails["lastname"] . $organization . "&address1=" . $clientsdetails["address1"] . "&address2=" . $clientsdetails["address2"] . "&city=" . $clientsdetails["city"] . "&state=" . $clientsdetails["state"] . "&postal_code=" . $clientsdetails["postcode"] . "&country=" . $clientsdetails["country"] . "&work_phone=" . $clientsdetails["phonenumber"] . "&email=" . $clientsdetails["email"] . "&account_type=" . $account_type . "&domain_name=" . $domain . "&package_id=" . $package_id . "&billing_cycle=" . $billing_cycle . "&paymentmethod=" . $payment_method . "&nextduedate=" . $nextduedate . "&account_id=" . $serviceid . "&order_id=" . $orderid . "&account_login_name=" . $username . "&account_password=" . $password;
+	$data = "action=createacct" . "&customer_id=" . $clientsdetails['userid'] . "&login_name=" . $clientsdetails['email'] . "&password=" . $password . "&first_name=" . $clientsdetails['firstname'] . "&last_name=" . $clientsdetails['lastname'] . $organization . "&address1=" . $clientsdetails['address1'] . "&address2=" . $clientsdetails['address2'] . "&city=" . $clientsdetails['city'] . "&state=" . $clientsdetails['state'] . "&postal_code=" . $clientsdetails['postcode'] . "&country=" . $clientsdetails['country'] . "&work_phone=" . $clientsdetails['phonenumber'] . "&email=" . $clientsdetails['email'] . "&account_type=" . $account_type . "&domain_name=" . $domain . "&package_id=" . $package_id . "&billing_cycle=" . $billing_cycle . "&paymentmethod=" . $payment_method . "&nextduedate=" . $nextduedate . "&account_id=" . $serviceid . "&order_id=" . $orderid . "&account_login_name=" . $username . "&account_password=" . $password;
 	$response = sendRequest( $curl, $data );
 	$responseXml = parseResponse( $response );
 	foreach ($responseXml->xpath( "/account/add/result" ) as $resultNode) {
@@ -219,12 +219,12 @@ function xpanel_CreateAccount($params) {
 
 
 function xpanel_TerminateAccount($params) {
-	$serviceid = $params["serviceid"];
-	$serverip = $params["serverip"];
-	$serverhostname = $params["serverhostname"];
-	$serverusername = $params["serverusername"];
-	$serverpassword = $params["serverpassword"];
-	$serversecure = $params["serversecure"];
+	$serviceid = $params['serviceid'];
+	$serverip = $params['serverip'];
+	$serverhostname = $params['serverhostname'];
+	$serverusername = $params['serverusername'];
+	$serverpassword = $params['serverpassword'];
+	$serversecure = $params['serversecure'];
 	$curl = curlInit( $serverip, $serverhostname, $serverusername, $serverpassword, $serversecure );
 	$data = "action=removeacct" . "&account_id=" . $serviceid;
 	$response = sendRequest( $curl, $data );
@@ -247,12 +247,12 @@ function xpanel_TerminateAccount($params) {
 
 
 function xpanel_SuspendAccount($params) {
-	$serviceid = $params["serviceid"];
-	$serverip = $params["serverip"];
-	$serverhostname = $params["serverhostname"];
-	$serverusername = $params["serverusername"];
-	$serverpassword = $params["serverpassword"];
-	$serversecure = $params["serversecure"];
+	$serviceid = $params['serviceid'];
+	$serverip = $params['serverip'];
+	$serverhostname = $params['serverhostname'];
+	$serverusername = $params['serverusername'];
+	$serverpassword = $params['serverpassword'];
+	$serversecure = $params['serversecure'];
 	$curl = curlInit( $serverip, $serverhostname, $serverusername, $serverpassword, $serversecure );
 	$data = "action=suspendacct" . "&account_id=" . $serviceid;
 	$response = sendRequest( $curl, $data );
@@ -275,12 +275,12 @@ function xpanel_SuspendAccount($params) {
 
 
 function xpanel_UnsuspendAccount($params) {
-	$serviceid = $params["serviceid"];
-	$serverip = $params["serverip"];
-	$serverhostname = $params["serverhostname"];
-	$serverusername = $params["serverusername"];
-	$serverpassword = $params["serverpassword"];
-	$serversecure = $params["serversecure"];
+	$serviceid = $params['serviceid'];
+	$serverip = $params['serverip'];
+	$serverhostname = $params['serverhostname'];
+	$serverusername = $params['serverusername'];
+	$serverpassword = $params['serverpassword'];
+	$serversecure = $params['serversecure'];
 	$curl = curlInit( $serverip, $serverhostname, $serverusername, $serverpassword, $serversecure );
 	$data = "action=unsuspendacct" . "&account_id=" . $serviceid;
 	$response = sendRequest( $curl, $data );
@@ -303,14 +303,14 @@ function xpanel_UnsuspendAccount($params) {
 
 
 function xpanel_ChangePassword($params) {
-	$serviceid = $params["serviceid"];
-	$serverip = $params["serverip"];
-	$serverhostname = $params["serverhostname"];
-	$serverusername = $params["serverusername"];
-	$serverpassword = $params["serverpassword"];
-	$serversecure = $params["serversecure"];
-	$username = $params["username"];
-	$password = $params["password"];
+	$serviceid = $params['serviceid'];
+	$serverip = $params['serverip'];
+	$serverhostname = $params['serverhostname'];
+	$serverusername = $params['serverusername'];
+	$serverpassword = $params['serverpassword'];
+	$serversecure = $params['serversecure'];
+	$username = $params['username'];
+	$password = $params['password'];
 	$curl = curlInit( $serverip, $serverhostname, $serverusername, $serverpassword, $serversecure );
 	$data = "action=passwd" . "&account_id=" . $serviceid . "&account_login_name=" . $username . "&account_password=" . $password;
 	$response = sendRequest( $curl, $data );
@@ -333,13 +333,13 @@ function xpanel_ChangePassword($params) {
 
 
 function xpanel_ChangePackage($params) {
-	$serviceid = $params["serviceid"];
-	$serverip = $params["serverip"];
-	$serverhostname = $params["serverhostname"];
-	$serverusername = $params["serverusername"];
-	$serverpassword = $params["serverpassword"];
-	$serversecure = $params["serversecure"];
-	$package_id = $params["configoption2"];
+	$serviceid = $params['serviceid'];
+	$serverip = $params['serverip'];
+	$serverhostname = $params['serverhostname'];
+	$serverusername = $params['serverusername'];
+	$serverpassword = $params['serverpassword'];
+	$serversecure = $params['serversecure'];
+	$package_id = $params['configoption2'];
 	$curl = curlInit( $serverip, $serverhostname, $serverusername, $serverpassword, $serversecure );
 	$data = "action=changepackage" . "&account_id=" . $serviceid . "&package_id=" . $package_id;
 	$response = sendRequest( $curl, $data );
@@ -364,32 +364,32 @@ function xpanel_ChangePackage($params) {
 function xpanel_ClientArea($params) {
 	global $_LANG;
 
-	$serverhostname = $params["serverhostname"];
-	$serversecure = $params["serversecure"];
+	$serverhostname = $params['serverhostname'];
+	$serversecure = $params['serversecure'];
 	$protocol = ($serversecure ? "https" : "http");
 	$port = ($serversecure ? 3737 : 80);
 	$script = "cgi-bin/xpanel/account_manager.cgi?a=log_in&amp;privileges=account";
 	$url = "" . $protocol . "://" . $serverhostname . ":" . $port . "/" . $script;
 	$code = "<form action=\"" . $url . "\" method=\"post\" target=\"_blank\">
-<input type=\"hidden\" name=\"login_name\" value=\"" . $params["username"] . "\" />
-<input type=\"hidden\" name=\"password\" value=\"" . $params["password"] . "\" />
-<input type=\"submit\" value=\"" . $_LANG["xpanellogin"] . "/>
-<input type=\"button\" value=\"" . $_LANG["xpanelmaillogin"] . "\" onClick=\"window.open('http://" . $serverhostname . "/webmail')\" />
+<input type=\"hidden\" name=\"login_name\" value=\"" . $params['username'] . "\" />
+<input type=\"hidden\" name=\"password\" value=\"" . $params['password'] . "\" />
+<input type=\"submit\" value=\"" . $_LANG['xpanellogin'] . "/>
+<input type=\"button\" value=\"" . $_LANG['xpanelmaillogin'] . "\" onClick=\"window.open('http://" . $serverhostname . "/webmail')\" />
 </form>";
 	return $code;
 }
 
 
 function xpanel_AdminLink($params) {
-	$serverhostname = $params["serverhostname"];
-	$serversecure = $params["serversecure"];
+	$serverhostname = $params['serverhostname'];
+	$serversecure = $params['serversecure'];
 	$protocol = ($serversecure ? "https" : "http");
 	$port = ($serversecure ? 3737 : 80);
 	$script = "cgi-bin/xpanel/admin/index.cgi";
 	$url = "" . $protocol . "://" . $serverhostname . ":" . $port . "/" . $script;
 	$code = "<form action=\"" . $url . "\" method=\"post\" target=\"_blank\">
-<input type=\"hidden\" name=\"user\" value=\"" . $params["serverusername"] . "\" />
-<input type=\"hidden\" name=\"pass\" value=\"" . $params["serverpassword"] . "\" />
+<input type=\"hidden\" name=\"user\" value=\"" . $params['serverusername'] . "\" />
+<input type=\"hidden\" name=\"pass\" value=\"" . $params['serverpassword'] . "\" />
 <input type=\"submit\" value=\"XPanel\" />
 </form>";
 	return $code;
@@ -397,13 +397,13 @@ function xpanel_AdminLink($params) {
 
 
 function xpanel_LoginLink($params) {
-	$serverhostname = $params["serverhostname"];
-	$serversecure = $params["serversecure"];
+	$serverhostname = $params['serverhostname'];
+	$serversecure = $params['serversecure'];
 	$protocol = ($serversecure ? "https" : "http");
 	$port = ($serversecure ? 3737 : 80);
 	$script = "cgi-bin/xpanel/account_manager.cgi?a=log_in&amp;privileges=account&amp;login_link=1";
 	$url = "" . $protocol . "://" . $serverhostname . ":" . $port . "/" . $script;
-	$code = "<a href=\"" . $url . "&amp;login_name=" . $params["username"] . "&amp;password=" . $params["password"] . "\" target=\"_blank\" class=\"moduleloginlink\">login to control panel</a>";
+	$code = "<a href=\"" . $url . "&amp;login_name=" . $params['username'] . "&amp;password=" . $params['password'] . "\" target=\"_blank\" class=\"moduleloginlink\">login to control panel</a>";
 	return $code;
 }
 

@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -27,9 +27,9 @@ function enomtruste_ConfigOptions() {
 
 function enomtruste_CreateAccount($params) {
 	updateService( array( "username" => "", "password" => "" ) );
-	$withseal = $params["configoption3"];
-	$numyears = $params["configoption4"];
-	$result = select_query( "tblhosting", "billingcycle", array( "id" => $params["serviceid"] ) );
+	$withseal = $params['configoption3'];
+	$numyears = $params['configoption4'];
+	$result = select_query( "tblhosting", "billingcycle", array( "id" => $params['serviceid'] ) );
 	$data = mysql_fetch_array( $result );
 	$billingcycle = $data[0];
 
@@ -43,47 +43,47 @@ function enomtruste_CreateAccount($params) {
 	}
 
 
-	if ($params["configoptions"]["Seal"]) {
+	if ($params['configoptions']['Seal']) {
 		$withseal = true;
 	}
 
 
-	if ($params["configoptions"]["NumYears"]) {
-		$numyears = $params["configoptions"]["NumYears"];
+	if ($params['configoptions']['NumYears']) {
+		$numyears = $params['configoptions']['NumYears'];
 	}
 
 	$apiproducttype = ($withseal ? "TRUSTePrivacyPolicySeal" : "TRUSTePrivacyPolicy");
 	$postfields = array();
-	$postfields["command"] = "PurchaseServices";
-	$postfields["Service"] = $apiproducttype;
-	$postfields["NumYears"] = $numyears;
-	$postfields["EmailNotify"] = "0";
+	$postfields['command'] = "PurchaseServices";
+	$postfields['Service'] = $apiproducttype;
+	$postfields['NumYears'] = $numyears;
+	$postfields['EmailNotify'] = "0";
 	$xmldata = enomtruste_call( $params, $postfields );
 
-	if ($xmldata["INTERFACE-RESPONSE"]["ERRCOUNT"] == 0) {
+	if ($xmldata['INTERFACE-RESPONSE']['ERRCOUNT'] == 0) {
 		$result = "success";
 
 		if (!mysql_num_rows( full_query( "SHOW TABLES LIKE 'mod_enomtruste'" ) )) {
 			full_query( "CREATE TABLE `mod_enomtruste` ( `serviceid` INT(10) NOT NULL , `subscrid` INT(10) NOT NULL )" );
 		}
 
-		$subscrid = $xmldata["INTERFACE-RESPONSE"]["SUBSCRIPTIONID"];
-		insert_query( "mod_enomtruste", array( "serviceid" => $params["serviceid"], "subscrid" => $subscrid ) );
-		$domain = $params["domain"];
+		$subscrid = $xmldata['INTERFACE-RESPONSE']['SUBSCRIPTIONID'];
+		insert_query( "mod_enomtruste", array( "serviceid" => $params['serviceid'], "subscrid" => $subscrid ) );
+		$domain = $params['domain'];
 
 		if (!$domain) {
-			$domain = $params["customfields"]["Domain Name"];
+			$domain = $params['customfields']["Domain Name"];
 		}
 
 		$postfields = array();
-		$postfields["command"] = "PP_UpdateSubscriptionDetails";
-		$postfields["SubscriptionID"] = $subscrid;
-		$postfields["DomainName"] = $domain;
-		$postfields["EmailAddress"] = $params["clientsdetails"]["email"];
+		$postfields['command'] = "PP_UpdateSubscriptionDetails";
+		$postfields['SubscriptionID'] = $subscrid;
+		$postfields['DomainName'] = $domain;
+		$postfields['EmailAddress'] = $params['clientsdetails']['email'];
 		$xmldata = enomtruste_call( $params, $postfields );
 	}
 	else {
-		$result = $xmldata["INTERFACE-RESPONSE"]["ERRORS"]["ERR1"];
+		$result = $xmldata['INTERFACE-RESPONSE']['ERRORS']['ERR1'];
 
 		if (!$result) {
 			$result = "An Unknown Error Occurred";
@@ -95,21 +95,21 @@ function enomtruste_CreateAccount($params) {
 
 
 function enomtruste_TerminateAccount($params) {
-	$result = select_query( "mod_enomtruste", "subscrid", array( "serviceid" => $params["serviceid"] ) );
+	$result = select_query( "mod_enomtruste", "subscrid", array( "serviceid" => $params['serviceid'] ) );
 	$data = mysql_fetch_array( $result );
 	$subscrid = $data[0];
 	$postfields = array();
-	$postfields["command"] = "PP_CancelSubscription";
-	$postfields["SubscriptionID"] = $subscrid;
-	$postfields["ReasonID"] = "1";
-	$postfields["Comment"] = "None";
+	$postfields['command'] = "PP_CancelSubscription";
+	$postfields['SubscriptionID'] = $subscrid;
+	$postfields['ReasonID'] = "1";
+	$postfields['Comment'] = "None";
 	$xmldata = enomtruste_call( $params, $postfields );
 
-	if ($xmldata["INTERFACE-RESPONSE"]["ERRCOUNT"] == 0) {
+	if ($xmldata['INTERFACE-RESPONSE']['ERRCOUNT'] == 0) {
 		$result = "success";
 	}
 	else {
-		$result = $xmldata["INTERFACE-RESPONSE"]["ERRORS"]["ERR1"];
+		$result = $xmldata['INTERFACE-RESPONSE']['ERRORS']['ERR1'];
 
 		if (!$result) {
 			$result = "An Unknown Error Occurred";
@@ -126,21 +126,21 @@ function enomtruste_ClientArea($params) {
 	$domain = ;
 
 	if (!$domain) {
-		$domain = $params["customfields"]["Domain Name"];
+		$domain = $params['customfields']["Domain Name"];
 	}
 
 	$postfields = array();
-	$postfields["command"] = "PP_GetControlPanelLoginURL";
-	$postfields["DomainName"] = $domain;
+	$postfields['command'] = "PP_GetControlPanelLoginURL";
+	$postfields['DomainName'] = $domain;
 	$xmldata = enomtruste_call( $params, $postfields );
 
-	if ($xmldata["INTERFACE-RESPONSE"]["ERRCOUNT"] == 0) {
-		$code = "<p align=\"center\"><img src=\"modules/servers/enomtruste/logo.png\" alt=\"TrustE Certified Privacy\" /><br />" . $_LANG["enomtrustedesc"] . "<br /><br /><input type=\"button\" value=\"" . $_LANG["enomtrustelogin"] . "\" onclick=\"window.open('" . $xmldata["INTERFACE-RESPONSE"]["LOGINURL"] . "','truste')\" class=\"btn\" /></p>";
+	if ($xmldata['INTERFACE-RESPONSE']['ERRCOUNT'] == 0) {
+		$code = "<p align=\"center\"><img src=\"modules/servers/enomtruste/logo.png\" alt=\"TrustE Certified Privacy\" /><br />" . $_LANG['enomtrustedesc'] . "<br /><br /><input type=\"button\" value=\"" . $_LANG['enomtrustelogin'] . "\" onclick=\"window.open('" . $xmldata['INTERFACE-RESPONSE']['LOGINURL'] . "','truste')\" class=\"btn\" /></p>";
 		return $code;
 	}
 
-	$xmldata["INTERFACE-RESPONSE"]["ERRORS"]["ERR1"];
-	$result = $params["domain"];
+	$xmldata['INTERFACE-RESPONSE']['ERRORS']['ERR1'];
+	$result = $params['domain'];
 
 	if (!$result) {
 		$result = "An Unknown Error Occurred";
@@ -150,17 +150,17 @@ function enomtruste_ClientArea($params) {
 
 
 function enomtruste_call($params, $postfields) {
-	$enomusr = $params["configoption1"];
-	$enompwd = $params["configoption2"];
-	$demomode = $params["configoption5"];
-	$postfields["uid"] = $enomusr;
-	$postfields["pw"] = $enompwd;
-	$postfields["ResponseType"] = "XML";
+	$enomusr = $params['configoption1'];
+	$enompwd = $params['configoption2'];
+	$demomode = $params['configoption5'];
+	$postfields['uid'] = $enomusr;
+	$postfields['pw'] = $enompwd;
+	$postfields['ResponseType'] = "XML";
 	$url = ($demomode ? "test" : "");
 	$url = "http://reseller" . $url . ".enom.com/interface.asp";
 	$data = curlCall( $url, $postfields );
 	$xmldata = XMLtoArray( $data );
-	logModuleCall( "enomtruste", $postfields["command"], $postfields, $data, $xmldata );
+	logModuleCall( "enomtruste", $postfields['command'], $postfields, $data, $xmldata );
 	return $xmldata;
 }
 

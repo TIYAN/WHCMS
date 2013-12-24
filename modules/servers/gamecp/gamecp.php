@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -17,58 +17,58 @@ function gamecp_ConfigOptions() {
 
 
 function gamecp_CreateAccount($params) {
-	$serviceid = $params["serviceid"];
-	$pid = $params["pid"];
-	$producttype = $params["producttype"];
-	$domain = $params["domain"];
-	$username = $params["username"];
-	$password = $params["password"];
-	$clientsdetails = $params["clientsdetails"];
-	$customfields = $params["customfields"];
-	$configoptions = $params["configoptions"];
-	$configoption1 = $params["configoption1"];
-	$configoption2 = $params["configoption2"];
-	$configoption3 = $params["configoption3"];
-	$configoption4 = $params["configoption4"];
-	$server = $params["server"];
-	$serverid = $params["serverid"];
-	$serverip = $params["serverip"];
-	$serverusername = $params["serverusername"];
-	$serverpassword = $params["serverpassword"];
-	$serveraccesshash = $params["serveraccesshash"];
-	$serversecure = $params["serversecure"];
+	$serviceid = $params['serviceid'];
+	$pid = $params['pid'];
+	$producttype = $params['producttype'];
+	$domain = $params['domain'];
+	$username = $params['username'];
+	$password = $params['password'];
+	$clientsdetails = $params['clientsdetails'];
+	$customfields = $params['customfields'];
+	$configoptions = $params['configoptions'];
+	$configoption1 = $params['configoption1'];
+	$configoption2 = $params['configoption2'];
+	$configoption3 = $params['configoption3'];
+	$configoption4 = $params['configoption4'];
+	$server = $params['server'];
+	$serverid = $params['serverid'];
+	$serverip = $params['serverip'];
+	$serverusername = $params['serverusername'];
+	$serverpassword = $params['serverpassword'];
+	$serveraccesshash = $params['serveraccesshash'];
+	$serversecure = $params['serversecure'];
 
 	if (!$username) {
-		$username = strtolower( $customfields[field_name] );
+		$username = strtolower( $customfields['field_name'] );
 	}
 
 	$username = preg_replace( "/[^a-z0123456789]/", "", $username );
-	update_query( "tblhosting", array( "username" => $username ), array( "id" => $params["serviceid"] ) );
-	$args = array( "plugin_gamecp_GameCP_URL" => $params["configoption1"], "plugin_gamecp_Connector_Passphrase" => $params["configoption2"], "debugging" => "off" );
-	$unfio = array( "action" => "userinfo", "function" => "userinfo", "customerid" => $clientsdetails["userid"] );
+	update_query( "tblhosting", array( "username" => $username ), array( "id" => $params['serviceid'] ) );
+	$args = array( "plugin_gamecp_GameCP_URL" => $params['configoption1'], "plugin_gamecp_Connector_Passphrase" => $params['configoption2'], "debugging" => "off" );
+	$unfio = array( "action" => "userinfo", "function" => "userinfo", "customerid" => $clientsdetails['userid'] );
 	$userinfo = curl2gcp( $args, $unfio );
-	preg_match_all( "/USER: (?P<name>\w+) ::/", $userinfo, $matches );
+	preg_match_all( '/USER: (?P<name>\w+) ::/', $userinfo, $matches );
 
-	if (( $matches["name"][0] && $matches["name"][0] != $username )) {
-		update_query( "tblhosting", array( "username" => $matches["name"][0] ), array( "id" => $params["serviceid"] ) );
-		$customfields[field_name] = $matches["name"][0];
+	if ($matches['name'][0] && $matches['name'][0] != $username) {
+		update_query( "tblhosting", array( "username" => $matches['name'][0] ), array( "id" => $params['serviceid'] ) );
+		$customfields['field_name'] = $matches['name'][0];
 	}
 
-	preg_match_all( "/PASS: (?P<pass>\w+) ::/", $userinfo, $pwmatch );
+	preg_match_all( '/PASS: (?P<pass>\w+) ::/', $userinfo, $pwmatch );
 
-	if ($pwmatch["pass"][0]) {
-		update_query( "tblhosting", array( "password" => encrypt( $pwmatch["pass"][0] ) ), array( "id" => $params["serviceid"] ) );
-		$params["password"] = $pwmatch["pass"][0];
+	if ($pwmatch['pass'][0]) {
+		update_query( "tblhosting", array( "password" => encrypt( $pwmatch['pass'][0] ) ), array( "id" => $params['serviceid'] ) );
+		$params['password'] = $pwmatch['pass'][0];
 	}
 
-	$urlvars = array( "action" => "create", "function" => "createacct", "username" => $customfields[field_name], "password" => $params["password"], "customerid" => $clientsdetails["userid"], "packageid" => $params["serviceid"], "email_server" => $params["configoption8"], "start_server" => $params["configoption9"], "mark_ip_used" => $params["configoption10"], "emailaddr" => $clientsdetails["email"], "firstname" => $clientsdetails["firstname"], "lastname" => $clientsdetails["lastname"], "address" => $clientsdetails["address1"], "city" => $clientsdetails["city"], "state" => $clientsdetails["state"], "country" => $clientsdetails["country"], "zipcode" => $clientsdetails["postcode"], "phonenum" => $clientsdetails["phonenumber"], "game_id" => $params["configoption3"], "max_players" => $configoptions[field_players], "pub_priv" => $params["configoption4"], "login_path" => $params["configoption5"], "sv_location" => $customfields[field_location], "website" => $customfields[field_website], "hostname" => $customfields[field_hostname], "motd" => $customfields[field_motd], "rcon_password" => $customfields[field_rconpw], "priv_password" => $customfields[field_serverpw], "addons" => serialize( $configoptions ) );
-	$args = array( "plugin_gamecp_GameCP_URL" => $params["configoption1"], "plugin_gamecp_Connector_Passphrase" => $params["configoption2"], "debugging" => $params["configoption7"] );
+	$urlvars = array( "action" => "create", "function" => "createacct", "username" => $customfields['field_name'], "password" => $params['password'], "customerid" => $clientsdetails['userid'], "packageid" => $params['serviceid'], "email_server" => $params['configoption8'], "start_server" => $params['configoption9'], "mark_ip_used" => $params['configoption10'], "emailaddr" => $clientsdetails['email'], "firstname" => $clientsdetails['firstname'], "lastname" => $clientsdetails['lastname'], "address" => $clientsdetails['address1'], "city" => $clientsdetails['city'], "state" => $clientsdetails['state'], "country" => $clientsdetails['country'], "zipcode" => $clientsdetails['postcode'], "phonenum" => $clientsdetails['phonenumber'], "game_id" => $params['configoption3'], "max_players" => $configoptions['field_players'], "pub_priv" => $params['configoption4'], "login_path" => $params['configoption5'], "sv_location" => $customfields['field_location'], "website" => $customfields['field_website'], "hostname" => $customfields['field_hostname'], "motd" => $customfields['field_motd'], "rcon_password" => $customfields['field_rconpw'], "priv_password" => $customfields['field_serverpw'], "addons" => serialize( $configoptions ) );
+	$args = array( "plugin_gamecp_GameCP_URL" => $params['configoption1'], "plugin_gamecp_Connector_Passphrase" => $params['configoption2'], "debugging" => $params['configoption7'] );
 	$r_result = curl2gcp( $args, $urlvars );
-	preg_match_all( "/USER: (?P<name>\w+) ::/", $r_result, $matches );
+	preg_match_all( '/USER: (?P<name>\w+) ::/', $r_result, $matches );
 
-	if (( $matches["name"][0] && $matches["name"][0] != $username )) {
-		update_query( "tblhosting", array( "username" => $matches["name"][0] ), array( "id" => $params["serviceid"] ) );
-		$customfields[field_name] = $matches["name"][0];
+	if ($matches['name'][0] && $matches['name'][0] != $username) {
+		update_query( "tblhosting", array( "username" => $matches['name'][0] ), array( "id" => $params['serviceid'] ) );
+		$customfields['field_name'] = $matches['name'][0];
 	}
 
 	$result = checkStatus( $r_result );
@@ -86,15 +86,15 @@ function gamecp_CreateAccount($params) {
 
 
 function gamecp_TerminateAccount($params) {
-	if (( ( $params["configoption3"] == "1000" || $params["configoption3"] == "1001" ) || $params["configoption3"] == "1002" )) {
+	if (( $params['configoption3'] == "1000" || $params['configoption3'] == "1001" ) || $params['configoption3'] == "1002") {
 		$action = "deletevoice";
 	}
 	else {
 		$action = "delete";
 	}
 
-	$urlvars = array( "action" => $action, "customerid" => $params["clientsdetails"]["userid"], "packageid" => $params["serviceid"] );
-	$args = array( "plugin_gamecp_GameCP_URL" => $params["configoption1"], "plugin_gamecp_Connector_Passphrase" => $params["configoption2"], "debugging" => $params["configoption7"] );
+	$urlvars = array( "action" => $action, "customerid" => $params['clientsdetails']['userid'], "packageid" => $params['serviceid'] );
+	$args = array( "plugin_gamecp_GameCP_URL" => $params['configoption1'], "plugin_gamecp_Connector_Passphrase" => $params['configoption2'], "debugging" => $params['configoption7'] );
 	$r_result = curl2gcp( $args, $urlvars );
 	$result = checkStatus( $r_result );
 
@@ -111,15 +111,15 @@ function gamecp_TerminateAccount($params) {
 
 
 function gamecp_SuspendAccount($params) {
-	if (( ( $params["configoption3"] == "1000" || $params["configoption3"] == "1001" ) || $params["configoption3"] == "1002" )) {
+	if (( $params['configoption3'] == "1000" || $params['configoption3'] == "1001" ) || $params['configoption3'] == "1002") {
 		$action = "suspendvoice";
 	}
 	else {
 		$action = "suspendgame";
 	}
 
-	$urlvars = array( "action" => $action, "customerid" => $params["clientsdetails"]["userid"], "packageid" => $params["serviceid"] );
-	$args = array( "plugin_gamecp_GameCP_URL" => $params["configoption1"], "plugin_gamecp_Connector_Passphrase" => $params["configoption2"], "debugging" => $params["configoption7"] );
+	$urlvars = array( "action" => $action, "customerid" => $params['clientsdetails']['userid'], "packageid" => $params['serviceid'] );
+	$args = array( "plugin_gamecp_GameCP_URL" => $params['configoption1'], "plugin_gamecp_Connector_Passphrase" => $params['configoption2'], "debugging" => $params['configoption7'] );
 	$r_result = curl2gcp( $args, $urlvars );
 	$result = checkStatus( $r_result );
 
@@ -136,15 +136,15 @@ function gamecp_SuspendAccount($params) {
 
 
 function gamecp_UnsuspendAccount($params) {
-	if (( ( $params["configoption3"] == "1000" || $params["configoption3"] == "1001" ) || $params["configoption3"] == "1002" )) {
+	if (( $params['configoption3'] == "1000" || $params['configoption3'] == "1001" ) || $params['configoption3'] == "1002") {
 		$action = "unsuspendvoice";
 	}
 	else {
 		$action = "unsuspendgame";
 	}
 
-	$urlvars = array( "action" => $action, "customerid" => $params["clientsdetails"]["userid"], "packageid" => $params["serviceid"] );
-	$args = array( "plugin_gamecp_GameCP_URL" => $params["configoption1"], "plugin_gamecp_Connector_Passphrase" => $params["configoption2"], "debugging" => $params["configoption7"] );
+	$urlvars = array( "action" => $action, "customerid" => $params['clientsdetails']['userid'], "packageid" => $params['serviceid'] );
+	$args = array( "plugin_gamecp_GameCP_URL" => $params['configoption1'], "plugin_gamecp_Connector_Passphrase" => $params['configoption2'], "debugging" => $params['configoption7'] );
 	$r_result = curl2gcp( $args, $urlvars );
 	$result = checkStatus( $r_result );
 
@@ -161,12 +161,12 @@ function gamecp_UnsuspendAccount($params) {
 
 
 function gamecp_ChangePackage($params) {
-	if (( ( $params["configoption3"] == "1000" || $params["configoption3"] == "1001" ) || $params["configoption3"] == "1002" )) {
+	if (( $params['configoption3'] == "1000" || $params['configoption3'] == "1001" ) || $params['configoption3'] == "1002") {
 		return false;
 	}
 
-	$urlvars = array( "action" => "changeplayers", "packageid" => $params["serviceid"], "max_players" => $params["configoptions"]["Players"], "addons" => serialize( $params["configoptions"] ) );
-	$args = array( "plugin_gamecp_GameCP_URL" => $params["configoption1"], "plugin_gamecp_Connector_Passphrase" => $params["configoption2"], "debugging" => $params["configoption7"] );
+	$urlvars = array( "action" => "changeplayers", "packageid" => $params['serviceid'], "max_players" => $params['configoptions']['Players'], "addons" => serialize( $params['configoptions'] ) );
+	$args = array( "plugin_gamecp_GameCP_URL" => $params['configoption1'], "plugin_gamecp_Connector_Passphrase" => $params['configoption2'], "debugging" => $params['configoption7'] );
 	$r_result = curl2gcp( $args, $urlvars );
 	$result = checkStatus( $r_result );
 
@@ -185,19 +185,19 @@ function gamecp_ChangePackage($params) {
 function gamecp_ClientArea($params) {
 	global $_LANG;
 
-	$code = "<form action=\"" . $params["configoption1"] . "\" method=\"post\" target=\"_blank\">
-<input type=\"hidden\" name=\"user\" value=\"" . $params["username"] . "\" />
-<input type=\"hidden\" name=\"pass\" value=\"" . $params["password"] . "\" />
-<input type=\"submit\" name=\"sublogin\" value=\"" . $_LANG["gamecplogin"] . "\" />
+	$code = "<form action=\"" . $params['configoption1'] . "\" method=\"post\" target=\"_blank\">
+<input type=\"hidden\" name=\"user\" value=\"" . $params['username'] . "\" />
+<input type=\"hidden\" name=\"pass\" value=\"" . $params['password'] . "\" />
+<input type=\"submit\" name=\"sublogin\" value=\"" . $_LANG['gamecplogin'] . "\" />
 </form>";
 	return $code;
 }
 
 
 function gamecp_AdminLink($params) {
-	$code = "<form action=\"" . $params["configoption1"] . "\" method=\"post\" target=\"_blank\">
-<input type=\"hidden\" name=\"user\" value=\"" . $params["serverusername"] . "\" />
-<input type=\"hidden\" name=\"pass\" value=\"" . $params["serverpassword"] . "\" />
+	$code = "<form action=\"" . $params['configoption1'] . "\" method=\"post\" target=\"_blank\">
+<input type=\"hidden\" name=\"user\" value=\"" . $params['serverusername'] . "\" />
+<input type=\"hidden\" name=\"pass\" value=\"" . $params['serverpassword'] . "\" />
 <input type=\"submit\" name=\"sublogin\" value=\"Login to GameCP\" />
 </form>";
 	return $code;
@@ -205,7 +205,7 @@ function gamecp_AdminLink($params) {
 
 
 function gamecp_LoginLink($params) {
-	$code = "<a href=\"" . $params["configoption1"] . "?username=" . $params["username"] . "&password=" . $params["password"] . "\" target=\"_blank\" class=\"moduleloginlink\">login to control panel</a>";
+	$code = "<a href=\"" . $params['configoption1'] . "?username=" . $params['username'] . "&password=" . $params['password'] . "\" target=\"_blank\" class=\"moduleloginlink\">login to control panel</a>";
 	return $code;
 }
 
@@ -217,12 +217,12 @@ function gamecp_AdminCustomButtonArray() {
 
 
 function gamecp_start($params) {
-	if (( ( $params["configoption3"] == "1000" || $params["configoption3"] == "1001" ) || $params["configoption3"] == "1002" )) {
+	if (( $params['configoption3'] == "1000" || $params['configoption3'] == "1001" ) || $params['configoption3'] == "1002") {
 		return false;
 	}
 
-	$urlvars = array( "action" => "start", "customerid" => $params["clientsdetails"]["userid"], "packageid" => $params["serviceid"] );
-	$args = array( "plugin_gamecp_GameCP_URL" => $params["configoption1"], "plugin_gamecp_Connector_Passphrase" => $params["configoption2"], "debugging" => $params["configoption7"] );
+	$urlvars = array( "action" => "start", "customerid" => $params['clientsdetails']['userid'], "packageid" => $params['serviceid'] );
+	$args = array( "plugin_gamecp_GameCP_URL" => $params['configoption1'], "plugin_gamecp_Connector_Passphrase" => $params['configoption2'], "debugging" => $params['configoption7'] );
 	$r_result = curl2gcp( $args, $urlvars );
 	$result = checkStatus( $r_result );
 
@@ -239,12 +239,12 @@ function gamecp_start($params) {
 
 
 function gamecp_stop($params) {
-	if (( ( $params["configoption3"] == "1000" || $params["configoption3"] == "1001" ) || $params["configoption3"] == "1002" )) {
+	if (( $params['configoption3'] == "1000" || $params['configoption3'] == "1001" ) || $params['configoption3'] == "1002") {
 		return false;
 	}
 
-	$urlvars = array( "action" => "stop", "customerid" => $params["clientsdetails"]["userid"], "packageid" => $params["serviceid"] );
-	$args = array( "plugin_gamecp_GameCP_URL" => $params["configoption1"], "plugin_gamecp_Connector_Passphrase" => $params["configoption2"], "debugging" => $params["configoption7"] );
+	$urlvars = array( "action" => "stop", "customerid" => $params['clientsdetails']['userid'], "packageid" => $params['serviceid'] );
+	$args = array( "plugin_gamecp_GameCP_URL" => $params['configoption1'], "plugin_gamecp_Connector_Passphrase" => $params['configoption2'], "debugging" => $params['configoption7'] );
 	$r_result = curl2gcp( $args, $urlvars );
 	$result = checkStatus( $r_result );
 
@@ -261,21 +261,21 @@ function gamecp_stop($params) {
 
 
 function curl2gcp($args, $values) {
-	if (!$args["plugin_gamecp_GameCP_URL"]) {
+	if (!$args['plugin_gamecp_GameCP_URL']) {
 		return "No GameCP URL defined. Assign one in your product. Please contact GameCP for support.";
 	}
 
 
-	if (!$args["plugin_gamecp_Connector_Passphrase"]) {
+	if (!$args['plugin_gamecp_Connector_Passphrase']) {
 		return "No GameCP passphrase defined. Assign one in your product. Please contact GameCP for support.";
 	}
 
 
-	if ($args["debugging"] == "on") {
-		$post = "passphrase=" . urlencode( $args["plugin_gamecp_Connector_Passphrase"] ) . "&debugging=true&connector=ce";
+	if ($args['debugging'] == "on") {
+		$post = "passphrase=" . urlencode( $args['plugin_gamecp_Connector_Passphrase'] ) . "&debugging=true&connector=ce";
 	}
 	else {
-		$post = "passphrase=" . urlencode( $args["plugin_gamecp_Connector_Passphrase"] ) . "&connector=ce";
+		$post = "passphrase=" . urlencode( $args['plugin_gamecp_Connector_Passphrase'] ) . "&connector=ce";
 	}
 
 
@@ -285,10 +285,10 @@ function curl2gcp($args, $values) {
 		}
 	}
 
-	$url = rtrim( $args["plugin_gamecp_GameCP_URL"], "/" ) . "/billing/mb/index.php";
+	$url = rtrim( $args['plugin_gamecp_GameCP_URL'], "/" ) . "/billing/mb/index.php";
 	$result = send2curl( $url, $post );
 
-	if ($args["debugging"] == "on") {
+	if ($args['debugging'] == "on") {
 		logModuleCall( "gamecp", "debug", $url . "?" . $post, strip_tags( $result ) );
 	}
 

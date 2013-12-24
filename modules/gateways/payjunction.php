@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -18,24 +18,24 @@ function payjunction_activate() {
 
 function payjunction_capture($params) {
 	$url = "https://payjunction.com/quick_link";
-	$fields["dc_logon"] = $params["dc_logon"];
-	$fields["dc_password"] = $params["dc_password"];
-	$fields["dc_first_name"] = $params["clientdetails"]["firstname"];
-	$fields["dc_last_name"] = $params["clientdetails"]["lastname"];
-	$fields["dc_address"] = $params["clientdetails"]["address1"];
-	$fields["dc_city"] = $params["clientdetails"]["city"];
-	$fields["dc_state"] = $params["clientdetails"]["state"];
-	$fields["dc_zipcode"] = $params["clientdetails"]["postcode"];
-	$fields["dc_country"] = $params["clientdetails"]["country"];
-	$fields["dc_number"] = $params["cardnum"];
-	$fields["dc_expiration_month"] = substr( $params["cardexp"], 0, 2 );
-	$fields["dc_expiration_year"] = substr( $params["cardexp"], 2, 2 );
-	$fields["dc_verification_number"] = $params["cccvv"];
-	$fields["dc_transaction_amount"] = $params["amount"];
-	$fields["dc_notes"] = $params["description"];
-	$fields["dc_transaction_type"] = "AUTHORIZATION_CAPTURE";
-	$fields["dc_test"] = "No";
-	$fields["dc_version"] = "1.2";
+	$fields['dc_logon'] = $params['dc_logon'];
+	$fields['dc_password'] = $params['dc_password'];
+	$fields['dc_first_name'] = $params['clientdetails']['firstname'];
+	$fields['dc_last_name'] = $params['clientdetails']['lastname'];
+	$fields['dc_address'] = $params['clientdetails']['address1'];
+	$fields['dc_city'] = $params['clientdetails']['city'];
+	$fields['dc_state'] = $params['clientdetails']['state'];
+	$fields['dc_zipcode'] = $params['clientdetails']['postcode'];
+	$fields['dc_country'] = $params['clientdetails']['country'];
+	$fields['dc_number'] = $params['cardnum'];
+	$fields['dc_expiration_month'] = substr( $params['cardexp'], 0, 2 );
+	$fields['dc_expiration_year'] = substr( $params['cardexp'], 2, 2 );
+	$fields['dc_verification_number'] = $params['cccvv'];
+	$fields['dc_transaction_amount'] = $params['amount'];
+	$fields['dc_notes'] = $params['description'];
+	$fields['dc_transaction_type'] = "AUTHORIZATION_CAPTURE";
+	$fields['dc_test'] = "No";
+	$fields['dc_version'] = "1.2";
 	$query_string = "";
 	foreach ($fields as $k => $v) {
 		$query_string .= "" . $k . "=" . urlencode( $v ) . "&";
@@ -62,7 +62,7 @@ function payjunction_capture($params) {
 	}
 
 
-	if (( strcmp( $response["dc_response_code"], "00" ) == 0 || strcmp( $response["dc_response_code"], "85" ) == 0 )) {
+	if (strcmp( $response['dc_response_code'], "00" ) == 0 || strcmp( $response['dc_response_code'], "85" ) == 0) {
 		return array( "status" => "success", "transid" => $transid, "rawdata" => $response );
 	}
 
@@ -72,22 +72,22 @@ function payjunction_capture($params) {
 
 function payjunction_refund($params) {
 	$url = "https://payjunction.com/quick_link";
-	$fields["dc_logon"] = $params["dc_logon"];
-	$fields["dc_password"] = $params["dc_password"];
-	$fields["dc_first_name"] = $params["clientdetails"]["firstname"];
-	$fields["dc_last_name"] = $params["clientdetails"]["lastname"];
-	$fields["dc_address"] = $params["clientdetails"]["address1"];
-	$fields["dc_city"] = $params["clientdetails"]["city"];
-	$fields["dc_state"] = $params["clientdetails"]["state"];
-	$fields["dc_zipcode"] = $params["clientdetails"]["postcode"];
-	$fields["dc_country"] = $params["clientdetails"]["country"];
-	$fields["dc_number"] = $params["cardnum"];
-	$fields["dc_expiration_month"] = substr( $params["cardexp"], 0, 2 );
-	$fields["dc_expiration_year"] = substr( $params["cardexp"], 2, 2 );
-	$fields["dc_transaction_amount"] = $params["amount"];
-	$fields["dc_notes"] = $params["description"];
-	$fields["dc_transaction_type"] = "CREDIT";
-	$fields["dc_version"] = "1.2";
+	$fields['dc_logon'] = $params['dc_logon'];
+	$fields['dc_password'] = $params['dc_password'];
+	$fields['dc_first_name'] = $params['clientdetails']['firstname'];
+	$fields['dc_last_name'] = $params['clientdetails']['lastname'];
+	$fields['dc_address'] = $params['clientdetails']['address1'];
+	$fields['dc_city'] = $params['clientdetails']['city'];
+	$fields['dc_state'] = $params['clientdetails']['state'];
+	$fields['dc_zipcode'] = $params['clientdetails']['postcode'];
+	$fields['dc_country'] = $params['clientdetails']['country'];
+	$fields['dc_number'] = $params['cardnum'];
+	$fields['dc_expiration_month'] = substr( $params['cardexp'], 0, 2 );
+	$fields['dc_expiration_year'] = substr( $params['cardexp'], 2, 2 );
+	$fields['dc_transaction_amount'] = $params['amount'];
+	$fields['dc_notes'] = $params['description'];
+	$fields['dc_transaction_type'] = "CREDIT";
+	$fields['dc_version'] = "1.2";
 	$query_string = "";
 	foreach ($fields as $k => $v) {
 		$query_string .= "" . $k . "=" . urlencode( $v ) . "&";
@@ -120,8 +120,8 @@ function payjunction_refund($params) {
 	}
 
 
-	if (( strcmp( $response["dc_response_code"], "00" ) == 0 || strcmp( $response["dc_response_code"], "85" ) == 0 )) {
-		refundInvoicePayment( $params["invoiceid"], $transid );
+	if (strcmp( $response['dc_response_code'], "00" ) == 0 || strcmp( $response['dc_response_code'], "85" ) == 0) {
+		refundInvoicePayment( $params['invoiceid'], $transid );
 		logTransaction( "PayJunction", $debugoutput, "Successful" );
 		$result = "success";
 	}
@@ -138,7 +138,7 @@ if (!defined( "WHMCS" )) {
 	exit( "This file cannot be accessed directly" );
 }
 
-$GATEWAYMODULE["payjunctionname"] = "payjunction";
-$GATEWAYMODULE["payjunctionvisiblename"] = "Pay Junction";
-$GATEWAYMODULE["payjunctiontype"] = "CC";
+$GATEWAYMODULE['payjunctionname'] = "payjunction";
+$GATEWAYMODULE['payjunctionvisiblename'] = "Pay Junction";
+$GATEWAYMODULE['payjunctiontype'] = "CC";
 ?>

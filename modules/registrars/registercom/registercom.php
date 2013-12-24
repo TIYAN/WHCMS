@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -17,13 +17,13 @@ function registercom_getConfigArray() {
 
 
 function registercom_GetNameservers($params) {
-	$tld = $params["tld"];
-	$sld = $params["sld"];
+	$tld = $params['tld'];
+	$sld = $params['sld'];
 	$domain = $sld . "." . $tld;
 	$xml = "<serviceRequest>
 <command>domainGet</command>
 <client>
-<applicationGuid>" . $params["applicationGuid"] . "</applicationGuid>
+<applicationGuid>" . $params['applicationGuid'] . "</applicationGuid>
 <clientRef>" . md5( date( "YmdHis" ) ) . "</clientRef>
 </client>
 <request>
@@ -34,12 +34,12 @@ function registercom_GetNameservers($params) {
 </request>
 </serviceRequest>";
 	$data = registercom_curlCall( $xml, $params );
-	$data = $data["serviceResponse"]["response"]["domainGet"]["domain"]["nameServers"]["nameServer"];
-	$values["ns1"] = $data[0]["nsName"]["value"];
-	$values["ns2"] = $data[1]["nsName"]["value"];
+	$data = $data['serviceResponse']['response']['domainGet']['domain']['nameServers']['nameServer'];
+	$values['ns1'] = $data[0]['nsName']['value'];
+	$values['ns2'] = $data[1]['nsName']['value'];
 
-	if (( empty( $values["ns1"] ) && empty( $values["ns2"] ) )) {
-		$values["error"] = "Could not retrieve nameservers for the domain " . $domain;
+	if (empty( $values['ns1'] ) && empty( $values['ns2'] )) {
+		$values['error'] = "Could not retrieve nameservers for the domain " . $domain;
 	}
 
 	return $values;
@@ -47,16 +47,16 @@ function registercom_GetNameservers($params) {
 
 
 function registercom_SaveNameservers($params) {
-	$tld = $params["tld"];
-	$sld = $params["sld"];
+	$tld = $params['tld'];
+	$sld = $params['sld'];
 	$domain = $sld . "." . $tld;
-	$nameserver1 = $params["ns1"];
-	$nameserver2 = $params["ns2"];
+	$nameserver1 = $params['ns1'];
+	$nameserver2 = $params['ns2'];
 	$product_id = registercom_GetProductIdByDomain( $domain, $params );
 	$xml_modify = "<serviceRequest>
 <command>domainModify</command>
 <client>
-<applicationGuid>" . $params["applicationGuid"] . "</applicationGuid>
+<applicationGuid>" . $params['applicationGuid'] . "</applicationGuid>
 <clientRef>" . md5( date( "YmdHis" ) ) . "</clientRef>
 </client>
 <request>
@@ -74,11 +74,11 @@ function registercom_SaveNameservers($params) {
 </request>
 </serviceRequest>";
 	registercom_curlCall( $xml, $params );
-	$data = $params["tld"];
-	$data = $data["serviceResponse"]["productId"]["value"];
+	$data = $params['tld'];
+	$data = $data['serviceResponse']['productId']['value'];
 
 	if ($product_id != $data) {
-		$values["error"] = "The requested nameserver changes were NOT accepted by the registrar for the domain " . $domain;
+		$values['error'] = "The requested nameserver changes were NOT accepted by the registrar for the domain " . $domain;
 	}
 
 	return $values;
@@ -86,13 +86,13 @@ function registercom_SaveNameservers($params) {
 
 
 function registercom_GetRegistrarLock($params) {
-	$tld = $params["tld"];
-	$sld = $params["sld"];
+	$tld = $params['tld'];
+	$sld = $params['sld'];
 	$domain = $sld . "." . $tld;
 	$xml = "<serviceRequest>
 <command>domainGet</command>
 <client>
-<applicationGuid>" . $params["applicationGuid"] . "</applicationGuid>
+<applicationGuid>" . $params['applicationGuid'] . "</applicationGuid>
 <clientRef>" . md5( date( "YmdHis" ) ) . "</clientRef>
 </client>
 <request>
@@ -103,7 +103,7 @@ function registercom_GetRegistrarLock($params) {
 </request>
 </serviceRequest>";
 	$data = registercom_curlCall( $xml, $params );
-	$lock = $data["serviceResponse"]["response"]["domainGet"]["domain"]["domainInfo"]["registrarLock"]["value"];
+	$lock = $data['serviceResponse']['response']['domainGet']['domain']['domainInfo']['registrarLock']['value'];
 
 	if ($lock == "On") {
 		$lockstatus = "locked";
@@ -117,12 +117,12 @@ function registercom_GetRegistrarLock($params) {
 
 
 function registercom_SaveRegistrarLock($params) {
-	$tld = $params["tld"];
-	$sld = $params["sld"];
+	$tld = $params['tld'];
+	$sld = $params['sld'];
 	$domain = $sld . "." . $tld;
 	$product_id = registercom_GetProductIdByDomain( $domain, $params );
 
-	if ($params["lockenabled"] == "locked") {
+	if ($params['lockenabled'] == "locked") {
 		$lockstatus = "True";
 	}
 	else {
@@ -132,7 +132,7 @@ function registercom_SaveRegistrarLock($params) {
 	$xml_lock = "<serviceRequest>
 <command>domainLock</command>
 <client>
-<applicationGuid>" . $params["applicationGuid"] . "</applicationGuid>
+<applicationGuid>" . $params['applicationGuid'] . "</applicationGuid>
 <clientRef>" . md5( date( "YmdHis" ) ) . "</clientRef>
 </client>
 <request>
@@ -141,11 +141,11 @@ function registercom_SaveRegistrarLock($params) {
 </request>
 </serviceRequest>";
 	registercom_curlCall( $xml_lock, $params );
-	$data = $params["tld"];
-	$data = $data["serviceResponse"]["status"]["statusCode"]["value"];
+	$data = $params['tld'];
+	$data = $data['serviceResponse']['status']['statusCode']['value'];
 
 	if ($data != "1000") {
-		$values["error"] = "Could not update Registrar Lock Status for the domain " . $domain;
+		$values['error'] = "Could not update Registrar Lock Status for the domain " . $domain;
 	}
 
 	return $values;
@@ -154,22 +154,22 @@ function registercom_SaveRegistrarLock($params) {
 
 function registercom_RegisterDomain($params) {
 	require ROOTDIR . "/includes/countriescallingcodes.php";
-	$tld = $params["tld"];
-	$sld = $params["sld"];
+	$tld = $params['tld'];
+	$sld = $params['sld'];
 	$domain = $sld . "." . $tld;
-	$regperiod = $params["regperiod"];
-	$nameserver1 = $params["ns1"];
-	$nameserver2 = $params["ns2"];
-	$RegistrantFirstName = $params["firstname"];
-	$RegistrantLastName = $params["lastname"];
-	$RegistrantAddress1 = $params["address1"];
-	$RegistrantAddress2 = $params["address2"];
-	$RegistrantCity = $params["city"];
-	$RegistrantPostalCode = $params["postcode"];
-	$RegistrantCountry = $params["country"];
+	$regperiod = $params['regperiod'];
+	$nameserver1 = $params['ns1'];
+	$nameserver2 = $params['ns2'];
+	$RegistrantFirstName = $params['firstname'];
+	$RegistrantLastName = $params['lastname'];
+	$RegistrantAddress1 = $params['address1'];
+	$RegistrantAddress2 = $params['address2'];
+	$RegistrantCity = $params['city'];
+	$RegistrantPostalCode = $params['postcode'];
+	$RegistrantCountry = $params['country'];
 
 	if ($RegistrantCountry == "US") {
-		$RegistrantStateProvince = registercom_convert_us_state( $params["state"] );
+		$RegistrantStateProvince = registercom_convert_us_state( $params['state'] );
 
 		if ($RegistrantStateProvince == "false") {
 			$RegistrantStateProvince = "";
@@ -179,20 +179,20 @@ function registercom_RegisterDomain($params) {
 		$RegistrantStateProvince = "";
 	}
 
-	$RegistrantEmailAddress = $params["email"];
-	$RegistrantPhone = "+" . $countrycallingcodes[$params["country"]] . "." . preg_replace( "/[^0-9]/", "", $params["phonenumber"] );
-	$AdminPhone = "+" . $countrycallingcodes[$params["admincountry"]] . "." . preg_replace( "/[^0-9]/", "", $params["adminphonenumber"] );
-	$AdminFirstName = $params["adminfirstname"];
-	$AdminLastName = $params["adminlastname"];
-	$AdminAddress1 = $params["adminaddress1"];
-	$AdminAddress2 = $params["adminaddress2"];
-	$AdminCity = $params["admincity"];
-	$AdminStateProvince = $params["adminstate"];
-	$AdminPostalCode = $params["adminpostcode"];
-	$AdminCountry = $params["admincountry"];
+	$RegistrantEmailAddress = $params['email'];
+	$RegistrantPhone = "+" . $countrycallingcodes[$params['country']] . "." . preg_replace( "/[^0-9]/", "", $params['phonenumber'] );
+	$AdminPhone = "+" . $countrycallingcodes[$params['admincountry']] . "." . preg_replace( "/[^0-9]/", "", $params['adminphonenumber'] );
+	$AdminFirstName = $params['adminfirstname'];
+	$AdminLastName = $params['adminlastname'];
+	$AdminAddress1 = $params['adminaddress1'];
+	$AdminAddress2 = $params['adminaddress2'];
+	$AdminCity = $params['admincity'];
+	$AdminStateProvince = $params['adminstate'];
+	$AdminPostalCode = $params['adminpostcode'];
+	$AdminCountry = $params['admincountry'];
 
 	if ($AdminCountry == "US") {
-		$AdminStateProvince = registercom_convert_us_state( $params["adminstate"] );
+		$AdminStateProvince = registercom_convert_us_state( $params['adminstate'] );
 
 		if ($AdminStateProvince == "false") {
 			$AdminStateProvince = "";
@@ -202,11 +202,11 @@ function registercom_RegisterDomain($params) {
 		$AdminStateProvince = "";
 	}
 
-	$AdminEmailAddress = $params["adminemail"];
+	$AdminEmailAddress = $params['adminemail'];
 	$xml_adduser = "<serviceRequest>
 <command>userAdd</command>
 <client>
-<applicationGuid>" . $params["applicationGuid"] . "</applicationGuid>
+<applicationGuid>" . $params['applicationGuid'] . "</applicationGuid>
 <clientRef>" . md5( date( "YmdHis" ) ) . "</clientRef>
 </client>
 <request>
@@ -223,7 +223,7 @@ function registercom_RegisterDomain($params) {
 <city>" . $RegistrantCity . "</city>";
 
 	if ($RegistrantCountry == "US") {
-		$xml_adduser .= "<province>" . $params["state"] . "</province>";
+		$xml_adduser .= "<province>" . $params['state'] . "</province>";
 	}
 	else {
 		$xml_adduser .= "<state>" . $RegistrantStateProvince . "</state>";
@@ -245,7 +245,7 @@ function registercom_RegisterDomain($params) {
 <city>" . $AdminCity . "</city>";
 
 		if ($AdminCountry == "US") {
-			$xml_adduser .= "<province>" . $params["adminstate"] . "</province>";
+			$xml_adduser .= "<province>" . $params['adminstate'] . "</province>";
 		}
 		else {
 			$xml_adduser .= "<state>" . $AdminStateProvince . "</state>";
@@ -263,15 +263,15 @@ function registercom_RegisterDomain($params) {
 </serviceRequest>";
 	$data = registercom_curlCall( $xml_adduser, $params );
 
-	if (( $data["serviceResponse"]["status"]["statusCode"]["value"] != "1000" && $data["serviceResponse"]["status"]["statusCode"]["value"] != "1005" )) {
-		$values["error"] = "Could not add or update user account " . $AdminFirstName . " " . $AdminLastName . " with Registrar for the domainAdd request of " . $domain;
+	if ($data['serviceResponse']['status']['statusCode']['value'] != "1000" && $data['serviceResponse']['status']['statusCode']['value'] != "1005") {
+		$values['error'] = "Could not add or update user account " . $AdminFirstName . " " . $AdminLastName . " with Registrar for the domainAdd request of " . $domain;
 		return $values;
 	}
 
 	$xml_adddomain = "<serviceRequest>
 <command>domainAdd</command>
 <client>
-<applicationGuid>" . $params["applicationGuid"] . "</applicationGuid>
+<applicationGuid>" . $params['applicationGuid'] . "</applicationGuid>
 <clientRef>" . md5( date( "YmdHis" ) ) . "</clientRef>
 </client>
 <request>
@@ -290,7 +290,7 @@ function registercom_RegisterDomain($params) {
 <city>" . $RegistrantCity . "</city>";
 
 	if ($RegistrantCountry == "US") {
-		$xml_adddomain .= "<province>" . $params["state"] . "</province>";
+		$xml_adddomain .= "<province>" . $params['state'] . "</province>";
 	}
 	else {
 		$xml_adddomain .= "<state>" . $RegistrantStateProvince . "</state>";
@@ -311,7 +311,7 @@ function registercom_RegisterDomain($params) {
 <city>" . $AdminCity . "</city>";
 
 	if ($AdminCountry == "US") {
-		$xml_adddomain .= "<province>" . $params["adminstate"] . "</province>";
+		$xml_adddomain .= "<province>" . $params['adminstate'] . "</province>";
 	}
 	else {
 		$xml_adddomain .= "<state>" . $AdminStateProvince . "</state>";
@@ -325,18 +325,18 @@ function registercom_RegisterDomain($params) {
 </request>
 </serviceRequest>";
 	$data = registercom_curlCall( $xml_adddomain, $params );
-	$domProductId = $data["serviceResponse"]["response"]["productId"]["value"];
-	$data = $data["serviceResponse"]["status"]["statusCode"]["value"];
+	$domProductId = $data['serviceResponse']['response']['productId']['value'];
+	$data = $data['serviceResponse']['status']['statusCode']['value'];
 
 	if ($data != "1000") {
-		$values["error"] = "Failed to register the domain " . $domain;
+		$values['error'] = "Failed to register the domain " . $domain;
 		return $values;
 	}
 
 	$domain_product_id = registercom_GetProductIdByDomain( $domain, $params );
 
 	if ($domProductId != $domain_product_id) {
-		$values["error"] = "Failed to register the domain " . $domain;
+		$values['error'] = "Failed to register the domain " . $domain;
 		return $values;
 	}
 
@@ -345,22 +345,22 @@ function registercom_RegisterDomain($params) {
 
 function registercom_TransferDomain($params) {
 	require ROOTDIR . "/includes/countriescallingcodes.php";
-	$tld = $params["tld"];
-	$sld = $params["sld"];
+	$tld = $params['tld'];
+	$sld = $params['sld'];
 	$domain = $sld . "." . $tld;
-	$transfersecret = $params["transfersecret"];
-	$nameserver1 = $params["ns1"];
-	$nameserver2 = $params["ns2"];
-	$RegistrantFirstName = $params["firstname"];
-	$RegistrantLastName = $params["lastname"];
-	$RegistrantAddress1 = $params["address1"];
-	$RegistrantAddress2 = $params["address2"];
-	$RegistrantCity = $params["city"];
-	$RegistrantPostalCode = $params["postcode"];
-	$RegistrantCountry = $params["country"];
+	$transfersecret = $params['transfersecret'];
+	$nameserver1 = $params['ns1'];
+	$nameserver2 = $params['ns2'];
+	$RegistrantFirstName = $params['firstname'];
+	$RegistrantLastName = $params['lastname'];
+	$RegistrantAddress1 = $params['address1'];
+	$RegistrantAddress2 = $params['address2'];
+	$RegistrantCity = $params['city'];
+	$RegistrantPostalCode = $params['postcode'];
+	$RegistrantCountry = $params['country'];
 
 	if ($RegistrantCountry == "US") {
-		$RegistrantStateProvince = registercom_convert_us_state( $params["state"] );
+		$RegistrantStateProvince = registercom_convert_us_state( $params['state'] );
 
 		if ($RegistrantStateProvince == "false") {
 			$RegistrantStateProvince = "";
@@ -370,20 +370,20 @@ function registercom_TransferDomain($params) {
 		$RegistrantStateProvince = "";
 	}
 
-	$RegistrantEmailAddress = $params["email"];
-	$RegistrantPhone = "+" . $countrycallingcodes[$params["country"]] . "." . preg_replace( "/[^0-9]/", "", $params["phonenumber"] );
-	$AdminPhone = "+" . $countrycallingcodes[$params["admincountry"]] . "." . preg_replace( "/[^0-9]/", "", $params["adminphonenumber"] );
-	$AdminFirstName = $params["adminfirstname"];
-	$AdminLastName = $params["adminlastname"];
-	$AdminAddress1 = $params["adminaddress1"];
-	$AdminAddress2 = $params["adminaddress2"];
-	$AdminCity = $params["admincity"];
-	$AdminStateProvince = $params["adminstate"];
-	$AdminPostalCode = $params["adminpostcode"];
-	$AdminCountry = $params["admincountry"];
+	$RegistrantEmailAddress = $params['email'];
+	$RegistrantPhone = "+" . $countrycallingcodes[$params['country']] . "." . preg_replace( "/[^0-9]/", "", $params['phonenumber'] );
+	$AdminPhone = "+" . $countrycallingcodes[$params['admincountry']] . "." . preg_replace( "/[^0-9]/", "", $params['adminphonenumber'] );
+	$AdminFirstName = $params['adminfirstname'];
+	$AdminLastName = $params['adminlastname'];
+	$AdminAddress1 = $params['adminaddress1'];
+	$AdminAddress2 = $params['adminaddress2'];
+	$AdminCity = $params['admincity'];
+	$AdminStateProvince = $params['adminstate'];
+	$AdminPostalCode = $params['adminpostcode'];
+	$AdminCountry = $params['admincountry'];
 
 	if ($AdminCountry == "US") {
-		$AdminStateProvince = registercom_convert_us_state( $params["adminstate"] );
+		$AdminStateProvince = registercom_convert_us_state( $params['adminstate'] );
 
 		if ($AdminStateProvince == "false") {
 			$AdminStateProvince = "";
@@ -393,11 +393,11 @@ function registercom_TransferDomain($params) {
 		$AdminStateProvince = "";
 	}
 
-	$AdminEmailAddress = $params["adminemail"];
+	$AdminEmailAddress = $params['adminemail'];
 	$xml_adduser = "<serviceRequest>
 <command>userAdd</command>
 <client>
-<applicationGuid>" . $params["applicationGuid"] . "</applicationGuid>
+<applicationGuid>" . $params['applicationGuid'] . "</applicationGuid>
 <clientRef>" . md5( date( "YmdHis" ) ) . "</clientRef>
 </client>
 <request>
@@ -414,7 +414,7 @@ function registercom_TransferDomain($params) {
 <city>" . $RegistrantCity . "</city>";
 
 	if ($RegistrantCountry == "US") {
-		$xml_adduser .= "<province>" . $params["state"] . "</province>";
+		$xml_adduser .= "<province>" . $params['state'] . "</province>";
 	}
 	else {
 		$xml_adduser .= "<state>" . $RegistrantStateProvince . "</state>";
@@ -436,7 +436,7 @@ function registercom_TransferDomain($params) {
 <city>" . $AdminCity . "</city>";
 
 		if ($AdminCountry == "US") {
-			$xml_adduser .= "<province>" . $params["adminstate"] . "</province>";
+			$xml_adduser .= "<province>" . $params['adminstate'] . "</province>";
 		}
 		else {
 			$xml_adduser .= "<state>" . $AdminStateProvince . "</state>";
@@ -454,15 +454,15 @@ function registercom_TransferDomain($params) {
 </serviceRequest>";
 	$data = registercom_curlCall( $xml_adduser, $params );
 
-	if (( $data["serviceResponse"]["status"]["statusCode"]["value"] != "1000" && $data["serviceResponse"]["status"]["statusCode"]["value"] != "1005" )) {
-		$values["error"] = "Could not add or update user account " . $AdminFirstName . " " . $AdminLastName . " with Registrar for the domainTransferIn request of " . $domain;
+	if ($data['serviceResponse']['status']['statusCode']['value'] != "1000" && $data['serviceResponse']['status']['statusCode']['value'] != "1005") {
+		$values['error'] = "Could not add or update user account " . $AdminFirstName . " " . $AdminLastName . " with Registrar for the domainTransferIn request of " . $domain;
 		return $values;
 	}
 
 	$xml_adddomain = "<serviceRequest>
 <command>domainTransferIn</command>
 <client>
-<applicationGuid>" . $params["applicationGuid"] . "</applicationGuid>
+<applicationGuid>" . $params['applicationGuid'] . "</applicationGuid>
 <clientRef>" . md5( date( "YmdHis" ) ) . "</clientRef>
 </client>
 <request>
@@ -481,7 +481,7 @@ function registercom_TransferDomain($params) {
 <city>" . $RegistrantCity . "</city>";
 
 	if ($RegistrantCountry == "US") {
-		$xml_adddomain .= "<province>" . $params["state"] . "</province>";
+		$xml_adddomain .= "<province>" . $params['state'] . "</province>";
 	}
 	else {
 		$xml_adddomain .= "<state>" . $RegistrantStateProvince . "</state>";
@@ -502,7 +502,7 @@ function registercom_TransferDomain($params) {
 <city>" . $AdminCity . "</city>";
 
 	if ($AdminCountry == "US") {
-		$xml_adddomain .= "<province>" . $params["adminstate"] . "</province>";
+		$xml_adddomain .= "<province>" . $params['adminstate'] . "</province>";
 	}
 	else {
 		$xml_adddomain .= "<state>" . $AdminStateProvince . "</state>";
@@ -517,18 +517,18 @@ function registercom_TransferDomain($params) {
 </serviceRequest>";
 	$data = registercom_curlCall( $xml_adddomain, $params );
 	print_r( $data );
-	$domProductId = $data["serviceResponse"]["response"]["productId"]["value"];
-	$data = $data["serviceResponse"]["status"]["statusCode"]["value"];
+	$domProductId = $data['serviceResponse']['response']['productId']['value'];
+	$data = $data['serviceResponse']['status']['statusCode']['value'];
 
 	if ($data != "1000") {
-		$values["error"] = "Failed to transfer the domain " . $domain;
+		$values['error'] = "Failed to transfer the domain " . $domain;
 		return $values;
 	}
 
 	$domain_product_id = registercom_GetProductIdByDomain( $domain, $params );
 
 	if ($domProductId != $domain_product_id) {
-		$values["error"] = "Failed to transfer the domain " . $domain;
+		$values['error'] = "Failed to transfer the domain " . $domain;
 		return $values;
 	}
 
@@ -536,15 +536,15 @@ function registercom_TransferDomain($params) {
 
 
 function registercom_RenewDomain($params) {
-	$tld = $params["tld"];
-	$sld = $params["sld"];
+	$tld = $params['tld'];
+	$sld = $params['sld'];
 	$domain = $sld . "." . $tld;
-	$regperiod = $params["regperiod"];
+	$regperiod = $params['regperiod'];
 	$product_id = registercom_GetProductIdByDomain( $domain, $params );
 	$xml_domainrenew = "<serviceRequest>
 <command>domainRenew</command>
 <client>
-<applicationGuid>" . $params["applicationGuid"] . "</applicationGuid>
+<applicationGuid>" . $params['applicationGuid'] . "</applicationGuid>
 <clientRef>" . md5( date( "YmdHis" ) ) . "</clientRef>
 </client>
 <request>
@@ -553,18 +553,18 @@ function registercom_RenewDomain($params) {
 </request>
 </serviceRequest>";
 	$data = registercom_curlCall( $xml_domainrenew, $params );
-	$domProductId = $data["serviceResponse"]["response"]["productId"]["value"];
-	$data = $data["serviceResponse"]["status"]["statusCode"]["value"];
+	$domProductId = $data['serviceResponse']['response']['productId']['value'];
+	$data = $data['serviceResponse']['status']['statusCode']['value'];
 
 	if ($data != "1000") {
-		$values["error"] = "Failed to renew the domain " . $domain;
+		$values['error'] = "Failed to renew the domain " . $domain;
 		return $values;
 	}
 
 	$domain_product_id = registercom_GetProductIdByDomain( $domain, $params );
 
 	if ($domProductId != $domain_product_id) {
-		$values["error"] = "Failed to renew the domain " . $domain;
+		$values['error'] = "Failed to renew the domain " . $domain;
 		return $values;
 	}
 
@@ -572,13 +572,13 @@ function registercom_RenewDomain($params) {
 
 
 function registercom_GetContactDetails($params) {
-	$tld = $params["tld"];
-	$sld = $params["sld"];
+	$tld = $params['tld'];
+	$sld = $params['sld'];
 	$domain = $sld . "." . $tld;
 	$xml = "<serviceRequest>
 <command>domainGet</command>
 <client>
-<applicationGuid>" . $params["applicationGuid"] . "</applicationGuid>
+<applicationGuid>" . $params['applicationGuid'] . "</applicationGuid>
 <clientRef>" . md5( date( "YmdHis" ) ) . "</clientRef>
 </client>
 <request>
@@ -589,23 +589,23 @@ function registercom_GetContactDetails($params) {
 </request>
 </serviceRequest>";
 	$data = registercom_curlCall( $xml, $params );
-	$data = $data["serviceResponse"]["response"]["domainGet"]["domain"]["contacts"]["contact"];
-	$values["Registrant"]["First Name"] = $data[1]["firstName"]["value"];
-	$values["Registrant"]["Last Name"] = $data[1]["lastName"]["value"];
-	$values["Admin"]["First Name"] = $data[0]["firstName"]["value"];
-	$values["Admin"]["Last Name"] = $data[0]["lastName"]["value"];
+	$data = $data['serviceResponse']['response']['domainGet']['domain']['contacts']['contact'];
+	$values['Registrant']["First Name"] = $data[1]['firstName']['value'];
+	$values['Registrant']["Last Name"] = $data[1]['lastName']['value'];
+	$values['Admin']["First Name"] = $data[0]['firstName']['value'];
+	$values['Admin']["Last Name"] = $data[0]['lastName']['value'];
 	return $values;
 }
 
 
 function registercom_SaveContactDetails($params) {
-	$tld = $params["tld"];
-	$sld = $params["sld"];
+	$tld = $params['tld'];
+	$sld = $params['sld'];
 	$domain = $sld . "." . $tld;
 	$currentc_xml = "<serviceRequest>
 <command>domainGet</command>
 <client>
-<applicationGuid>" . $params["applicationGuid"] . "</applicationGuid>
+<applicationGuid>" . $params['applicationGuid'] . "</applicationGuid>
 <clientRef>" . md5( date( "YmdHis" ) ) . "</clientRef>
 </client>
 <request>
@@ -616,16 +616,16 @@ function registercom_SaveContactDetails($params) {
 </request>
 </serviceRequest>";
 	$curcontacts = registercom_curlCall( $currentc_xml, $params );
-	$product_id = $curcontacts["serviceResponse"]["response"]["domainGet"]["domain"]["domainInfo"]["productId"]["value"];
-	$curcontacts = $curcontacts["serviceResponse"]["response"]["domainGet"]["domain"]["contacts"]["contact"];
-	$firstname = $params["contactdetails"]["Registrant"]["First Name"];
-	$lastname = $params["contactdetails"]["Registrant"]["Last Name"];
-	$adminfirstname = $params["contactdetails"]["Admin"]["First Name"];
-	$adminlastname = $params["contactdetails"]["Admin"]["Last Name"];
+	$product_id = $curcontacts['serviceResponse']['response']['domainGet']['domain']['domainInfo']['productId']['value'];
+	$curcontacts = $curcontacts['serviceResponse']['response']['domainGet']['domain']['contacts']['contact'];
+	$firstname = $params['contactdetails']['Registrant']["First Name"];
+	$lastname = $params['contactdetails']['Registrant']["Last Name"];
+	$adminfirstname = $params['contactdetails']['Admin']["First Name"];
+	$adminlastname = $params['contactdetails']['Admin']["Last Name"];
 	$xml_modify = "<serviceRequest>
 <command>domainModify</command>
 <client>
-<applicationGuid>" . $params["applicationGuid"] . "</applicationGuid>
+<applicationGuid>" . $params['applicationGuid'] . "</applicationGuid>
 <clientRef>" . md5( date( "YmdHis" ) ) . "</clientRef>
 </client>
 <request>
@@ -635,53 +635,53 @@ function registercom_SaveContactDetails($params) {
 <title>Mr.</title>
 <firstName>" . $adminfirstname . "</firstName>
 <lastName>" . $adminlastname . "</lastName>
-<emailAddress>" . $curcontacts[0]["emailAddress"]["value"] . "</emailAddress>
-<telephoneNumber>" . $curcontacts[0]["telephoneNumber"]["value"] . "</telephoneNumber>
-<addressLine1>" . $curcontacts[0]["addressLine1"]["value"] . "</addressLine1>
-<addressLine2>" . $curcontacts[0]["addressLine2"]["value"] . "</addressLine2>
-<city>" . $curcontacts[0]["city"]["value"] . "</city>";
+<emailAddress>" . $curcontacts[0]['emailAddress']['value'] . "</emailAddress>
+<telephoneNumber>" . $curcontacts[0]['telephoneNumber']['value'] . "</telephoneNumber>
+<addressLine1>" . $curcontacts[0]['addressLine1']['value'] . "</addressLine1>
+<addressLine2>" . $curcontacts[0]['addressLine2']['value'] . "</addressLine2>
+<city>" . $curcontacts[0]['city']['value'] . "</city>";
 
-	if ($curcontacts[0]["countryCode"]["value"] == "US") {
-		$xml_modify .= "<province>" . $curcontacts[0]["province"]["value"] . "</province>";
+	if ($curcontacts[0]['countryCode']['value'] == "US") {
+		$xml_modify .= "<province>" . $curcontacts[0]['province']['value'] . "</province>";
 	}
 	else {
-		$xml_modify .= "<state>" . $curcontacts[0]["state"]["value"] . "</state>";
+		$xml_modify .= "<state>" . $curcontacts[0]['state']['value'] . "</state>";
 	}
 
-	$xml_modify .= "<postalCode>" . $curcontacts[0]["postalCode"]["value"] . "</postalCode>
-<countryCode>" . $curcontacts[0]["countryCode"]["value"] . "</countryCode>
+	$xml_modify .= "<postalCode>" . $curcontacts[0]['postalCode']['value'] . "</postalCode>
+<countryCode>" . $curcontacts[0]['countryCode']['value'] . "</countryCode>
 <contactType>Administration</contactType>
 </contact>
 <contact>
 <title>Mr.</title>
 <firstName>" . $firstname . "</firstName>
 <lastName>" . $lastname . "</lastName>
-<emailAddress>" . $curcontacts[1]["emailAddress"]["value"] . "</emailAddress>
-<telephoneNumber>" . $curcontacts[1]["telephoneNumber"]["value"] . "</telephoneNumber>
-<addressLine1>" . $curcontacts[1]["addressLine1"]["value"] . "</addressLine1>
-<addressLine2>" . $curcontacts[1]["addressLine2"]["value"] . "</addressLine2>
-<city>" . $curcontacts[1]["city"]["value"] . "</city>";
+<emailAddress>" . $curcontacts[1]['emailAddress']['value'] . "</emailAddress>
+<telephoneNumber>" . $curcontacts[1]['telephoneNumber']['value'] . "</telephoneNumber>
+<addressLine1>" . $curcontacts[1]['addressLine1']['value'] . "</addressLine1>
+<addressLine2>" . $curcontacts[1]['addressLine2']['value'] . "</addressLine2>
+<city>" . $curcontacts[1]['city']['value'] . "</city>";
 
-	if ($curcontacts[1]["countryCode"]["value"] == "US") {
-		$xml_modify .= "<province>" . $curcontacts[1]["province"]["value"] . "</province>";
+	if ($curcontacts[1]['countryCode']['value'] == "US") {
+		$xml_modify .= "<province>" . $curcontacts[1]['province']['value'] . "</province>";
 	}
 	else {
-		$xml_modify .= "<state>" . $curcontacts[1]["state"]["value"] . "</state>";
+		$xml_modify .= "<state>" . $curcontacts[1]['state']['value'] . "</state>";
 	}
 
-	$xml_modify .= "<postalCode>" . $curcontacts[1]["postalCode"]["value"] . "</postalCode>
-<countryCode>" . $curcontacts[1]["countryCode"]["value"] . "</countryCode>
+	$xml_modify .= "<postalCode>" . $curcontacts[1]['postalCode']['value'] . "</postalCode>
+<countryCode>" . $curcontacts[1]['countryCode']['value'] . "</countryCode>
 <contactType>Registration</contactType>
 </contact>
 </contacts>
 </request>
 </serviceRequest>";
 	registercom_curlCall( $xml_modify, $params );
-	$data = $params["tld"];
-	$data = $data["serviceResponse"]["status"]["statusCode"]["value"];
+	$data = $params['tld'];
+	$data = $data['serviceResponse']['status']['statusCode']['value'];
 
 	if ($data != "1000") {
-		$values["error"] = "The requested domain contact changes were NOT accepted by the registrar for the domain " . $domain;
+		$values['error'] = "The requested domain contact changes were NOT accepted by the registrar for the domain " . $domain;
 	}
 
 	return $values;
@@ -724,7 +724,7 @@ function registercom_xml2array($contents, $get_attributes = 1) {
 			$result = array();
 
 			if (isset( $value )) {
-				$result["value"] = $value;
+				$result['value'] = $value;
 			}
 
 
@@ -732,7 +732,7 @@ function registercom_xml2array($contents, $get_attributes = 1) {
 				foreach ($attributes as $attr => $val) {
 
 					if ($get_attributes == 1) {
-						$result["attr"][$attr] = $val;
+						$result['attr'][$attr] = $val;
 						continue;
 					}
 				}
@@ -748,7 +748,7 @@ function registercom_xml2array($contents, $get_attributes = 1) {
 		if ($type == "open") {
 			$parent[$level - 1] = &$current;
 
-			if (( !is_array( $current ) || !in_array( $tag, array_keys( $current ) ) )) {
+			if (!is_array( $current ) || !in_array( $tag, array_keys( $current ) )) {
 				$current[$tag] = $result;
 				$current = &$current[$tag];
 
@@ -777,7 +777,7 @@ function registercom_xml2array($contents, $get_attributes = 1) {
 			}
 
 
-			if (( ( is_array( $current[$tag] ) && $get_attributes == 0 ) || ( ( isset( $current[$tag][0] ) && is_array( $current[$tag][0] ) ) && $get_attributes == 1 ) )) {
+			if (( is_array( $current[$tag] ) && $get_attributes == 0 ) || ( ( isset( $current[$tag][0] ) && is_array( $current[$tag][0] ) ) && $get_attributes == 1 )) {
 				array_push( $current[$tag], $result );
 				continue;
 			}
@@ -804,8 +804,8 @@ function registercom_convert_us_state($name, $to = "abbrev") {
 	foreach ($states as $state) {
 
 		if ($to == "name") {
-			if (strtolower( $state["abbrev"] ) == strtolower( $name )) {
-				$return = $state["name"];
+			if (strtolower( $state['abbrev'] ) == strtolower( $name )) {
+				$return = $state['name'];
 				break;
 			}
 
@@ -814,8 +814,8 @@ function registercom_convert_us_state($name, $to = "abbrev") {
 
 
 		if ($to == "abbrev") {
-			if (strtolower( $state["name"] ) == strtolower( $name )) {
-				$return = strtoupper( $state["abbrev"] );
+			if (strtolower( $state['name'] ) == strtolower( $name )) {
+				$return = strtoupper( $state['abbrev'] );
 				break;
 			}
 
@@ -828,7 +828,7 @@ function registercom_convert_us_state($name, $to = "abbrev") {
 
 
 function registercom_curlCall($xml, $params) {
-	if ($params["TestMode"]) {
+	if ($params['TestMode']) {
 		$url = "https://staging-services.rxportalexpress.com/V1.0/";
 	}
 	else {
@@ -845,7 +845,7 @@ function registercom_curlCall($xml, $params) {
 	$xml_data = curl_exec( $ch );
 	curl_close( $ch );
 	$tempxml = XMLtoArray( $xml );
-	$command = $tempxml["SERVICEREQUEST"]["COMMAND"];
+	$command = $tempxml['SERVICEREQUEST']['COMMAND'];
 	logModuleCall( "registercom", $command, $xml, $xml_data );
 	return registercom_xml2array( $xml_data );
 }
@@ -855,7 +855,7 @@ function registercom_GetProductIdByDomain($domain, $params) {
 	$xml = "<serviceRequest>
 <command>domainGet</command>
 <client>
-<applicationGuid>" . $params["applicationGuid"] . "</applicationGuid>
+<applicationGuid>" . $params['applicationGuid'] . "</applicationGuid>
 <clientRef>" . md5( date( "YmdHis" ) ) . "</clientRef>
 </client>
 <request>
@@ -866,7 +866,7 @@ function registercom_GetProductIdByDomain($domain, $params) {
 </request>
 </serviceRequest>";
 	$data = registercom_curlCall( $xml, $params );
-	return $data["serviceResponse"]["response"]["domainGet"]["domain"]["domainInfo"]["productId"]["value"];
+	return $data['serviceResponse']['response']['domainGet']['domain']['domainInfo']['productId']['value'];
 }
 
 

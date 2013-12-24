@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -19,24 +19,24 @@ function virtualmin_ConfigOptions() {
 function virtualmin_ClientArea($params) {
 	global $_LANG;
 
-	$http = ($params["serversecure"] ? "https" : "http");
-	$domain = ($params["serverhostname"] ? $params["serverhostname"] : $params["serverip"]);
+	$http = ($params['serversecure'] ? "https" : "http");
+	$domain = ($params['serverhostname'] ? $params['serverhostname'] : $params['serverip']);
 	$code = "<form action=\"" . $http . "://" . $domain . "/session_login.cgi\" method=\"post\" target=\"_blank\">
-<input type=\"hidden\" name=\"user\" value=\"" . $params["username"] . "\" />
-<input type=\"hidden\" name=\"pass\" value=\"" . $params["password"] . "\" />
+<input type=\"hidden\" name=\"user\" value=\"" . $params['username'] . "\" />
+<input type=\"hidden\" name=\"pass\" value=\"" . $params['password'] . "\" />
 <input type=\"hidden\" name=\"notestingcookie\" value=\"1\" />
-<input type=\"submit\" value=\"" . $_LANG["virtualminlogin"] . "\" class=\"button\" />
+<input type=\"submit\" value=\"" . $_LANG['virtualminlogin'] . "\" class=\"button\" />
 </form>";
 	return $code;
 }
 
 
 function virtualmin_AdminLink($params) {
-	$http = ($params["serversecure"] ? "https" : "http");
-	$domain = ($params["serverhostname"] ? $params["serverhostname"] : $params["serverip"]);
+	$http = ($params['serversecure'] ? "https" : "http");
+	$domain = ($params['serverhostname'] ? $params['serverhostname'] : $params['serverip']);
 	$code = "<form action=\"" . $http . "://" . $domain . "/session_login.cgi\" method=\"post\" target=\"_blank\">
-<input type=\"hidden\" name=\"user\" value=\"" . $params["serverusername"] . "\" />
-<input type=\"hidden\" name=\"pass\" value=\"" . $params["serverpassword"] . "\" />
+<input type=\"hidden\" name=\"user\" value=\"" . $params['serverusername'] . "\" />
+<input type=\"hidden\" name=\"pass\" value=\"" . $params['serverpassword'] . "\" />
 <input type=\"hidden\" name=\"notestingcookie\" value=\"1\" />
 <input type=\"submit\" value=\"Login to Control Panel\" class=\"button\" />
 </form>";
@@ -45,48 +45,48 @@ function virtualmin_AdminLink($params) {
 
 
 function virtualmin_CreateAccount($params) {
-	if ($params["type"] == "reselleraccount") {
-		if (!$params["username"]) {
-			$username = preg_replace( "/[^a-z0-9]/", "", strtolower( $params["clientsdetails"]["firstname"] . $params["clientsdetails"]["lastname"] . $params["serviceid"] ) );
-			update_query( "tblhosting", array( "username" => $username ), array( "id" => $params["serviceid"] ) );
-			$params["username"] = $username;
+	if ($params['type'] == "reselleraccount") {
+		if (!$params['username']) {
+			$username = preg_replace( "/[^a-z0-9]/", "", strtolower( $params['clientsdetails']['firstname'] . $params['clientsdetails']['lastname'] . $params['serviceid'] ) );
+			update_query( "tblhosting", array( "username" => $username ), array( "id" => $params['serviceid'] ) );
+			$params['username'] = $username;
 		}
 
 		$postfields = array();
-		$postfields["program"] = "create-reseller";
-		$postfields["name"] = $params["username"];
-		$postfields["pass"] = $params["password"];
-		$postfields["email"] = $params["clientsdetails"]["email"];
+		$postfields['program'] = "create-reseller";
+		$postfields['name'] = $params['username'];
+		$postfields['pass'] = $params['password'];
+		$postfields['email'] = $params['clientsdetails']['email'];
 
-		if ($params["configoption2"]) {
-			$postfields["plan"] = $params["configoption2"];
+		if ($params['configoption2']) {
+			$postfields['plan'] = $params['configoption2'];
 		}
 
 		$result = virtualmin_req( $params, $postfields );
 	}
 	else {
 		$postfields = array();
-		$postfields["program"] = "create-domain";
-		$postfields["domain"] = $params["domain"];
-		$postfields["user"] = $params["username"];
-		$postfields["pass"] = $params["password"];
-		$postfields["email"] = $params["clientsdetails"]["email"];
+		$postfields['program'] = "create-domain";
+		$postfields['domain'] = $params['domain'];
+		$postfields['user'] = $params['username'];
+		$postfields['pass'] = $params['password'];
+		$postfields['email'] = $params['clientsdetails']['email'];
 
-		if ($params["configoption1"]) {
-			$postfields["template"] = $params["configoption1"];
+		if ($params['configoption1']) {
+			$postfields['template'] = $params['configoption1'];
 		}
 
 
-		if ($params["configoption2"]) {
-			$postfields["plan"] = $params["configoption2"];
+		if ($params['configoption2']) {
+			$postfields['plan'] = $params['configoption2'];
 		}
 
 
-		if ($params["configoption3"]) {
-			$postfields["allocate-ip"] = "";
+		if ($params['configoption3']) {
+			$postfields['allocate-ip'] = "";
 		}
 
-		$postfields["features-from-plan"] = "";
+		$postfields['features-from-plan'] = "";
 		$result = virtualmin_req( $params, $postfields );
 	}
 
@@ -95,17 +95,17 @@ function virtualmin_CreateAccount($params) {
 
 
 function virtualmin_SuspendAccount($params) {
-	if ($params["type"] == "reselleraccount") {
+	if ($params['type'] == "reselleraccount") {
 		$postfields = array();
-		$postfields["program"] = "modify-reseller";
-		$postfields["name"] = $params["username"];
-		$postfields["pass"] = md5( rand( 10000, 99999999 ) . $params["domain"] );
-		$postfields["lock"] = "1";
+		$postfields['program'] = "modify-reseller";
+		$postfields['name'] = $params['username'];
+		$postfields['pass'] = md5( rand( 10000, 99999999 ) . $params['domain'] );
+		$postfields['lock'] = "1";
 	}
 	else {
 		$postfields = array();
-		$postfields["program"] = "disable-domain";
-		$postfields["domain"] = $params["domain"];
+		$postfields['program'] = "disable-domain";
+		$postfields['domain'] = $params['domain'];
 	}
 
 	$result = virtualmin_req( $params, $postfields );
@@ -114,17 +114,17 @@ function virtualmin_SuspendAccount($params) {
 
 
 function virtualmin_UnsuspendAccount($params) {
-	if ($params["type"] == "reselleraccount") {
+	if ($params['type'] == "reselleraccount") {
 		$postfields = array();
-		$postfields["program"] = "modify-reseller";
-		$postfields["name"] = $params["username"];
-		$postfields["pass"] = $params["password"];
-		$postfields["lock"] = "0";
+		$postfields['program'] = "modify-reseller";
+		$postfields['name'] = $params['username'];
+		$postfields['pass'] = $params['password'];
+		$postfields['lock'] = "0";
 	}
 	else {
 		$postfields = array();
-		$postfields["program"] = "enable-domain";
-		$postfields["domain"] = $params["domain"];
+		$postfields['program'] = "enable-domain";
+		$postfields['domain'] = $params['domain'];
 	}
 
 	$result = virtualmin_req( $params, $postfields );
@@ -133,15 +133,15 @@ function virtualmin_UnsuspendAccount($params) {
 
 
 function virtualmin_TerminateAccount($params) {
-	if ($params["type"] == "reselleraccount") {
+	if ($params['type'] == "reselleraccount") {
 		$postfields = array();
-		$postfields["program"] = "delete-reseller";
-		$postfields["name"] = $params["username"];
+		$postfields['program'] = "delete-reseller";
+		$postfields['name'] = $params['username'];
 	}
 	else {
 		$postfields = array();
-		$postfields["program"] = "delete-domain";
-		$postfields["domain"] = $params["domain"];
+		$postfields['program'] = "delete-domain";
+		$postfields['domain'] = $params['domain'];
 	}
 
 	$result = virtualmin_req( $params, $postfields );
@@ -151,9 +151,9 @@ function virtualmin_TerminateAccount($params) {
 
 function virtualmin_ChangePassword($params) {
 	$postfields = array();
-	$postfields["program"] = "modify-domain";
-	$postfields["domain"] = $params["domain"];
-	$postfields["pass"] = $params["password"];
+	$postfields['program'] = "modify-domain";
+	$postfields['domain'] = $params['domain'];
+	$postfields['pass'] = $params['password'];
 	$result = virtualmin_req( $params, $postfields );
 	return $result;
 }
@@ -161,17 +161,17 @@ function virtualmin_ChangePassword($params) {
 
 function virtualmin_ChangePackage($params) {
 	$postfields = array();
-	$postfields["program"] = "modify-domain";
-	$postfields["domain"] = $params["domain"];
-	$postfields["plan-features"] = "";
+	$postfields['program'] = "modify-domain";
+	$postfields['domain'] = $params['domain'];
+	$postfields['plan-features'] = "";
 
-	if ($params["configoption1"]) {
-		$postfields["template"] = $params["configoption1"];
+	if ($params['configoption1']) {
+		$postfields['template'] = $params['configoption1'];
 	}
 
 
-	if ($params["configoption2"]) {
-		$postfields["apply-plan"] = $params["configoption2"];
+	if ($params['configoption2']) {
+		$postfields['apply-plan'] = $params['configoption2'];
 	}
 
 	$result = virtualmin_req( $params, $postfields );
@@ -181,8 +181,8 @@ function virtualmin_ChangePackage($params) {
 
 function virtualmin_UsageUpdate($params) {
 	$postfields = array();
-	$postfields["program"] = "list-domains";
-	$postfields["multiline"] = "";
+	$postfields['program'] = "list-domains";
+	$postfields['multiline'] = "";
 	$result = virtualmin_req( $params, $postfields, true );
 	$dataarray = explode( "
 ", $result );
@@ -209,7 +209,7 @@ function virtualmin_UsageUpdate($params) {
 		$bwused = $values["Bandwidth byte usage"] / 1048576;
 
 		if ($domain) {
-			update_query( "tblhosting", array( "diskusage" => $diskusage, "disklimit" => $disklimit, "bwusage" => $bwused, "bwlimit" => $bwlimit, "lastupdate" => "now()" ), array( "domain" => $domain, "server" => $params["serverid"] ) );
+			update_query( "tblhosting", array( "diskusage" => $diskusage, "disklimit" => $disklimit, "bwusage" => $bwused, "bwlimit" => $bwlimit, "lastupdate" => "now()" ), array( "domain" => $domain, "server" => $params['serverid'] ) );
 			continue;
 		}
 	}
@@ -218,8 +218,8 @@ function virtualmin_UsageUpdate($params) {
 
 
 function virtualmin_req($params, $postfields, $rawdata = false) {
-	$http = ($params["serversecure"] ? "https" : "http");
-	$domain = ($params["serverhostname"] ? $params["serverhostname"] : $params["serverip"]);
+	$http = ($params['serversecure'] ? "https" : "http");
+	$domain = ($params['serverhostname'] ? $params['serverhostname'] : $params['serverip']);
 	$url = "" . $http . "://" . $domain . "/virtual-server/remote.cgi?" . $fieldstring;
 	$fieldstring = "";
 	foreach ($postfields as $k => $v) {
@@ -233,7 +233,7 @@ function virtualmin_req($params, $postfields, $rawdata = false) {
 	curl_setopt( $ch, CURLOPT_SSL_VERIFYPEER, 0 );
 	curl_setopt( $ch, CURLOPT_SSL_VERIFYHOST, 0 );
 	curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 );
-	curl_setopt( $ch, CURLOPT_USERPWD, $params["serverusername"] . ":" . $params["serverpassword"] );
+	curl_setopt( $ch, CURLOPT_USERPWD, $params['serverusername'] . ":" . $params['serverpassword'] );
 	curl_setopt( $ch, CURLOPT_TIMEOUT, 60 );
 	$data = curl_exec( $ch );
 
@@ -242,7 +242,7 @@ function virtualmin_req($params, $postfields, $rawdata = false) {
 	}
 
 	curl_close( $ch );
-	logModuleCall( "virtualmin", $postfields["program"], $postfields, $data );
+	logModuleCall( "virtualmin", $postfields['program'], $postfields, $data );
 
 	if (strpos( $data, "Unauthorized" ) == true) {
 		return "Server Login Invalid";

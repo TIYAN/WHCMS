@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -190,13 +190,13 @@ class BluePayment {
 
 	function parseResponse() {
 		parse_str( $this->response, $array );
-		$this->transId = $array["TRANS_ID"];
-		$this->status = $array["STATUS"];
-		$this->avsResp = $array["AVS"];
-		$this->cvv2Resp = $array["CVV2"];
-		$this->authCode = $array["AUTH_CODE"];
-		$this->message = $array["MESSAGE"];
-		$this->rebid = $array["REBID"];
+		$this->transId = $array['TRANS_ID'];
+		$this->status = $array['STATUS'];
+		$this->avsResp = $array['AVS'];
+		$this->cvv2Resp = $array['CVV2'];
+		$this->authCode = $array['AUTH_CODE'];
+		$this->message = $array['MESSAGE'];
+		$this->rebid = $array['REBID'];
 	}
 
 
@@ -251,7 +251,7 @@ function bluepay_activate() {
 
 
 function bluepay_capture($params) {
-	if ($params["testmode"] == "on") {
+	if ($params['testmode'] == "on") {
 		$gateway_testmode = "TEST";
 	}
 	else {
@@ -260,18 +260,18 @@ function bluepay_capture($params) {
 
 	define( "MODE", $gateway_testmode );
 	define( "POST_URL", "https://secure.bluepay.com/interfaces/bp20post" );
-	define( "ACCOUNT_ID", $params["accountid"] );
-	define( "SECRET_KEY", $params["secretkey"] );
+	define( "ACCOUNT_ID", $params['accountid'] );
+	define( "SECRET_KEY", $params['secretkey'] );
 	define( "STATUS_DECLINE", "0" );
 	define( "STATUS_APPROVED", "1" );
 	define( "STATUS_ERROR", "2" );
 	$bp = new BluePayment();
-	$bp->sale( $params["amount"] );
-	$bp->setCustInfo( $params["cardnum"], $params["cccvv"], $params["cardexp"], $params["clientdetails"]["firstname"], $params["clientdetails"]["lastname"], $params["clientdetails"]["address1"], $params["clientdetails"]["city"], $params["clientdetails"]["state"], $params["clientdetails"]["postcode"], $params["clientdetails"]["country"] );
-	$bp->invoiceId = $params["invoiceid"];
+	$bp->sale( $params['amount'] );
+	$bp->setCustInfo( $params['cardnum'], $params['cccvv'], $params['cardexp'], $params['clientdetails']['firstname'], $params['clientdetails']['lastname'], $params['clientdetails']['address1'], $params['clientdetails']['city'], $params['clientdetails']['state'], $params['clientdetails']['postcode'], $params['clientdetails']['country'] );
+	$bp->invoiceId = $params['invoiceid'];
 	$bp->process();
 	$desc = "Action => Capture
-Client => " . $params["clientdetails"]["firstname"] . " " . $params["clientdetails"]["lastname"] . "
+Client => " . $params['clientdetails']['firstname'] . " " . $params['clientdetails']['lastname'] . "
 ";
 	$desc .= "TransId => " . $bp->getTransId() . "
 " . "Status => " . $bp->getStatus() . "
@@ -291,7 +291,7 @@ Client => " . $params["clientdetails"]["firstname"] . " " . $params["clientdetai
 
 
 function bluepay_refund($params) {
-	if ($params["testmode"] == "on") {
+	if ($params['testmode'] == "on") {
 		$gateway_testmode = "TEST";
 	}
 	else {
@@ -300,17 +300,17 @@ function bluepay_refund($params) {
 
 	define( "MODE", $gateway_testmode );
 	define( "POST_URL", "https://secure.bluepay.com/interfaces/bp20post" );
-	define( "ACCOUNT_ID", $params["accountid"] );
-	define( "SECRET_KEY", $params["secretkey"] );
+	define( "ACCOUNT_ID", $params['accountid'] );
+	define( "SECRET_KEY", $params['secretkey'] );
 	define( "STATUS_DECLINE", "0" );
 	define( "STATUS_APPROVED", "1" );
 	define( "STATUS_ERROR", "2" );
 	$bp = new BluePayment();
-	$bp->refund( $params["transid"] );
-	$bp->setCustInfo( $params["cardnum"], "", $params["cardexp"], $params["clientdetails"]["firstname"], $params["clientdetails"]["lastname"], $params["clientdetails"]["address1"], $params["clientdetails"]["city"], $params["clientdetails"]["state"], $params["clientdetails"]["postcode"], $params["clientdetails"]["country"] );
+	$bp->refund( $params['transid'] );
+	$bp->setCustInfo( $params['cardnum'], "", $params['cardexp'], $params['clientdetails']['firstname'], $params['clientdetails']['lastname'], $params['clientdetails']['address1'], $params['clientdetails']['city'], $params['clientdetails']['state'], $params['clientdetails']['postcode'], $params['clientdetails']['country'] );
 	$bp->process();
 	$desc = "Action => Refund
-Client => " . $params["clientdetails"]["firstname"] . " " . $params["clientdetails"]["lastname"] . "
+Client => " . $params['clientdetails']['firstname'] . " " . $params['clientdetails']['lastname'] . "
 ";
 	$desc .= "TransId => " . $bp->getTransId() . "
 " . "Status => " . $bp->getStatus() . "
@@ -333,9 +333,9 @@ if (!defined( "WHMCS" )) {
 	exit( "This file cannot be accessed directly" );
 }
 
-$GATEWAYMODULE["bluepayname"] = "bluepay";
-$GATEWAYMODULE["bluepayvisiblename"] = "BluePay";
-$GATEWAYMODULE["bluepaytype"] = "CC";
+$GATEWAYMODULE['bluepayname'] = "bluepay";
+$GATEWAYMODULE['bluepayvisiblename'] = "BluePay";
+$GATEWAYMODULE['bluepaytype'] = "CC";
 
 if (!class_exists( "BluePayment" )) {
 }

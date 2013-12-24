@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -78,7 +78,7 @@ $defaultLicenseErrorValue = "invalid";
 if (is_string($licenseerror)) {
 	$licenseerror = trim($licenseerror);
 	$licenseerror = strtolower($licenseerror);
-	$licenseerror = (($licenseerror && preg_match("/^[a-z]*$/", $licenseerror) === 1) ? $licenseerror : $defaultLicenseErrorValue);
+	$licenseerror = ($licenseerror && preg_match('/^[a-z]*$/', $licenseerror) === 1) ? $licenseerror : $defaultLicenseErrorValue;
 }
 else {
 	$licenseerror = $defaultLicenseErrorValue;
@@ -88,9 +88,9 @@ $match = "";
 $id = "";
 $roleid = "";
 $remote_ip = $whmcs->get_user_ip();
-$performLicenseKeyUpdate = $whmcs->get_req_var("updatekey") === "true";
+$performLicenseKeyUpdate = $whmcs->get_req_var("updatekey");
 
-if ($performLicenseKeyUpdate) {
+if ($performLicenseKeyUpdate === "true") {
 	$result = select_query("tbladmins", "", array("username" => $username, "password" => md5($password), "disabled" => "0"));
 	$data = mysql_fetch_array($result);
 	$id = $data['id'];
@@ -144,7 +144,7 @@ if ($performLicenseKeyUpdate) {
 	}
 
 	$newlicensekey = trim($newlicensekey);
-	$licenseKeyPattern = "/^[a-zA-Z0-9-]+$/";
+	$licenseKeyPattern = '/^[a-zA-Z0-9-]+$/';
 
 	if (preg_match($licenseKeyPattern, $newlicensekey) !== 1) {
 		exit("You did not enter a valid license key");

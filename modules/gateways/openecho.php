@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -125,7 +125,7 @@ class EchoPHP {
 			exit( "Please email <a href=\"mailto:developer-support@echo-inc.com\">ECHO Developer Support</a> and notify them know that the echophp.class file cannot find the <a href=\"http://www.php.net\">PHP</a> version number.  Please also include your server configuration.
 <br>
 <br>
-Server Software: " . $_SERVER["SERVER_SOFTWARE"] . "
+Server Software: " . $_SERVER['SERVER_SOFTWARE'] . "
 <br>
 PHP Version: " . phpversion() );
 		}
@@ -138,7 +138,7 @@ PHP Version: " . phpversion() );
 <br>Your <a href=\"http://www.php.net\">PHP</a> currently does not have <a href=\"http://curl.haxx.se\">cURL</a> support, which is required for PHP servers older than 4.3.0.  Please contact your hosting company to resolve this issue.  <a href=\"http://curl.haxx.se\">cURL</a> must be configured with ./configure --with-ssl, and <a href=\"http://www.php.net\">PHP</a> must be configured with the --with-curl option.
 <br>
 <br>
-Server Software: " . $_SERVER["SERVER_SOFTWARE"] . "
+Server Software: " . $_SERVER['SERVER_SOFTWARE'] . "
 <br>
 PHP Version: " . phpversion();
 				exit( "" );
@@ -155,7 +155,7 @@ PHP Version: " . phpversion();
 					print "You are receiving this error for one of the following reasons:<br><br>1) The cURL component is missing SSL support.  When installing <a href=\"http://curl.haxx.se\">cURL</a>, it must be configured with ./configure --with-ssl<br>2) The server cannot establish an internet connection to the <i>ECHO</i>nline server at " . $URL . "<br><br>Please contact your hosting company to resolve this issue.
 <br>
 <br>
-Server Software: " . $_SERVER["SERVER_SOFTWARE"] . "
+Server Software: " . $_SERVER['SERVER_SOFTWARE'] . "
 <br>
 PHP Version: " . phpversion();
 					exit( "" );
@@ -180,7 +180,7 @@ PHP Version: " . phpversion();
 						print "You are receiving this error for one of the following reasons:<br><br>1) OpenSSL support is missing (needs to be configured with ./configure --with-openssl), but it found cURL instead.  However, the cURL component is missing SSL support.  When installing <a href=\"http://curl.haxx.se\">cURL</a>, it must be configured with ./configure --with-ssl<br>2) The server cannot establish an internet connection to the <i>ECHO</i>nline server at " . $URL . "<br><br>Please contact your hosting company to resolve this issue.
 <br>
 <br>
-Server Software: " . $_SERVER["SERVER_SOFTWARE"] . "
+Server Software: " . $_SERVER['SERVER_SOFTWARE'] . "
 <br>
 PHP Version: " . phpversion();
 						exit( "" );
@@ -191,7 +191,7 @@ PHP Version: " . phpversion();
 				else {
 					print "You are receiving this error for one of the following reasons:<br><br>1) OpenSSL support is missing (needs to be configured with ./configure --with-openssl).  In your phpinfo(), you are missing the section called 'OpenSSL'.  Please contact your hosting company to resolve this issue.  ";
 
-					if (strcmp( $_ENV["OS"], "Windows_NT" ) == 0) {
+					if (strcmp( $_ENV['OS'], "Windows_NT" ) == 0) {
 						print "<br><br>Since this server is running under a Windows box, it may need some modifications.  In order to take advantage of the new features in PHP 4.3.0 such as SSL url wrappers you need to install PHP with built-in SSL support. In order to do so you need to install the standard <a href=\"http://www.php.net\">PHP</a> distribution and replace php4ts.dll file with one supplied in <a href=\"http://ftp.proventum.net/pub/php/win32/misc/openssl/\">this</a> archive.  ";
 						print "Since OpenSSL support is built-in into this file, please remember to comment out 'extension=php_openssl.dll' from your php.ini file since the external extension is no longer needed.";
 					}
@@ -203,7 +203,7 @@ PHP Version: " . phpversion();
 					print "
 <br>
 <br>
-Server Software: " . $_SERVER["SERVER_SOFTWARE"] . "
+Server Software: " . $_SERVER['SERVER_SOFTWARE'] . "
 <br>
 PHP Version: " . phpversion();
 					exit( "" );
@@ -240,9 +240,9 @@ PHP Version: " . phpversion();
 		$this->merchant_name = $this->GetEchoProp( $this->echotype3, "merchant_name" );
 		$this->version = $this->GetEchoProp( $this->echotype3, "version" );
 
-		if (( $this->status == "G" || $this->status == "R" )) {
+		if ($this->status == "G" || $this->status == "R") {
 			if ($this->transaction_type == "AD") {
-				if (( ( ( $this->avs_result == "X" || $this->avs_result == "Y" ) || $this->avs_result == "D" ) || $this->avs_result == "M" )) {
+				if (( ( $this->avs_result == "X" || $this->avs_result == "Y" ) || $this->avs_result == "D" ) || $this->avs_result == "M") {
 					$this->EchoSuccess = true;
 				}
 				else {
@@ -1366,28 +1366,28 @@ function openecho_capture($params) {
 	$echoPHP->set_EchoServer( "https://wwws.echo-inc.com/scripts/INR200.EXE" );
 	$echoPHP->set_transaction_type( "EV" );
 	$echoPHP->set_order_type( "S" );
-	$echoPHP->set_merchant_echo_id( $params["merchantechoid"] );
-	$echoPHP->set_merchant_pin( $params["merchantpin"] );
-	$echoPHP->set_billing_ip_address( $_SERVER["REMOTE_ADDR"] );
-	$echoPHP->set_billing_first_name( $params["clientdetails"]["firstname"] );
-	$echoPHP->set_billing_last_name( $params["clientdetails"]["lastname"] );
-	$echoPHP->set_billing_address1( $params["clientdetails"]["address1"] );
-	$echoPHP->set_billing_city( $params["clientdetails"]["city"] );
-	$echoPHP->set_billing_state( $params["clientdetails"]["state"] );
-	$echoPHP->set_billing_zip( $params["clientdetails"]["postcode"] );
-	$echoPHP->set_billing_country( $params["clientdetails"]["country"] );
-	$echoPHP->set_billing_phone( $params["clientdetails"]["phonenumber"] );
-	$echoPHP->set_billing_email( $params["clientdetails"]["email"] );
+	$echoPHP->set_merchant_echo_id( $params['merchantechoid'] );
+	$echoPHP->set_merchant_pin( $params['merchantpin'] );
+	$echoPHP->set_billing_ip_address( $_SERVER['REMOTE_ADDR'] );
+	$echoPHP->set_billing_first_name( $params['clientdetails']['firstname'] );
+	$echoPHP->set_billing_last_name( $params['clientdetails']['lastname'] );
+	$echoPHP->set_billing_address1( $params['clientdetails']['address1'] );
+	$echoPHP->set_billing_city( $params['clientdetails']['city'] );
+	$echoPHP->set_billing_state( $params['clientdetails']['state'] );
+	$echoPHP->set_billing_zip( $params['clientdetails']['postcode'] );
+	$echoPHP->set_billing_country( $params['clientdetails']['country'] );
+	$echoPHP->set_billing_phone( $params['clientdetails']['phonenumber'] );
+	$echoPHP->set_billing_email( $params['clientdetails']['email'] );
 	$echoPHP->set_debug( "F" );
-	$echoPHP->set_cc_number( $params["cardnum"] );
-	$echoPHP->set_grand_total( $params["amount"] );
-	$echoPHP->set_ccexp_month( substr( $params["cardexp"], 0, 2 ) );
-	$echoPHP->set_ccexp_year( "20" . substr( $params["cardexp"], 2, 2 ) );
-	$echoPHP->set_cnp_security( $params["cccvv"] );
+	$echoPHP->set_cc_number( $params['cardnum'] );
+	$echoPHP->set_grand_total( $params['amount'] );
+	$echoPHP->set_ccexp_month( substr( $params['cardexp'], 0, 2 ) );
+	$echoPHP->set_ccexp_year( "20" . substr( $params['cardexp'], 2, 2 ) );
+	$echoPHP->set_cnp_security( $params['cccvv'] );
 	$echoPHP->set_counter( "1" );
 	$desc = "Action => Capture
 ";
-	$desc .= "Client => " . $params["clientdetails"]["firstname"] . " " . $params["clientdetails"]["lastname"] . "
+	$desc .= "Client => " . $params['clientdetails']['firstname'] . " " . $params['clientdetails']['lastname'] . "
 ";
 	$desc .= "Authorization Code => " . $echoPHP->authorization . "
 ";
@@ -1432,7 +1432,7 @@ if (!defined( "WHMCS" )) {
 	exit( "This file cannot be accessed directly" );
 }
 
-$GATEWAYMODULE["openechoname"] = "openecho";
-$GATEWAYMODULE["openechovisiblename"] = "OpenECHO";
-$GATEWAYMODULE["openechotype"] = "CC";
+$GATEWAYMODULE['openechoname'] = "openecho";
+$GATEWAYMODULE['openechovisiblename'] = "OpenECHO";
+$GATEWAYMODULE['openechotype'] = "CC";
 ?>

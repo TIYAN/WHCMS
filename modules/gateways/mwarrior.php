@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -23,50 +23,50 @@ function mwarrior_config() {
  * @return array
  */
 function mwarrior_capture($params) {
-	$endpoint = "https://" . (0 < strlen( $params["testmode"] ) ? "base" : "api") . ".merchantwarrior.com/post/";
-	$postData["method"] = "processCard";
-	$postData["merchantUUID"] = $params["merchantUUID"];
-	$postData["apiKey"] = $params["apiKey"];
-	$postData["transactionProduct"] = $params["invoiceid"];
-	$postData["transactionAmount"] = $params["amount"];
-	$postData["transactionCurrency"] = "AUD";
-	$postData["customerName"] = $params["clientdetails"]["firstname"] . " " . $params["clientdetails"]["lastname"];
-	$postData["customerEmail"] = $params["clientdetails"]["email"];
-	$postData["customerCountry"] = $params["clientdetails"]["country"];
-	$postData["customerState"] = $params["clientdetails"]["state"];
-	$postData["customerCity"] = $params["clientdetails"]["city"];
-	$postData["customerPostCode"] = $params["clientdetails"]["postcode"];
-	$postData["customerPhone"] = $params["clientdetails"]["phonenumber"];
-	$postData["customerIP"] = $_SERVER["REMOTE_ADDR"];
-	$address = $params["clientdetails"]["address1"];
+	$endpoint = "https://" . (0 < strlen( $params['testmode'] ) ? "base" : "api") . ".merchantwarrior.com/post/";
+	$postData['method'] = "processCard";
+	$postData['merchantUUID'] = $params['merchantUUID'];
+	$postData['apiKey'] = $params['apiKey'];
+	$postData['transactionProduct'] = $params['invoiceid'];
+	$postData['transactionAmount'] = $params['amount'];
+	$postData['transactionCurrency'] = "AUD";
+	$postData['customerName'] = $params['clientdetails']['firstname'] . " " . $params['clientdetails']['lastname'];
+	$postData['customerEmail'] = $params['clientdetails']['email'];
+	$postData['customerCountry'] = $params['clientdetails']['country'];
+	$postData['customerState'] = $params['clientdetails']['state'];
+	$postData['customerCity'] = $params['clientdetails']['city'];
+	$postData['customerPostCode'] = $params['clientdetails']['postcode'];
+	$postData['customerPhone'] = $params['clientdetails']['phonenumber'];
+	$postData['customerIP'] = $_SERVER['REMOTE_ADDR'];
+	$address = $params['clientdetails']['address1'];
 
-	if (( isset( $params["clientdetails"]["address2"] ) && strlen( $params["clientdetails"]["address2"] ) )) {
-		$address .= ", " . $params["clientdetails"]["address2"];
+	if (isset( $params['clientdetails']['address2'] ) && strlen( $params['clientdetails']['address2'] )) {
+		$address .= ", " . $params['clientdetails']['address2'];
 	}
 
-	$postData["customerAddress"] = $address;
-	$postData["paymentCardName"] = $postData["customerName"];
-	$postData["paymentCardNumber"] = $params["cardnum"];
-	$postData["paymentCardExpiry"] = $params["cardexp"];
-	$postData["paymentCardCSC"] = $params["cccvv"];
-	$postData["hash"] = md5( strtolower( $params["apiPassphrase"] . $params["merchantUUID"] . $postData["transactionAmount"] . $postData["transactionCurrency"] ) );
+	$postData['customerAddress'] = $address;
+	$postData['paymentCardName'] = $postData['customerName'];
+	$postData['paymentCardNumber'] = $params['cardnum'];
+	$postData['paymentCardExpiry'] = $params['cardexp'];
+	$postData['paymentCardCSC'] = $params['cccvv'];
+	$postData['hash'] = md5( strtolower( $params['apiPassphrase'] . $params['merchantUUID'] . $postData['transactionAmount'] . $postData['transactionCurrency'] ) );
 	list($xmlObj,$xml) = mwarrior_sendRequest( $endpoint, $postData );
 	try
     {
-	$status = ((int)$xml["responseCode"] === 0 ? "success" : "declined");
+	$status = ((int)$xml['responseCode'] === 0 ? "success" : "declined");
 	}
 	catch ( Exception $e ) {
 		$status = "error";
 	}
-		$results = array( "status" => $status, "transID" => (isset( $xml["transactionID"] ) ? $xml["transactionID"] : null), "transAmount" => $params["amount"], "endpoint" => $endpoint, "xml" => ($xmlObj instanceof SimpleXMLElement ? $xmlObj->asXML() : null) );
+		$results = array( "status" => $status, "transID" => (isset( $xml['transactionID'] ) ? $xml['transactionID'] : null), "transAmount" => $params['amount'], "endpoint" => $endpoint, "xml" => ($xmlObj instanceof SimpleXMLElement ? $xmlObj->asXML() : null) );
 
-		if ($results["status"] == "success") {
-			$tarnsID = "" . $results["transID"] . "|" . $params["amount"];
+		if ($results['status'] == "success") {
+			$tarnsID = "" . $results['transID'] . "|" . $params['amount'];
 			return array( "status" => "success", "transid" => $transID, "rawdata" => $results );
 		}
 
 
-		if ($results["status"] == "declined") {
+		if ($results['status'] == "declined") {
 			return array( "status" => "declined", "rawdata" => $results );
 		}
 
@@ -81,33 +81,33 @@ function mwarrior_capture($params) {
  * @return array
  */
 function mwarrior_refund($params) {
-	list($transID,$origAmount) = explode( "|", $params["transid"] );
-	$endpoint = "https://" . (0 < strlen( $params["testmode"] ) ? "base" : "api") . ".merchantwarrior.com/post/";
-	$postData["method"] = "refundCard";
-	$postData["merchantUUID"] = $params["merchantUUID"];
-	$postData["apiKey"] = $params["apiKey"];
-	$postData["transactionAmount"] = number_format( $origAmount, 2, ".", "" );
-	$postData["transactionCurrency"] = "AUD";
-	$postData["transactionID"] = $transID;
-	$postData["refundAmount"] = number_format( $params["amount"], 2, ".", "" );
-	$postData["hash"] = md5( strtolower( $params["apiPassphrase"] . $params["merchantUUID"] . $postData["transactionAmount"] . $postData["transactionCurrency"] ) );
+	list($transID,$origAmount) = explode( "|", $params['transid'] );
+	$endpoint = "https://" . (0 < strlen( $params['testmode'] ) ? "base" : "api") . ".merchantwarrior.com/post/";
+	$postData['method'] = "refundCard";
+	$postData['merchantUUID'] = $params['merchantUUID'];
+	$postData['apiKey'] = $params['apiKey'];
+	$postData['transactionAmount'] = number_format( $origAmount, 2, ".", "" );
+	$postData['transactionCurrency'] = "AUD";
+	$postData['transactionID'] = $transID;
+	$postData['refundAmount'] = number_format( $params['amount'], 2, ".", "" );
+	$postData['hash'] = md5( strtolower( $params['apiPassphrase'] . $params['merchantUUID'] . $postData['transactionAmount'] . $postData['transactionCurrency'] ) );
 	list($xmlObj,$xml) = mwarrior_sendRequest( $endpoint, $postData );
     try
     {
-	$status = ((int)$xml["responseCode"] === 0 ? "success" : "declined");
+	$status = ((int)$xml['responseCode'] === 0 ? "success" : "declined");
 	}
 	catch ( Exception $e ) {
 		$status = "error";
 	}
 
-		$results = array( "status" => $status, "transID" => (isset( $xml["transactionID"] ) ? $xml["transactionID"] : null), "endpoint" => $endpoint, "xml" => ($xmlObj instanceof SimpleXMLElement ? $xmlObj->asXML() : null) );
+		$results = array( "status" => $status, "transID" => (isset( $xml['transactionID'] ) ? $xml['transactionID'] : null), "endpoint" => $endpoint, "xml" => ($xmlObj instanceof SimpleXMLElement ? $xmlObj->asXML() : null) );
 
-		if ($results["status"] == "success") {
-			return array( "status" => "success", "transid" => $results["transID"], "rawdata" => $results );
+		if ($results['status'] == "success") {
+			return array( "status" => "success", "transid" => $results['transID'], "rawdata" => $results );
 		}
 
 
-		if ($results["status"] == "declined") {
+		if ($results['status'] == "declined") {
 			return array( "status" => "declined", "rawdata" => $results );
 		}
 
@@ -139,19 +139,19 @@ function mwarrior_sendRequest($url, $postData) {
 	$response = curl_exec( $curl );
 	$error = curl_error( $curl );
 
-	if (( isset( $error ) && strlen( $error ) )) {
+	if (isset( $error ) && strlen( $error )) {
 		throw new Exception( "CURL Error: " . $error );
 	}
 
 
-	if (( !isset( $response ) || strlen( $response ) < 1 )) {
+	if (!isset( $response ) || strlen( $response ) < 1) {
 		throw new Exception( "API response was empty" );
 	}
 
 	$xmlObj = simplexml_load_string( $response );
 	$xml = (array)$xmlObj;
 
-	if (( !isset( $xml["responseCode"] ) || strlen( $xml["responseCode"] ) < 1 )) {
+	if (!isset( $xml['responseCode'] ) || strlen( $xml['responseCode'] ) < 1) {
 		throw new Exception( "API Response did not contain a valid responseCode" );
 	}
 

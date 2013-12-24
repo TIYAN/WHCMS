@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -22,25 +22,25 @@ function quantumvault_nolocalcc() {
 
 function quantumvault_remoteinput($params) {
 	$code = "<form method=\"post\" action=\"https://secure.quantumgateway.com/cgi/qgwdbe.php\">
-<input type=\"hidden\" name=\"gwlogin\" value=\"" . $params["loginid"] . "\" />
-<input type=\"hidden\" name=\"RestrictKey\" value=\"" . $params["transkey"] . "\" />
-<input type=\"hidden\" name=\"amount\" value=\"" . $params["amount"] . "\" />
-<input type=\"hidden\" name=\"ID\" value=\"" . $params["invoiceid"] . "\" />
-<input type=\"hidden\" name=\"FNAME\" value=\"" . $params["clientdetails"]["firstname"] . "\" />
-<input type=\"hidden\" name=\"LNAME\" value=\"" . $params["clientdetails"]["lastname"] . "\" />
-<input type=\"hidden\" name=\"BADDR1\" value=\"" . $params["clientdetails"]["address1"] . "\" />
-<input type=\"hidden\" name=\"BCITY\" value=\"" . $params["clientdetails"]["city"] . "\" />
-<input type=\"hidden\" name=\"BSTATE\" value=\"" . $params["clientdetails"]["state"] . "\" />
-<input type=\"hidden\" name=\"BZIP1\" value=\"" . $params["clientdetails"]["postcode"] . "\" />
-<input type=\"hidden\" name=\"BCOUNTRY\" value=\"" . $params["clientdetails"]["country"] . "\" />
-<input type=\"hidden\" name=\"PHONE\" value=\"" . $params["clientdetails"]["phonenumber"] . "\" />
-<input type=\"hidden\" name=\"BCUST_EMAIL\" value=\"" . $params["clientdetails"]["email"] . "\" />
+<input type=\"hidden\" name=\"gwlogin\" value=\"" . $params['loginid'] . "\" />
+<input type=\"hidden\" name=\"RestrictKey\" value=\"" . $params['transkey'] . "\" />
+<input type=\"hidden\" name=\"amount\" value=\"" . $params['amount'] . "\" />
+<input type=\"hidden\" name=\"ID\" value=\"" . $params['invoiceid'] . "\" />
+<input type=\"hidden\" name=\"FNAME\" value=\"" . $params['clientdetails']['firstname'] . "\" />
+<input type=\"hidden\" name=\"LNAME\" value=\"" . $params['clientdetails']['lastname'] . "\" />
+<input type=\"hidden\" name=\"BADDR1\" value=\"" . $params['clientdetails']['address1'] . "\" />
+<input type=\"hidden\" name=\"BCITY\" value=\"" . $params['clientdetails']['city'] . "\" />
+<input type=\"hidden\" name=\"BSTATE\" value=\"" . $params['clientdetails']['state'] . "\" />
+<input type=\"hidden\" name=\"BZIP1\" value=\"" . $params['clientdetails']['postcode'] . "\" />
+<input type=\"hidden\" name=\"BCOUNTRY\" value=\"" . $params['clientdetails']['country'] . "\" />
+<input type=\"hidden\" name=\"PHONE\" value=\"" . $params['clientdetails']['phonenumber'] . "\" />
+<input type=\"hidden\" name=\"BCUST_EMAIL\" value=\"" . $params['clientdetails']['email'] . "\" />
 <input type=\"hidden\" name=\"AddToVault\" value=\"Y\" />
-<input type=\"hidden\" name=\"cust_id\" value=\"" . $params["clientdetails"]["id"] . "\" />
+<input type=\"hidden\" name=\"cust_id\" value=\"" . $params['clientdetails']['id'] . "\" />
 <input type=\"hidden\" name=\"trans_method\" value=\"CC\" />
 <input type=\"hidden\" name=\"ResponseMethod\" value=\"GET\" />
-<input type=\"hidden\" name=\"post_return_url_approved\" value=\"" . $params["systemurl"] . "/modules/gateways/callback/quantumvault.php\" />
-<input type=\"hidden\" name=\"post_return_url_declined\" value=\"" . $params["systemurl"] . "/modules/gateways/callback/quantumvault.php\" />
+<input type=\"hidden\" name=\"post_return_url_approved\" value=\"" . $params['systemurl'] . "/modules/gateways/callback/quantumvault.php\" />
+<input type=\"hidden\" name=\"post_return_url_declined\" value=\"" . $params['systemurl'] . "/modules/gateways/callback/quantumvault.php\" />
 <noscript>
 <input type=\"submit\" value=\"Click here to continue &raquo;\" />
 </noscript>
@@ -50,40 +50,40 @@ function quantumvault_remoteinput($params) {
 
 
 function quantumvault_remoteupdate($params) {
-	if (!$params["gatewayid"]) {
+	if (!$params['gatewayid']) {
 		return "<p align=\"center\">You must pay your first invoice via credit card before you can update your stored card details here...</p>";
 	}
 
-	$quantum = quantumvault_getCode( $params["apiusername"], $params["apikey"], "650", "450", "0", "0", $params["gatewayid"], "CustomerEdit" );
-	return $quantum["script"] . $quantum["iframe"];
+	$quantum = quantumvault_getCode( $params['apiusername'], $params['apikey'], "650", "450", "0", "0", $params['gatewayid'], "CustomerEdit" );
+	return $quantum['script'] . $quantum['iframe'];
 }
 
 
 function quantumvault_capture($params) {
-	if (!$params["gatewayid"]) {
+	if (!$params['gatewayid']) {
 		return array( "status" => "failed", "rawdata" => "No Card Stored for this Client in Vault" );
 	}
 
 	$url = "https://secure.quantumgateway.com/cgi/xml_requester.php";
 	$xml = "<QGWRequest>
 <Authentication>
-<GatewayLogin>" . $params["loginid"] . "</GatewayLogin>
-<GatewayKey>" . $params["vaultkey"] . "</GatewayKey>
+<GatewayLogin>" . $params['loginid'] . "</GatewayLogin>
+<GatewayKey>" . $params['vaultkey'] . "</GatewayKey>
 </Authentication>
 <Request>
 <RequestType>CreateTransaction</RequestType>
 <TransactionType>CREDIT</TransactionType>
 <ProcessType>SALES</ProcessType>
-<CustomerID>" . $params["gatewayid"] . "</CustomerID>
-<Memo>Invoice Number " . $params["invoiceid"] . "</Memo>
-<Amount>" . $params["amount"] . "</Amount>
+<CustomerID>" . $params['gatewayid'] . "</CustomerID>
+<Memo>Invoice Number " . $params['invoiceid'] . "</Memo>
+<Amount>" . $params['amount'] . "</Amount>
 </Request>
 </QGWRequest>";
 	$data = curlCall( $url, "xml=" . $xml );
 	$results = XMLtoArray( $data );
 
-	if ($results["QGWREQUEST"]["RESULT"]["STATUS"] == "APPROVED") {
-		return array( "status" => "success", "transid" => $results["QGWREQUEST"]["RESULT"]["TRANSACTIONID"], "rawdata" => $results["QGWREQUEST"]["RESULT"] );
+	if ($results['QGWREQUEST']['RESULT']['STATUS'] == "APPROVED") {
+		return array( "status" => "success", "transid" => $results['QGWREQUEST']['RESULT']['TRANSACTIONID'], "rawdata" => $results['QGWREQUEST']['RESULT'] );
 	}
 
 	return array( "status" => "error", "rawdata" => $data );
@@ -91,45 +91,45 @@ function quantumvault_capture($params) {
 
 
 function quantumvault_refund($params) {
-	if (!$params["gatewayid"]) {
+	if (!$params['gatewayid']) {
 		return array( "status" => "failed", "rawdata" => "No Card Stored for this Client in Vault" );
 	}
 
 	$url = "https://secure.quantumgateway.com/cgi/xml_requester.php";
 	$xml = "<QGWRequest>
 <Authentication>
-<GatewayLogin>" . $params["loginid"] . "</GatewayLogin>
-<GatewayKey>" . $params["transkey"] . "</GatewayKey>
+<GatewayLogin>" . $params['loginid'] . "</GatewayLogin>
+<GatewayKey>" . $params['transkey'] . "</GatewayKey>
 </Authentication>
 <Request>
 <RequestType>ShowTransactionDetails</RequestType>
-<TransactionID>" . $params["transid"] . "</TransactionID>
+<TransactionID>" . $params['transid'] . "</TransactionID>
 </Request>
 </QGWRequest>";
 	$data = curlCall( $url, "xml=" . $xml );
 	$results = XMLtoArray( $data );
-	$cclastfour = $results["QGWREQUEST"]["RESULT"]["CREDITCARDNUMBER"];
+	$cclastfour = $results['QGWREQUEST']['RESULT']['CREDITCARDNUMBER'];
 	$xml = "<QGWRequest>
 <Authentication>
-<GatewayLogin>" . $params["loginid"] . "</GatewayLogin>
-<GatewayKey>" . $params["transkey"] . "</GatewayKey>
+<GatewayLogin>" . $params['loginid'] . "</GatewayLogin>
+<GatewayKey>" . $params['transkey'] . "</GatewayKey>
 </Authentication>
 <Request>
 <RequestType>ProcessSingleTransaction</RequestType>
 <ProcessType>RETURN</ProcessType>
 <TransactionType>CREDIT</TransactionType>
 <PaymentType>CC</PaymentType>
-<CustomerID>" . $params["gatewayid"] . "</CustomerID>
-<TransactionID>" . $params["transid"] . "</TransactionID>
+<CustomerID>" . $params['gatewayid'] . "</CustomerID>
+<TransactionID>" . $params['transid'] . "</TransactionID>
 <CreditCardNumber>" . $cclastfour . "</CreditCardNumber>
-<Amount>" . $params["amount"] . "</Amount>
+<Amount>" . $params['amount'] . "</Amount>
 </Request>
 </QGWRequest>";
 	$data = curlCall( $url, "xml=" . $xml );
 	$results = XMLtoArray( $data );
 
-	if ($results["QGWREQUEST"]["RESULT"]["STATUS"] == "APPROVED") {
-		return array( "status" => "success", "transid" => $results["QGWREQUEST"]["RESULT"]["TRANSACTIONID"], "rawdata" => $results["QGWREQUEST"]["RESULT"] );
+	if ($results['QGWREQUEST']['RESULT']['STATUS'] == "APPROVED") {
+		return array( "status" => "success", "transid" => $results['QGWREQUEST']['RESULT']['TRANSACTIONID'], "rawdata" => $results['QGWREQUEST']['RESULT'] );
 	}
 
 	return array( "status" => "error", "rawdata" => $data );
@@ -152,7 +152,7 @@ function quantumvault_getCode($API_Username, $API_Key, $width, $height, $amount 
 	$thereturn = array();
 	$random = rand( 1111111111, 9999999999 );
 	$random = (int)$random;
-	$response = _quantumvault_http_post( "secure.quantumgateway.com", "/cgi/ilf_authenticate.php", array( "API_Username" => $API_Username, "API_Key" => $API_Key, "randval" => $random, "lastip" => $_SERVER["REMOTE_ADDR"] ), 443 );
+	$response = _quantumvault_http_post( "secure.quantumgateway.com", "/cgi/ilf_authenticate.php", array( "API_Username" => $API_Username, "API_Key" => $API_Key, "randval" => $random, "lastip" => $_SERVER['REMOTE_ADDR'] ), 443 );
 
 	if (is_array( $response )) {
 		if ($response[1] != "error") {
@@ -188,14 +188,14 @@ function quantumvault_getCode($API_Username, $API_Key, $width, $height, $amount 
 			}
 
 			$extrapars .= "&skip_shipping_info=Y&ilf_API_Style=2";
-			$thereturn["iframe"] = "<iframe src=\"https://secure.quantumgateway.com/cgi/ilf.php?k=" . $response[1] . "&ip=" . $_SERVER["REMOTE_ADDR"] . $extrapars . "\" height=\"" . $height . "\" width=\"" . $width . "\" frameborder=\"0\"></iframe><br/>";
-			$thereturn["script"] = "
+			$thereturn['iframe'] = "<iframe src=\"https://secure.quantumgateway.com/cgi/ilf.php?k=" . $response[1] . "&ip=" . $_SERVER['REMOTE_ADDR'] . $extrapars . "\" height=\"" . $height . "\" width=\"" . $width . "\" frameborder=\"0\"></iframe><br/>";
+			$thereturn['script'] = "
 <script type=\"text/javascript\">
 function refreshSession(thek, theip) {
 	var randomnumber=Math.random();
     jQuery.post(\"modules/gateways/quantumvault.php?cachebuster=\"+randomnumber, { ajax: \"1\", ip: theip, k: thek } );
 }
-setInterval(\"refreshSession('" . $response[1] . "','" . $_SERVER["REMOTE_ADDR"] . "')\",20000);
+setInterval(\"refreshSession('" . $response[1] . "','" . $_SERVER['REMOTE_ADDR'] . "')\",20000);
 </script>
 ";
 		}
@@ -206,7 +206,7 @@ setInterval(\"refreshSession('" . $response[1] . "','" . $_SERVER["REMOTE_ADDR"]
 
 
 function quantumvault_adminstatusmsg($vars) {
-	$gatewayid = get_query_val( "tblclients", "gatewayid", array( "id" => $vars["userid"] ) );
+	$gatewayid = get_query_val( "tblclients", "gatewayid", array( "id" => $vars['userid'] ) );
 
 	if ($gatewayid) {
 		return array( "type" => "info", "title" => "Quantum Vault Profile", "msg" => "This customer has a Quantum Vault Profile storing their card details for automated recurring billing with ID " . $gatewayid );
@@ -220,9 +220,9 @@ if (!defined( "WHMCS" )) {
 }
 
 
-if (isset( $_POST["ajax"] )) {
-	if ($_POST["ajax"] == "true") {
-		$response = _quantumvault_http_post( "secure.quantumgateway.com", "/cgi/ilf_refresh.php", array( "ip" => $_POST["ip"], "k" => $_POST["k"] ), 443 );
+if (isset( $_POST['ajax'] )) {
+	if ($_POST['ajax'] == "true") {
+		$response = _quantumvault_http_post( "secure.quantumgateway.com", "/cgi/ilf_refresh.php", array( "ip" => $_POST['ip'], "k" => $_POST['k'] ), 443 );
 	}
 }
 

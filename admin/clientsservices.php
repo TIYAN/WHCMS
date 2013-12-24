@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -15,11 +15,12 @@ require "../init.php";
 $aInt = new WHMCS_Admin("View Clients Products/Services");
 $aInt->requiredFiles(array("clientfunctions", "gatewayfunctions", "modulefunctions", "customfieldfunctions", "configoptionsfunctions", "invoicefunctions", "processinvoices"));
 $aInt->inClientsProfile = true;
+$id = (int)$whmcs->get_req_var("id");
 $hostingid = (int)$whmcs->get_req_var("hostingid");
 $userid = (int)$whmcs->get_req_var("userid");
 $aid = $whmcs->get_req_var("aid");
 $action = $whmcs->get_req_var("action");
-$whmcs->get_req_var("modop");
+$modop = $whmcs->get_req_var("modop");
 
 if ($modop) {
 	checkPermission("Perform Server Operations");
@@ -85,8 +86,8 @@ $ns1 = $service_data['ns1'];
 $ns2 = $service_data['ns2'];
 $dedicatedip = $service_data['dedicatedip'];
 $assignedips = $service_data['assignedips'];
-$disklimit = $service_data['disklimit'];
 $diskusage = $service_data['diskusage'];
+$disklimit = $service_data['disklimit'];
 $bwusage = $service_data['bwusage'];
 $bwlimit = $service_data['bwlimit'];
 $lastupdate = $service_data['lastupdate'];
@@ -456,7 +457,6 @@ if ($whmcs->get_req_var("success")) {
 $regdate = fromMySQLDate($regdate);
 $nextduedate = fromMySQLDate($nextduedate);
 $overidesuspenduntil = fromMySQLDate($overidesuspenduntil);
-$id = (int)$whmcs->get_req_var("id");
 
 if ($disklimit == "0") {
 	$disklimit = $aInt->lang("global", "unlimited");
@@ -469,7 +469,7 @@ if ($bwlimit == "0") {
 
 $currency = getCurrency($userid);
 $data = get_query_vals("tblcancelrequests", "id,type,reason", array("relid" => $id), "id", "DESC");
-$cancelid = $modop = $data['id'];
+$cancelid = $data['id'];
 $canceltype = $data['type'];
 $autoterminatereason = $data['reason'];
 $autoterminateendcycle = false;
@@ -770,7 +770,7 @@ else {
 	$tbl->add($aInt->lang("fields", "firstpaymentamount"), $frm->text("firstpaymentamount", $firstpaymentamount, "10"));
 	$tbl->add($aInt->lang("fields", "server"), $frm->dropdown("server", $serversarr, $server, "submit()", "", true));
 	$tbl->add($aInt->lang("fields", "recurringamount"), $frm->text("amount", $amount, "10") . " " . $frm->checkbox("autorecalcrecurringprice", $aInt->lang("services", "autorecalc"), ($autorecalcdefault ? true : false)));
-	$tbl->add(($producttype == "server" ? $aInt->lang("fields", "hostname") : $aInt->lang("fields", "domain")), $frm->text("domain", $domain, "40") . " <a href=\"http://" . $domain . "\" target=\"_blank\" style=\"color:#cc0000\">www</a> <a href=\"whois.php?domain=" . $domain . "\" target=\"_blank\">" . $aInt->lang("domains", "whois") . "</a> <a href=\"http://www.intodns.com/" . $domain . "\" target=\"_blank\" style=\"color:#006633\">intoDNS</a>");
+	$tbl->add(($producttype == "server" ? $aInt->lang("fields", "hostname") : $aInt->lang("fields", "domain")), $frm->text("domain", $domain, "40") . " <a href=\"http://" . $domain . "\" target=\"_blank\" style=\"color:#cc0000\">www</a> <a href=\"#\" onclick=\"$('#frmWhois').submit();return false\">" . $aInt->lang("domains", "whois") . "</a> <a href=\"http://www.intodns.com/" . $domain . "\" target=\"_blank\" style=\"color:#006633\">intoDNS</a>");
 	$tbl->add($aInt->lang("fields", "nextduedate"), (in_array($billingcycle, array("One Time", "Free Account")) ? "N/A" : $frm->hidden("oldnextduedate", $nextduedate) . $frm->date("nextduedate", $nextduedate)));
 	$tbl->add($aInt->lang("fields", "dedicatedip"), $frm->text("dedicatedip", $dedicatedip, "25"));
 	$tbl->add($aInt->lang("fields", "billingcycle"), $aInt->cyclesDropDown($billingcycle));
@@ -982,12 +982,17 @@ echo $frmsub->hidden("messagename", "defaultnewacc");
 echo $frmsub->submit($aInt->lang("emails", "senddefaultproductwelcome"));
 echo $frmsub->close();
 echo "</td></tr></table>
-</div>";
+</div>
+
+<form method=\"post\" action=\"whois.php\" target=\"_blank\" id=\"frmWhois\">
+<input type=\"hidden\" name=\"domain\" value=\"" . $domain . "\" />
+</form>
+";
 $content = ob_get_contents();
 ob_end_clean();
 
 if ($whmcs->get_req_var("ajaxupdate")) {
-	$content = preg_replace("/(<form\W[^>]*\bmethod=('|\"|)POST('|\"|)\b[^>]*>)/i", "$1" . "\r\n" . generate_token(), $content);
+	$content = preg_replace('/(<form\W[^>]*\bmethod=(\'|"|)POST(\'|"|)\b[^>]*>)/i', '$1' . "\n" . generate_token(), $content);
 
 	echo $content;
 	exit();

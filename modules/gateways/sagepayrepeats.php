@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -17,19 +17,19 @@ function sagepayrepeats_config() {
 
 
 function sagepayrepeats_3dsecure($params) {
-	$gatewayids = explode( ",", $params["gatewayid"] );
+	$gatewayids = explode( ",", $params['gatewayid'] );
 
-	if (( !$params["cardnum"] && count( $gatewayids ) == 4 )) {
+	if (!$params['cardnum'] && count( $gatewayids ) == 4) {
 		$results = sagepayrepeats_capture( $params );
 
-		if ($results["status"] == "success") {
-			addInvoicePayment( $params["invoiceid"], $results["transid"], "", "", "sagepayrepeats", "on" );
-			logTransaction( "SagePay Repeats 3DAuth", $results["rawdata"], "Repeat Capture Success" );
-			sendMessage( "Credit Card Payment Confirmation", $params["invoiceid"] );
+		if ($results['status'] == "success") {
+			addInvoicePayment( $params['invoiceid'], $results['transid'], "", "", "sagepayrepeats", "on" );
+			logTransaction( "SagePay Repeats 3DAuth", $results['rawdata'], "Repeat Capture Success" );
+			sendMessage( "Credit Card Payment Confirmation", $params['invoiceid'] );
 			return "success";
 		}
 
-		logTransaction( "SagePay Repeats 3DAuth", $results["rawdata"], "Repeat Capture Failure" );
+		logTransaction( "SagePay Repeats 3DAuth", $results['rawdata'], "Repeat Capture Failure" );
 		return "declined";
 	}
 
@@ -40,7 +40,7 @@ function sagepayrepeats_3dsecure($params) {
 		$VerifyServer = false;
 	}
 	else {
-		if ($params["testmode"]) {
+		if ($params['testmode']) {
 			$TargetURL = "https://test.sagepay.com/gateway/service/vspdirect-register.vsp";
 			$VerifyServer = false;
 		}
@@ -50,73 +50,73 @@ function sagepayrepeats_3dsecure($params) {
 		}
 	}
 
-	$tempvendortxcode = date( "YmdHis" ) . $params["invoiceid"];
-	$data["VPSProtocol"] = "2.23";
-	$data["TxType"] = "PAYMENT";
-	$data["Vendor"] = $params["vendorid"];
-	$data["VendorTxCode"] = $tempvendortxcode;
-	$data["Amount"] = $params["amount"];
-	$data["Currency"] = $params["currency"];
-	$data["Description"] = $params["companyname"] . " - Invoice #" . $params["invoiceid"];
-	$cardtype = sagepayrepeats_getcardtype( $params["cardtype"] );
-	$data["CardHolder"] = $params["clientdetails"]["firstname"] . " " . $params["clientdetails"]["lastname"];
-	$data["CardType"] = $cardtype;
-	$data["CardNumber"] = $params["cardnum"];
-	$data["ExpiryDate"] = $params["cardexp"];
-	$data["StartDate"] = $params["cardstart"];
-	$data["IssueNumber"] = $params["cardissuenum"];
-	$data["CV2"] = $params["cccvv"];
-	$data["BillingSurname"] = $params["clientdetails"]["lastname"];
-	$data["BillingFirstnames"] = $params["clientdetails"]["firstname"];
-	$data["BillingAddress1"] = $params["clientdetails"]["address1"];
-	$data["BillingAddress2"] = $params["clientdetails"]["address2"];
-	$data["BillingCity"] = $params["clientdetails"]["city"];
+	$tempvendortxcode = date( "YmdHis" ) . $params['invoiceid'];
+	$data['VPSProtocol'] = "2.23";
+	$data['TxType'] = "PAYMENT";
+	$data['Vendor'] = $params['vendorid'];
+	$data['VendorTxCode'] = $tempvendortxcode;
+	$data['Amount'] = $params['amount'];
+	$data['Currency'] = $params['currency'];
+	$data['Description'] = $params['companyname'] . " - Invoice #" . $params['invoiceid'];
+	$cardtype = sagepayrepeats_getcardtype( $params['cardtype'] );
+	$data['CardHolder'] = $params['clientdetails']['firstname'] . " " . $params['clientdetails']['lastname'];
+	$data['CardType'] = $cardtype;
+	$data['CardNumber'] = $params['cardnum'];
+	$data['ExpiryDate'] = $params['cardexp'];
+	$data['StartDate'] = $params['cardstart'];
+	$data['IssueNumber'] = $params['cardissuenum'];
+	$data['CV2'] = $params['cccvv'];
+	$data['BillingSurname'] = $params['clientdetails']['lastname'];
+	$data['BillingFirstnames'] = $params['clientdetails']['firstname'];
+	$data['BillingAddress1'] = $params['clientdetails']['address1'];
+	$data['BillingAddress2'] = $params['clientdetails']['address2'];
+	$data['BillingCity'] = $params['clientdetails']['city'];
 
-	if ($params["clientdetails"]["country"] == "US") {
-		$data["BillingState"] = $params["clientdetails"]["state"];
+	if ($params['clientdetails']['country'] == "US") {
+		$data['BillingState'] = $params['clientdetails']['state'];
 	}
 
 
-	if ($params["clientdetails"]["country"] != "GB") {
-		$params["clientdetails"]["postcode"] = "0000";
+	if ($params['clientdetails']['country'] != "GB") {
+		$params['clientdetails']['postcode'] = "0000";
 	}
 
-	$data["BillingPostCode"] = $params["clientdetails"]["postcode"];
-	$data["BillingCountry"] = $params["clientdetails"]["country"];
-	$data["BillingPhone"] = $params["clientdetails"]["phonenumber"];
-	$data["DeliverySurname"] = $params["clientdetails"]["lastname"];
-	$data["DeliveryFirstnames"] = $params["clientdetails"]["firstname"];
-	$data["DeliveryAddress1"] = $params["clientdetails"]["address1"];
-	$data["DeliveryAddress2"] = $params["clientdetails"]["address2"];
-	$data["DeliveryCity"] = $params["clientdetails"]["city"];
+	$data['BillingPostCode'] = $params['clientdetails']['postcode'];
+	$data['BillingCountry'] = $params['clientdetails']['country'];
+	$data['BillingPhone'] = $params['clientdetails']['phonenumber'];
+	$data['DeliverySurname'] = $params['clientdetails']['lastname'];
+	$data['DeliveryFirstnames'] = $params['clientdetails']['firstname'];
+	$data['DeliveryAddress1'] = $params['clientdetails']['address1'];
+	$data['DeliveryAddress2'] = $params['clientdetails']['address2'];
+	$data['DeliveryCity'] = $params['clientdetails']['city'];
 
-	if ($params["clientdetails"]["country"] == "US") {
-		$data["DeliveryState"] = $params["clientdetails"]["state"];
+	if ($params['clientdetails']['country'] == "US") {
+		$data['DeliveryState'] = $params['clientdetails']['state'];
 	}
 
-	$data["DeliveryPostCode"] = $params["clientdetails"]["postcode"];
-	$data["DeliveryCountry"] = $params["clientdetails"]["country"];
-	$data["DeliveryPhone"] = $params["clientdetails"]["phonenumber"];
-	$data["CustomerEMail"] = $params["clientdetails"]["email"];
-	$data["ClientIPAddress"] = $_SERVER["REMOTE_ADDR"];
+	$data['DeliveryPostCode'] = $params['clientdetails']['postcode'];
+	$data['DeliveryCountry'] = $params['clientdetails']['country'];
+	$data['DeliveryPhone'] = $params['clientdetails']['phonenumber'];
+	$data['CustomerEMail'] = $params['clientdetails']['email'];
+	$data['ClientIPAddress'] = $_SERVER['REMOTE_ADDR'];
 	$data = sagepayrepeats_formatData( $data );
 	$response = sagepayrepeats_requestPost( $TargetURL, $data );
-	$baseStatus = $response["Status"];
+	$baseStatus = $response['Status'];
 	$transdump = "";
 	foreach ($response as $key => $value) {
 		$transdump .= ( "" . $key . " => " . $value . "
 " );
 	}
 
-	update_query( "tblclients", array( "gatewayid" => "" . $tempvendortxcode . ",", "cardnum" => "" ), array( "id" => $params["clientdetails"]["userid"] ) );
+	update_query( "tblclients", array( "gatewayid" => "" . $tempvendortxcode . ",", "cardnum" => "" ), array( "id" => $params['clientdetails']['userid'] ) );
 	switch ($baseStatus) {
 	case "3DAUTH": {
 			logTransaction( "SagePay Repeats 3DAuth", $transdump, "Ok" );
-			$_SESSION["sagepayrepeatsinvoiceid"] = $params["invoiceid"];
-			$code = "<form method=\"post\" action=\"" . $response["ACSURL"] . "\">
-		<input type=\"hidden\" name=\"PaReq\" value=\"" . $response["PAReq"] . "\">
-		<input type=\"hidden\" name=\"TermUrl\" value=\"" . $params["systemurl"] . "/modules/gateways/callback/sagepayrepeats.php?invoiceid=" . $params["invoiceid"] . "\">
-		<input type=\"hidden\" name=\"MD\" value=\"" . $response["MD"] . "\">
+			$_SESSION['sagepayrepeatsinvoiceid'] = $params['invoiceid'];
+			$code = "<form method=\"post\" action=\"" . $response['ACSURL'] . "\">
+		<input type=\"hidden\" name=\"PaReq\" value=\"" . $response['PAReq'] . "\">
+		<input type=\"hidden\" name=\"TermUrl\" value=\"" . $params['systemurl'] . "/modules/gateways/callback/sagepayrepeats.php?invoiceid=" . $params['invoiceid'] . "\">
+		<input type=\"hidden\" name=\"MD\" value=\"" . $response['MD'] . "\">
         <noscript>
         <div class=\"errorbox\"><b>JavaScript is currently disabled or is not supported by your browser.</b><br />Please click the continue button to proceed with the processing of your transaction.</div>
         <p align=\"center\"><input type=\"submit\" value=\"Continue >>\" /></p>
@@ -135,7 +135,7 @@ function sagepayrepeats_capture($params) {
 		$url = "https://test.sagepay.com/simulator/VSPDirectGateway.asp";
 	}
 	else {
-		if ($params["testmode"]) {
+		if ($params['testmode']) {
 			$url = "https://test.sagepay.com/gateway/service/repeat.vsp";
 		}
 		else {
@@ -143,7 +143,7 @@ function sagepayrepeats_capture($params) {
 		}
 	}
 
-	$gatewayid = $params["gatewayid"];
+	$gatewayid = $params['gatewayid'];
 
 	if (!$gatewayid) {
 		return array( "status" => "No Repeat Details Stored", "rawdata" => "" );
@@ -152,30 +152,30 @@ function sagepayrepeats_capture($params) {
 	$gatewayid = explode( ",", $gatewayid );
 
 	if (count( $gatewayid ) != 4) {
-		update_query( "tblclients", array( "gatewayid" => "", "cardnum" => "" ), array( "id" => $params["clientdetails"]["userid"] ) );
+		update_query( "tblclients", array( "gatewayid" => "", "cardnum" => "" ), array( "id" => $params['clientdetails']['userid'] ) );
 		return array( "status" => "Incomplete Remote Token", "rawdata" => implode( ",", $gatewayid ) );
 	}
 
 	$fields = array();
-	$fields["VPSProtocol"] = "2.23";
-	$fields["TxType"] = "REPEAT";
-	$fields["Vendor"] = $params["vendorid"];
-	$fields["VendorTxCode"] = date( "YmdHis" ) . $params["invoiceid"];
-	$fields["Amount"] = $params["amount"];
-	$fields["Currency"] = $params["currency"];
-	$fields["Description"] = $params["companyname"] . " - Invoice #" . $params["invoiceid"];
-	$fields["RelatedVPSTxId"] = $gatewayid[1];
-	$fields["RelatedVendorTxCode"] = $gatewayid[0];
-	$fields["RelatedSecurityKey"] = $gatewayid[2];
-	$fields["RelatedTxAuthNo"] = $gatewayid[3];
+	$fields['VPSProtocol'] = "2.23";
+	$fields['TxType'] = "REPEAT";
+	$fields['Vendor'] = $params['vendorid'];
+	$fields['VendorTxCode'] = date( "YmdHis" ) . $params['invoiceid'];
+	$fields['Amount'] = $params['amount'];
+	$fields['Currency'] = $params['currency'];
+	$fields['Description'] = $params['companyname'] . " - Invoice #" . $params['invoiceid'];
+	$fields['RelatedVPSTxId'] = $gatewayid[1];
+	$fields['RelatedVendorTxCode'] = $gatewayid[0];
+	$fields['RelatedSecurityKey'] = $gatewayid[2];
+	$fields['RelatedTxAuthNo'] = $gatewayid[3];
 	$poststring = sagepayrepeats_formatData( $fields );
 	$output = sagepayrepeats_requestPost( $url, $poststring );
 
-	if ($output["Status"] == "OK") {
-		return array( "status" => "success", "transid" => $output["VPSTxId"], "rawdata" => $output );
+	if ($output['Status'] == "OK") {
+		return array( "status" => "success", "transid" => $output['VPSTxId'], "rawdata" => $output );
 	}
 
-	return array( "status" => $output["Status"], "rawdata" => $output );
+	return array( "status" => $output['Status'], "rawdata" => $output );
 }
 
 
@@ -194,8 +194,8 @@ function sagepayrepeats_requestPost($url, $data) {
 	$response = split( chr( 10 ), curl_exec( $curlSession ) );
 
 	if (curl_error( $curlSession )) {
-		$output["Status"] = "FAIL";
-		$output["StatusDetail"] = curl_error( $curlSession );
+		$output['Status'] = "FAIL";
+		$output['StatusDetail'] = curl_error( $curlSession );
 	}
 
 	curl_close( $curlSession );

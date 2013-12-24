@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -127,7 +127,7 @@ $t_result = full_query($t_query);
 
 if (0 < mysql_num_rows($t_result)) {
 	$t_row = mysql_fetch_row($t_result);
-	$type_options = explode("','", preg_replace("/(enum|set)\('(.+?)'\)/", "$1", $t_row[1]));
+	$type_options = explode('\',\'', preg_replace('/(enum|set)\(\'(.+?)\'\)/', '$1', $t_row[1]));
 }
 
 $p_query = "SHOW COLUMNS FROM tblnetworkissues LIKE 'priority'";
@@ -135,7 +135,7 @@ $p_result = full_query($p_query);
 
 if (0 < mysql_num_rows($p_result)) {
 	$p_row = mysql_fetch_row($p_result);
-	$priority_options = explode("','", preg_replace("/(enum|set)\('(.+?)'\)/", "$1", $p_row[1]));
+	$priority_options = explode('\',\'', preg_replace( '/(enum|set)\(\'(.+?)\'\)/', '$1', $p_row[1]));
 }
 
 $s_query = "SHOW COLUMNS FROM tblnetworkissues LIKE 'status'";
@@ -143,7 +143,7 @@ $s_result = full_query($s_query);
 
 if (0 < mysql_num_rows($s_result)) {
 	$s_row = mysql_fetch_row($s_result);
-	$status_options = explode("','", preg_replace("/(enum|set)\('(.+?)'\)/", "$1", $s_row[1]));
+	$status_options = explode('\',\'', preg_replace( '/(enum|set)\(\'(.+?)\'\)/', '$1', $s_row[1]));
 }
 
 $server_query = "SELECT id, name FROM tblservers";

@@ -261,7 +261,7 @@
 {/if}
 </div>
 
-{if !$reply.userid && !$reply.contactid}<input type="button" value="{$_ADMINLANG.support.blocksender}" onclick="window.location='?action=viewticket&id={$ticketid}&blocksender=true'" class="btn-small" />{/if}
+{if !$reply.userid && !$reply.contactid}<input type="button" value="{$_ADMINLANG.support.blocksender}" onclick="window.location='?action=viewticket&id={$ticketid}&blocksender=true&token={$csrfToken}'" class="btn-small" />{/if}
 
 {/if}
 

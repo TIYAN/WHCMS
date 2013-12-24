@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -235,7 +235,7 @@ You can change your password after login from the My Account section of the admi
 		$whmcs->load_class("phpmailer");
 		$mail = new PHPMailer();
 		$mail->From = $CONFIG['SystemEmailsFromEmail'];
-		$mail->FromName = $CONFIG['SystemEmailsFromName'];
+		$mail->FromName = html_entity_decode($CONFIG['SystemEmailsFromName'], ENT_QUOTES);
 		$mail->Subject = "Admin Password Reset Completed";
 		$mail->CharSet = $CONFIG['Charset'];
 
@@ -455,7 +455,7 @@ This link will only be valid for the next 30 minutes so if you didn't request th
 					$whmcs->load_class("phpmailer");
 					$mail = new PHPMailer();
 					$mail->From = $CONFIG['SystemEmailsFromEmail'];
-					$mail->FromName = $CONFIG['SystemEmailsFromName'];
+					$mail->FromName = html_entity_decode($CONFIG['SystemEmailsFromName'], ENT_QUOTES);
 					$mail->Subject = "Admin Password Reset Request";
 					$mail->CharSet = $CONFIG['Charset'];
 
@@ -568,5 +568,6 @@ echo "cript type=\"text/javascript\">
 $(\"form input:text:visible:first\").focus();
 </script>
 </body>
-</html>";
+</html>
+";
 ?>

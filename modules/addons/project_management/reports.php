@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -26,10 +26,10 @@ $text_reports = array();
 $dh = opendir( "../modules/reports/" );
 
 while (false !== ($file = readdir( $dh ))) {
-	if (( $file != "index.php" && is_file( "../modules/reports/" . $file ) )) {
+	if ( $file != "index.php" && is_file( "../modules/reports/" . $file ) ) {
 		$file = str_replace( ".php", "", $file );
 
-		if (( substr( $file, 0, 5 ) != "graph" && substr( $file, 0, 8 ) == "project_" )) {
+		if ( substr( $file, 0, 5 ) != "graph" && substr( $file, 0, 8 ) == "project_" ) {
 			$nicename = str_replace( "_", " ", $file );
 			$nicename = titleCase( $nicename );
 			$text_reports[$file] = $nicename;

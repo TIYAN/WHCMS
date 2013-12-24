@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -234,13 +234,13 @@ class Varilogix_Call {
 	function _getUserIp() {
 		$ip = false;
 
-		if (!empty( $_SERVER["HTTP_CLIENT_IP"] )) {
-			$ip = $_SERVER["HTTP_CLIENT_IP"];
+		if (!empty( $_SERVER['HTTP_CLIENT_IP'] )) {
+			$ip = $_SERVER['HTTP_CLIENT_IP'];
 		}
 
 
-		if (!empty( $_SERVER["HTTP_X_FORWARDED_FOR"] )) {
-			$ips = explode( ", ", $_SERVER["HTTP_X_FORWARDED_FOR"] );
+		if (!empty( $_SERVER['HTTP_X_FORWARDED_FOR'] )) {
+			$ips = explode( ", ", $_SERVER['HTTP_X_FORWARDED_FOR'] );
 
 			if ($ip) {
 				array_unshift( $ips, $ip );
@@ -269,7 +269,7 @@ class Varilogix_Call {
 			}
 		}
 
-		return $ip ? $ip : $_SERVER["REMOTE_ADDR"];
+		return $ip ? $ip : $_SERVER['REMOTE_ADDR'];
 	}
 
 

@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -20,45 +20,45 @@ function worldpayinvisible_activate() {
 
 function worldpayinvisible_capture($params) {
 	$gatewayurl = "https://secure.worldpay.com/wcc/itransaction";
-	$query_string = "instId=" . $params["installationid"];
-	$query_string .= "&cartId=" . $params["invoiceid"];
+	$query_string = "instId=" . $params['installationid'];
+	$query_string .= "&cartId=" . $params['invoiceid'];
 
-	if ($params["testmode"] == "on") {
+	if ($params['testmode'] == "on") {
 		$query_string .= "&testMode=100";
 	}
 
-	$query_string .= "&currency=" . $params["currency"];
-	$query_string .= "&desc=" . $params["description"];
-	$query_string .= "&amount=" . $params["amount"];
-	$query_string .= "&authPW=" . $params["authpw"];
-	$query_string .= "&cardNo=" . $params["cardnum"];
-	$query_string .= "&cardExpMonth=" . substr( $params["cardexp"], 0, 2 );
-	$query_string .= "&cardExpYear=20" . substr( $params["cardexp"], 2, 2 );
+	$query_string .= "&currency=" . $params['currency'];
+	$query_string .= "&desc=" . $params['description'];
+	$query_string .= "&amount=" . $params['amount'];
+	$query_string .= "&authPW=" . $params['authpw'];
+	$query_string .= "&cardNo=" . $params['cardnum'];
+	$query_string .= "&cardExpMonth=" . substr( $params['cardexp'], 0, 2 );
+	$query_string .= "&cardExpYear=20" . substr( $params['cardexp'], 2, 2 );
 
-	if ($params["cccvv"]) {
-		$query_string .= "&cardCVV=" . $params["cccvv"];
+	if ($params['cccvv']) {
+		$query_string .= "&cardCVV=" . $params['cccvv'];
 	}
 
 
-	if ($params["cardissuenum"]) {
-		$query_string .= "&cardIssueNo=" . $params["cardissuenum"];
+	if ($params['cardissuenum']) {
+		$query_string .= "&cardIssueNo=" . $params['cardissuenum'];
 	}
 
 
-	if ($params["cardstart"]) {
-		$query_string .= "&cardStartMonth=" . substr( $params["cardstart"], 0, 2 );
-		$query_string .= "&cardStartYear=20" . substr( $params["cardstart"], 2, 2 );
+	if ($params['cardstart']) {
+		$query_string .= "&cardStartMonth=" . substr( $params['cardstart'], 0, 2 );
+		$query_string .= "&cardStartYear=20" . substr( $params['cardstart'], 2, 2 );
 	}
 
-	$query_string .= "&cardName=" . $params["clientdetails"]["firstname"] . " " . $params["clientdetails"]["lastname"];
-	$query_string .= "&address=" . $params["clientdetails"]["address1"] . "&#10;" . $params["clientdetails"]["city"] . "&#10;" . $params["clientdetails"]["state"];
-	$query_string .= "&country=" . $params["clientdetails"]["country"];
-	$query_string .= "&postcode=" . $params["clientdetails"]["postcode"];
-	$query_string .= "&tel=" . $params["clientdetails"]["phonenumber"];
-	$query_string .= "&email=" . $params["clientdetails"]["email"];
+	$query_string .= "&cardName=" . $params['clientdetails']['firstname'] . " " . $params['clientdetails']['lastname'];
+	$query_string .= "&address=" . $params['clientdetails']['address1'] . "&#10;" . $params['clientdetails']['city'] . "&#10;" . $params['clientdetails']['state'];
+	$query_string .= "&country=" . $params['clientdetails']['country'];
+	$query_string .= "&postcode=" . $params['clientdetails']['postcode'];
+	$query_string .= "&tel=" . $params['clientdetails']['phonenumber'];
+	$query_string .= "&email=" . $params['clientdetails']['email'];
 	$query_string .= "&literalResult=" . urlencode( "<wpdisplay item=rawAuthCode>,<wpdisplay item=transId default='-1'>,<wpdisplay item=rawAuthMessage>,<wpdisplay item=countryMatch>,<wpdisplay item=AVS>,<wpdisplay item=wafMerchMessage>" );
 
-	if ($params["preauth"]) {
+	if ($params['preauth']) {
 		$query_string .= "&authMode=A";
 	}
 
@@ -88,12 +88,12 @@ function worldpayinvisible_capture($params) {
 
 function worldpayinvisible_refund($params) {
 	$gatewayurl = "https://secure.worldpay.com/wcc/authorise";
-	$query_string = "authPW=" . $params["authpw"];
-	$query_string .= "&instId=" . $params["installationid"];
-	$query_string .= "&cartId=Refund" . $params["invoiceid"];
+	$query_string = "authPW=" . $params['authpw'];
+	$query_string .= "&instId=" . $params['installationid'];
+	$query_string .= "&cartId=Refund" . $params['invoiceid'];
 	$query_string .= "&op=refund-full";
-	$query_string .= "&transId=" . $params["transid"];
-	$query_string .= "&currency=" . $params["currency"];
+	$query_string .= "&transId=" . $params['transid'];
+	$query_string .= "&currency=" . $params['currency'];
 	$ch = curl_init();
 	curl_setopt( $ch, CURLOPT_POST, 1 );
 	curl_setopt( $ch, CURLOPT_POSTFIELDS, $query_string );
@@ -122,7 +122,7 @@ if (!defined( "WHMCS" )) {
 	exit( "This file cannot be accessed directly" );
 }
 
-$GATEWAYMODULE["worldpayinvisiblename"] = "worldpayinvisible";
-$GATEWAYMODULE["worldpayinvisiblevisiblename"] = "WorldPay Invisible";
-$GATEWAYMODULE["worldpayinvisibletype"] = "CC";
+$GATEWAYMODULE['worldpayinvisiblename'] = "worldpayinvisible";
+$GATEWAYMODULE['worldpayinvisiblevisiblename'] = "WorldPay Invisible";
+$GATEWAYMODULE['worldpayinvisibletype'] = "CC";
 ?>

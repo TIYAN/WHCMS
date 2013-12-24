@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -171,7 +171,7 @@ if ($type == "pdfbatch") {
 		}
 	}
 
-	$clientWhere = (is_numeric($userid) ? "AND tblinvoices.userid=" . (int)$userid : "");
+	$clientWhere = ((is_numeric($userid) && 0 < $userid) ? "AND tblinvoices.userid=" . (int)$userid : "");
 
 	if ($filterby == "Date Created") {
 		$filterby = "date";

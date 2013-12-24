@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -96,7 +96,7 @@ Connection: Close
 		xml_parser_free( $p );
 		foreach ($vals as $key => $val) {
 
-			if ($val["type"] != "cdata") {
+			if ($val['type'] != "cdata") {
 				$n[$key] = $val;
 				continue;
 			}
@@ -105,21 +105,21 @@ Connection: Close
 		$i = 8;
 		foreach ($n as $k => $v) {
 
-			if ($v["type"] == "open") {
+			if ($v['type'] == "open") {
 				++$i;
 
-				if (is_array( $v["attributes"] )) {
-					foreach ($v["attributes"] as $attname => $attvalue) {
+				if (is_array( $v['attributes'] )) {
+					foreach ($v['attributes'] as $attname => $attvalue) {
 						$values[$i]["@" . $attname] = $attvalue;
 					}
 				}
 
-				$name[$i] = $v["tag"];
+				$name[$i] = $v['tag'];
 				continue;
 			}
 
 
-			if ($v["type"] == "close") {
+			if ($v['type'] == "close") {
 				$f = $values[$i];
 				$n = $name[$i];
 				--$i;
@@ -127,7 +127,7 @@ Connection: Close
 				continue;
 			}
 
-			$values[$i][$v["tag"]] = $v["value"];
+			$values[$i][$v['tag']] = $v['value'];
 		}
 
 		return $values[0];
@@ -144,16 +144,16 @@ function dotdns_getConfigArray() {
 
 
 function dotdns_SaveNameservers($params) {
-	$username = $params["Username"];
-	$password = $params["Password"];
-	$testmode = $params["TestMode"];
-	$tld = $params["tld"];
-	$sld = $params["sld"];
-	$nameserver1 = $params["ns1"];
-	$nameserver2 = $params["ns2"];
-	$nameserver3 = $params["ns3"];
-	$nameserver4 = $params["ns4"];
-	$nameserver5 = $params["ns5"];
+	$username = $params['Username'];
+	$password = $params['Password'];
+	$testmode = $params['TestMode'];
+	$tld = $params['tld'];
+	$sld = $params['sld'];
+	$nameserver1 = $params['ns1'];
+	$nameserver2 = $params['ns2'];
+	$nameserver3 = $params['ns3'];
+	$nameserver4 = $params['ns4'];
+	$nameserver5 = $params['ns5'];
 	$DotDNS = new DotDNS();
 	$DotDNS->AddParam( "username", $username );
 	$DotDNS->AddParam( "password", $password );
@@ -169,12 +169,12 @@ function dotdns_SaveNameservers($params) {
 	$DotDNS->DoTransaction();
 
 	if ($DotDNS->Values) {
-		if ($DotDNS->Values["DOTDNS"]["RESULT"]["@CODE"] != "OK") {
-			$values["error"] = $DotDNS->Values["DOTDNS"]["RESULT"]["MSG"];
+		if ($DotDNS->Values['DOTDNS']['RESULT']["@CODE"] != "OK") {
+			$values['error'] = $DotDNS->Values['DOTDNS']['RESULT']['MSG'];
 		}
 	}
 	else {
-		$values["error"] = "Can't connect to the API server.";
+		$values['error'] = "Can't connect to the API server.";
 	}
 
 	return $values;
@@ -182,55 +182,55 @@ function dotdns_SaveNameservers($params) {
 
 
 function dotdns_RegisterDomain($params) {
-	$username = $params["Username"];
-	$password = $params["Password"];
-	$tld = $params["tld"];
-	$sld = $params["sld"];
-	$regperiod = $params["regperiod"];
-	$nameserver1 = $params["ns1"];
-	$nameserver2 = $params["ns2"];
-	$nameserver3 = $params["ns3"];
-	$nameserver4 = $params["ns4"];
-	$nameserver5 = $params["ns5"];
-	$RegistrantFirstName = $params["firstname"];
-	$RegistrantLastName = $params["lastname"];
-	$RegistrantAddress1 = $params["address1"];
-	$RegistrantAddress2 = $params["address2"];
-	$RegistrantCity = $params["city"];
-	$RegistrantStateProvince = $params["state"];
-	$RegistrantPostalCode = $params["postcode"];
-	$RegistrantEmailAddress = $params["email"];
-	$RegistrantCountry = $params["country"];
+	$username = $params['Username'];
+	$password = $params['Password'];
+	$tld = $params['tld'];
+	$sld = $params['sld'];
+	$regperiod = $params['regperiod'];
+	$nameserver1 = $params['ns1'];
+	$nameserver2 = $params['ns2'];
+	$nameserver3 = $params['ns3'];
+	$nameserver4 = $params['ns4'];
+	$nameserver5 = $params['ns5'];
+	$RegistrantFirstName = $params['firstname'];
+	$RegistrantLastName = $params['lastname'];
+	$RegistrantAddress1 = $params['address1'];
+	$RegistrantAddress2 = $params['address2'];
+	$RegistrantCity = $params['city'];
+	$RegistrantStateProvince = $params['state'];
+	$RegistrantPostalCode = $params['postcode'];
+	$RegistrantEmailAddress = $params['email'];
+	$RegistrantCountry = $params['country'];
 
-	if ($params["country"] == "NL") {
+	if ($params['country'] == "NL") {
 		$telcodecode = "+31";
 	}
 	else {
-		if ($params["country"] == "BE") {
+		if ($params['country'] == "BE") {
 			$telcodecode = "+32";
 		}
 		else {
-			if ($params["country"] == "FR") {
+			if ($params['country'] == "FR") {
 				$telcodecode = "+33";
 			}
 		}
 	}
 
-	$mobilenumer = str_replace( "-", "", $params["phonenumber"] );
-	$mobilenumer = str_replace( ".", "", $params["phonenumber"] );
-	$mobilenumer = str_replace( "+", "", $params["phonenumber"] );
-	$mobilenumer = substr( $params["phonenumber"], 1, 20 );
+	$mobilenumer = str_replace( "-", "", $params['phonenumber'] );
+	$mobilenumer = str_replace( ".", "", $params['phonenumber'] );
+	$mobilenumer = str_replace( "+", "", $params['phonenumber'] );
+	$mobilenumer = substr( $params['phonenumber'], 1, 20 );
 	$RegistrantPhone = "" . $telcodecode . "." . $mobilenumer;
-	$AdminFirstName = $params["adminfirstname"];
-	$AdminLastName = $params["adminlastname"];
-	$AdminAddress1 = $params["adminaddress1"];
-	$AdminAddress2 = $params["adminaddress2"];
-	$AdminCity = $params["admincity"];
-	$AdminStateProvince = $params["adminstate"];
-	$AdminPostalCode = $params["adminpostcode"];
-	$AdminCountry = $params["admincountry"];
-	$AdminEmailAddress = $params["adminemail"];
-	$AdminPhone = $params["adminphonenumber"];
+	$AdminFirstName = $params['adminfirstname'];
+	$AdminLastName = $params['adminlastname'];
+	$AdminAddress1 = $params['adminaddress1'];
+	$AdminAddress2 = $params['adminaddress2'];
+	$AdminCity = $params['admincity'];
+	$AdminStateProvince = $params['adminstate'];
+	$AdminPostalCode = $params['adminpostcode'];
+	$AdminCountry = $params['admincountry'];
+	$AdminEmailAddress = $params['adminemail'];
+	$AdminPhone = $params['adminphonenumber'];
 	$DotDNS = new DotDNS();
 	$DotDNS->AddParam( "username", $username );
 	$DotDNS->AddParam( "password", $password );
@@ -255,12 +255,12 @@ function dotdns_RegisterDomain($params) {
 	$DotDNS->DoTransaction();
 
 	if ($DotDNS->Values) {
-		if ($DotDNS->Values["DOTDNS"]["RESULT"]["@CODE"] != "OK") {
-			$values["error"] = $DotDNS->Values["DOTDNS"]["RESULT"]["MSG"];
+		if ($DotDNS->Values['DOTDNS']['RESULT']["@CODE"] != "OK") {
+			$values['error'] = $DotDNS->Values['DOTDNS']['RESULT']['MSG'];
 		}
 	}
 	else {
-		$values["error"] = "Can't connect to the API server.";
+		$values['error'] = "Can't connect to the API server.";
 	}
 
 	return $values;
@@ -268,57 +268,57 @@ function dotdns_RegisterDomain($params) {
 
 
 function dotdns_TransferDomain($params) {
-	$username = $params["Username"];
-	$password = $params["Password"];
-	$testmode = $params["TestMode"];
-	$tld = $params["tld"];
-	$sld = $params["sld"];
-	$regperiod = $params["regperiod"];
-	$transfersecret = $params["transfersecret"];
-	$nameserver1 = $params["ns1"];
-	$nameserver2 = $params["ns2"];
-	$nameserver3 = $params["ns3"];
-	$nameserver4 = $params["ns4"];
-	$nameserver5 = $params["ns5"];
-	$RegistrantFirstName = $params["firstname"];
-	$RegistrantLastName = $params["lastname"];
-	$RegistrantAddress1 = $params["address1"];
-	$RegistrantAddress2 = $params["address2"];
-	$RegistrantCity = $params["city"];
-	$RegistrantStateProvince = $params["state"];
-	$RegistrantPostalCode = $params["postcode"];
-	$RegistrantEmailAddress = $params["email"];
-	$RegistrantCountry = $params["country"];
+	$username = $params['Username'];
+	$password = $params['Password'];
+	$testmode = $params['TestMode'];
+	$tld = $params['tld'];
+	$sld = $params['sld'];
+	$regperiod = $params['regperiod'];
+	$transfersecret = $params['transfersecret'];
+	$nameserver1 = $params['ns1'];
+	$nameserver2 = $params['ns2'];
+	$nameserver3 = $params['ns3'];
+	$nameserver4 = $params['ns4'];
+	$nameserver5 = $params['ns5'];
+	$RegistrantFirstName = $params['firstname'];
+	$RegistrantLastName = $params['lastname'];
+	$RegistrantAddress1 = $params['address1'];
+	$RegistrantAddress2 = $params['address2'];
+	$RegistrantCity = $params['city'];
+	$RegistrantStateProvince = $params['state'];
+	$RegistrantPostalCode = $params['postcode'];
+	$RegistrantEmailAddress = $params['email'];
+	$RegistrantCountry = $params['country'];
 
-	if ($params["country"] == "NL") {
+	if ($params['country'] == "NL") {
 		$telcodecode = "+31";
 	}
 	else {
-		if ($params["country"] == "BE") {
+		if ($params['country'] == "BE") {
 			$telcodecode = "+32";
 		}
 		else {
-			if ($params["country"] == "FR") {
+			if ($params['country'] == "FR") {
 				$telcodecode = "+33";
 			}
 		}
 	}
 
-	$mobilenumer = str_replace( "-", "", $params["phonenumber"] );
-	$mobilenumer = str_replace( ".", "", $params["phonenumber"] );
-	$mobilenumer = str_replace( "+", "", $params["phonenumber"] );
-	$mobilenumer = substr( $params["phonenumber"], 1, 20 );
+	$mobilenumer = str_replace( "-", "", $params['phonenumber'] );
+	$mobilenumer = str_replace( ".", "", $params['phonenumber'] );
+	$mobilenumer = str_replace( "+", "", $params['phonenumber'] );
+	$mobilenumer = substr( $params['phonenumber'], 1, 20 );
 	$RegistrantPhone = "" . $telcodecode . "." . $mobilenumer;
-	$AdminFirstName = $params["adminfirstname"];
-	$AdminLastName = $params["adminlastname"];
-	$AdminAddress1 = $params["adminaddress1"];
-	$AdminAddress2 = $params["adminaddress2"];
-	$AdminCity = $params["admincity"];
-	$AdminStateProvince = $params["adminstate"];
-	$AdminPostalCode = $params["adminpostcode"];
-	$AdminCountry = $params["admincountry"];
-	$AdminEmailAddress = $params["adminemail"];
-	$AdminPhone = $params["adminphonenumber"];
+	$AdminFirstName = $params['adminfirstname'];
+	$AdminLastName = $params['adminlastname'];
+	$AdminAddress1 = $params['adminaddress1'];
+	$AdminAddress2 = $params['adminaddress2'];
+	$AdminCity = $params['admincity'];
+	$AdminStateProvince = $params['adminstate'];
+	$AdminPostalCode = $params['adminpostcode'];
+	$AdminCountry = $params['admincountry'];
+	$AdminEmailAddress = $params['adminemail'];
+	$AdminPhone = $params['adminphonenumber'];
 	$DotDNS = new DotDNS();
 	$DotDNS->AddParam( "username", $username );
 	$DotDNS->AddParam( "password", $password );
@@ -335,12 +335,12 @@ function dotdns_TransferDomain($params) {
 	$DotDNS->DoTransaction();
 
 	if ($DotDNS->Values) {
-		if ($DotDNS->Values["DOTDNS"]["RESULT"]["@CODE"] != "OK") {
-			$values["error"] = $DotDNS->Values["DOTDNS"]["RESULT"]["MSG"];
+		if ($DotDNS->Values['DOTDNS']['RESULT']["@CODE"] != "OK") {
+			$values['error'] = $DotDNS->Values['DOTDNS']['RESULT']['MSG'];
 		}
 	}
 	else {
-		$values["error"] = "Can't connect to the API server.";
+		$values['error'] = "Can't connect to the API server.";
 	}
 
 	return $values;
@@ -348,19 +348,19 @@ function dotdns_TransferDomain($params) {
 
 
 function dotdns_SaveContactDetails($params) {
-	$username = $params["Username"];
-	$password = $params["Password"];
-	$testmode = $params["TestMode"];
-	$tld = $params["tld"];
-	$sld = $params["sld"];
-	$firstname = $params["contactdetails"]["Registrant"]["First Name"];
-	$lastname = $params["contactdetails"]["Registrant"]["Last Name"];
-	$city = $params["contactdetails"]["Registrant"]["City"];
-	$address = $params["contactdetails"]["Registrant"]["Address 1"];
-	$postal = $params["contactdetails"]["Registrant"]["Postal"];
-	$country = $params["contactdetails"]["Registrant"]["Country"];
-	$phone = $params["contactdetails"]["Registrant"]["Telephone"];
-	$email = $params["contactdetails"]["Registrant"]["Email"];
+	$username = $params['Username'];
+	$password = $params['Password'];
+	$testmode = $params['TestMode'];
+	$tld = $params['tld'];
+	$sld = $params['sld'];
+	$firstname = $params['contactdetails']['Registrant']["First Name"];
+	$lastname = $params['contactdetails']['Registrant']["Last Name"];
+	$city = $params['contactdetails']['Registrant']['City'];
+	$address = $params['contactdetails']['Registrant']["Address 1"];
+	$postal = $params['contactdetails']['Registrant']['Postal'];
+	$country = $params['contactdetails']['Registrant']['Country'];
+	$phone = $params['contactdetails']['Registrant']['Telephone'];
+	$email = $params['contactdetails']['Registrant']['Email'];
 	$DotDNS->AddParam( "username", $username );
 	$DotDNS->AddParam( "password", $password );
 	$DotDNS->AddParam( "command", "CONTACTUPDATE" );
@@ -378,12 +378,12 @@ function dotdns_SaveContactDetails($params) {
 	$DotDNS->AddParam( "Language", "en" );
 
 	if ($DotDNS->Values) {
-		if ($DotDNS->Values["DOTDNS"]["RESULT"]["@CODE"] != "OK") {
-			$values["error"] = $DotDNS->Values["DOTDNS"]["RESULT"]["MSG"];
+		if ($DotDNS->Values['DOTDNS']['RESULT']["@CODE"] != "OK") {
+			$values['error'] = $DotDNS->Values['DOTDNS']['RESULT']['MSG'];
 		}
 	}
 	else {
-		$values["error"] = "Can't connect to the API server.";
+		$values['error'] = "Can't connect to the API server.";
 	}
 
 	return $values;

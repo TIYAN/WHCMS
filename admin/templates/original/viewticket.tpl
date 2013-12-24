@@ -251,7 +251,7 @@
 {else}
 <a href="mailto:{$reply.clientemail}">{$reply.clientemail}</a>
 <br />
-<input type="button" value="{$_ADMINLANG.support.blocksender}" style="font-size:9px;" onclick="window.location='{$smarty.server.PHP_SELF}?action=viewticket&id={$ticketid}&blocksender=true'"><br>
+<input type="button" value="{$_ADMINLANG.support.blocksender}" style="font-size:9px;" onclick="window.location='{$smarty.server.PHP_SELF}?action=viewticket&id={$ticketid}&blocksender=true&token={$csrfToken}'"><br>
 {/if}
 
 {/if}

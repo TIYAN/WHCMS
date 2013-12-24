@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -1030,9 +1030,9 @@ function applyCredit($invoiceid, $userid, $amount, $noemail = "") {
 	$query = "UPDATE tblclients SET credit=credit-" . db_escape_string($amount) . " WHERE id='" . mysql_real_escape_string($userid) . "'";
 	full_query($query);
 	insert_query("tblcredit", array("clientid" => $userid, "date" => "now()", "description" => "Credit Applied to Invoice #" . $invoiceid, "amount" => $amount * (0 - 1)));
+	logActivity("Credit Applied - Amount: " . $amount . " - Invoice ID: " . $invoiceid, $userid);
 	updateInvoiceTotal($invoiceid);
-	select_query("tblinvoices", "total", array("id" => $invoiceid));
-	$result = logActivity("Credit Applied - Amount: " . $amount . " - Invoice ID: " . $invoiceid, $userid);
+	$result = select_query("tblinvoices", "total", array("id" => $invoiceid));
 	$data = mysql_fetch_array($result);
 	$total = $data['total'];
 	$result = select_query("tblaccounts", "SUM(amountin)-SUM(amountout)", array("invoiceid" => $invoiceid));

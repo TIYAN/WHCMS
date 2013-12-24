@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -23,54 +23,54 @@ function eeecurrency_nolocalcc() {
 function eeecurrency_link($params) {
 	$code = "";
 
-	if ($_POST["eeecurrency"]) {
-		if (( ( !$accountid || !$password ) || !$secpassword )) {
+	if ($_POST['eeecurrency']) {
+		if ( ( !$accountid || !$password ) || !$secpassword ) {
 			$code .= "<div align=center style=\"color:#cc0000;\"><strong>You must fill out all the fields</strong></div>";
 		}
 	}
 
-	$code .= "<form method=\"post\" action=\"" . $_SERVER["PHP_SELF"] . "?id=" . $params["invoiceid"] . "\">
+	$code .= "<form method=\"post\" action=\"" . $_SERVER['PHP_SELF'] . "?id=" . $params['invoiceid'] . "\">
 <input type=\"hidden\" name=\"eeecurrency\" value=\"true\" />
 Account ID: <input type=\"text\" name=\"accountid\" size=\"15\" /><br />
 Password: <input type=\"password\" name=\"password\" size=\"15\" /><br />
 Secondary Password: <input type=\"password\" name=\"secpassword\" size=\"15\" /><br />
-<input type=\"submit\" value=\"" . $params["langpaynow"] . "\" />
+<input type=\"submit\" value=\"" . $params['langpaynow'] . "\" />
 </form>";
 	return $code;
 }
 
 
 function eeecurrency_capture($params) {
-	$result = select_query( "tblinvoices", "", array( "id" => $params["invoiceid"] ) );
+	$result = select_query( "tblinvoices", "", array( "id" => $params['invoiceid'] ) );
 	$data = mysql_fetch_array( $result );
-	$userid = $data["userid"];
+	$userid = $data['userid'];
 	$result = select_query( "tblclients", "", array( "id" => $userid ) );
 	$data = mysql_fetch_array( $result );
-	$params["clientdetails"]["firstname"] = $data["firstname"];
-	$params["clientdetails"]["lastname"] = $data["lastname"];
-	$clientsaccountid = $data["eeecurrencyaccountid"];
-	$clientspassword = decrypt( $data["eeecurrencypassword"] );
-	$clientssecpassword = decrypt( $data["eeecurrencysecpassword"] );
+	$params['clientdetails']['firstname'] = $data['firstname'];
+	$params['clientdetails']['lastname'] = $data['lastname'];
+	$clientsaccountid = $data['eeecurrencyaccountid'];
+	$clientspassword = decrypt( $data['eeecurrencypassword'] );
+	$clientssecpassword = decrypt( $data['eeecurrencysecpassword'] );
 	$result = select_query( "mod_eeecurrency", "", array( "userid" => $userid ) );
 	$data = mysql_fetch_array( $result );
-	$eeecuserid = $data["userid"];
+	$eeecuserid = $data['userid'];
 
 	if ($eeecuserid) {
-		$clientsaccountid = $data["accountid"];
-		$clientspassword = decrypt( $data["password"] );
-		$clientssecpassword = decrypt( $data["secpassword"] );
+		$clientsaccountid = $data['accountid'];
+		$clientspassword = decrypt( $data['password'] );
+		$clientssecpassword = decrypt( $data['secpassword'] );
 	}
 
 	$gateway_url = "https://eeecurrency.com/cgi-bin/autopay.cgi";
-	$fields["ACCOUNTID"] = $clientsaccountid;
-	$fields["PASSWORD"] = $clientspassword;
-	$fields["SECPASSWORD"] = $clientssecpassword;
-	$fields["AMOUNT"] = $params["amount"];
-	$fields["RECEIVER"] = $params["receiverid"];
-	$fields["NOTE"] = $params["description"];
+	$fields['ACCOUNTID'] = $clientsaccountid;
+	$fields['PASSWORD'] = $clientspassword;
+	$fields['SECPASSWORD'] = $clientssecpassword;
+	$fields['AMOUNT'] = $params['amount'];
+	$fields['RECEIVER'] = $params['receiverid'];
+	$fields['NOTE'] = $params['description'];
 
-	if ($params["testmode"]) {
-		$fields["TEST"] = "Y";
+	if ($params['testmode']) {
+		$fields['TEST'] = "Y";
 	}
 
 	$post_str = "";
@@ -93,8 +93,8 @@ function eeecurrency_capture($params) {
 	}
 
 	curl_close( $ch );
-	$desc = "Invoice Number => " . $params["invoiceid"] . "
-Client => " . $params["clientdetails"]["firstname"] . " " . $params["clientdetails"]["lastname"] . ( "
+	$desc = "Invoice Number => " . $params['invoiceid'] . "
+Client => " . $params['clientdetails']['firstname'] . " " . $params['clientdetails']['lastname'] . ( "
 Payer Account ID => " . $clientsaccountid . "
 Result => " . $res );
 
@@ -103,12 +103,12 @@ Result => " . $res );
 ", $res );
 
 		$tempres = explode( ":", $tempres );
-		addInvoicePayment( $params["invoiceid"], $tempres[1], "", "", "eeecurrency" );
+		addInvoicePayment( $params['invoiceid'], $tempres[1], "", "", "eeecurrency" );
 		logTransaction( "Eeecurrency", $desc, "Successful" );
 		$result = "success";
 	}
 	else {
-		sendMessage( "eeepaystat01", $params["invoiceid"] );
+		sendMessage( "eeepaystat01", $params['invoiceid'] );
 		logTransaction( "Eeecurrency", $desc, "Failed" );
 		$result = "declined";
 	}
@@ -117,13 +117,13 @@ Result => " . $res );
 }
 
 
-if (( ( ( isset( $_POST["eeecurrency"] ) && $_POST["accountid"] ) && $_POST["password"] ) && $_POST["secpassword"] )) {
+if ( ( ( isset( $_POST['eeecurrency'] ) && $_POST['accountid'] ) && $_POST['password'] ) && $_POST['secpassword'] ) {
 	if (!defined( "WHMCS" )) {
 		exit( "This file cannot be accessed directly" );
 	}
 
 
-	if (!$_SESSION["uid"]) {
+	if (!$_SESSION['uid']) {
 		exit( "You must be logged in as the client to use this feature" );
 	}
 
@@ -133,17 +133,17 @@ if (( ( ( isset( $_POST["eeecurrency"] ) && $_POST["accountid"] ) && $_POST["pas
 		full_query( $query );
 	}
 
-	delete_query( "mod_eeecurrency", array( "userid" => $_SESSION["uid"] ) );
-	insert_query( "mod_eeecurrency", array( "userid" => $_SESSION["uid"], "accountid" => $_POST["accountid"], "password" => encrypt( $_POST["password"] ), "secpassword" => encrypt( $_POST["secpassword"] ) ) );
-	update_query( "tblclients", array( "gatewayid" => "eeecurrency" ), array( "id" => $_SESSION["uid"] ) );
-	$result = select_query( "tblinvoices", "", array( "id" => $_REQUEST["id"] ) );
+	delete_query( "mod_eeecurrency", array( "userid" => $_SESSION['uid'] ) );
+	insert_query( "mod_eeecurrency", array( "userid" => $_SESSION['uid'], "accountid" => $_POST['accountid'], "password" => encrypt( $_POST['password'] ), "secpassword" => encrypt( $_POST['secpassword'] ) ) );
+	update_query( "tblclients", array( "gatewayid" => "eeecurrency" ), array( "id" => $_SESSION['uid'] ) );
+	$result = select_query( "tblinvoices", "", array( "id" => $_REQUEST['id'] ) );
 	$data = mysql_fetch_array( $result );
-	$invoiceid = $data["id"];
-	$total = $data["total"];
+	$invoiceid = $data['id'];
+	$total = $data['total'];
 	$params = getGatewayVariables( "eeecurrency", $invoiceid, $total );
-	$params["invoiceid"] = $invoiceid;
-	$params["amount"] = $total;
-	$params["description"] = "Invoice #" . $invoiceid;
+	$params['invoiceid'] = $invoiceid;
+	$params['amount'] = $total;
+	$params['description'] = "Invoice #" . $invoiceid;
 	$status = eeecurrency_capture( $params );
 
 	if ($status == "success") {

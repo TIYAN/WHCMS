@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -18,32 +18,32 @@ function ewayuk_config() {
 
 function ewayuk_link($params) {
 	$query = "";
-	$gatewaytestmode = $params["testmode"];
+	$gatewaytestmode = $params['testmode'];
 
 	if ($gatewaytestmode == "on") {
 		$query .= "CustomerID=87654321";
 		$query .= "&UserName=TestAccount";
 	}
 	else {
-		$query .= "CustomerID=" . $params["customerid"];
-		$query .= "&UserName=" . $params["username"];
+		$query .= "CustomerID=" . $params['customerid'];
+		$query .= "&UserName=" . $params['username'];
 	}
 
-	$query .= "&MerchantInvoice=" . $params["invoiceid"];
-	$query .= "&MerchantReference=" . $params["invoiceid"];
-	$query .= "&Amount=" . urlencode( $params["amount"] );
-	$query .= "&Currency=" . $params["currency"];
-	$query .= "&CustomerFirstName=" . $params["clientdetails"]["firstname"];
-	$query .= "&CustomerLastName=" . $params["clientdetails"]["lastname"];
-	$query .= "&CustomerAddress=" . $params["clientdetails"]["address1"] . " " . $params["clientdetails"]["address2"];
-	$query .= "&CustomerCity=" . $params["clientdetails"]["city"];
-	$query .= "&CustomerState=" . $params["clientdetails"]["state"];
-	$query .= "&CustomerPostCode=" . $params["clientdetails"]["postcode"];
-	$query .= "&CustomerCountry=" . $params["clientdetails"]["country"];
-	$query .= "&CustomerEmail=" . $params["clientdetails"]["email"];
-	$query .= "&CustomerPhone=" . $params["clientdetails"]["phonenumber"];
-	$query .= "&CancelUrl=" . urlencode( $params["systemurl"] . "/viewinvoice.php?id=" . $params["invoiceid"] );
-	$query .= "&ReturnUrl=" . urlencode( $params["systemurl"] . "/modules/gateways/callback/ewayuk.php" );
+	$query .= "&MerchantInvoice=" . $params['invoiceid'];
+	$query .= "&MerchantReference=" . $params['invoiceid'];
+	$query .= "&Amount=" . urlencode( $params['amount'] );
+	$query .= "&Currency=" . $params['currency'];
+	$query .= "&CustomerFirstName=" . $params['clientdetails']['firstname'];
+	$query .= "&CustomerLastName=" . $params['clientdetails']['lastname'];
+	$query .= "&CustomerAddress=" . $params['clientdetails']['address1'] . " " . $params['clientdetails']['address2'];
+	$query .= "&CustomerCity=" . $params['clientdetails']['city'];
+	$query .= "&CustomerState=" . $params['clientdetails']['state'];
+	$query .= "&CustomerPostCode=" . $params['clientdetails']['postcode'];
+	$query .= "&CustomerCountry=" . $params['clientdetails']['country'];
+	$query .= "&CustomerEmail=" . $params['clientdetails']['email'];
+	$query .= "&CustomerPhone=" . $params['clientdetails']['phonenumber'];
+	$query .= "&CancelUrl=" . urlencode( $params['systemurl'] . "/viewinvoice.php?id=" . $params['invoiceid'] );
+	$query .= "&ReturnUrl=" . urlencode( $params['systemurl'] . "/modules/gateways/callback/ewayuk.php" );
 	$query = str_replace( " ", "%20", $query );
 	$posturl = "https://payment.ewaygateway.com/Request/?" . $query;
 	$response = curlCall( $posturl, "" );
@@ -51,7 +51,7 @@ function ewayuk_link($params) {
 
 	if ($responsemode == "true") {
 		$redirecturl = ewayuk_fetch_data( $response, "<Uri>", "</Uri>" );
-		$code = "<input type=\"button\" value=\"" . $params["langpaynow"] . "\" onclick=\"window.location='" . $redirecturl . "'\" />
+		$code = "<input type=\"button\" value=\"" . $params['langpaynow'] . "\" onclick=\"window.location='" . $redirecturl . "'\" />
 </form>";
 		return $code;
 	}

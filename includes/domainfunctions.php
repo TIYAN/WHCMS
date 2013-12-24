@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -223,7 +223,7 @@ function checkDomainisValid($sld, $tld) {
 
 
 	if ($isidn === FALSE) {
-		if (preg_replace("/[^.%$^'#~@&*(),_£?!+=:{}[]()|\/ \\ ]/", "", $sld)) {
+		if (preg_replace('/[^.%$^\'#~@&*(),_£?!+=:{}[]()|\/ \\ ]/', '', $sld)) {
 			return 0;
 		}
 

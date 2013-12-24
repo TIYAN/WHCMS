@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -271,7 +271,8 @@ function SumUpConfigOptionsOrder($id, $configoptions, $promocode, $paymentmethod
 
 	$year = substr($nextduedate, 0, 4);
 	$month = substr($nextduedate, 5, 2);
-	$cyclemonths = $day = substr($nextduedate, 8, 2);
+	$day = substr($nextduedate, 8, 2);
+	$cyclemonths = getBillingCycleMonths($billingcycle);
 	$prevduedate = date("Y-m-d", mktime(0, 0, 0, $month - $cyclemonths, $day, $year));
 	$totaldays = round((strtotime($nextduedate) - strtotime($prevduedate)) / 86400);
 	$todaysdate = date("Ymd");
@@ -347,8 +348,7 @@ function SumUpConfigOptionsOrder($id, $configoptions, $promocode, $paymentmethod
 		}
 	}
 
-	getCartConfigOptions($packageid, $configoptions, $billingcycle);
-	$configoptions = getBillingCycleMonths($billingcycle);
+	$configoptions = getCartConfigOptions($packageid, $configoptions, $billingcycle);
 	$oldconfigoptions = getCartConfigOptions($packageid, "", $billingcycle, $id);
 	$subtotal = 0;
 	foreach ($configoptions as $key => $configoption) {
@@ -401,7 +401,7 @@ function SumUpConfigOptionsOrder($id, $configoptions, $promocode, $paymentmethod
 						$new_selectedqty = (int)$new_selectedqty;
 
 						if ($new_selectedqty < 0) {
-							$new_selectedqty = 1073;
+							$new_selectedqty = 0;
 						}
 
 						$db_orig_value = $old_selectedqty;

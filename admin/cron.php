@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -1056,7 +1056,7 @@ if ($cron->isScheduled("backups")) {
 		$whmcs->load_class("phpmailer");
 		$mail = new PHPMailer();
 		$mail->From = $CONFIG['SystemEmailsFromEmail'];
-		$mail->FromName = $CONFIG['SystemEmailsFromName'];
+		$mail->FromName = html_entity_decode($CONFIG['SystemEmailsFromName'], ENT_QUOTES);
 		$mail->Subject = "WHMCS Database Backup";
 
 		if ($CONFIG['MailType'] == "mail") {

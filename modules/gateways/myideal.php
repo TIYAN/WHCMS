@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -33,25 +33,25 @@ function myideal_link($params) {
 	$data = new DirectoryRequest();
 	$rule = new ThinMPI();
 	$result = $rule->ProcessRequest( $data );
-	$gatewayusername = $params["username"];
-	$gatewaytestmode = $params["testmode"];
-	$invoiceid = $params["invoiceid"];
-	$description = $params["description"];
-	$amount = $params["amount"];
-	$duedate = $params["duedate"];
-	$firstname = $params["clientdetails"]["firstname"];
-	$lastname = $params["clientdetails"]["lastname"];
-	$email = $params["clientdetails"]["email"];
-	$address1 = $params["clientdetails"]["address1"];
-	$address2 = $params["clientdetails"]["address2"];
-	$city = $params["clientdetails"]["city"];
-	$state = $params["clientdetails"]["state"];
-	$postcode = $params["clientdetails"]["postcode"];
-	$country = $params["clientdetails"]["country"];
-	$phone = $params["clientdetails"]["phone"];
-	$companyname = $params["companyname"];
-	$systemurl = $params["systemurl"];
-	$currency = $params["currency"];
+	$gatewayusername = $params['username'];
+	$gatewaytestmode = $params['testmode'];
+	$invoiceid = $params['invoiceid'];
+	$description = $params['description'];
+	$amount = $params['amount'];
+	$duedate = $params['duedate'];
+	$firstname = $params['clientdetails']['firstname'];
+	$lastname = $params['clientdetails']['lastname'];
+	$email = $params['clientdetails']['email'];
+	$address1 = $params['clientdetails']['address1'];
+	$address2 = $params['clientdetails']['address2'];
+	$city = $params['clientdetails']['city'];
+	$state = $params['clientdetails']['state'];
+	$postcode = $params['clientdetails']['postcode'];
+	$country = $params['clientdetails']['country'];
+	$phone = $params['clientdetails']['phone'];
+	$companyname = $params['companyname'];
+	$systemurl = $params['systemurl'];
+	$currency = $params['currency'];
 
 	if (!$result->isOK()) {
 		$code = $result->getConsumerMessage();
@@ -115,7 +115,7 @@ if (!defined( "WHMCS" )) {
 	exit( "This file cannot be accessed directly" );
 }
 
-$GATEWAYMODULE["myidealname"] = "myideal";
-$GATEWAYMODULE["myidealvisiblename"] = "iDEAL";
-$GATEWAYMODULE["myidealtype"] = "Invoices";
+$GATEWAYMODULE['myidealname'] = "myideal";
+$GATEWAYMODULE['myidealvisiblename'] = "iDEAL";
+$GATEWAYMODULE['myidealtype'] = "Invoices";
 ?>

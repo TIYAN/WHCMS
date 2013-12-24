@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -42,9 +42,10 @@ if (!$id) {
 }
 
 $domains = new WHMCS_Domains();
-$domains->getDomainsDatabyID($id);
-$did = $domainid = $domain_data['id'];
-$domain_data['userid'];
+$domain_data = $domains->getDomainsDatabyID($id);
+$id = $did = $domainid = $domain_data['id'];
+$userid = $domain_data['userid'];
+$aInt->valUserID($userid);
 
 if (!$id) {
 	$aInt->gracefulExit("Domain ID Not Found");
@@ -216,12 +217,11 @@ ob_start();
 $did = $domain_data['id'];
 $orderid = $domain_data['orderid'];
 $ordertype = $domain_data['type'];
-$domain = $domain_data = $domain_data['domain'];
+$domain = $domain_data['domain'];
 $paymentmethod = $domain_data['paymentmethod'];
-$firstpaymentamount = $id = $domain_data['firstpaymentamount'];
-$recurringamount = $userid = $domain_data['recurringamount'];
-$domain_data['registrar'];
-$registrar = $aInt->valUserID($userid);
+$firstpaymentamount = $domain_data['firstpaymentamount'];
+$recurringamount = $domain_data['recurringamount'];
+$registrar = $domain_data['registrar'];
 $regtype = $domain_data['type'];
 $expirydate = $domain_data['expirydate'];
 $nextduedate = $domain_data['nextduedate'];
@@ -593,9 +593,7 @@ echo "</td><td class=\"fieldarea\"><input type=\"text\" name=\"domain\" size=\"3
 echo $domain;
 echo "\"> <a href=\"http://www.";
 echo $domain;
-echo "\" target=\"_blank\" style=\"color:#cc0000\">www</a> <a href=\"whois.php?domain=";
-echo $domain;
-echo "\" target=\"_blank\">";
+echo "\" target=\"_blank\" style=\"color:#cc0000\">www</a> <a href=\"#\" onclick=\"$('#frmWhois').submit();return false\">";
 echo $aInt->lang("domains", "whois");
 echo "</a></td><td class=\"fieldlabel\">";
 echo $aInt->lang("fields", "expirydate");
@@ -1089,6 +1087,11 @@ while ($data = mysql_fetch_array($result)) {
 
 echo "</select> <input type=\"submit\" value=\"" . $aInt->lang("global", "sendmessage") . "\">";
 echo "</div>
+</form>
+";
+echo "
+<form method=\"post\" action=\"whois.php\" target=\"_blank\" id=\"frmWhois\">
+<input type=\"hidden\" name=\"domain\" value=\"" . $domain . "\" />
 </form>
 ";
 $content = ob_get_contents();

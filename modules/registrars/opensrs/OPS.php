@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -41,7 +41,7 @@ class OPS extends PEAR {
 		$this->PEAR();
 
 		if (is_array( $args )) {
-			if ($args["option"] == "compress") {
+			if ($args['option'] == "compress") {
 				$this->_OPT = "compress";
 				$this->_SPACER = "";
 				$this->_CRLF = "";
@@ -184,13 +184,13 @@ class OPS extends PEAR {
 		if (is_resource( $fh )) {
 			$temp = socket_get_status( $fh );
 
-			if ($temp["timed_out"]) {
+			if ($temp['timed_out']) {
 				$this->_log( "raw", "e", "SOCKET TIMED OUT" );
 				$return = true;
 			}
 
 
-			if ($temp["eof"]) {
+			if ($temp['eof']) {
 				$this->_log( "raw", "e", "SOCKET EOF" );
 				$return = true;
 			}
@@ -354,18 +354,18 @@ class OPS extends PEAR {
 		$msg_id = $this->_SESSID + $this->_MSGCNT;
 		$msg_type = $this->_MSGTYPE_STD;
 
-		if ($array["protocol"]) {
-			$array["protocol"] = strtoupper( $array["protocol"] );
+		if ($array['protocol']) {
+			$array['protocol'] = strtoupper( $array['protocol'] );
 		}
 
 
-		if ($array["action"]) {
-			$array["action"] = strtoupper( $array["action"] );
+		if ($array['action']) {
+			$array['action'] = strtoupper( $array['action'] );
 		}
 
 
-		if ($array["object"]) {
-			$array["object"] = strtoupper( $array["object"] );
+		if ($array['object']) {
+			$array['object'] = strtoupper( $array['object'] );
 		}
 
 		$xml_data_block = $this->PHP2XML( $array );

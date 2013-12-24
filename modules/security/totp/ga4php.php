@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -39,12 +39,12 @@ class GoogleAuthenticator {
 
 
 	function createEmptyData() {
-		$data["tokenkey"] = "";
-		$data["tokentype"] = "HOTP";
-		$data["tokentimer"] = 30;
-		$data["tokencounter"] = 1;
-		$data["tokenalgorithm"] = "SHA1";
-		$data["user"] = "";
+		$data['tokenkey'] = "";
+		$data['tokentype'] = "HOTP";
+		$data['tokentimer'] = 30;
+		$data['tokencounter'] = 1;
+		$data['tokenalgorithm'] = "SHA1";
+		$data['user'] = "";
 		return $data;
 	}
 
@@ -76,13 +76,13 @@ class GoogleAuthenticator {
 	function setTokenType($username, $tokentype) {
 		$tokentype = strtoupper( $tokentype );
 
-		if (( $tokentype != "HOTP" && $tokentype != "TOTP" )) {
+		if ($tokentype != "HOTP" && $tokentype != "TOTP") {
 			$errorText = "Invalid Token Type";
 			return false;
 		}
 
 		$data = $this->internalGetData( $username );
-		$data["tokentype"] = $tokentype;
+		$data['tokentype'] = $tokentype;
 		return $this->internalPutData( $username, $data );
 	}
 
@@ -90,7 +90,7 @@ class GoogleAuthenticator {
 	function setUser($username, $ttype = "HOTP", $key = "", $hexkey = "") {
 		$ttype = strtoupper( $ttype );
 
-		if (( $ttype != "HOTP" && $ttype != "TOTP" )) {
+		if ($ttype != "HOTP" && $ttype != "TOTP") {
 			return false;
 		}
 
@@ -106,8 +106,8 @@ class GoogleAuthenticator {
 		}
 
 		$token = $this->internalGetData( $username );
-		$token["tokenkey"] = $hkey;
-		$token["tokentype"] = $ttype;
+		$token['tokenkey'] = $hkey;
+		$token['tokentype'] = $ttype;
 
 		if (!$this->internalPutData( $username, $token )) {
 			return false;
@@ -120,12 +120,12 @@ class GoogleAuthenticator {
 	function hasToken($username) {
 		$token = $this->internalGetData( $username );
 
-		if (!isset( $token["tokenkey"] )) {
+		if (!isset( $token['tokenkey'] )) {
 			return false;
 		}
 
 
-		if ($token["tokenkey"] == "") {
+		if ($token['tokenkey'] == "") {
 			return false;
 		}
 
@@ -135,7 +135,7 @@ class GoogleAuthenticator {
 
 	function setUserKey($username, $key) {
 		$token = $this->internalGetData( $username );
-		$token["tokenkey"] = $key;
+		$token['tokenkey'] = $key;
 		$this->internalPutData( $username, $token );
 		return true;
 	}
@@ -153,14 +153,14 @@ class GoogleAuthenticator {
 
 		$tokendata = $this->internalGetData( $username );
 
-		if ($tokendata["tokenkey"] == "") {
+		if ($tokendata['tokenkey'] == "") {
 			$errorText = "No Assigned Token";
 			return false;
 		}
 
-		$ttype = $tokendata["tokentype"];
-		$tlid = $tokendata["tokencounter"];
-		$tkey = $tokendata["tokenkey"];
+		$ttype = $tokendata['tokentype'];
+		$tlid = $tokendata['tokencounter'];
+		$tkey = $tokendata['tokenkey'];
 		switch ($ttype) {
 		case "HOTP": {
 				$st = $tlid + 1;
@@ -171,7 +171,7 @@ class GoogleAuthenticator {
 					$stest = $this->oath_hotp( $tkey, $i );
 
 					if ($code == $stest) {
-						$tokendata["tokencounter"] = $i;
+						$tokendata['tokencounter'] = $i;
 						$this->internalPutData( $username, $tokendata );
 						return true;
 					}
@@ -189,9 +189,9 @@ class GoogleAuthenticator {
 
 	function resyncCode($username, $code1, $code2) {
 		$tokendata = internalGetData( $username );
-		$ttype = $tokendata["tokentype"];
-		$tlid = $tokendata["tokencounter"];
-		$tkey = $tokendata["tokenkey"];
+		$ttype = $tokendata['tokentype'];
+		$tlid = $tokendata['tokencounter'];
+		$tkey = $tokendata['tokenkey'];
 
 		if ($tkey == "") {
 			$this->errorText = "No Assigned Token";
@@ -211,7 +211,7 @@ class GoogleAuthenticator {
 						$stest2 = $this->oath_hotp( $tkey, $i + 1 );
 
 						if ($code2 == $stest2) {
-							$tokendata["tokencounter"] = $i + 1;
+							$tokendata['tokencounter'] = $i + 1;
 							internalPutData( $username, $tokendata );
 							return true;
 						}
@@ -235,9 +235,9 @@ class GoogleAuthenticator {
 
 	function createURL($user) {
 		$data = $this->internalGetData( $user );
-		$toktype = $data["tokentype"];
-		$key = $this->helperhex2b32( $data["tokenkey"] );
-		$counter = $data["tokencounter"] + 1;
+		$toktype = $data['tokentype'];
+		$key = $this->helperhex2b32( $data['tokenkey'] );
+		$counter = $data['tokencounter'] + 1;
 		$toktype = strtolower( $toktype );
 
 		if ($toktype == "hotp") {
@@ -267,14 +267,14 @@ class GoogleAuthenticator {
 
 
 	$data = function getKey($username) {;
-		$data["tokenkey"];
+		$data['tokenkey'];
 		$key = $this->internalGetData( $username );
 		return $key;
 	}
 
 
 	$data = function getTokenType($username) {;
-		$data["tokentype"];
+		$data['tokentype'];
 		$toktype = $this->internalGetData( $username );
 		return $toktype;
 	}

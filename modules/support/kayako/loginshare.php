@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -13,21 +13,21 @@
 require "../../../init.php";
 $whmcs->load_function( "client" );
 
-if ($CONFIG["SupportModule"] != "kayako") {
+if ($CONFIG['SupportModule'] != "kayako") {
 	exit( "Kayako Module not Enabled in General Settings > Support" );
 }
 
-$username = $_REQUEST["username"];
-$password = $_REQUEST["password"];
-$remote_ip = $_REQUEST["ipaddress"];
+$username = $_REQUEST['username'];
+$password = $_REQUEST['password'];
+$remote_ip = $_REQUEST['ipaddress'];
 
 if (validateClientLogin( $username, $password )) {
-	$result = select_query( "tblclients", "", array( "id" => $_SESSION["uid"] ) );
+	$result = select_query( "tblclients", "", array( "id" => $_SESSION['uid'] ) );
 	$data = mysql_fetch_array( $result );
-	$firstname = $data["firstname"];
-	$lastname = $data["lastname"];
-	$email = $data["email"];
-	$phonenumber = $data["phonenumber"];
+	$firstname = $data['firstname'];
+	$lastname = $data['lastname'];
+	$email = $data['email'];
+	$phonenumber = $data['phonenumber'];
 	$xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<loginshare>
     <result>1</result>
     <user>

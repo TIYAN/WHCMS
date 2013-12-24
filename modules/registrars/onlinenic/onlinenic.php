@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -19,11 +19,11 @@ function onlinenic_getConfigArray() {
 
 
 function onlinenic_GetNameservers($params) {
-	$username = $params["Username"];
-	$password = md5( $params["Password"] );
-	$testmode = $params["TestMode"];
-	$tld = $params["tld"];
-	$sld = $params["sld"];
+	$username = $params['Username'];
+	$password = md5( $params['Password'] );
+	$testmode = $params['TestMode'];
+	$tld = $params['tld'];
+	$sld = $params['sld'];
 	$domain = $sld . "." . $tld;
 
 	if ($testmode) {
@@ -33,7 +33,7 @@ function onlinenic_GetNameservers($params) {
 
 	$values = onlinenic_Login( $fp, $username, $password, $testmode );
 
-	if ($values["error"]) {
+	if ($values['error']) {
 		return $values;
 	}
 
@@ -70,16 +70,16 @@ function onlinenic_GetNameservers($params) {
 		$error = onlinenic_GetValue( $result, "<value>", "</value>" );
 		$error = $msg . " - " . $error;
 		$errormsg = onlinenic_getResultText( $resultcode );
-		$values["error"] = "" . $resultcode . " - " . $errormsg . ": " . $error;
+		$values['error'] = "" . $resultcode . " - " . $errormsg . ": " . $error;
 	}
 	else {
 		$nameserver1 = onlinenic_GetValue( $result, "<dns1>", "</dns1>" );
 		$nameserver2 = onlinenic_GetValue( $result, "<dns2>", "</dns2>" );
-		$values["ns1"] = trim( $nameserver1 );
-		$values["ns2"] = trim( $nameserver2 );
-		$values["ns3"] = trim( $nameserver3 );
-		$values["ns4"] = trim( $nameserver4 );
-		$values["ns5"] = trim( $nameserver5 );
+		$values['ns1'] = trim( $nameserver1 );
+		$values['ns2'] = trim( $nameserver2 );
+		$values['ns3'] = trim( $nameserver3 );
+		$values['ns4'] = trim( $nameserver4 );
+		$values['ns5'] = trim( $nameserver5 );
 	}
 
 	return $values;
@@ -87,11 +87,11 @@ function onlinenic_GetNameservers($params) {
 
 
 function onlinenic_SaveNameservers($params) {
-	$username = $params["Username"];
-	$password = md5( $params["Password"] );
-	$testmode = $params["TestMode"];
-	$tld = $params["tld"];
-	$sld = $params["sld"];
+	$username = $params['Username'];
+	$password = md5( $params['Password'] );
+	$testmode = $params['TestMode'];
+	$tld = $params['tld'];
+	$sld = $params['sld'];
 
 	if ($testmode) {
 		$username = 135614;
@@ -101,16 +101,16 @@ function onlinenic_SaveNameservers($params) {
 	$domain = $sld . "." . $tld;
 	$values = onlinenic_Login( $fp, $username, $password, $testmode );
 
-	if ($values["error"]) {
+	if ($values['error']) {
 		return $values;
 	}
 
 	$domain_type = onlinenic_getDomainType( $tld );
-	$dns1 = $params["ns1"];
-	$dns2 = $params["ns2"];
-	$dns3 = $params["ns3"];
-	$dns4 = $params["ns4"];
-	$dns5 = $params["ns5"];
+	$dns1 = $params['ns1'];
+	$dns2 = $params['ns2'];
+	$dns3 = $params['ns3'];
+	$dns4 = $params['ns4'];
+	$dns5 = $params['ns5'];
 	$clTrid = substr( md5( $domain ), 0, 10 ) . mt_rand( 1000000000, 9999999999 );
 	
 	$checksum = md5( $username . $password . $clTrid . "upddomain" . $domain_type . $domain . $dns1 . $dns2 );
@@ -142,7 +142,7 @@ function onlinenic_SaveNameservers($params) {
 		$msg = onlinenic_GetValue( $result, "<msg>", "</msg>" );
 		$error = onlinenic_GetValue( $result, "<value>", "</value>" );
 		$error = $msg . " - " . $error;
-		$values["error"] = "" . $resultcode . " - " . $errormsg . ": " . $error;
+		$values['error'] = "" . $resultcode . " - " . $errormsg . ": " . $error;
 	}
 
 	return $values;
@@ -150,11 +150,11 @@ function onlinenic_SaveNameservers($params) {
 
 
 function onlinenic_GetRegistrarLock($params) {
-	$username = $params["Username"];
-	$password = $params["Password"];
-	$testmode = $params["TestMode"];
-	$params["tld"];
-	$params["sld"];
+	$username = $params['Username'];
+	$password = $params['Password'];
+	$testmode = $params['TestMode'];
+	$params['tld'];
+	$params['sld'];
 	$domainname = "" . $sld . "." . $tld;
 
 	if ($testmode) {
@@ -164,7 +164,7 @@ function onlinenic_GetRegistrarLock($params) {
 
 	$queryresult = $tld = select_query( "mod_onlinenic", "lockstatus", "domain='" . $domainname . "'" );
 	$data = $sld = mysql_fetch_array( $queryresult );
-	$lock = (string)$data["lockstatus"];
+	$lock = (string)$data['lockstatus'];
 
 	if ($lock) {
 		$lockstatus = "locked";
@@ -178,13 +178,13 @@ function onlinenic_GetRegistrarLock($params) {
 
 
 function onlinenic_SaveRegistrarLock($params) {
-	$username = $params["Username"];
-	$password = md5( $params["Password"] );
-	$testmode = $params["TestMode"];
-	$tld = $params["tld"];
-	$sld = $params["sld"];
+	$username = $params['Username'];
+	$password = md5( $params['Password'] );
+	$testmode = $params['TestMode'];
+	$tld = $params['tld'];
+	$sld = $params['sld'];
 
-	if ($params["lockenabled"] == "locked") {
+	if ($params['lockenabled'] == "locked") {
 		$locked = true;
 	}
 	else {
@@ -200,7 +200,7 @@ function onlinenic_SaveRegistrarLock($params) {
 	$domain = $sld . "." . $tld;
 	$values = onlinenic_Login( $fp, $username, $password, $testmode );
 
-	if ($values["error"]) {
+	if ($values['error']) {
 		return $values;
 	}
 
@@ -244,7 +244,7 @@ function onlinenic_SaveRegistrarLock($params) {
 		$msg = onlinenic_GetValue( $result, "<msg>", "</msg>" );
 		$error = onlinenic_GetValue( $result, "<value>", "</value>" );
 		$error = $msg . " - " . $error;
-		$values["error"] = "" . $resultcode . " - " . $errormsg . ": " . $error;
+		$values['error'] = "" . $resultcode . " - " . $errormsg . ": " . $error;
 	}
 	else {
 		$queryresult = select_query( "mod_onlinenic", "*", "domain='" . $domain . "'" );
@@ -263,11 +263,11 @@ function onlinenic_SaveRegistrarLock($params) {
 
 
 function onlinenicX_GetDNS($params) {
-	$username = $params["Username"];
-	$password = $params["Password"];
-	$testmode = $params["TestMode"];
-	$tld = $params["tld"];
-	$sld = $params["sld"];
+	$username = $params['Username'];
+	$password = $params['Password'];
+	$testmode = $params['TestMode'];
+	$tld = $params['tld'];
+	$sld = $params['sld'];
 
 	if ($testmode) {
 		$username = 135614;	
@@ -282,34 +282,34 @@ function onlinenicX_GetDNS($params) {
 
 
 function onlinenicX_SaveDNS($params) {
-	$username = $params["Username"];
-	$password = $params["Password"];
-	$testmode = $params["TestMode"];
-	$tld = $params["tld"];
-	$sld = $params["sld"];
+	$username = $params['Username'];
+	$password = $params['Password'];
+	$testmode = $params['TestMode'];
+	$tld = $params['tld'];
+	$sld = $params['sld'];
 
 	if ($testmode) {
 		$username = 135615;
 		$password = md5( "654123" );
 	}
 
-	foreach ($params["dnsrecords"] as $key => $values) {
-		$hostname = $values["hostname"];
-		$type = $values["type"];
-		$address = $values["address"];
+	foreach ($params['dnsrecords'] as $key => $values) {
+		$hostname = $values['hostname'];
+		$type = $values['type'];
+		$address = $values['address'];
 	}
 
-	$values["error"] = $Enom->Values["Err1"];
+	$values['error'] = $Enom->Values['Err1'];
 	return $values;
 }
 
 
 function onlinenic_RegisterDomain($params) {
-	$username = $params["Username"];
-	$password = md5( $params["Password"] );
-	$testmode = $params["TestMode"];
-	$tld = $params["tld"];
-	$sld = $params["sld"];
+	$username = $params['Username'];
+	$password = md5( $params['Password'] );
+	$testmode = $params['TestMode'];
+	$tld = $params['tld'];
+	$sld = $params['sld'];
 	$domain = $sld . "." . $tld;
 
 	if ($testmode) {
@@ -319,59 +319,59 @@ function onlinenic_RegisterDomain($params) {
 
 	$values = onlinenic_Login( $fp, $username, $password, $testmode );
 
-	if ($values["error"]) {
+	if ($values['error']) {
 		return $values;
 	}
 
 	$domain_type = onlinenic_getDomainType( $tld );
-	$year = $params["regperiod"];
-	$dns1 = $params["ns1"];
-	$dns2 = $params["ns2"];
-	$dns3 = $params["ns3"];
-	$dns4 = $params["ns4"];
-	$dns5 = $params["ns5"];
-	$RegistrantFirstName = $params["firstname"];
-	$RegistrantLastName = $params["lastname"];
-	$RegistrantCompany = $params["companyname"];
-	$RegistrantAddress1 = $params["address1"];
-	$RegistrantAddress2 = $params["address2"];
-	$RegistrantCity = $params["city"];
-	$RegistrantStateProvince = $params["state"];
-	$RegistrantPostalCode = $params["postcode"];
-	$RegistrantCountry = $params["country"];
-	$RegistrantEmailAddress = $params["email"];
-	$RegistrantPhone = $params["phonenumber"];
+	$year = $params['regperiod'];
+	$dns1 = $params['ns1'];
+	$dns2 = $params['ns2'];
+	$dns3 = $params['ns3'];
+	$dns4 = $params['ns4'];
+	$dns5 = $params['ns5'];
+	$RegistrantFirstName = $params['firstname'];
+	$RegistrantLastName = $params['lastname'];
+	$RegistrantCompany = $params['companyname'];
+	$RegistrantAddress1 = $params['address1'];
+	$RegistrantAddress2 = $params['address2'];
+	$RegistrantCity = $params['city'];
+	$RegistrantStateProvince = $params['state'];
+	$RegistrantPostalCode = $params['postcode'];
+	$RegistrantCountry = $params['country'];
+	$RegistrantEmailAddress = $params['email'];
+	$RegistrantPhone = $params['phonenumber'];
 	$values = onlinenic_RegisterContact( $fp, $username, $password, $domain_type, $RegistrantFirstName, $RegistrantLastName, $RegistrantCompany, $RegistrantAddress1, $RegistrantAddress2, $RegistrantCity, $RegistrantStateProvince, $RegistrantCountry, $RegistrantPostalCode, $RegistrantPhone, $RegistrantPhone, $RegistrantEmailAddress );
 
-	if ($values["error"]) {
+	if ($values['error']) {
 		return $values;
 	}
 
-	$registrant = $values["contactid"];
-	$AdminFirstName = $params["adminfirstname"];
-	$AdminLastName = $params["adminlastname"];
-	$AdminCompany = $params["companyname"];
-	$AdminAddress1 = $params["adminaddress1"];
-	$AdminAddress2 = $params["adminaddress2"];
-	$AdminCity = $params["admincity"];
-	$AdminStateProvince = $params["adminstate"];
-	$AdminPostalCode = $params["adminpostcode"];
-	$AdminCountry = $params["admincountry"];
-	$AdminEmailAddress = $params["adminemail"];
-	$AdminPhone = $params["adminphonenumber"];
+	$registrant = $values['contactid'];
+	$AdminFirstName = $params['adminfirstname'];
+	$AdminLastName = $params['adminlastname'];
+	$AdminCompany = $params['companyname'];
+	$AdminAddress1 = $params['adminaddress1'];
+	$AdminAddress2 = $params['adminaddress2'];
+	$AdminCity = $params['admincity'];
+	$AdminStateProvince = $params['adminstate'];
+	$AdminPostalCode = $params['adminpostcode'];
+	$AdminCountry = $params['admincountry'];
+	$AdminEmailAddress = $params['adminemail'];
+	$AdminPhone = $params['adminphonenumber'];
 	$values = onlinenic_RegisterContact( $fp, $username, $password, $domain_type, $AdminFirstName, $AdminLastName, $AdminCompany, $AdminAddress1, $AdminAddress2, $AdminCity, $AdminStateProvince, $AdminCountry, $AdminPostalCode, $AdminPhone, $AdminPhone, $AdminEmailAddress );
 
-	if ($values["error"]) {
+	if ($values['error']) {
 		return $values;
 	}
 
-	$admin = $values["contactid"];
+	$admin = $values['contactid'];
 	$tech = $admin;
 	$billing = $admin;
 	$clTrid = substr( md5( $domain ), 0, 10 ) . mt_rand( 1000000000, 9999999999 );
 	$password1 = onlinenic_genpw();
 
-	if (( $tld == "eu" || $tld == "cc" )) {
+	if ($tld == "eu" || $tld == "cc") {
 		
 		$checksum = md5( $username . $password . $clTrid . "crtdomain" . $domain_type . $domain . $year . $dns1 . $dns2 . $registrant . $password1 );
 	}
@@ -424,7 +424,7 @@ function onlinenic_RegisterDomain($params) {
 		$msg = onlinenic_GetValue( $result, "<msg>", "</msg>" );
 		$error = onlinenic_GetValue( $result, "<value>", "</value>" );
 		$error = $msg . " - " . $error;
-		$values["error"] = "" . $resultcode . " - " . $errormsg . ": " . $error;
+		$values['error'] = "" . $resultcode . " - " . $errormsg . ": " . $error;
 		return $values;
 	}
 
@@ -444,7 +444,7 @@ function onlinenic_FormatPhone($telephone, $country) {
 	$StartsWith011 = strcmp( substr( $telephone, 0, 3 ), "011" ) == 0;
 	$StartsWithPrefix = strcmp( substr( $telephone, 0, strlen( $prefix ) ), $prefix ) == 0;
 
-	if (( $StartsWith001 || $StartsWith011 )) {
+	if ($StartsWith001 || $StartsWith011) {
 		$telephone = substr( $telephone, 3, strlen( $telephone ) - 3 );
 	}
 
@@ -512,21 +512,21 @@ function onlinenic_RegisterContact($fp, $username, $password, $domain_type, $fir
 		$msg = onlinenic_GetValue( $result, "<msg>", "</msg>" );
 		$error = onlinenic_GetValue( $result, "<value>", "</value>" );
 		$error = $msg . " - " . $error;
-		$values["error"] = "" . $resultcode . " - " . $errormsg . ": " . $error;
+		$values['error'] = "" . $resultcode . " - " . $errormsg . ": " . $error;
 	}
 
-	$values["contactid"] = onlinenic_GetValue( $result, "<contact:id>", "</contact:id>" );
+	$values['contactid'] = onlinenic_GetValue( $result, "<contact:id>", "</contact:id>" );
 	return $values;
 }
 
 
 function onlinenic_TransferDomain($params) {
-	$username = $params["Username"];
+	$username = $params['Username'];
 	
-	$password = md5( $params["Password"] );
-	$testmode = $params["TestMode"];
-	$tld = $params["tld"];
-	$sld = $params["sld"];
+	$password = md5( $params['Password'] );
+	$testmode = $params['TestMode'];
+	$tld = $params['tld'];
+	$sld = $params['sld'];
 	$domain = $sld . "." . $tld;
 
 	if ($testmode) {
@@ -537,7 +537,7 @@ function onlinenic_TransferDomain($params) {
 
 	$values = onlinenic_Login( $fp, $username, $password, $testmode );
 
-	if ($values["error"]) {
+	if ($values['error']) {
 		return $values;
 	}
 
@@ -564,12 +564,12 @@ function onlinenic_TransferDomain($params) {
 	$resultcode = onlinenic_getResultCode( $result );
 	onlinenic_Logout( $fp, $username, $password );
 
-	if (( $resultcode != "1000" && $resultcode != "1001" )) {
+	if ($resultcode != "1000" && $resultcode != "1001") {
 		$errormsg = onlinenic_getResultText( $resultcode );
 		$msg = onlinenic_GetValue( $result, "<msg>", "</msg>" );
 		$error = onlinenic_GetValue( $result, "<value>", "</value>" );
 		$error = $msg . " - " . $error;
-		$values["error"] = "" . $resultcode . " - " . $errormsg . ": " . $error;
+		$values['error'] = "" . $resultcode . " - " . $errormsg . ": " . $error;
 		return $values;
 	}
 
@@ -577,12 +577,12 @@ function onlinenic_TransferDomain($params) {
 
 
 function onlinenic_RenewDomain($params) {
-	$username = $params["Username"];
+	$username = $params['Username'];
 	
-	$password = md5( $params["Password"] );
-	$testmode = $params["TestMode"];
-	$tld = $params["tld"];
-	$sld = $params["sld"];
+	$password = md5( $params['Password'] );
+	$testmode = $params['TestMode'];
+	$tld = $params['tld'];
+	$sld = $params['sld'];
 	$domain = $sld . "." . $tld;
 
 	if ($testmode) {
@@ -591,10 +591,10 @@ function onlinenic_RenewDomain($params) {
 		$password = md5( "654123" );
 	}
 
-	$year = $params["regperiod"];
+	$year = $params['regperiod'];
 	$values = onlinenic_Login( $fp, $username, $password, $testmode );
 
-	if ($values["error"]) {
+	if ($values['error']) {
 		return $values;
 	}
 
@@ -624,7 +624,7 @@ function onlinenic_RenewDomain($params) {
 		$msg = onlinenic_GetValue( $result, "<msg>", "</msg>" );
 		$error = onlinenic_GetValue( $result, "<value>", "</value>" );
 		$error = $msg . " - " . $error;
-		$values["error"] = "" . $resultcode . " - " . $errormsg . ": " . $error;
+		$values['error'] = "" . $resultcode . " - " . $errormsg . ": " . $error;
 		return $values;
 	}
 
@@ -632,12 +632,12 @@ function onlinenic_RenewDomain($params) {
 
 
 function onlinenic_GetContactDetails($params) {
-	$username = $params["Username"];
+	$username = $params['Username'];
 	
-	$password = md5( $params["Password"] );
-	$testmode = $params["TestMode"];
-	$tld = $params["tld"];
-	$sld = $params["sld"];
+	$password = md5( $params['Password'] );
+	$testmode = $params['TestMode'];
+	$tld = $params['tld'];
+	$sld = $params['sld'];
 	$domain = $sld . "." . $tld;
 
 	if ($testmode) {
@@ -648,7 +648,7 @@ function onlinenic_GetContactDetails($params) {
 
 	$values = onlinenic_Login( $fp, $username, $password, $testmode );
 
-	if ($values["error"]) {
+	if ($values['error']) {
 		return $values;
 	}
 
@@ -680,7 +680,7 @@ function onlinenic_GetContactDetails($params) {
 		$msg = onlinenic_GetValue( $result, "<msg>", "</msg>" );
 		$error = onlinenic_GetValue( $result, "<value>", "</value>" );
 		$error = $msg . " - " . $error;
-		$values["error"] = "" . $resultcode . " - " . $errormsg . ": " . $error;
+		$values['error'] = "" . $resultcode . " - " . $errormsg . ": " . $error;
 	}
 	else {
 		$name = onlinenic_GetValue( $result, "<r_name>", "</r_name>" );
@@ -693,16 +693,16 @@ function onlinenic_GetContactDetails($params) {
 		$tel = onlinenic_GetValue( $result, "<r_phone>", "</r_phone>" );
 		$fax = onlinenic_GetValue( $result, "<r_fax>", "</r_fax>" );
 		$email = onlinenic_GetValue( $result, "<r_email>", "</r_email>" );
-		$values["Registrant"]["Full Name"] = $name;
-		$values["Registrant"]["Company Name"] = $company;
-		$values["Registrant"]["Address"] = $address;
-		$values["Registrant"]["City"] = $city;
-		$values["Registrant"]["State"] = $state;
-		$values["Registrant"]["Postcode"] = $postcode;
-		$values["Registrant"]["Country"] = $country;
-		$values["Registrant"]["Phone Number"] = $tel;
-		$values["Registrant"]["Fax Number"] = $fax;
-		$values["Registrant"]["Email"] = $email;
+		$values['Registrant']["Full Name"] = $name;
+		$values['Registrant']["Company Name"] = $company;
+		$values['Registrant']['Address'] = $address;
+		$values['Registrant']['City'] = $city;
+		$values['Registrant']['State'] = $state;
+		$values['Registrant']['Postcode'] = $postcode;
+		$values['Registrant']['Country'] = $country;
+		$values['Registrant']["Phone Number"] = $tel;
+		$values['Registrant']["Fax Number"] = $fax;
+		$values['Registrant']['Email'] = $email;
 		$name = onlinenic_GetValue( $result, "<a_name>", "</a_name>" );
 		$company = onlinenic_GetValue( $result, "<a_org>", "</a_org>" );
 		$address = onlinenic_GetValue( $result, "<a_addr>", "</a_addr>" );
@@ -713,16 +713,16 @@ function onlinenic_GetContactDetails($params) {
 		$tel = onlinenic_GetValue( $result, "<a_phone>", "</a_phone>" );
 		$fax = onlinenic_GetValue( $result, "<a_fax>", "</a_fax>" );
 		$email = onlinenic_GetValue( $result, "<a_email>", "</a_email>" );
-		$values["Admin"]["Full Name"] = $name;
-		$values["Admin"]["Company Name"] = $company;
-		$values["Admin"]["Address"] = $address;
-		$values["Admin"]["City"] = $city;
-		$values["Admin"]["State"] = $state;
-		$values["Admin"]["Postcode"] = $postcode;
-		$values["Admin"]["Country"] = $country;
-		$values["Admin"]["Phone Number"] = $tel;
-		$values["Admin"]["Fax Number"] = $fax;
-		$values["Admin"]["Email"] = $email;
+		$values['Admin']["Full Name"] = $name;
+		$values['Admin']["Company Name"] = $company;
+		$values['Admin']['Address'] = $address;
+		$values['Admin']['City'] = $city;
+		$values['Admin']['State'] = $state;
+		$values['Admin']['Postcode'] = $postcode;
+		$values['Admin']['Country'] = $country;
+		$values['Admin']["Phone Number"] = $tel;
+		$values['Admin']["Fax Number"] = $fax;
+		$values['Admin']['Email'] = $email;
 		$name = onlinenic_GetValue( $result, "<t_name>", "</t_name>" );
 		$company = onlinenic_GetValue( $result, "<t_org>", "</t_org>" );
 		$address = onlinenic_GetValue( $result, "<t_addr>", "</t_addr>" );
@@ -733,16 +733,16 @@ function onlinenic_GetContactDetails($params) {
 		$tel = onlinenic_GetValue( $result, "<t_phone>", "</t_phone>" );
 		$fax = onlinenic_GetValue( $result, "<t_fax>", "</t_fax>" );
 		$email = onlinenic_GetValue( $result, "<t_email>", "</t_email>" );
-		$values["Tech"]["Full Name"] = $name;
-		$values["Tech"]["Company Name"] = $company;
-		$values["Tech"]["Address"] = $address;
-		$values["Tech"]["City"] = $city;
-		$values["Tech"]["State"] = $state;
-		$values["Tech"]["Postcode"] = $postcode;
-		$values["Tech"]["Country"] = $country;
-		$values["Tech"]["Phone Number"] = $tel;
-		$values["Tech"]["Fax Number"] = $fax;
-		$values["Tech"]["Email"] = $email;
+		$values['Tech']["Full Name"] = $name;
+		$values['Tech']["Company Name"] = $company;
+		$values['Tech']['Address'] = $address;
+		$values['Tech']['City'] = $city;
+		$values['Tech']['State'] = $state;
+		$values['Tech']['Postcode'] = $postcode;
+		$values['Tech']['Country'] = $country;
+		$values['Tech']["Phone Number"] = $tel;
+		$values['Tech']["Fax Number"] = $fax;
+		$values['Tech']['Email'] = $email;
 	}
 
 	return $values;
@@ -750,12 +750,12 @@ function onlinenic_GetContactDetails($params) {
 
 
 function onlinenic_SaveContactDetails($params) {
-	$username = $params["Username"];
+	$username = $params['Username'];
 	
-	$password = md5( $params["Password"] );
-	$testmode = $params["TestMode"];
-	$tld = $params["tld"];
-	$sld = $params["sld"];
+	$password = md5( $params['Password'] );
+	$testmode = $params['TestMode'];
+	$tld = $params['tld'];
+	$sld = $params['sld'];
 	$domain = $sld . "." . $tld;
 
 	if ($testmode) {
@@ -766,7 +766,7 @@ function onlinenic_SaveContactDetails($params) {
 
 	$values = onlinenic_Login( $fp, $username, $password, $testmode );
 
-	if ($values["error"]) {
+	if ($values['error']) {
 		return $values;
 	}
 
@@ -797,7 +797,7 @@ function onlinenic_SaveContactDetails($params) {
 		$msg = onlinenic_GetValue( $result, "<msg>", "</msg>" );
 		$error = onlinenic_GetValue( $result, "<value>", "</value>" );
 		$error = $msg . " - " . $error;
-		$values["error"] = "" . $resultcode . " - " . $errormsg . ": " . $error;
+		$values['error'] = "" . $resultcode . " - " . $errormsg . ": " . $error;
 	}
 	else {
 		$password1 = onlinenic_GetValue( $result, "<pwd>", "</pwd>" );
@@ -805,15 +805,15 @@ function onlinenic_SaveContactDetails($params) {
 
 	$contact_type = "4";
 	$name = "";
-	$company = $params["contactdetails"]["Registrant"]["Company Name"];
-	$address = $params["contactdetails"]["Registrant"]["Address"];
-	$city = $params["contactdetails"]["Registrant"]["City"];
-	$state = $params["contactdetails"]["Registrant"]["State"];
-	$postcode = $params["contactdetails"]["Registrant"]["Postcode"];
-	$country = $params["contactdetails"]["Registrant"]["Country"];
-	$tel = $params["contactdetails"]["Registrant"]["Phone Number"];
-	$fax = $params["contactdetails"]["Registrant"]["Fax Number"];
-	$email = $params["contactdetails"]["Registrant"]["Email"];
+	$company = $params['contactdetails']['Registrant']["Company Name"];
+	$address = $params['contactdetails']['Registrant']['Address'];
+	$city = $params['contactdetails']['Registrant']['City'];
+	$state = $params['contactdetails']['Registrant']['State'];
+	$postcode = $params['contactdetails']['Registrant']['Postcode'];
+	$country = $params['contactdetails']['Registrant']['Country'];
+	$tel = $params['contactdetails']['Registrant']["Phone Number"];
+	$fax = $params['contactdetails']['Registrant']["Fax Number"];
+	$email = $params['contactdetails']['Registrant']['Email'];
 	$password1 = onlinenic_genpw();
 	$clTrid = substr( md5( $domain ), 0, 10 ) . mt_rand( 1000000000, 9999999999 );
 	
@@ -854,21 +854,21 @@ function onlinenic_SaveContactDetails($params) {
 		$msg = onlinenic_GetValue( $result, "<msg>", "</msg>" );
 		$error = onlinenic_GetValue( $result, "<value>", "</value>" );
 		$error = $msg . " - " . $error;
-		$values["error"] = "" . $resultcode . " - " . $errormsg . ": " . $error;
+		$values['error'] = "" . $resultcode . " - " . $errormsg . ": " . $error;
 		return $values;
 	}
 
 	$contact_type = "1";
-	$name = $params["contactdetails"]["Admin"]["Full Name"];
-	$company = $params["contactdetails"]["Admin"]["Company Name"];
-	$address = $params["contactdetails"]["Admin"]["Address"];
-	$city = $params["contactdetails"]["Admin"]["City"];
-	$state = $params["contactdetails"]["Admin"]["State"];
-	$postcode = $params["contactdetails"]["Admin"]["Postcode"];
-	$country = $params["contactdetails"]["Admin"]["Country"];
-	$tel = $params["contactdetails"]["Admin"]["Phone Number"];
-	$fax = $params["contactdetails"]["Admin"]["Fax Number"];
-	$email = $params["contactdetails"]["Admin"]["Email"];
+	$name = $params['contactdetails']['Admin']["Full Name"];
+	$company = $params['contactdetails']['Admin']["Company Name"];
+	$address = $params['contactdetails']['Admin']['Address'];
+	$city = $params['contactdetails']['Admin']['City'];
+	$state = $params['contactdetails']['Admin']['State'];
+	$postcode = $params['contactdetails']['Admin']['Postcode'];
+	$country = $params['contactdetails']['Admin']['Country'];
+	$tel = $params['contactdetails']['Admin']["Phone Number"];
+	$fax = $params['contactdetails']['Admin']["Fax Number"];
+	$email = $params['contactdetails']['Admin']['Email'];
 	$clTrid = substr( md5( $domain ), 0, 10 ) . mt_rand( 1000000000, 9999999999 );
 	
 	$checksum = md5( $username . $password . $clTrid . "updcontact" . $domain_type . $domain . $contact_type . $name . $company . $email );
@@ -908,21 +908,21 @@ function onlinenic_SaveContactDetails($params) {
 		$msg = onlinenic_GetValue( $result, "<msg>", "</msg>" );
 		$error = onlinenic_GetValue( $result, "<value>", "</value>" );
 		$error = $msg . " - " . $error;
-		$values["error"] = "" . $resultcode . " - " . $errormsg . ": " . $error;
+		$values['error'] = "" . $resultcode . " - " . $errormsg . ": " . $error;
 		return $values;
 	}
 
 	$contact_type = "2";
-	$name = $params["contactdetails"]["Tech"]["Full Name"];
-	$company = $params["contactdetails"]["Tech"]["Company Name"];
-	$address = $params["contactdetails"]["Tech"]["Address"];
-	$city = $params["contactdetails"]["Tech"]["City"];
-	$state = $params["contactdetails"]["Tech"]["State"];
-	$postcode = $params["contactdetails"]["Tech"]["Postcode"];
-	$country = $params["contactdetails"]["Tech"]["Country"];
-	$tel = $params["contactdetails"]["Tech"]["Phone Number"];
-	$fax = $params["contactdetails"]["Tech"]["Fax Number"];
-	$email = $params["contactdetails"]["Tech"]["Email"];
+	$name = $params['contactdetails']['Tech']["Full Name"];
+	$company = $params['contactdetails']['Tech']["Company Name"];
+	$address = $params['contactdetails']['Tech']['Address'];
+	$city = $params['contactdetails']['Tech']['City'];
+	$state = $params['contactdetails']['Tech']['State'];
+	$postcode = $params['contactdetails']['Tech']['Postcode'];
+	$country = $params['contactdetails']['Tech']['Country'];
+	$tel = $params['contactdetails']['Tech']["Phone Number"];
+	$fax = $params['contactdetails']['Tech']["Fax Number"];
+	$email = $params['contactdetails']['Tech']['Email'];
 	$clTrid = substr( md5( $domain ), 0, 10 ) . mt_rand( 1000000000, 9999999999 );
 	
 	$checksum = md5( $username . $password . $clTrid . "updcontact" . $domain_type . $domain . $contact_type . $name . $company . $email );
@@ -963,7 +963,7 @@ function onlinenic_SaveContactDetails($params) {
 		$msg = onlinenic_GetValue( $result, "<msg>", "</msg>" );
 		$error = onlinenic_GetValue( $result, "<value>", "</value>" );
 		$error = $msg . " - " . $error;
-		$values["error"] = "" . $resultcode . " - " . $errormsg . ": " . $error;
+		$values['error'] = "" . $resultcode . " - " . $errormsg . ": " . $error;
 		return $values;
 	}
 
@@ -972,14 +972,14 @@ function onlinenic_SaveContactDetails($params) {
 
 
 function onlinenic_RegisterNameserver($params) {
-	$username = $params["Username"];
+	$username = $params['Username'];
 	
-	$password = md5( $params["Password"] );
-	$testmode = $params["TestMode"];
-	$tld = $params["tld"];
-	$sld = $params["sld"];
-	$nameserver = $params["nameserver"];
-	$ipaddress = $params["ipaddress"];
+	$password = md5( $params['Password'] );
+	$testmode = $params['TestMode'];
+	$tld = $params['tld'];
+	$sld = $params['sld'];
+	$nameserver = $params['nameserver'];
+	$ipaddress = $params['ipaddress'];
 
 	if ($testmode) {
 		$username = 135614;
@@ -1011,7 +1011,7 @@ function onlinenic_RegisterNameserver($params) {
 			</epp>";
 	$values = onlinenic_Login( $fp, $username, $password, $testmode );
 
-	if ($values["error"]) {
+	if ($values['error']) {
 		return $values;
 	}
 
@@ -1024,7 +1024,7 @@ function onlinenic_RegisterNameserver($params) {
 		$msg = onlinenic_GetValue( $result, "<msg>", "</msg>" );
 		$error = onlinenic_GetValue( $result, "<value>", "</value>" );
 		$error = $msg . " - " . $error;
-		$values["error"] = "" . $resultcode . " - " . $errormsg . ": " . $error;
+		$values['error'] = "" . $resultcode . " - " . $errormsg . ": " . $error;
 	}
 
 	return $values;
@@ -1032,15 +1032,15 @@ function onlinenic_RegisterNameserver($params) {
 
 
 function onlinenic_ModifyNameserver($params) {
-	$username = $params["Username"];
+	$username = $params['Username'];
 	
-	$password = md5( $params["Password"] );
-	$testmode = $params["TestMode"];
-	$tld = $params["tld"];
-	$sld = $params["sld"];
-	$nameserver = $params["nameserver"];
-	$currentipaddress = $params["currentipaddress"];
-	$newipaddress = $params["newipaddress"];
+	$password = md5( $params['Password'] );
+	$testmode = $params['TestMode'];
+	$tld = $params['tld'];
+	$sld = $params['sld'];
+	$nameserver = $params['nameserver'];
+	$currentipaddress = $params['currentipaddress'];
+	$newipaddress = $params['newipaddress'];
 
 	if ($testmode) {
 		$username = 135614;
@@ -1077,7 +1077,7 @@ function onlinenic_ModifyNameserver($params) {
 			</epp>";
 	$values = onlinenic_Login( $fp, $username, $password, $testmode );
 
-	if ($values["error"]) {
+	if ($values['error']) {
 		return $values;
 	}
 
@@ -1090,7 +1090,7 @@ function onlinenic_ModifyNameserver($params) {
 		$msg = onlinenic_GetValue( $result, "<msg>", "</msg>" );
 		$error = onlinenic_GetValue( $result, "<value>", "</value>" );
 		$error = $msg . " - " . $error;
-		$values["error"] = "" . $resultcode . " - " . $errormsg . ": " . $error;
+		$values['error'] = "" . $resultcode . " - " . $errormsg . ": " . $error;
 	}
 
 	return $values;
@@ -1098,13 +1098,13 @@ function onlinenic_ModifyNameserver($params) {
 
 
 function onlinenic_DeleteNameserver($params) {
-	$username = $params["Username"];
+	$username = $params['Username'];
 	
-	$password = md5( $params["Password"] );
-	$testmode = $params["TestMode"];
-	$tld = $params["tld"];
-	$sld = $params["sld"];
-	$nameserver = $params["nameserver"];
+	$password = md5( $params['Password'] );
+	$testmode = $params['TestMode'];
+	$tld = $params['tld'];
+	$sld = $params['sld'];
+	$nameserver = $params['nameserver'];
 
 	if ($testmode) {
 		$username = 135614;
@@ -1135,7 +1135,7 @@ function onlinenic_DeleteNameserver($params) {
 			</epp>";
 	$values = onlinenic_Login( $fp, $username, $password, $testmode );
 
-	if ($values["error"]) {
+	if ($values['error']) {
 		return $values;
 	}
 
@@ -1148,7 +1148,7 @@ function onlinenic_DeleteNameserver($params) {
 		$msg = onlinenic_GetValue( $result, "<msg>", "</msg>" );
 		$error = onlinenic_GetValue( $result, "<value>", "</value>" );
 		$error = $msg . " - " . $error;
-		$values["error"] = "" . $resultcode . " - " . $errormsg . ": " . $error;
+		$values['error'] = "" . $resultcode . " - " . $errormsg . ": " . $error;
 	}
 
 	return $values;
@@ -1184,10 +1184,10 @@ function onlinenic_GetExpirationDate($fp, $username, $password, $domainname, $do
 		$msg = onlinenic_GetValue( $result, "<msg>", "</msg>" );
 		$error = onlinenic_GetValue( $result, "<value>", "</value>" );
 		$error = $msg . " - " . $error;
-		$values["error"] = "" . $resultcode . " - " . $errormsg . ": " . $error;
+		$values['error'] = "" . $resultcode . " - " . $errormsg . ": " . $error;
 	}
 	else {
-		$values["expirydate"] = onlinenic_GetValue( $result, "<expdate>", "</expdate>" );
+		$values['expirydate'] = onlinenic_GetValue( $result, "<expdate>", "</expdate>" );
 	}
 
 	return $values;
@@ -1214,7 +1214,7 @@ function onlinenic_Logout($fp, $username, $password) {
 		$msg = onlinenic_GetValue( $result, "<msg>", "</msg>" );
 		$error = onlinenic_GetValue( $result, "<value>", "</value>" );
 		$error = $msg . " - " . $error;
-		$values["error"] = "" . $resultcode . " - " . $errormsg . ": " . $error;
+		$values['error'] = "" . $resultcode . " - " . $errormsg . ": " . $error;
 	}
 
 	return $values;
@@ -1245,7 +1245,7 @@ function onlinenic_Login($fp, $username, $password, $testmode) {
 
 
 	if (!$fp = fsockopen( $server, $port, $errno, $errstr, 90 )) {
-		$values["error"] = "Connection Failed - " . $errno . " - " . $errstr;
+		$values['error'] = "Connection Failed - " . $errno . " - " . $errstr;
 		return $values;
 	}
 
@@ -1270,7 +1270,7 @@ function onlinenic_Login($fp, $username, $password, $testmode) {
 	if (ereg( "</greeting></epp>$", $result )) {
 	}
 	else {
-		$values["error"] = "An Error Occurred with Connection";
+		$values['error'] = "An Error Occurred with Connection";
 		return $values;
 	}
 
@@ -1300,7 +1300,7 @@ function onlinenic_Login($fp, $username, $password, $testmode) {
 		$msg = onlinenic_GetValue( $result, "<msg>", "</msg>" );
 		$error = onlinenic_GetValue( $result, "<value>", "</value>" );
 		$error = $msg . " - " . $error;
-		$values["error"] = "" . $resultcode . " - " . $errormsg . ": " . $error;
+		$values['error'] = "" . $resultcode . " - " . $errormsg . ": " . $error;
 	}
 
 	return $values;
@@ -1414,7 +1414,7 @@ function onlinenic_sendCommand($fp, $command, $username = "", $password = "") {
 	}
 
 	$xmlinput = XMLtoArray( $command );
-	$xmlinput = array_keys( $xmlinput["EPP"]["COMMAND"] );
+	$xmlinput = array_keys( $xmlinput['EPP']['COMMAND'] );
 	$xmlinput = $xmlinput[2];
 	logModuleCall( "onlinenic", $xmlinput, $command, $result, "", array( $username, $password ) );
 	return $result;
@@ -1465,10 +1465,10 @@ function onlinenic_genpw() {
 
 
 function onlinenic_Sync($params) {
-	$username = $params["Username"];
+	$username = $params['Username'];
 	
-	$password = md5( $params["Password"] );
-	$testmode = $params["TestMode"];
+	$password = md5( $params['Password'] );
+	$testmode = $params['TestMode'];
 
 	if ($testmode) {
 		$username = 135614;
@@ -1478,17 +1478,17 @@ function onlinenic_Sync($params) {
 
 	$values = onlinenic_Login( $fp, $username, $password, $testmode );
 
-	if ($values["error"]) {
+	if ($values['error']) {
 		return $values;
 	}
 
-	$values = onlinenic_GetExpirationDate( $fp, $username, $password, $params["sld"], $params["tld"] );
+	$values = onlinenic_GetExpirationDate( $fp, $username, $password, $params['sld'], $params['tld'] );
 
-	if ($values["error"]) {
+	if ($values['error']) {
 		return $values;
 	}
 
-	$expirydate = strtotime( $values["expirydate"] );
+	$expirydate = strtotime( $values['expirydate'] );
 	$expirydate = date( "Y-m-d", $expirydate );
 	return array( "active" => true, "expirydate" => $expirydate );
 }

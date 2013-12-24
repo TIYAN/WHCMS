@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -37,7 +37,7 @@ function globalsignvouchers_CreateAccount($params) {
 		full_query( "CREATE TABLE `mod_gsvouchers` ( `serviceid` INT(10) NOT NULL , `voucher` TEXT NOT NULL )" );
 	}
 
-	$result = select_query( "mod_gsvouchers", "voucher", array( "serviceid" => $params["serviceid"] ) );
+	$result = select_query( "mod_gsvouchers", "voucher", array( "serviceid" => $params['serviceid'] ) );
 	$data = mysql_fetch_array( $result );
 	$voucher = $data[0];
 
@@ -45,23 +45,23 @@ function globalsignvouchers_CreateAccount($params) {
 		return "OneClickSSL Voucher Code Already Provisioned";
 	}
 
-	$user = $params["configoption1"];
-	$pass = $params["configoption3"];
-	$ssltype = $params["configoption2"];
-	$validityperiod = $params["configoption4"];
-	$coupon = $params["configoption5"];
-	$orderkind = $params["configoption6"];
-	$campaign = $params["configoption7"];
-	$testmode = $params["configoption8"];
-	$transfer = $params["configoptions"]["Transfer"];
-	$domain = $params["domain"];
+	$user = $params['configoption1'];
+	$pass = $params['configoption3'];
+	$ssltype = $params['configoption2'];
+	$validityperiod = $params['configoption4'];
+	$coupon = $params['configoption5'];
+	$orderkind = $params['configoption6'];
+	$campaign = $params['configoption7'];
+	$testmode = $params['configoption8'];
+	$transfer = $params['configoptions']['Transfer'];
+	$domain = $params['domain'];
 
 	if (!$domain) {
-		$domain = $params["customfields"]["Domain"];
+		$domain = $params['customfields']['Domain'];
 	}
 
 	updateService( array( "domain" => $domain, "username" => "", "password" => "" ) );
-	$result = select_query( "tblhosting", "billingcycle", array( "id" => $params["serviceid"] ) );
+	$result = select_query( "tblhosting", "billingcycle", array( "id" => $params['serviceid'] ) );
 	$data = mysql_fetch_array( $result );
 	$billingcycle = $data[0];
 
@@ -75,8 +75,8 @@ function globalsignvouchers_CreateAccount($params) {
 	}
 
 
-	if ($params["configoptions"]["NumYears"]) {
-		$validityperiod = $params["configoptions"]["NumYears"];
+	if ($params['configoptions']['NumYears']) {
+		$validityperiod = $params['configoptions']['NumYears'];
 	}
 
 	$wsdlorderurl = ($testmode ? "https://testsystem.globalsign.com/vc/ws/VoucherOrder?wsdl" : "https://system.globalsign.com/vc/ws/VoucherOrder?wsdl");
@@ -102,22 +102,22 @@ function globalsignvouchers_CreateAccount($params) {
 	}
 
 	require ROOTDIR . "/includes/countriescallingcodes.php";
-	$countrycode = $params["clientsdetails"]["country"];
-	$phonenumber = $params["clientsdetails"]["phonenumber"];
+	$countrycode = $params['clientsdetails']['country'];
+	$phonenumber = $params['clientsdetails']['phonenumber'];
 	$phonenumber = preg_replace( "/[^0-9]/", "", $phonenumber );
 	$countrycode = $countrycallingcodes[$countrycode];
 	$phonenumber = $countrycode . substr( $phonenumber, 0, 3 ) . "-" . substr( $phonenumber, 3 );
 	$request = array();
-	$request["Request"]["OrderRequestHeader"]["AuthToken"]["UserName"] = $user;
-	$request["Request"]["OrderRequestHeader"]["AuthToken"]["Password"] = $pass;
-	$request["Request"]["OrderRequestParameter"]["ProductCode"] = $ssltype;
-	$request["Request"]["OrderRequestParameter"]["OrderKind"] = $orderkind;
-	$request["Request"]["OrderRequestParameter"]["ValidityPeriod"]["Months"] = $validityperiod;
-	$request["Request"]["FQDN"] = $domain;
-	$request["Request"]["ContactInfo"]["FirstName"] = $params["clientsdetails"]["firstname"];
-	$request["Request"]["ContactInfo"]["LastName"] = $params["clientsdetails"]["lastname"];
-	$request["Request"]["ContactInfo"]["Phone"] = $phonenumber;
-	$request["Request"]["ContactInfo"]["Email"] = $params["clientsdetails"]["email"];
+	$request['Request']['OrderRequestHeader']['AuthToken']['UserName'] = $user;
+	$request['Request']['OrderRequestHeader']['AuthToken']['Password'] = $pass;
+	$request['Request']['OrderRequestParameter']['ProductCode'] = $ssltype;
+	$request['Request']['OrderRequestParameter']['OrderKind'] = $orderkind;
+	$request['Request']['OrderRequestParameter']['ValidityPeriod']['Months'] = $validityperiod;
+	$request['Request']['FQDN'] = $domain;
+	$request['Request']['ContactInfo']['FirstName'] = $params['clientsdetails']['firstname'];
+	$request['Request']['ContactInfo']['LastName'] = $params['clientsdetails']['lastname'];
+	$request['Request']['ContactInfo']['Phone'] = $phonenumber;
+	$request['Request']['ContactInfo']['Email'] = $params['clientsdetails']['email'];
 	$client = new SoapClient( $wsdlorderurl );
 	$result = $client->VoucherOrder( $request );
 	logModuleCall( "globalsignvouchers", "order", $request, (array)$result, "", array( $user, $pass ) );
@@ -125,8 +125,8 @@ function globalsignvouchers_CreateAccount($params) {
 
 	if (0 <= $errorcode) {
 		$voucher = $result->Response->Voucher;
-		insert_query( "mod_gsvouchers", array( "serviceid" => $params["serviceid"], "voucher" => $voucher ) );
-		sendMessage( "GlobalSign OneClickSSL Welcome Email", $params["serviceid"], array( "voucher" => $voucher ) );
+		insert_query( "mod_gsvouchers", array( "serviceid" => $params['serviceid'], "voucher" => $voucher ) );
+		sendMessage( "GlobalSign OneClickSSL Welcome Email", $params['serviceid'], array( "voucher" => $voucher ) );
 		return "success";
 	}
 
@@ -153,15 +153,15 @@ function globalsignvouchers_CreateAccount($params) {
 
 
 function globalsignvouchers_TerminateAccount($params) {
-	$user = $params["configoption1"];
-	$pass = $params["configoption3"];
-	$ssltype = $params["configoption2"];
-	$validityperiod = $params["configoption4"];
-	$coupon = $params["configoption5"];
-	$orderkind = $params["configoption6"];
-	$campaign = $params["configoption7"];
-	$testmode = $params["configoption8"];
-	$result = select_query( "mod_gsvouchers", "voucher", array( "serviceid" => $params["serviceid"] ) );
+	$user = $params['configoption1'];
+	$pass = $params['configoption3'];
+	$ssltype = $params['configoption2'];
+	$validityperiod = $params['configoption4'];
+	$coupon = $params['configoption5'];
+	$orderkind = $params['configoption6'];
+	$campaign = $params['configoption7'];
+	$testmode = $params['configoption8'];
+	$result = select_query( "mod_gsvouchers", "voucher", array( "serviceid" => $params['serviceid'] ) );
 	$data = mysql_fetch_array( $result );
 	$voucher = $data[0];
 
@@ -171,16 +171,16 @@ function globalsignvouchers_TerminateAccount($params) {
 
 	$wsdlorderurl = ($testmode ? "https://testsystem.globalsign.com/vc/ws/VoucherOrder?wsdl" : "https://system.globalsign.com/vc/ws/VoucherOrder?wsdl");
 	$request = array();
-	$request["Request"]["OrderRequestHeader"]["AuthToken"]["UserName"] = $user;
-	$request["Request"]["OrderRequestHeader"]["AuthToken"]["Password"] = $pass;
-	$request["Request"]["Voucher"] = $voucher;
+	$request['Request']['OrderRequestHeader']['AuthToken']['UserName'] = $user;
+	$request['Request']['OrderRequestHeader']['AuthToken']['Password'] = $pass;
+	$request['Request']['Voucher'] = $voucher;
 	$client = new SoapClient( $wsdlorderurl );
 	$result = $client->CancelVoucherOrder( $request );
 	logModuleCall( "globalsignvouchers", "cancel", $request, (array)$result, "", array( $user, $pass ) );
 	$errorcode = $result->Response->OrderResponseHeader->SuccessCode;
 
 	if (0 <= $errorcode) {
-		delete_query( "mod_gsvouchers", array( "serviceid" => $params["serviceid"] ) );
+		delete_query( "mod_gsvouchers", array( "serviceid" => $params['serviceid'] ) );
 		return "success";
 	}
 
@@ -207,7 +207,7 @@ function globalsignvouchers_TerminateAccount($params) {
 
 
 function globalsignvouchers_AdminServicesTabFields($params) {
-	$result = select_query( "mod_gsvouchers", "voucher", array( "serviceid" => $params["serviceid"] ) );
+	$result = select_query( "mod_gsvouchers", "voucher", array( "serviceid" => $params['serviceid'] ) );
 	$data = mysql_fetch_array( $result );
 	$voucher = $data[0];
 
@@ -223,15 +223,15 @@ function globalsignvouchers_AdminServicesTabFields($params) {
 function globalsignvouchers_ClientArea($params) {
 	global $_LANG;
 
-	$result = select_query( "mod_gsvouchers", "voucher", array( "serviceid" => $params["serviceid"] ) );
+	$result = select_query( "mod_gsvouchers", "voucher", array( "serviceid" => $params['serviceid'] ) );
 	$data = mysql_fetch_array( $result );
 	$voucher = $data[0];
 
 	if (!$voucher) {
-		$voucher = $_LANG["globalsignvouchersnotissued"];
+		$voucher = $_LANG['globalsignvouchersnotissued'];
 	}
 
-	$code = "<img src=\"modules/servers/globalsignvouchers/logo.gif\" /><br /><br /><span style=\"font-family:Arial;font-size:18px;color:#000;\">" . $_LANG["globalsignvoucherscode"] . "</span><br /><div style=\"border:1px dashed #B9B9B9;background-color:#efefef;margin:10px;padding:10px;width:380px;text-align:center;font-weight:bold;font-size:24px;\">" . $voucher . "</div><br /><br />";
+	$code = "<img src=\"modules/servers/globalsignvouchers/logo.gif\" /><br /><br /><span style=\"font-family:Arial;font-size:18px;color:#000;\">" . $_LANG['globalsignvoucherscode'] . "</span><br /><div style=\"border:1px dashed #B9B9B9;background-color:#efefef;margin:10px;padding:10px;width:380px;text-align:center;font-weight:bold;font-size:24px;\">" . $voucher . "</div><br /><br />";
 	return $code;
 }
 

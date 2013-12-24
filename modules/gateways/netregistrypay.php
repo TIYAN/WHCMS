@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -17,26 +17,26 @@ function netregistrypay_activate() {
 
 
 function netregistrypay_capture($params) {
-	$gatewayusername = $params["merchantid"];
-	$gatewaypassword = $params["externalpassword"];
-	$invoiceid = $params["invoiceid"];
-	$amount = $params["amount"];
-	$currency = $params["currency"];
-	$firstname = $params["clientdetails"]["firstname"];
-	$lastname = $params["clientdetails"]["lastname"];
-	$email = $params["clientdetails"]["email"];
-	$address1 = $params["clientdetails"]["address1"];
-	$address2 = $params["clientdetails"]["address2"];
-	$city = $params["clientdetails"]["city"];
-	$state = $params["clientdetails"]["state"];
-	$postcode = $params["clientdetails"]["postcode"];
-	$country = $params["clientdetails"]["country"];
-	$phone = $params["clientdetails"]["phone"];
-	$cardtype = $params["cardtype"];
-	$cardnumber = $params["cardnum"];
-	$cardexpiry = $params["cardexp"];
-	$cardstart = $params["cardstart"];
-	$cardissuenum = $params["cardissuenum"];
+	$gatewayusername = $params['merchantid'];
+	$gatewaypassword = $params['externalpassword'];
+	$invoiceid = $params['invoiceid'];
+	$amount = $params['amount'];
+	$currency = $params['currency'];
+	$firstname = $params['clientdetails']['firstname'];
+	$lastname = $params['clientdetails']['lastname'];
+	$email = $params['clientdetails']['email'];
+	$address1 = $params['clientdetails']['address1'];
+	$address2 = $params['clientdetails']['address2'];
+	$city = $params['clientdetails']['city'];
+	$state = $params['clientdetails']['state'];
+	$postcode = $params['clientdetails']['postcode'];
+	$country = $params['clientdetails']['country'];
+	$phone = $params['clientdetails']['phone'];
+	$cardtype = $params['cardtype'];
+	$cardnumber = $params['cardnum'];
+	$cardexpiry = $params['cardexp'];
+	$cardstart = $params['cardstart'];
+	$cardissuenum = $params['cardissuenum'];
 	$txnref = "Unknown";
 	$params = array( "COMMAND" => "purchase", "LOGIN" => $gatewayusername . "/" . $gatewaypassword, "AMOUNT" => number_format( $amount, 2, ".", "" ), "CCNUM" => $cardnumber, "CCEXP" => substr( $cardexpiry, 0, 2 ) . "/" . substr( $cardexpiry, 2, 3 ), "COMMENT" => $firstname . $lastname . " WHMCS Invoice ID:" . $invoiceid );
 	$curl = curl_init();
@@ -70,12 +70,12 @@ function netregistrypay_capture($params) {
 	}
 
 
-	if (( isset( $success ) && $success )) {
+	if (isset( $success ) && $success) {
 		return array( "status" => "success", "transid" => $txnref, "rawdata" => $result );
 	}
 
 
-	if (( isset( $declined ) && $declined )) {
+	if (isset( $declined ) && $declined) {
 		return array( "status" => "declined", "rawdata" => $result );
 	}
 

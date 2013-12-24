@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -19,7 +19,6 @@ $aInt->icon = "logs";
 $aInt->requiredFiles(array("ticketfunctions"));
 
 if ($display) {
-	check_token("WHMCS.admin.default");
 	$aInt->title = $aInt->lang("system", "viewimportmessage");
 	$result = select_query("tblticketmaillog", "", array("id" => $id));
 	$data = mysql_fetch_array($result);
@@ -208,7 +207,7 @@ while ($data = mysql_fetch_array($result)) {
 	}
 
 	$subject = (75 < strlen($subject) ? substr($subject, 0, 75) . "..." : $subject);
-	$tabledata[] = array(fromMySQLDate($date, true), $to, "<a href=\"#\" onClick=\"window.open('" . $_SERVER['PHP_SELF'] . ("?display=true&id=" . $id) . generate_token("link") . ("','','width=650,height=400,scrollbars=yes');return false\">" . $subject . "</a><br>") . $aInt->lang("emails", "from") . (": " . $name . " &laquo;" . $email . "&raquo;"), $status);
+	$tabledata[] = array(fromMySQLDate($date, true), $to, "<a href=\"#\" onClick=\"window.open('" . $_SERVER['PHP_SELF'] . ("?display=true&id=" . $id . "','','width=650,height=400,scrollbars=yes');return false\">" . $subject . "</a><br>") . $aInt->lang("emails", "from") . (": " . $name . " &laquo;" . $email . "&raquo;"), $status);
 }
 
 echo $aInt->sortableTable(array($aInt->lang("fields", "date"), $aInt->lang("emails", "to"), $aInt->lang("emails", "subject"), $aInt->lang("fields", "status")), $tabledata);

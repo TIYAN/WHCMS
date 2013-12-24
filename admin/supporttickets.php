@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -79,7 +79,7 @@ if ($action == "savetags") {
 		exit();
 	}
 
-	$tags = json_decode(html_entity_decode($tags), true);
+	$tags = json_decode(html_entity_decode($tags, ENT_QUOTES), true);
 	foreach ($tags as $k => $tag) {
 		$tags[$k] = strip_tags($tag);
 	}
@@ -216,7 +216,7 @@ if ($action == "getmsg") {
 		}
 	}
 
-	echo html_entity_decode($msg);
+	echo html_entity_decode($msg, ENT_QUOTES);
 	exit();
 }
 
@@ -298,7 +298,7 @@ if ($action == "getclientlog") {
 	while ($data = mysql_fetch_array($result)) {
 		$description = $data['description'];
 		$description .= " ";
-		$description = htmlentities($description, ENT_QUOTES, "UTF-8");
+		$description = whmcsHtmlspecialchars($description);
 		$description = preg_replace($patterns, $replacements, $description);
 		$tabledata[] = array(fromMySQLDate($data['date'], 1), "<div style=\"text-align:left;\">" . $description . "</div>", $data['user'], $data['ipaddr']);
 	}
@@ -456,7 +456,7 @@ if ($action == "getallservices") {
 		}
 
 		$service_amount = formatCurrency($service_amount);
-		$selected = ((substr($service, 0, 1) == "S" && substr($service, 1) == $service_id) ? true : false);
+		$selected = (substr($service, 0, 1) == "S" && substr($service, 1) == $service_id) ? true : false;
 		$service_name = "<a href=\"clientshosting.php?userid=" . $pauserid . "&id=" . $service_id . "\" target=\"_blank\">" . $service_name . "</a> - <a href=\"http://" . $service_domain . "/\" target=\"_blank\">" . $service_domain . "</a>";
 		$output[] = "<tr" . ($selected ? " class=\"rowhighlight\"" : "") . "><td>" . $service_name . "</td><td>" . $service_amount . "</td><td>" . $service_billingcycle . "</td><td>" . $service_regdate . "</td><td>" . $service_nextduedate . "</td><td>" . $data['domainstatus'] . "</td></tr>";
 	}
@@ -662,7 +662,7 @@ if ($action == "getpredefinedreply") {
 	check_token("WHMCS.admin.default");
 	$result = select_query("tblticketpredefinedreplies", "", array("id" => $id));
 	$data = mysql_fetch_array($result);
-	$reply = html_entity_decode($data['reply']);
+	$reply = html_entity_decode($data['reply'], ENT_QUOTES);
 	echo $reply;
 	exit();
 }
@@ -698,7 +698,7 @@ if ($action == "getquotedtext") {
 		}
 	}
 
-	$replytext = wordwrap(html_entity_decode(strip_tags($replytext)), 80);
+	$replytext = wordwrap(html_entity_decode(strip_tags($replytext), ENT_QUOTES), 80);
 	$replytext = explode("\r\n", $replytext);
 
 	foreach ($replytext as $line) {
@@ -814,7 +814,7 @@ if (!$action) {
 }
 else {
 	if ($action == "mergeticket") {
-		exit("action=mergeticket");
+		check_token("WHMCS.admin.default");
 		$result = select_query("tbltickets", "id", array("tid" => $mergetid));
 		$data = mysql_fetch_array($result);
 		$mergeid = $data['id'];
@@ -882,7 +882,7 @@ else {
 
 
 			if (!$client) {
-				if (!preg_match("/^([a-zA-Z0-9])+([\.a-zA-Z0-9+_-])*@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-]+)*\.([a-zA-Z]{2,6})$/", $email)) {
+				if (!preg_match('/^([a-zA-Z0-9])+([\.a-zA-Z0-9+_-])*@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-]+)*\.([a-zA-Z]{2,6})$/', $email)) {
 					$errormessage = $aInt->lang("support", "ticketemailvalidationerror");
 				}
 
@@ -1086,7 +1086,7 @@ else {
 
 
 					if ($mergetid) {
-						redir("action=mergeticket&id=" . $id . "&mergetid=" . $mergetid);
+						redir("action=mergeticket&id=" . $id . "&mergetid=" . $mergetid . generate_token("link"));
 						exit();
 					}
 
@@ -2207,7 +2207,7 @@ function searchselectclient(userid,name,email) {
     $(\"#email\").val(email);
 	$(\"#ticketclientsearchresults\").slideUp(\"slow\");
     $(\"#clientsearchcancel\").fadeOut();
-    $.post(\"supporttickets.php\", { action: \"getcontacts\", userid: userid },
+    $.post(\"supporttickets.php\", { action: \"getcontacts\", userid: userid, token: \"" . generate_token("plain") . "\" },
     function(data){
         if (data) {
             $(\"#contacthtml\").html(data);

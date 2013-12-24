@@ -22,11 +22,23 @@ table.domainpricing td {
     text-align: center;
 }
 </style>
-<script language="javascript" src="feeds/domainpricing.php"></script>
+<script language="javascript" src="feeds/domainpricing.php?currency=1"></script>
 
 */
 
 $code = '<table cellspacing="1" cellpadding="0" class="domainpricing"><tr><th>TLD</th><th>Min. Years</th><th>Register</th><th>Transfer</th><th>Renew</th></tr>';
+/**
+ * Case 3482: see documentation on formatCurrency()
+ */
+if (!is_numeric($currency)) {
+    $currency = array();
+} else {
+    $currency = getCurrency('', $currency);
+}
+
+if (!$currency || !is_array($currency) || !isset($currency['id'])) {
+    $currency = getCurrency();
+}
 
 $freeamt = formatCurrency(0);
 $tldslist = getTLDList();

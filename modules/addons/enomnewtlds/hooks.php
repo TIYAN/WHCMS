@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -23,19 +23,19 @@ function enomnewtlds_hook_cronjob() {
 	enomnewtlds_hook_DB_GetBatchSize();
 	$data = enomnewtlds_hook_DB_GetWatchlistSettingsLocal();
 	$enomnewtlds_hook_defaultgateway = enomnewtlds_hook_DB_GetSystemDefaultGateway();
-	$portalid = $data["portalid"];
-	$enomuid = $data["enomlogin"];
-	$enompw = $data["enompassword"];
-	$enabled = $data["enabled"];
-	$configured = $data["configured"];
-	$companyname = $data["companyname"];
-	$companyurl = $data["companyurl"];
-	$supportemail = $data["supportemail"];
-	$environment = enomnewtlds_hook_Helper_Getenvironment( $data["environment"] );
+	$portalid = $data['portalid'];
+	$enomuid = $data['enomlogin'];
+	$enompw = $data['enompassword'];
+	$enabled = $data['enabled'];
+	$configured = $data['configured'];
+	$companyname = $data['companyname'];
+	$companyurl = $data['companyurl'];
+	$supportemail = $data['supportemail'];
+	$environment = enomnewtlds_hook_Helper_Getenvironment( $data['environment'] );
 	$batches = 7;
 	$enomnewtlds_hook_processed = 6;
 
-	if (( !$enabled || !$configured )) {
+	if ( !$enabled || !$configured ) {
 		enomnewtlds_hook_Helper_Log( "Module is not configured." );
 		return null;
 	}
@@ -50,10 +50,10 @@ function enomnewtlds_hook_cronjob() {
 	enomnewtlds_hook_Helper_Log2( "Batch Size = " . $enomnewtlds_hook_BatchSize );
 	enomnewtlds_hook_Helper_Log2( "<br /><br />" );
 	$fields = array();
-	$fields["portalid"] = $portalid;
-	$fields["uid"] = $enomuid;
-	$fields["pw"] = $enompw;
-	$fields["recordcount"] = $enomnewtlds_hook_BatchSize;
+	$fields['portalid'] = $portalid;
+	$fields['uid'] = $enomuid;
+	$fields['pw'] = $enompw;
+	$fields['recordcount'] = $enomnewtlds_hook_BatchSize;
 	enomnewtlds_hook_Helper_Log( "Calling eNom API To get the awarded domains" );
 	$xmldata = enomnewtlds_hook_API_GetAwardedDomains( $fields );
 	$success = $xmldata->ErrCount == 0;
@@ -63,7 +63,7 @@ function enomnewtlds_hook_cronjob() {
 		$totalCount = $xmldata->Domains->TotalDomainCount;
 		enomnewtlds_hook_Helper_Log( "Got " . $returnedCount . " domains returned, " . $totalCount . " total domains to process" );
 
-		if (( 0 < (int)$returnedCount && 0 < (int)$totalCount )) {
+		if ( 0 < (int)$returnedCount && 0 < (int)$totalCount ) {
 			if ((int)$returnedCount < (int)$totalCount) {
 				$batches = ceil( (int)$totalCount / (int)$returnedCount );
 			}
@@ -119,19 +119,19 @@ function enomnewtlds_hook_ProcessBatch($data, $returnedCount, $totalCount, $batc
 	global $enomnewtlds_hook_BatchSize;
 	global $enomnewtlds_hook_processed;
 
-	$portalid = $data["portalid"];
-	$enomuid = $data["enomlogin"];
-	$enompw = $data["enompassword"];
-	$enabled = $data["enabled"];
-	$configured = $data["configured"];
-	$companyname = $data["companyname"];
-	$companyurl = $data["companyurl"];
-	$environment = enomnewtlds_hook_Helper_Getenvironment( $data["environment"] );
+	$portalid = $data['portalid'];
+	$enomuid = $data['enomlogin'];
+	$enompw = $data['enompassword'];
+	$enabled = $data['enabled'];
+	$configured = $data['configured'];
+	$companyname = $data['companyname'];
+	$companyurl = $data['companyurl'];
+	$environment = enomnewtlds_hook_Helper_Getenvironment( $data['environment'] );
 	$fields = array();
-	$fields["portalid"] = $portalid;
-	$fields["uid"] = $enomuid;
-	$fields["pw"] = $enompw;
-	$fields["recordcount"] = $enomnewtlds_hook_BatchSize;
+	$fields['portalid'] = $portalid;
+	$fields['uid'] = $enomuid;
+	$fields['pw'] = $enompw;
+	$fields['recordcount'] = $enomnewtlds_hook_BatchSize;
 	enomnewtlds_hook_Helper_Log( "Calling eNom API To get the awarded domains" );
 	$xmldata = enomnewtlds_hook_API_GetAwardedDomains( $fields );
 	enomnewtlds_hook_ProcessDomains( $xmldata, $returnedCount, $totalCount, $batch );
@@ -160,7 +160,7 @@ function enomnewtlds_hook_ProcessDomains($xmldata, $returnedCount, $totalCount, 
 		$dtexpdate = new DateTime( $expdate );
 		$currency = getCurrency( $userid );
 		$from = get_query_val( "tblcurrencies", "id", array( "code" => "USD" ) );
-		$to = $currency["id"];
+		$to = $currency['id'];
 
 		if (!$from) {
 			$from = "1";
@@ -273,39 +273,39 @@ function enomnewtlds_hook_DB_GetWatchlistSettingsLocal() {
 	$result = select_query( $enomnewtlds_DBName, "enabled,configured,portalid,environment,enomlogin,enompassword,companyname,companyurl", array() );
 	$data = mysql_fetch_array( $result );
 
-	if (enomnewtlds_hook_Helper_IsNullOrEmptyString( $data["portalid"] )) {
-		$data["portalid"] = "0";
+	if (enomnewtlds_hook_Helper_IsNullOrEmptyString( $data['portalid'] )) {
+		$data['portalid'] = "0";
 	}
 
 
-	if (enomnewtlds_hook_Helper_IsNullOrEmptyString( $data["enompassword"] )) {
-		$data["enompassword"] = "";
-	}
-	else {
-		$data["enompassword"] = decrypt( $data["enompassword"] );
-	}
-
-
-	if (enomnewtlds_hook_Helper_IsNullOrEmptyString( $data["enomlogin"] )) {
-		$data["enomlogin"] = "";
+	if (enomnewtlds_hook_Helper_IsNullOrEmptyString( $data['enompassword'] )) {
+		$data['enompassword'] = "";
 	}
 	else {
-		$data["enomlogin"] = decrypt( $data["enomlogin"] );
+		$data['enompassword'] = decrypt( $data['enompassword'] );
 	}
 
 
-	if (enomnewtlds_hook_Helper_IsNullOrEmptyString( $data["companyname"] )) {
-		$data["companyname"] = "";
+	if (enomnewtlds_hook_Helper_IsNullOrEmptyString( $data['enomlogin'] )) {
+		$data['enomlogin'] = "";
+	}
+	else {
+		$data['enomlogin'] = decrypt( $data['enomlogin'] );
 	}
 
 
-	if (enomnewtlds_hook_Helper_IsNullOrEmptyString( $data["companyurl"] )) {
-		$data["companyurl"] = "";
+	if (enomnewtlds_hook_Helper_IsNullOrEmptyString( $data['companyname'] )) {
+		$data['companyname'] = "";
 	}
 
 
-	if (enomnewtlds_hook_Helper_IsNullOrEmptyString( $data["environment"] )) {
-		$data["environment"] = $enomnewtlds_hook_DefaultEnvironment;
+	if (enomnewtlds_hook_Helper_IsNullOrEmptyString( $data['companyurl'] )) {
+		$data['companyurl'] = "";
+	}
+
+
+	if (enomnewtlds_hook_Helper_IsNullOrEmptyString( $data['environment'] )) {
+		$data['environment'] = $enomnewtlds_hook_DefaultEnvironment;
 	}
 
 	return $data;
@@ -313,11 +313,11 @@ function enomnewtlds_hook_DB_GetWatchlistSettingsLocal() {
 
 
 function enomnewtlds_hook_DB_InsertDomain($domain) {
-	$domainname = $domain["domain"];
+	$domainname = $domain['domain'];
 
-	if (( is_array( $domain ) && !enomnewtlds_hook_Helper_IsNullOrEmptyString( $domainname ) )) {
+	if ( is_array( $domain ) && !enomnewtlds_hook_Helper_IsNullOrEmptyString( $domainname ) ) {
 		if (!enomnewtlds_hook_DB_DomainExists( $domainname )) {
-			$values = array( "userid" => $domain["userid"], "type" => "Register", "registrationdate" => $domain["registrationdate"], "domain" => $domain["domain"], "firstpaymentamount" => $domain["firstpaymentamount"], "recurringamount" => $domain["recurringamount"], "registrar" => "enom", "registrationperiod" => $domain["registrationperiod"], "expirydate" => $domain["expirydate"], "nextduedate" => $domain["nextduedate"], "nextinvoicedate" => $domain["nextinvoicedate"], "status" => "Active", "paymentmethod" => $domain["paymentmethod"] );
+			$values = array( "userid" => $domain['userid'], "type" => "Register", "registrationdate" => $domain['registrationdate'], "domain" => $domain['domain'], "firstpaymentamount" => $domain['firstpaymentamount'], "recurringamount" => $domain['recurringamount'], "registrar" => "enom", "registrationperiod" => $domain['registrationperiod'], "expirydate" => $domain['expirydate'], "nextduedate" => $domain['nextduedate'], "nextinvoicedate" => $domain['nextinvoicedate'], "status" => "Active", "paymentmethod" => $domain['paymentmethod'] );
 			$result = insert_query( "tbldomains", $values );
 		}
 		else {
@@ -358,16 +358,16 @@ function enomnewtlds_hook_DB_InsertIntoCronTable($values) {
 	$sql = "replace into " . mysql_real_escape_string( $enomnewtlds_CronDBName ) . "
                         (domainname, domainnameid, emailaddress, expdate, regdate, userid, regprice, renewprice, regperiod, provisioned)
                 Values (
-                '" . $values["domain"] . "',
-                '" . $values["dnid"] . "',
-                '" . $values["email"] . "',
-                '" . $values["expirydate"] . "',
-                '" . $values["registrationdate"] . "',
-                '" . $values["userid"] . "',
-                '" . $values["firstpaymentamount"] . "',
-                '" . $values["recurringamount"] . "',
-                '" . $values["registrationperiod"] . "',
-                '" . $values["provisioned"] . "' )";
+                '" . $values['domain'] . "',
+                '" . $values['dnid'] . "',
+                '" . $values['email'] . "',
+                '" . $values['expirydate'] . "',
+                '" . $values['registrationdate'] . "',
+                '" . $values['userid'] . "',
+                '" . $values['firstpaymentamount'] . "',
+                '" . $values['recurringamount'] . "',
+                '" . $values['registrationperiod'] . "',
+                '" . $values['provisioned'] . "' )";
 	$result = full_query( $sql );
 	return $result;
 }
@@ -517,7 +517,7 @@ function enomnewtlds_hook_Helper_Getenvironment($environment) {
 
 	if (enomnewtlds_hook_Helper_IsNullOrEmptyString( $environment )) {
 		$data = enomnewtlds_hook_DB_GetWatchlistSettingsLocal();
-		$environment = $data["environment"];
+		$environment = $data['environment'];
 	}
 
 	return $environment;
@@ -571,7 +571,7 @@ function enomnewtlds_hook_API_GetAwardedDomains($fields) {
 	global $enomnewtlds_hook_errormessage;
 
 	$postfields = array();
-	$postfields["command"] = "PORTAL_GETAWARDEDDOMAINS";
+	$postfields['command'] = "PORTAL_GETAWARDEDDOMAINS";
 
 	if (is_array( $fields )) {
 		foreach ($fields as $x => $y) {
@@ -589,8 +589,8 @@ function enomnewtlds_hook_API_SetAwardedDomains($fields) {
 	global $enomnewtlds_hook_DomainsToUpdate;
 
 	$postfields = array();
-	$postfields["domainlist"] = implode( ",", $enomnewtlds_hook_DomainsToUpdate );
-	$postfields["command"] = "PORTAL_UPDATEAWARDEDDOMAINS";
+	$postfields['domainlist'] = implode( ",", $enomnewtlds_hook_DomainsToUpdate );
+	$postfields['command'] = "PORTAL_UPDATEAWARDEDDOMAINS";
 
 	if (is_array( $fields )) {
 		foreach ($fields as $x => $y) {
@@ -608,30 +608,30 @@ function enomnewtlds_hook_API_CallEnom($postfields) {
 	global $enomnewtlds_ModuleName;
 
 	$data = array();
-	$environment = enomnewtlds_hook_Helper_Getenvironment( $data["environment"] );
-	$portalid = $data["portalid"];
+	$environment = enomnewtlds_hook_Helper_Getenvironment( $data['environment'] );
+	$portalid = $data['portalid'];
 
 	if (!in_array( "uid", $postfields )) {
-		$enomuid = $data["enomlogin"];
-		$postfields["uid"] = $enomuid;
+		$enomuid = $data['enomlogin'];
+		$postfields['uid'] = $enomuid;
 	}
 
 
 	if (!in_array( "pw", $postfields )) {
-		$enompw = $data["enompassword"];
-		$postfields["pw"] = $enompw;
+		$enompw = $data['enompassword'];
+		$postfields['pw'] = $enompw;
 	}
 
 
 	if (!in_array( "portalid", $postfields )) {
-		if (( !enomnewtlds_hook_Helper_IsNullOrEmptyString( $portalid ) && 0 < (int)$portalid )) {
-			$postfields["portalid"] = $portalid;
+		if ( !enomnewtlds_hook_Helper_IsNullOrEmptyString( $portalid ) && 0 < (int)$portalid ) {
+			$postfields['portalid'] = $portalid;
 		}
 	}
 
-	$postfields["ResponseType"] = "XML";
-	$postfields["Source"] = "WHMCS";
-	$postfields["sourceid"] = "37";
+	$postfields['ResponseType'] = "XML";
+	$postfields['Source'] = "WHMCS";
+	$postfields['sourceid'] = "37";
 	$url = "https://" . enomnewtlds_hook_Helper_GetAPIHost( $environment ) . "/interface.asp";
 	$data = curlCall( $url, $postfields );
 	enomnewtlds_hook_Helper_FormatAPICallForEmail( $postfields, $environment );
@@ -640,7 +640,7 @@ function enomnewtlds_hook_API_CallEnom($postfields) {
 	enomnewtlds_hook_Helper_Log2( "API DATA = " . $apiData );
 	enomnewtlds_hook_Helper_Log( "API DATA = " . $call . "<br /><br /><br />" . $data );
 	$xmldata = simplexml_load_string( $data );
-	logModuleCall( $enomnewtlds_ModuleName, $postfields["command"], $postfields, $data, $xmldata );
+	logModuleCall( $enomnewtlds_ModuleName, $postfields['command'], $postfields, $data, $xmldata );
 	return $xmldata;
 }
 

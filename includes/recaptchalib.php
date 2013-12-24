@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -206,7 +206,7 @@ function recaptcha_mailhide_url($pubkey, $privkey, $email) {
  * the email is then displayed as john...@example.com
  */
 function _recaptcha_mailhide_email_parts($email) {
-	$arr = preg_split("/@/", $email);
+	$arr = preg_split('/@/', $email);
 
 	if (strlen($arr[0]) <= 4) {
 		$arr[0] = substr($arr[0], 0, 1);

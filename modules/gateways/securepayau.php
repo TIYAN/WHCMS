@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -20,18 +20,18 @@ function securepayau_activate() {
 function securepayau_capture($params) {
 	$request_type = "payment";
 	$payment_type = "0";
-	$merchant_id = $params["merchantid"];
-	$transaction_password = $params["transpassword"];
-	$payment_amount = $params["amount"] * 100;
-	$payment_reference = $params["invoiceid"];
-	$card_holder = $params["clientdetails"]["firstname"] . " " . $params["clientdetails"]["lastname"];
-	$card_number = $params["cardnum"];
-	$card_cvv = $params["cccvv"];
-	$card_expiry_month = substr( $params["cardexp"], 0, 2 );
-	$card_expiry_year = substr( $params["cardexp"], 2, 2 );
-	$currency = $params["currency"];
+	$merchant_id = $params['merchantid'];
+	$transaction_password = $params['transpassword'];
+	$payment_amount = $params['amount'] * 100;
+	$payment_reference = $params['invoiceid'];
+	$card_holder = $params['clientdetails']['firstname'] . " " . $params['clientdetails']['lastname'];
+	$card_number = $params['cardnum'];
+	$card_cvv = $params['cccvv'];
+	$card_expiry_month = substr( $params['cardexp'], 0, 2 );
+	$card_expiry_year = substr( $params['cardexp'], 2, 2 );
+	$currency = $params['currency'];
 
-	if ($params["testmode"]) {
+	if ($params['testmode']) {
 		$host = "www.securepay.com.au/test/payment";
 	}
 	else {
@@ -44,34 +44,34 @@ function securepayau_capture($params) {
 	$response = curlCall( $gatewayurl, $vars );
 	$xmlres = array();
 	$xmlres = securepayau_makeXMLTree( $response );
-	$messageID = trim( $xmlres[SecurePayMessage][MessageInfo][messageID] );
-	$messageTimestamp = trim( $xmlres[SecurePayMessage][MessageInfo][messageTimestamp] );
-	$apiVersion = trim( $xmlres[SecurePayMessage][MessageInfo][apiVersion] );
-	$RequestType = trim( $xmlres[SecurePayMessage][RequestType] );
-	$merchantID = trim( $xmlres[SecurePayMessage][MerchantInfo][merchantID] );
-	$statusCode = trim( $xmlres[SecurePayMessage][Status][statusCode] );
-	$statusDescription = trim( $xmlres[SecurePayMessage][Status][statusDescription] );
-	$txnType = trim( $xmlres[SecurePayMessage][Payment][TxnList][Txn][txnType] );
-	$txnSource = trim( $xmlres[SecurePayMessage][Payment][TxnList][Txn][txnSource] );
-	$amount = trim( $xmlres[SecurePayMessage][Payment][TxnList][Txn][amount] );
-	$currency = trim( $xmlres[SecurePayMessage][Payment][TxnList][Txn][currency] );
-	$purchaseOrderNo = trim( $xmlres[SecurePayMessage][Payment][TxnList][Txn][purchaseOrderNo] );
-	$approved = trim( $xmlres[SecurePayMessage][Payment][TxnList][Txn][approved] );
-	$responseCode = trim( $xmlres[SecurePayMessage][Payment][TxnList][Txn][responseCode] );
-	$responseText = trim( $xmlres[SecurePayMessage][Payment][TxnList][Txn][responseText] );
-	$settlementDate = trim( $xmlres[SecurePayMessage][Payment][TxnList][Txn][settlementDate] );
-	$txnID = trim( $xmlres[SecurePayMessage][Payment][TxnList][Txn][txnID] );
-	$preauthID = trim( $xmlres[SecurePayMessage][Payment][TxnList][Txn][preauthID] );
-	$pan = trim( $xmlres[SecurePayMessage][Payment][TxnList][Txn][CreditCardInfo][pan] );
-	$expiryDate = trim( $xmlres[SecurePayMessage][Payment][TxnList][Txn][CreditCardInfo][expiryDate] );
-	$cardType = trim( $xmlres[SecurePayMessage][Payment][TxnList][Txn][CreditCardInfo][cardType] );
-	$cardDescription = trim( $xmlres[SecurePayMessage][Payment][TxnList][Txn][CreditCardInfo][cardDescription] );
-	$bsbNumber = trim( $xmlres[SecurePayMessage][Payment][TxnList][Txn][DirectEntryInfo][bsbNumber] );
-	$accountNumber = trim( $xmlres[SecurePayMessage][Payment][TxnList][Txn][DirectEntryInfo][accountNumber] );
-	$accountName = trim( $xmlres[SecurePayMessage][Payment][TxnList][Txn][DirectEntryInfo][accountName] );
+	$messageID = trim( $xmlres['SecurePayMessage'][MessageInfo]['messageID'] );
+	$messageTimestamp = trim( $xmlres['SecurePayMessage'][MessageInfo]['messageTimestamp'] );
+	$apiVersion = trim( $xmlres['SecurePayMessage'][MessageInfo]['apiVersion'] );
+	$RequestType = trim( $xmlres['SecurePayMessage']['RequestType'] );
+	$merchantID = trim( $xmlres['SecurePayMessage'][MerchantInfo]['merchantID'] );
+	$statusCode = trim( $xmlres['SecurePayMessage'][Status]['statusCode'] );
+	$statusDescription = trim( $xmlres['SecurePayMessage'][Status]['statusDescription'] );
+	$txnType = trim( $xmlres['SecurePayMessage'][Payment][TxnList][Txn]['txnType'] );
+	$txnSource = trim( $xmlres['SecurePayMessage'][Payment][TxnList][Txn]['txnSource'] );
+	$amount = trim( $xmlres['SecurePayMessage'][Payment][TxnList][Txn]['amount'] );
+	$currency = trim( $xmlres['SecurePayMessage'][Payment][TxnList][Txn]['currency'] );
+	$purchaseOrderNo = trim( $xmlres['SecurePayMessage'][Payment][TxnList][Txn]['purchaseOrderNo'] );
+	$approved = trim( $xmlres['SecurePayMessage'][Payment][TxnList][Txn]['approved'] );
+	$responseCode = trim( $xmlres['SecurePayMessage'][Payment][TxnList][Txn]['responseCode'] );
+	$responseText = trim( $xmlres['SecurePayMessage'][Payment][TxnList][Txn]['responseText'] );
+	$settlementDate = trim( $xmlres['SecurePayMessage'][Payment][TxnList][Txn]['settlementDate'] );
+	$txnID = trim( $xmlres['SecurePayMessage'][Payment][TxnList][Txn]['txnID'] );
+	$preauthID = trim( $xmlres['SecurePayMessage'][Payment][TxnList][Txn]['preauthID'] );
+	$pan = trim( $xmlres['SecurePayMessage'][Payment][TxnList][Txn][CreditCardInfo]['pan'] );
+	$expiryDate = trim( $xmlres['SecurePayMessage'][Payment][TxnList][Txn][CreditCardInfo]['expiryDate'] );
+	$cardType = trim( $xmlres['SecurePayMessage'][Payment][TxnList][Txn][CreditCardInfo]['cardType'] );
+	$cardDescription = trim( $xmlres['SecurePayMessage'][Payment][TxnList][Txn][CreditCardInfo]['cardDescription'] );
+	$bsbNumber = trim( $xmlres['SecurePayMessage'][Payment][TxnList][Txn][DirectEntryInfo]['bsbNumber'] );
+	$accountNumber = trim( $xmlres['SecurePayMessage'][Payment][TxnList][Txn][DirectEntryInfo]['accountNumber'] );
+	$accountName = trim( $xmlres['SecurePayMessage'][Payment][TxnList][Txn][DirectEntryInfo]['accountName'] );
 	$transreport = print_r( $xmlres, true );
 
-	if (( ( $responseCode == "00" || $responseCode == "08" ) || $responseCode == "77" )) {
+	if (( $responseCode == "00" || $responseCode == "08" ) || $responseCode == "77") {
 		return array( "status" => "success", "transid" => $txnID, "rawdata" => $transreport );
 	}
 
@@ -103,7 +103,7 @@ if (!defined( "WHMCS" )) {
 	exit( "This file cannot be accessed directly" );
 }
 
-$GATEWAYMODULE["securepayauname"] = "securepayau";
-$GATEWAYMODULE["securepayauvisiblename"] = "SecurePay AU";
-$GATEWAYMODULE["securepayautype"] = "CC";
+$GATEWAYMODULE['securepayauname'] = "securepayau";
+$GATEWAYMODULE['securepayauvisiblename'] = "SecurePay AU";
+$GATEWAYMODULE['securepayautype'] = "CC";
 ?>

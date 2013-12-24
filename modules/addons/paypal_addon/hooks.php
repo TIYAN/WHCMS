@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -20,17 +20,17 @@ function widget_paypal_addon($vars) {
 	}
 
 	$content = "";
-	$adminroleid = get_query_val( "tbladmins", "roleid", array( "id" => $_SESSION["adminid"] ) );
+	$adminroleid = get_query_val( "tbladmins", "roleid", array( "id" => $_SESSION['adminid'] ) );
 
 	if ($params["showbalance" . $adminroleid]) {
 		$url = "https://api-3t.paypal.com/nvp";
 		$postfields = $resultsarray = array();
-		$postfields["USER"] = $params["username"];
-		$postfields["PWD"] = $params["password"];
-		$postfields["SIGNATURE"] = $params["signature"];
-		$postfields["METHOD"] = "GetBalance";
-		$postfields["RETURNALLCURRENCIES"] = "1";
-		$postfields["VERSION"] = "56.0";
+		$postfields['USER'] = $params['username'];
+		$postfields['PWD'] = $params['password'];
+		$postfields['SIGNATURE'] = $params['signature'];
+		$postfields['METHOD'] = "GetBalance";
+		$postfields['RETURNALLCURRENCIES'] = "1";
+		$postfields['VERSION'] = "56.0";
 		$result = curlCall( $url, $postfields );
 		$resultsarray2 = explode( "&", $result );
 		foreach ($resultsarray2 as $line) {
@@ -40,8 +40,8 @@ function widget_paypal_addon($vars) {
 
 		$paypalbal = array();
 
-		if (strtolower( $resultsarray["ACK"] ) != "success") {
-			$paypalbal[] = "Error: " . $resultsarray["L_LONGMESSAGE0"];
+		if (strtolower( $resultsarray['ACK'] ) != "success") {
+			$paypalbal[] = "Error: " . $resultsarray['L_LONGMESSAGE0'];
 		}
 		else {
 			$i = 0;
@@ -59,7 +59,7 @@ function widget_paypal_addon($vars) {
 	}
 
 	$content .= "<form method=\"post\" action=\"addonmodules.php?module=paypal_addon\">
-<div align=\"center\" style=\"margin:10px;font-size:16px;\">Lookup PayPal Transaction ID: <input type=\"text\" name=\"transid\" size=\"30\" value=\"" . $_POST["transid"] . "\" style=\"font-size:16px;\" /> <input type=\"submit\" name=\"search\" value=\"Go\" /></div>
+<div align=\"center\" style=\"margin:10px;font-size:16px;\">Lookup PayPal Transaction ID: <input type=\"text\" name=\"transid\" size=\"30\" value=\"" . $_POST['transid'] . "\" style=\"font-size:16px;\" /> <input type=\"submit\" name=\"search\" value=\"Go\" /></div>
 <div align=\"right\"><a href=\"addonmodules.php?module=paypal_addon\">Advanced Search &raquo;</a></div>
 </form>";
 	return array( "title" => $title, "content" => $content );

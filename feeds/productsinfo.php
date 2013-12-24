@@ -9,15 +9,16 @@ require("../init.php");
 
 <script language="javascript" src="feeds/productsinfo.php?pid=1&get=description"></script>
 
-<script language="javascript" src="feeds/productsinfo.php?pid=1&get=price&billingcycle=monthly"></script>
+<script language="javascript" src="feeds/productsinfo.php?pid=1&get=price&billingcycle=monthly&currency=1"></script>
 
 <script language="javascript" src="feeds/productsinfo.php?pid=1&get=orderurl&carttpl=web20cart"></script>
 
 */
 
-$whmcs = WHMCS_Application::getInstance();
+if (! $whmcs || !($whmcs instanceof WHMCS_Init)) {
+    die('Unable to instantiate application');
+};
 $pid = $whmcs->get_req_var('pid');
-$currencyid = $whmcs->get_req_var('currency');
 $get = $whmcs->get_req_var('get');
 $billingcycle = $whmcs->get_req_var('billingcycle');
 $configoptionnum = $whmcs->get_req_var('configoptionnum');
@@ -56,7 +57,10 @@ if ($get=="orderurl") {
 }
 
 if ($get=="price") {
-    // Verify user input for currency exists, is numeric, and as is a valid id
+    /**
+     * Case 3482: see documentation on formatCurrency()
+     */
+    $currencyid = $whmcs->get_req_var('currency');
     if (!is_numeric($currencyid)) {
         $currency = array();
     } else {

@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -20,20 +20,20 @@ function enomssl_ConfigOptions() {
 
 	$result = select_query( "tblproducts", "configoption1,configoption2,configoption5", array( "servertype" => "enomssl", "configoption1" => array( "sqltype" => "NEQ", "value" => "" ) ) );
 	$data = mysql_fetch_assoc( $result );
-	$enomusername = $data["configoption1"];
-	$enompassword = $data["configoption2"];
-	$testmode = $data["configoption5"];
+	$enomusername = $data['configoption1'];
+	$enompassword = $data['configoption2'];
+	$testmode = $data['configoption5'];
 
-	if (( $enomusername && $enompassword )) {
+	if ($enomusername && $enompassword) {
 		$postfields = array();
-		$postfields["uid"] = $enomusername;
-		$postfields["pw"] = $enompassword;
-		$postfields["command"] = "GetCerts";
-		$postfields["ResponseType"] = "XML";
+		$postfields['uid'] = $enomusername;
+		$postfields['pw'] = $enompassword;
+		$postfields['command'] = "GetCerts";
+		$postfields['ResponseType'] = "XML";
 		$result = enomssl_call( $postfields, $testmode );
 		$certtypelist = "";
-		foreach ($result["INTERFACE-RESPONSE"]["GETCERTS"]["CERTS"] as $cert => $details) {
-			$certcode = $details["PRODCODE"];
+		foreach ($result['INTERFACE-RESPONSE']['GETCERTS']['CERTS'] as $cert => $details) {
+			$certcode = $details['PRODCODE'];
 
 			if ($certcode) {
 				$certcode = str_replace( "-", " ", $certcode );
@@ -59,7 +59,7 @@ function enomssl_ConfigOptions() {
 
 
 function enomssl_CreateAccount($params) {
-	$result = select_query( "tblsslorders", "COUNT(*)", array( "serviceid" => $params["serviceid"] ) );
+	$result = select_query( "tblsslorders", "COUNT(*)", array( "serviceid" => $params['serviceid'] ) );
 	$data = mysql_fetch_array( $result );
 
 	if ($data[0]) {
@@ -67,61 +67,61 @@ function enomssl_CreateAccount($params) {
 	}
 
 	updateService( array( "username" => "", "password" => "" ) );
-	$certtype = ($params["configoptions"]["Certificate Type"] ? $params["configoptions"]["Certificate Type"] : $params["configoption3"]);
-	$certyears = ($params["configoptions"]["Years"] ? $params["configoptions"]["Years"] : $params["configoption4"]);
+	$certtype = ($params['configoptions']["Certificate Type"] ? $params['configoptions']["Certificate Type"] : $params['configoption3']);
+	$certyears = ($params['configoptions']['Years'] ? $params['configoptions']['Years'] : $params['configoption4']);
 	$certtype = str_replace( " ", "-", strtolower( $certtype ) );
 	$postfields = array();
-	$postfields["uid"] = $params["configoption1"];
-	$postfields["pw"] = $params["configoption2"];
-	$postfields["ProductType"] = $certtype;
-	$postfields["Quantity"] = $certyears;
-	$postfields["ClearItems"] = "yes";
-	$postfields["command"] = "AddToCart";
-	$postfields["ResponseType"] = "XML";
-	$result = enomssl_call( $postfields, $params["configoption5"] );
+	$postfields['uid'] = $params['configoption1'];
+	$postfields['pw'] = $params['configoption2'];
+	$postfields['ProductType'] = $certtype;
+	$postfields['Quantity'] = $certyears;
+	$postfields['ClearItems'] = "yes";
+	$postfields['command'] = "AddToCart";
+	$postfields['ResponseType'] = "XML";
+	$result = enomssl_call( $postfields, $params['configoption5'] );
 
-	if (( !is_array( $result ) && substr( $result, 0, 4 ) == "CURL" )) {
+	if (!is_array( $result ) && substr( $result, 0, 4 ) == "CURL") {
 		return $result;
 	}
 
-	$error = $result["INTERFACE-RESPONSE"]["ERRORS"]["ERR1"];
+	$error = $result['INTERFACE-RESPONSE']['ERRORS']['ERR1'];
 
 	if ($error) {
 		return $error;
 	}
 
 	$postfields = array();
-	$postfields["uid"] = $params["configoption1"];
-	$postfields["pw"] = $params["configoption2"];
-	$postfields["command"] = "InsertNewOrder";
-	$postfields["ResponseType"] = "XML";
-	$result = enomssl_call( $postfields, $params["configoption5"] );
-	$error = $result["INTERFACE-RESPONSE"]["ERRORS"]["ERR1"];
+	$postfields['uid'] = $params['configoption1'];
+	$postfields['pw'] = $params['configoption2'];
+	$postfields['command'] = "InsertNewOrder";
+	$postfields['ResponseType'] = "XML";
+	$result = enomssl_call( $postfields, $params['configoption5'] );
+	$error = $result['INTERFACE-RESPONSE']['ERRORS']['ERR1'];
 
 	if ($error) {
 		return $error;
 	}
 
-	$orderid = $result["INTERFACE-RESPONSE"]["ORDERID"];
-	$sslorderid = insert_query( "tblsslorders", array( "userid" => $params["clientsdetails"]["userid"], "serviceid" => $params["serviceid"], "remoteid" => $orderid, "module" => "enomssl", "certtype" => $certtype, "status" => "Awaiting Configuration" ) );
+	$orderid = $result['INTERFACE-RESPONSE']['ORDERID'];
+	$sslorderid = insert_query( "tblsslorders", array( "userid" => $params['clientsdetails']['userid'], "serviceid" => $params['serviceid'], "remoteid" => $orderid, "module" => "enomssl", "certtype" => $certtype, "status" => "Awaiting Configuration" ) );
 	global $CONFIG;
 
-	$sslconfigurationlink = $CONFIG["SystemURL"] . "/configuressl.php?cert=" . md5( $sslorderid );
+	$sslconfigurationlink = $CONFIG['SystemURL'] . "/configuressl.php?cert=" . md5( $sslorderid );
 	$sslconfigurationlink = "<a href=\"" . $sslconfigurationlink . "\">" . $sslconfigurationlink . "</a>";
-	sendMessage( "SSL Certificate Configuration Required", $params["serviceid"], array( "ssl_configuration_link" => $sslconfigurationlink ) );
+	sendMessage( "SSL Certificate Configuration Required", $params['serviceid'], array( "ssl_configuration_link" => $sslconfigurationlink ) );
 	return "success";
 }
 
 
 function enomssl_TerminateAccount($params) {
-	$result = select_query( "tblsslorders", "COUNT(*)", array( "serviceid" => $params["serviceid"], "status" => "Awaiting Configuration" ) );
+	$result = select_query( "tblsslorders", "COUNT(*)", array( "serviceid" => $params['serviceid'], "status" => "Awaiting Configuration" ) );
 	$data = mysql_fetch_array( $result );
 
 	if (!$data[0]) {
 		return "SSL Either not Provisioned or Not Awaiting Configuration so unable to cancel";
 	}
 
-	update_query( "tblsslorders", array( "status" => "Cancelled" ), array( "serviceid" => $params["serviceid"] ) );
+	update_query( "tblsslorders", array( "status" => "Cancelled" ), array( "serviceid" => $params['serviceid'] ) );
 	return "success";
 }
 
@@ -133,9 +133,9 @@ function enomssl_AdminCustomButtonArray() {
 
 
 function enomssl_resend($params) {
-	$result = select_query( "tblsslorders", "id", array( "serviceid" => $params["serviceid"] ) );
+	$result = select_query( "tblsslorders", "id", array( "serviceid" => $params['serviceid'] ) );
 	$data = mysql_fetch_array( $result );
-	$id = $data["id"];
+	$id = $data['id'];
 
 	if (!$id) {
 		return "No SSL Order exists for this product";
@@ -143,9 +143,9 @@ function enomssl_resend($params) {
 
 	global $CONFIG;
 
-	$sslconfigurationlink = $CONFIG["SystemURL"] . "/configuressl.php?cert=" . md5( $id );
+	$sslconfigurationlink = $CONFIG['SystemURL'] . "/configuressl.php?cert=" . md5( $id );
 	$sslconfigurationlink = "<a href=\"" . $sslconfigurationlink . "\">" . $sslconfigurationlink . "</a>";
-	sendMessage( "SSL Certificate Configuration Required", $params["serviceid"], array( "ssl_configuration_link" => $sslconfigurationlink ) );
+	sendMessage( "SSL Certificate Configuration Required", $params['serviceid'], array( "ssl_configuration_link" => $sslconfigurationlink ) );
 	return "success";
 }
 
@@ -153,32 +153,32 @@ function enomssl_resend($params) {
 function enomssl_ClientArea($params) {
 	global $_LANG;
 
-	$result = select_query( "tblsslorders", "", array( "serviceid" => $params["serviceid"] ) );
+	$result = select_query( "tblsslorders", "", array( "serviceid" => $params['serviceid'] ) );
 	$data = mysql_fetch_array( $result );
-	$id = $data["id"];
-	$orderid = $data["orderid"];
-	$serviceid = $data["serviceid"];
-	$remoteid = $data["remoteid"];
-	$module = $data["module"];
-	$certtype = $data["certtype"];
-	$domain = $data["domain"];
-	$provisiondate = $data["provisiondate"];
-	$completiondate = $data["completiondate"];
-	$status = $data["status"];
+	$id = $data['id'];
+	$orderid = $data['orderid'];
+	$serviceid = $data['serviceid'];
+	$remoteid = $data['remoteid'];
+	$module = $data['module'];
+	$certtype = $data['certtype'];
+	$domain = $data['domain'];
+	$provisiondate = $data['provisiondate'];
+	$completiondate = $data['completiondate'];
+	$status = $data['status'];
 
 	if ($id) {
 		if (!$provisiondate) {
-			$result = select_query( "tblhosting", "regdate", array( "id" => $params["serviceid"] ) );
+			$result = select_query( "tblhosting", "regdate", array( "id" => $params['serviceid'] ) );
 			$data = mysql_fetch_array( $result );
-			$provisiondate = $data["regdate"];
+			$provisiondate = $data['regdate'];
 		}
 
 		$provisiondate = fromMySQLDate( $provisiondate );
-		$status .= " - <a href=\"configuressl.php?cert=" . md5( $id ) . "\">" . $_LANG["sslconfigurenow"] . "</a>";
+		$status .= " - <a href=\"configuressl.php?cert=" . md5( $id ) . "\">" . $_LANG['sslconfigurenow'] . "</a>";
 		$output = "<div align=\"left\">
 <table width=\"100%\">
-<tr><td width=\"150\" class=\"fieldlabel\">" . $_LANG["sslprovisioningdate"] . ":</td><td>" . $provisiondate . "</td></tr>
-<tr><td class=\"fieldlabel\">" . $_LANG["sslstatus"] . ":</td><td>" . $status . "</td></tr>
+<tr><td width=\"150\" class=\"fieldlabel\">" . $_LANG['sslprovisioningdate'] . ":</td><td>" . $provisiondate . "</td></tr>
+<tr><td class=\"fieldlabel\">" . $_LANG['sslstatus'] . ":</td><td>" . $status . "</td></tr>
 </table>
 </div>";
 		return $output;
@@ -188,18 +188,18 @@ function enomssl_ClientArea($params) {
 
 
 function enomssl_AdminServicesTabFields($params) {
-	$result = select_query( "tblsslorders", "", array( "serviceid" => $params["serviceid"] ) );
+	$result = select_query( "tblsslorders", "", array( "serviceid" => $params['serviceid'] ) );
 	$data = mysql_fetch_array( $result );
-	$id = $data["id"];
-	$orderid = $data["orderid"];
-	$serviceid = $data["serviceid"];
-	$remoteid = $data["remoteid"];
-	$module = $data["module"];
-	$certtype = $data["certtype"];
-	$domain = $data["domain"];
-	$provisiondate = $data["provisiondate"];
-	$completiondate = $data["completiondate"];
-	$status = $data["status"];
+	$id = $data['id'];
+	$orderid = $data['orderid'];
+	$serviceid = $data['serviceid'];
+	$remoteid = $data['remoteid'];
+	$module = $data['module'];
+	$certtype = $data['certtype'];
+	$domain = $data['domain'];
+	$provisiondate = $data['provisiondate'];
+	$completiondate = $data['completiondate'];
+	$status = $data['status'];
 
 	if (!$id) {
 		$remoteid = "-";
@@ -212,30 +212,30 @@ function enomssl_AdminServicesTabFields($params) {
 
 
 function enomssl_SSLStepOne($params) {
-	$orderid = $params["remoteid"];
+	$orderid = $params['remoteid'];
 	$values = array();
 
-	if (!$_SESSION["enomsslcert"][$orderid]["id"]) {
+	if (!$_SESSION['enomsslcert'][$orderid]['id']) {
 		$postfields = array();
-		$postfields["uid"] = $params["configoption1"];
-		$postfields["pw"] = $params["configoption2"];
-		$postfields["command"] = "CertGetCerts";
-		$postfields["ResponseType"] = "XML";
-		$result = enomssl_call( $postfields, $params["configoption5"] );
-		$values["error"] = $result["INTERFACE-RESPONSE"]["ERRORS"]["ERR1"];
+		$postfields['uid'] = $params['configoption1'];
+		$postfields['pw'] = $params['configoption2'];
+		$postfields['command'] = "CertGetCerts";
+		$postfields['ResponseType'] = "XML";
+		$result = enomssl_call( $postfields, $params['configoption5'] );
+		$values['error'] = $result['INTERFACE-RESPONSE']['ERRORS']['ERR1'];
 
-		if ($values["error"]) {
+		if ($values['error']) {
 			return $values;
 		}
 
 		$cert_allowconfig = false;
-		foreach ($result["INTERFACE-RESPONSE"]["CERTGETCERTS"]["CERTS"] as $certificate) {
-			$temp_cert_id = $certificate["CERTID"];
-			$temp_cert_name = $certificate["PRODDESC"];
-			$temp_cert_status = $certificate["CERTSTATUS"];
-			$temp_cert_orderid = $certificate["ORDERID"];
-			$temp_cert_orderdate = $certificate["ORDERDATE"];
-			$temp_cert_validityperiod = $certificate["VALIDITYPERIOD"];
+		foreach ($result['INTERFACE-RESPONSE']['CERTGETCERTS']['CERTS'] as $certificate) {
+			$temp_cert_id = $certificate['CERTID'];
+			$temp_cert_name = $certificate['PRODDESC'];
+			$temp_cert_status = $certificate['CERTSTATUS'];
+			$temp_cert_orderid = $certificate['ORDERID'];
+			$temp_cert_orderdate = $certificate['ORDERDATE'];
+			$temp_cert_validityperiod = $certificate['VALIDITYPERIOD'];
 
 			if ($temp_cert_orderid == $orderid) {
 				$cert_id = $temp_cert_id;
@@ -244,7 +244,7 @@ function enomssl_SSLStepOne($params) {
 				$cert_orderdate = $temp_cert_orderdate;
 				$cert_validityperiod = $temp_cert_validityperiod;
 
-				if (( $temp_cert_status == "Awaiting Configuration" || $temp_cert_status == "Rejected by Customer" )) {
+				if ($temp_cert_status == "Awaiting Configuration" || $temp_cert_status == "Rejected by Customer") {
 					$cert_allowconfig = true;
 					continue;
 				}
@@ -255,63 +255,63 @@ function enomssl_SSLStepOne($params) {
 
 
 		if (!$cert_allowconfig) {
-			update_query( "tblsslorders", array( "completiondate" => "now()", "status" => "Completed" ), array( "serviceid" => $params["serviceid"], "status" => array( "sqltype" => "NEQ", "value" => "Completed" ) ) );
+			update_query( "tblsslorders", array( "completiondate" => "now()", "status" => "Completed" ), array( "serviceid" => $params['serviceid'], "status" => array( "sqltype" => "NEQ", "value" => "Completed" ) ) );
 		}
 		else {
-			update_query( "tblsslorders", array( "completiondate" => "", "status" => "Awaiting Configuration" ), array( "serviceid" => $params["serviceid"] ) );
+			update_query( "tblsslorders", array( "completiondate" => "", "status" => "Awaiting Configuration" ), array( "serviceid" => $params['serviceid'] ) );
 		}
 
-		$_SESSION["enomsslcert"][$orderid]["id"] = $cert_id;
+		$_SESSION['enomsslcert'][$orderid]['id'] = $cert_id;
 	}
 	else {
-		$cert_id = $_SESSION["enomsslcert"][$orderid]["id"];
+		$cert_id = $_SESSION['enomsslcert'][$orderid]['id'];
 	}
 
 	$postfields = array();
-	$postfields["uid"] = $params["configoption1"];
-	$postfields["pw"] = $params["configoption2"];
-	$postfields["CertID"] = $cert_id;
-	$postfields["command"] = "CertGetCertDetail";
-	$postfields["ResponseType"] = "XML";
-	$result = enomssl_call( $postfields, $params["configoption5"] );
-	$values["error"] = $result["INTERFACE-RESPONSE"]["ERRORS"]["ERR1"];
+	$postfields['uid'] = $params['configoption1'];
+	$postfields['pw'] = $params['configoption2'];
+	$postfields['CertID'] = $cert_id;
+	$postfields['command'] = "CertGetCertDetail";
+	$postfields['ResponseType'] = "XML";
+	$result = enomssl_call( $postfields, $params['configoption5'] );
+	$values['error'] = $result['INTERFACE-RESPONSE']['ERRORS']['ERR1'];
 
-	if ($values["error"]) {
+	if ($values['error']) {
 		return $values;
 	}
 
-	$values["displaydata"]["Domain"] = $result["INTERFACE-RESPONSE"]["CERTGETCERTDETAIL"]["DOMAINNAME"];
-	$values["displaydata"]["Validity Period"] = $result["INTERFACE-RESPONSE"]["CERTGETCERTDETAIL"]["VALIDITYPERIOD"] . " Months";
-	$values["displaydata"]["Expiration Date"] = $result["INTERFACE-RESPONSE"]["CERTGETCERTDETAIL"]["EXPIRATIONDATE"];
+	$values['displaydata']['Domain'] = $result['INTERFACE-RESPONSE']['CERTGETCERTDETAIL']['DOMAINNAME'];
+	$values['displaydata']["Validity Period"] = $result['INTERFACE-RESPONSE']['CERTGETCERTDETAIL']['VALIDITYPERIOD'] . " Months";
+	$values['displaydata']["Expiration Date"] = $result['INTERFACE-RESPONSE']['CERTGETCERTDETAIL']['EXPIRATIONDATE'];
 	return $values;
 }
 
 
 function enomssl_SSLStepTwo($params) {
-	$orderid = $params["remoteid"];
-	$cert_id = $_SESSION["enomsslcert"][$orderid]["id"];
-	$webservertype = $params["servertype"];
-	$csr = $params["csr"];
-	$firstname = $params["firstname"];
-	$lastname = $params["lastname"];
-	$organisationname = $params["orgname"];
-	$jobtitle = $params["jobtitle"];
-	$emailaddress = $params["email"];
-	$address1 = $params["address1"];
-	$address2 = $params["address2"];
-	$city = $params["city"];
-	$state = $params["state"];
-	$postcode = $params["postcode"];
-	$country = $params["country"];
-	$phonenumber = $params["phonenumber"];
-	$faxnumber = $params["faxnumber"];
+	$orderid = $params['remoteid'];
+	$cert_id = $_SESSION['enomsslcert'][$orderid]['id'];
+	$webservertype = $params['servertype'];
+	$csr = $params['csr'];
+	$firstname = $params['firstname'];
+	$lastname = $params['lastname'];
+	$organisationname = $params['orgname'];
+	$jobtitle = $params['jobtitle'];
+	$emailaddress = $params['email'];
+	$address1 = $params['address1'];
+	$address2 = $params['address2'];
+	$city = $params['city'];
+	$state = $params['state'];
+	$postcode = $params['postcode'];
+	$country = $params['country'];
+	$phonenumber = $params['phonenumber'];
+	$faxnumber = $params['faxnumber'];
 	$values = array();
 	$postfields = array();
-	$postfields["uid"] = $params["configoption1"];
-	$postfields["pw"] = $params["configoption2"];
-	$postfields["CertID"] = $cert_id;
-	$postfields["WebServerType"] = $webservertype;
-	$postfields["CSR"] = $csr;
+	$postfields['uid'] = $params['configoption1'];
+	$postfields['pw'] = $params['configoption2'];
+	$postfields['CertID'] = $cert_id;
+	$postfields['WebServerType'] = $webservertype;
+	$postfields['CSR'] = $csr;
 	$contacttypes = array( "Admin", "Tech", "Billing" );
 	foreach ($contacttypes as $contacttype) {
 		$postfields[$contacttype . "FName"] = $firstname;
@@ -329,20 +329,20 @@ function enomssl_SSLStepTwo($params) {
 		$postfields[$contacttype . "EmailAddress"] = $emailaddress;
 	}
 
-	$postfields["command"] = "CertConfigureCert";
-	$postfields["ResponseType"] = "XML";
-	$result = enomssl_call( $postfields, $params["configoption5"] );
-	$values["error"] = $result["INTERFACE-RESPONSE"]["ERRORS"]["ERR1"];
+	$postfields['command'] = "CertConfigureCert";
+	$postfields['ResponseType'] = "XML";
+	$result = enomssl_call( $postfields, $params['configoption5'] );
+	$values['error'] = $result['INTERFACE-RESPONSE']['ERRORS']['ERR1'];
 
-	if ($values["error"]) {
+	if ($values['error']) {
 		return $values;
 	}
 
 	$approveremailsarray = array();
-	foreach ($result["INTERFACE-RESPONSE"]["CERTCONFIGURECERT"] as $k => $v) {
+	foreach ($result['INTERFACE-RESPONSE']['CERTCONFIGURECERT'] as $k => $v) {
 
 		if (substr( $k, 0, 8 ) == "APPROVER") {
-			$approver = trim( $v["APPROVEREMAIL"] );
+			$approver = trim( $v['APPROVEREMAIL'] );
 
 			if ($approver) {
 				$approveremailsarray[] = $approver;
@@ -353,121 +353,121 @@ function enomssl_SSLStepTwo($params) {
 		}
 	}
 
-	$values["approveremails"] = $approveremailsarray;
+	$values['approveremails'] = $approveremailsarray;
 	$postfields = array();
-	$postfields["uid"] = $params["configoption1"];
-	$postfields["pw"] = $params["configoption2"];
-	$postfields["CertID"] = $cert_id;
-	$postfields["command"] = "CertGetCertDetail";
-	$postfields["ResponseType"] = "XML";
-	$result = enomssl_call( $postfields, $params["configoption5"] );
-	$values["error"] = $result["INTERFACE-RESPONSE"]["ERRORS"]["ERR1"];
+	$postfields['uid'] = $params['configoption1'];
+	$postfields['pw'] = $params['configoption2'];
+	$postfields['CertID'] = $cert_id;
+	$postfields['command'] = "CertGetCertDetail";
+	$postfields['ResponseType'] = "XML";
+	$result = enomssl_call( $postfields, $params['configoption5'] );
+	$values['error'] = $result['INTERFACE-RESPONSE']['ERRORS']['ERR1'];
 
-	if ($values["error"]) {
+	if ($values['error']) {
 		return $values;
 	}
 
-	$values["displaydata"]["Domain"] = $result["INTERFACE-RESPONSE"]["CERTGETCERTDETAIL"]["DOMAINNAME"];
-	$values["displaydata"]["Validity Period"] = $result["INTERFACE-RESPONSE"]["CERTGETCERTDETAIL"]["VALIDITYPERIOD"] . " Months";
-	$values["displaydata"]["Expiration Date"] = $result["INTERFACE-RESPONSE"]["CERTGETCERTDETAIL"]["EXPIRATIONDATE"];
-	update_query( "tblhosting", array( "domain" => $values["displaydata"]["Domain"] ), array( "id" => $params["serviceid"] ) );
+	$values['displaydata']['Domain'] = $result['INTERFACE-RESPONSE']['CERTGETCERTDETAIL']['DOMAINNAME'];
+	$values['displaydata']["Validity Period"] = $result['INTERFACE-RESPONSE']['CERTGETCERTDETAIL']['VALIDITYPERIOD'] . " Months";
+	$values['displaydata']["Expiration Date"] = $result['INTERFACE-RESPONSE']['CERTGETCERTDETAIL']['EXPIRATIONDATE'];
+	update_query( "tblhosting", array( "domain" => $values['displaydata']['Domain'] ), array( "id" => $params['serviceid'] ) );
 	$postfields = array();
-	$postfields["uid"] = $params["configoption1"];
-	$postfields["pw"] = $params["configoption2"];
-	$postfields["CertID"] = $cert_id;
-	$postfields["CSR"] = $csr;
-	$postfields["command"] = "CertParseCSR";
-	$postfields["ResponseType"] = "XML";
-	$result = enomssl_call( $postfields, $params["configoption5"] );
-	$values["error"] = $result["INTERFACE-RESPONSE"]["ERRORS"]["ERR1"];
+	$postfields['uid'] = $params['configoption1'];
+	$postfields['pw'] = $params['configoption2'];
+	$postfields['CertID'] = $cert_id;
+	$postfields['CSR'] = $csr;
+	$postfields['command'] = "CertParseCSR";
+	$postfields['ResponseType'] = "XML";
+	$result = enomssl_call( $postfields, $params['configoption5'] );
+	$values['error'] = $result['INTERFACE-RESPONSE']['ERRORS']['ERR1'];
 
-	if ($values["error"]) {
+	if ($values['error']) {
 		return $values;
 	}
 
-	$values["displaydata"]["Organization"] = $result["INTERFACE-RESPONSE"]["CERTPARSECSR"]["ORGANIZATION"];
-	$values["displaydata"]["Organization Unit"] = $result["INTERFACE-RESPONSE"]["CERTPARSECSR"]["ORGANIZATIONUNIT"];
-	$values["displaydata"]["Email"] = $result["INTERFACE-RESPONSE"]["CERTPARSECSR"]["EMAIL"];
-	$values["displaydata"]["Locality"] = $result["INTERFACE-RESPONSE"]["CERTPARSECSR"]["LOCALITY"];
-	$values["displaydata"]["State"] = $result["INTERFACE-RESPONSE"]["CERTPARSECSR"]["STATE"];
-	$values["displaydata"]["Country"] = $result["INTERFACE-RESPONSE"]["CERTPARSECSR"]["COUNTRY"];
+	$values['displaydata']['Organization'] = $result['INTERFACE-RESPONSE']['CERTPARSECSR']['ORGANIZATION'];
+	$values['displaydata']["Organization Unit"] = $result['INTERFACE-RESPONSE']['CERTPARSECSR']['ORGANIZATIONUNIT'];
+	$values['displaydata']['Email'] = $result['INTERFACE-RESPONSE']['CERTPARSECSR']['EMAIL'];
+	$values['displaydata']['Locality'] = $result['INTERFACE-RESPONSE']['CERTPARSECSR']['LOCALITY'];
+	$values['displaydata']['State'] = $result['INTERFACE-RESPONSE']['CERTPARSECSR']['STATE'];
+	$values['displaydata']['Country'] = $result['INTERFACE-RESPONSE']['CERTPARSECSR']['COUNTRY'];
 	return $values;
 }
 
 
 function enomssl_SSLStepThree($params) {
-	$params["remoteid"];
-	$cert_id = $_SESSION["enomsslcert"][$orderid]["id"];
-	$webservertype = $params["servertype"];
-	$csr = $params["csr"];
-	$firstname = $params["firstname"];
-	$lastname = $params["lastname"];
-	$organisationname = $params["organisationname"];
-	$jobtitle = $params["jobtitle"];
-	$emailaddress = $params["email"];
-	$address1 = $params["address1"];
-	$address2 = $params["address2"];
-	$city = $params["city"];
-	$state = $params["state"];
-	$postcode = $params["postcode"];
-	$country = $params["country"];
-	$phonenumber = $params["phonenumber"];
-	$faxnumber = $params["faxnumber"];
-	$approveremail = $params["approveremail"];
-	$cert_id = $_SESSION["enomsslcert"][$orderid]["id"];
-	unset( $_SESSION["enomsslcert"] );
+	$params['remoteid'];
+	$cert_id = $_SESSION['enomsslcert'][$orderid]['id'];
+	$webservertype = $params['servertype'];
+	$csr = $params['csr'];
+	$firstname = $params['firstname'];
+	$lastname = $params['lastname'];
+	$organisationname = $params['organisationname'];
+	$jobtitle = $params['jobtitle'];
+	$emailaddress = $params['email'];
+	$address1 = $params['address1'];
+	$address2 = $params['address2'];
+	$city = $params['city'];
+	$state = $params['state'];
+	$postcode = $params['postcode'];
+	$country = $params['country'];
+	$phonenumber = $params['phonenumber'];
+	$faxnumber = $params['faxnumber'];
+	$approveremail = $params['approveremail'];
+	$cert_id = $_SESSION['enomsslcert'][$orderid]['id'];
+	unset( $_SESSION['enomsslcert'] );
 	$postfields = array();
-	$postfields["uid"] = $params["configoption1"];
-	$postfields["pw"] = $params["configoption2"];
-	$postfields["CertID"] = $cert_id;
-	$postfields["CSR"] = $csr;
-	$postfields["command"] = "CertParseCSR";
-	$postfields["ResponseType"] = "XML";
-	$result = enomssl_call( $postfields, $params["configoption5"] );
-	$csr_organization = $result["INTERFACE-RESPONSE"]["CERTPARSECSR"]["ORGANIZATION"];
-	$csr_organizationunit = $result["INTERFACE-RESPONSE"]["CERTPARSECSR"]["ORGANIZATIONUNIT"];
-	$csr_email = $result["INTERFACE-RESPONSE"]["CERTPARSECSR"]["EMAIL"];
-	$csr_locality = $result["INTERFACE-RESPONSE"]["CERTPARSECSR"]["LOCALITY"];
-	$csr_state = $result["INTERFACE-RESPONSE"]["CERTPARSECSR"]["STATE"];
-	$csr_country = $result["INTERFACE-RESPONSE"]["CERTPARSECSR"]["COUNTRY"];
+	$postfields['uid'] = $params['configoption1'];
+	$postfields['pw'] = $params['configoption2'];
+	$postfields['CertID'] = $cert_id;
+	$postfields['CSR'] = $csr;
+	$postfields['command'] = "CertParseCSR";
+	$postfields['ResponseType'] = "XML";
+	$result = enomssl_call( $postfields, $params['configoption5'] );
+	$csr_organization = $result['INTERFACE-RESPONSE']['CERTPARSECSR']['ORGANIZATION'];
+	$csr_organizationunit = $result['INTERFACE-RESPONSE']['CERTPARSECSR']['ORGANIZATIONUNIT'];
+	$csr_email = $result['INTERFACE-RESPONSE']['CERTPARSECSR']['EMAIL'];
+	$csr_locality = $result['INTERFACE-RESPONSE']['CERTPARSECSR']['LOCALITY'];
+	$csr_state = $result['INTERFACE-RESPONSE']['CERTPARSECSR']['STATE'];
+	$csr_country = $result['INTERFACE-RESPONSE']['CERTPARSECSR']['COUNTRY'];
 	$postfields = array();
-	$postfields["uid"] = $params["configoption1"];
-	$postfields["pw"] = $params["configoption2"];
-	$postfields["ApproverEmail"] = $params["approveremail"];
-	$postfields["CertID"] = $cert_id;
-	$postfields["CSRAddress1"] = $address1;
-	$postfields["CSRPostalCode"] = $postcode;
+	$postfields['uid'] = $params['configoption1'];
+	$postfields['pw'] = $params['configoption2'];
+	$postfields['ApproverEmail'] = $params['approveremail'];
+	$postfields['CertID'] = $cert_id;
+	$postfields['CSRAddress1'] = $address1;
+	$postfields['CSRPostalCode'] = $postcode;
 
 	if ($csr_organization) {
-		$postfields["CSROrganization"] = $csr_organization;
+		$postfields['CSROrganization'] = $csr_organization;
 	}
 
 
 	if ($csr_organizationunit) {
-		$postfields["CSROrganizationUnit"] = $csr_organizationunit;
+		$postfields['CSROrganizationUnit'] = $csr_organizationunit;
 	}
 
 
 	if ($csr_locality) {
-		$postfields["CSRLocality"] = $csr_locality;
+		$postfields['CSRLocality'] = $csr_locality;
 	}
 
 
 	if ($csr_state) {
-		$postfields["CSRStateProvince"] = $csr_state;
+		$postfields['CSRStateProvince'] = $csr_state;
 	}
 
 
 	if ($csr_country) {
-		$postfields["CSRCountry"] = $csr_country;
+		$postfields['CSRCountry'] = $csr_country;
 	}
 
-	$postfields["command"] = "CertPurchaseCert";
-	$postfields["ResponseType"] = "XML";
-	$result = $orderid = enomssl_call( $postfields, $params["configoption5"] );
-	$values["error"] = $result["INTERFACE-RESPONSE"]["ERRORS"]["ERR1"];
+	$postfields['command'] = "CertPurchaseCert";
+	$postfields['ResponseType'] = "XML";
+	$result = $orderid = enomssl_call( $postfields, $params['configoption5'] );
+	$values['error'] = $result['INTERFACE-RESPONSE']['ERRORS']['ERR1'];
 
-	if ($values["error"]) {
+	if ($values['error']) {
 		return $values;
 	}
 
@@ -497,7 +497,7 @@ function enomssl_call($fields, $testmode = "") {
 	curl_close( $ch );
 	XMLtoARRAY( $data );
 	$result = $url = ($testmode ? "resellertest.enom.com" : "reseller.enom.com");
-	logModuleCall( "enomssl", $fields["command"], $fields, $result, "", array( $fields["uid"], $fields["pw"] ) );
+	logModuleCall( "enomssl", $fields['command'], $fields, $result, "", array( $fields['uid'], $fields['pw'] ) );
 	return $result;
 }
 

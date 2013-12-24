@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -17,47 +17,47 @@ function fasthosts_activate() {
 
 
 function fasthosts_capture($params) {
-	if ($params["cardtype"] == "Visa") {
+	if ($params['cardtype'] == "Visa") {
 		$cardtype = "VI";
 	}
 	else {
-		if ($params["cardtype"] == "MasterCard") {
+		if ($params['cardtype'] == "MasterCard") {
 			$cardtype = "MC";
 		}
 		else {
-			if ($params["cardtype"] == "American Express") {
+			if ($params['cardtype'] == "American Express") {
 				$cardtype = "AM";
 			}
 			else {
-				if ($params["cardtype"] == "Diners Club") {
+				if ($params['cardtype'] == "Diners Club") {
 					$cardtype = "DC";
 				}
 				else {
-					if ($params["cardtype"] == "Discover") {
+					if ($params['cardtype'] == "Discover") {
 						$cardtype = "DI";
 					}
 					else {
-						if ($params["cardtype"] == "JCB") {
+						if ($params['cardtype'] == "JCB") {
 							$cardtype = "JC";
 						}
 						else {
-							if ($params["cardtype"] == "Delta") {
+							if ($params['cardtype'] == "Delta") {
 								$cardtype = "VD";
 							}
 							else {
-								if ($params["cardtype"] == "Solo") {
+								if ($params['cardtype'] == "Solo") {
 									$cardtype = "MD";
 								}
 								else {
-									if ($params["cardtype"] == "Maestro") {
+									if ($params['cardtype'] == "Maestro") {
 										$cardtype = "MD";
 									}
 									else {
-										if ($params["cardtype"] == "Switch") {
+										if ($params['cardtype'] == "Switch") {
 											$cardtype = "MD";
 										}
 										else {
-											if ($params["cardtype"] == "Electron") {
+											if ($params['cardtype'] == "Electron") {
 												$cardtype = "VE";
 											}
 										}
@@ -71,32 +71,32 @@ function fasthosts_capture($params) {
 		}
 	}
 
-	$fasthosts[cardType] = $cardtype;
-	$fasthosts[cardNumber] = $params["cardnum"];
-	$fasthosts[cardExp] = substr( $params["cardexp"], 0, 2 ) . "/" . substr( $params["cardexp"], 2, 2 );
-	$fasthosts[issueNumber] = $params["cardissuenum"];
-	$fasthosts[amount] = $params["amount"] * 100;
-	$fasthosts[operation] = "P";
-	$fasthosts[merchantTxn] = $params["invoiceid"];
+	$fasthosts['cardType'] = $cardtype;
+	$fasthosts['cardNumber'] = $params['cardnum'];
+	$fasthosts['cardExp'] = substr( $params['cardexp'], 0, 2 ) . "/" . substr( $params['cardexp'], 2, 2 );
+	$fasthosts['issueNumber'] = $params['cardissuenum'];
+	$fasthosts['amount'] = $params['amount'] * 100;
+	$fasthosts['operation'] = "P";
+	$fasthosts['merchantTxn'] = $params['invoiceid'];
 
-	if ($params["cccvv"]) {
-		$fasthosts[cvdIndicator] = "1";
-		$fasthosts[cvdValue] = $params["cccvv"];
+	if ($params['cccvv']) {
+		$fasthosts['cvdIndicator'] = "1";
+		$fasthosts['cvdValue'] = $params['cccvv'];
 	}
 
-	$fasthosts[custName1] = $params["clientdetails"]["firstname"] . " " . $params["clientdetails"]["lastname"];
-	$fasthosts[streetAddr] = $params["clientdetails"]["address1"];
-	$fasthosts[streetAddr2] = $params["clientdetails"]["address2"];
-	$fasthosts[city] = $params["clientdetails"]["city"];
-	$fasthosts[province] = $params["clientdetails"]["state"];
-	$fasthosts[zip] = $params["clientdetails"]["postcode"];
-	$fasthosts[country] = $params["clientdetails"]["country"];
-	$fasthosts[phone] = $params["clientdetails"]["phonenumber"];
-	$fasthosts[email] = $params["clientdetails"]["email"];
-	$fasthosts["merchantID"] = $params["merchantid"];
-	$fasthosts["paymentKey"] = $params["paymentkey"];
-	$fasthosts["clientVersion"] = "1.1";
-	$fasthosts["operation"] = "P";
+	$fasthosts[custName1] = $params['clientdetails']['firstname'] . " " . $params['clientdetails']['lastname'];
+	$fasthosts['streetAddr'] = $params['clientdetails']['address1'];
+	$fasthosts[streetAddr2] = $params['clientdetails']['address2'];
+	$fasthosts['city'] = $params['clientdetails']['city'];
+	$fasthosts['province'] = $params['clientdetails']['state'];
+	$fasthosts['zip'] = $params['clientdetails']['postcode'];
+	$fasthosts['country'] = $params['clientdetails']['country'];
+	$fasthosts['phone'] = $params['clientdetails']['phonenumber'];
+	$fasthosts['email'] = $params['clientdetails']['email'];
+	$fasthosts['merchantID'] = $params['merchantid'];
+	$fasthosts['paymentKey'] = $params['paymentkey'];
+	$fasthosts['clientVersion'] = "1.1";
+	$fasthosts['operation'] = "P";
 	$data_stream = "";
 	$url = "https://www.e-merchant.co.uk/api/";
 	foreach ($fasthosts as $k => $v) {
@@ -123,7 +123,7 @@ function fasthosts_capture($params) {
 	}
 
 	$desc = "Action => Auth_Capture
-Client => " . $params["clientdetails"]["firstname"] . " " . $params["clientdetails"]["lastname"] . "
+Client => " . $params['clientdetails']['firstname'] . " " . $params['clientdetails']['lastname'] . "
 ";
 	foreach ($result as $key => $value) {
 		$desc .= ( "" . $key . " => " . $value . "
@@ -131,12 +131,12 @@ Client => " . $params["clientdetails"]["firstname"] . " " . $params["clientdetai
 	}
 
 
-	if ($result["status"] == "SP") {
-		return array( "status" => "success", "transid" => $result["txnNumber"], "rawdata" => $desc );
+	if ($result['status'] == "SP") {
+		return array( "status" => "success", "transid" => $result['txnNumber'], "rawdata" => $desc );
 	}
 
 
-	if ($result["status"] == "E") {
+	if ($result['status'] == "E") {
 		return array( "status" => "declined", "rawdata" => $desc );
 	}
 
@@ -148,7 +148,7 @@ if (!defined( "WHMCS" )) {
 	exit( "This file cannot be accessed directly" );
 }
 
-$GATEWAYMODULE["fasthostsname"] = "fasthosts";
-$GATEWAYMODULE["fasthostsvisiblename"] = "FastHosts";
-$GATEWAYMODULE["fasthoststype"] = "CC";
+$GATEWAYMODULE['fasthostsname'] = "fasthosts";
+$GATEWAYMODULE['fasthostsvisiblename'] = "FastHosts";
+$GATEWAYMODULE['fasthoststype'] = "CC";
 ?>

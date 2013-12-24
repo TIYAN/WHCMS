@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -15,7 +15,7 @@ class mpgGlobals {
 
 	function mpgGlobals($test_mode = false) {
 		if (!$test_mode) {
-			$this->Globals["MONERIS_HOST"] = "www3.moneris.com";
+			$this->Globals['MONERIS_HOST'] = "www3.moneris.com";
 		}
 
 	}
@@ -42,15 +42,15 @@ class mpgHttpsPost {
 		$g = new mpgGlobals( $test_mode );
 		$g->getGlobals();
 		$gArray = $this->store_id = $store_id;
-		$url = $gArray["MONERIS_PROTOCOL"] . "://" . $gArray["MONERIS_HOST"] . ":" . $gArray["MONERIS_PORT"] . $gArray["MONERIS_FILE"];
+		$url = $gArray['MONERIS_PROTOCOL'] . "://" . $gArray['MONERIS_HOST'] . ":" . $gArray['MONERIS_PORT'] . $gArray['MONERIS_FILE'];
 		$ch = curl_init();
 		curl_setopt( $ch, CURLOPT_URL, $url );
 		curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 );
 		curl_setopt( $ch, CURLOPT_HEADER, 0 );
 		curl_setopt( $ch, CURLOPT_POST, 1 );
 		curl_setopt( $ch, CURLOPT_POSTFIELDS, $dataToSend );
-		curl_setopt( $ch, CURLOPT_TIMEOUT, $gArray["CLIENT_TIMEOUT"] );
-		curl_setopt( $ch, CURLOPT_USERAGENT, $gArray["API_VERSION"] );
+		curl_setopt( $ch, CURLOPT_TIMEOUT, $gArray['CLIENT_TIMEOUT'] );
+		curl_setopt( $ch, CURLOPT_USERAGENT, $gArray['API_VERSION'] );
 		curl_setopt( $ch, CURLOPT_SSL_VERIFYPEER, false );
 		$response = curl_exec( $ch );
 		curl_close( $ch );
@@ -116,97 +116,97 @@ class mpgResponse {
 
 
 	function getAvsResultCode() {
-		return $this->responseData["AvsResultCode"];
+		return $this->responseData['AvsResultCode'];
 	}
 
 
 	function getCvdResultCode() {
-		return $this->responseData["CvdResultCode"];
+		return $this->responseData['CvdResultCode'];
 	}
 
 
 	function getRecurSuccess() {
-		return $this->responseData["RecurSuccess"];
+		return $this->responseData['RecurSuccess'];
 	}
 
 
 	function getCardType() {
-		return $this->responseData["CardType"];
+		return $this->responseData['CardType'];
 	}
 
 
 	function getTransAmount() {
-		return $this->responseData["TransAmount"];
+		return $this->responseData['TransAmount'];
 	}
 
 
 	function getTxnNumber() {
-		return $this->responseData["TransID"];
+		return $this->responseData['TransID'];
 	}
 
 
 	function getReceiptId() {
-		return $this->responseData["ReceiptId"];
+		return $this->responseData['ReceiptId'];
 	}
 
 
 	function getTransType() {
-		return $this->responseData["TransType"];
+		return $this->responseData['TransType'];
 	}
 
 
 	function getReferenceNum() {
-		return $this->responseData["ReferenceNum"];
+		return $this->responseData['ReferenceNum'];
 	}
 
 
 	function getResponseCode() {
-		return $this->responseData["ResponseCode"];
+		return $this->responseData['ResponseCode'];
 	}
 
 
 	function getISO() {
-		return $this->responseData["ISO"];
+		return $this->responseData['ISO'];
 	}
 
 
 	function getBankTotals() {
-		return $this->responseData["BankTotals"];
+		return $this->responseData['BankTotals'];
 	}
 
 
 	function getMessage() {
-		return $this->responseData["Message"];
+		return $this->responseData['Message'];
 	}
 
 
 	function getAuthCode() {
-		return $this->responseData["AuthCode"];
+		return $this->responseData['AuthCode'];
 	}
 
 
 	function getComplete() {
-		return $this->responseData["Complete"];
+		return $this->responseData['Complete'];
 	}
 
 
 	function getTransDate() {
-		return $this->responseData["TransDate"];
+		return $this->responseData['TransDate'];
 	}
 
 
 	function getTransTime() {
-		return $this->responseData["TransTime"];
+		return $this->responseData['TransTime'];
 	}
 
 
 	function getTicket() {
-		return $this->responseData["Ticket"];
+		return $this->responseData['Ticket'];
 	}
 
 
 	function getTimedOut() {
-		return $this->responseData["TimedOut"];
+		return $this->responseData['TimedOut'];
 	}
 
 
@@ -216,32 +216,32 @@ class mpgResponse {
 
 
 	function getPurchaseAmount($ecr_no, $card_type) {
-		return $this->purchaseHash[$ecr_no][$card_type]["Amount"] == "" ? 0 : $this->purchaseHash[$ecr_no][$card_type]["Amount"];
+		return $this->purchaseHash[$ecr_no][$card_type]['Amount'] == "" ? 0 : $this->purchaseHash[$ecr_no][$card_type]['Amount'];
 	}
 
 
 	function getPurchaseCount($ecr_no, $card_type) {
-		return $this->purchaseHash[$ecr_no][$card_type]["Count"] == "" ? 0 : $this->purchaseHash[$ecr_no][$card_type]["Count"];
+		return $this->purchaseHash[$ecr_no][$card_type]['Count'] == "" ? 0 : $this->purchaseHash[$ecr_no][$card_type]['Count'];
 	}
 
 
 	function getRefundAmount($ecr_no, $card_type) {
-		return $this->refundHash[$ecr_no][$card_type]["Amount"] == "" ? 0 : $this->refundHash[$ecr_no][$card_type]["Amount"];
+		return $this->refundHash[$ecr_no][$card_type]['Amount'] == "" ? 0 : $this->refundHash[$ecr_no][$card_type]['Amount'];
 	}
 
 
 	function getRefundCount($ecr_no, $card_type) {
-		return $this->refundHash[$ecr_no][$card_type]["Count"] == "" ? 0 : $this->refundHash[$ecr_no][$card_type]["Count"];
+		return $this->refundHash[$ecr_no][$card_type]['Count'] == "" ? 0 : $this->refundHash[$ecr_no][$card_type]['Count'];
 	}
 
 
 	function getCorrectionAmount($ecr_no, $card_type) {
-		return $this->correctionHash[$ecr_no][$card_type]["Amount"] == "" ? 0 : $this->correctionHash[$ecr_no][$card_type]["Amount"];
+		return $this->correctionHash[$ecr_no][$card_type]['Amount'] == "" ? 0 : $this->correctionHash[$ecr_no][$card_type]['Amount'];
 	}
 
 
 	function getCorrectionCount($ecr_no, $card_type) {
-		return $this->correctionHash[$ecr_no][$card_type]["Count"] == "" ? 0 : $this->correctionHash[$ecr_no][$card_type]["Count"];
+		return $this->correctionHash[$ecr_no][$card_type]['Count'] == "" ? 0 : $this->correctionHash[$ecr_no][$card_type]['Count'];
 	}
 
 
@@ -286,15 +286,15 @@ class mpgResponse {
 
 			case "Amount": {
 					if ($this->currentTxnType == "Purchase") {
-						$this->purchaseHash[$this->term_id][$this->CardType]["Amount"] = $data;
+						$this->purchaseHash[$this->term_id][$this->CardType]['Amount'] = $data;
 					}
 					else {
 						if ($this->currentTxnType == "Refund") {
-							$this->refundHash[$this->term_id][$this->CardType]["Amount"] = $data;
+							$this->refundHash[$this->term_id][$this->CardType]['Amount'] = $data;
 						}
 						else {
 							if ($this->currentTxnType == "Correction") {
-								$this->correctionHash[$this->term_id][$this->CardType]["Amount"] = $data;
+								$this->correctionHash[$this->term_id][$this->CardType]['Amount'] = $data;
 							}
 						}
 					}
@@ -304,17 +304,17 @@ class mpgResponse {
 
 			case "Count": {
 					if ($this->currentTxnType == "Purchase") {
-						$this->purchaseHash[$this->term_id][$this->CardType]["Count"] = $data;
+						$this->purchaseHash[$this->term_id][$this->CardType]['Count'] = $data;
 						break;
 					}
 					else {
 						if ($this->currentTxnType == "Refund") {
-							$this->refundHash[$this->term_id][$this->CardType]["Count"] = $data;
+							$this->refundHash[$this->term_id][$this->CardType]['Count'] = $data;
 							break;
 						}
 						else {
 							if ($this->currentTxnType == "Correction") {
-								$this->correctionHash[$this->term_id][$this->CardType]["Count"] = $data;
+								$this->correctionHash[$this->term_id][$this->CardType]['Count'] = $data;
 							}
 						}
 					}
@@ -453,7 +453,7 @@ class mpgCustInfo {
 
 
 	function setCustInfo($custinfo) {
-		$this->level3data["cust_info"] = array( $custinfo );
+		$this->level3data['cust_info'] = array( $custinfo );
 	}
 
 
@@ -470,23 +470,23 @@ class mpgCustInfo {
 
 
 	function setShipping($shipping) {
-		$this->level3data["shipping"] = array( $shipping );
+		$this->level3data['shipping'] = array( $shipping );
 	}
 
 
 	function setBilling($billing) {
-		$this->level3data["billing"] = array( $billing );
+		$this->level3data['billing'] = array( $billing );
 	}
 
 
 	function setItems($items) {
-		if (!isset( $this->level3data["item"] )) {
-			$this->level3data["item"] = array( $items );
+		if (!isset( $this->level3data['item'] )) {
+			$this->level3data['item'] = array( $items );
 			return null;
 		}
 
-		$index = count( $this->level3data["item"] );
-		$this->level3data["item"][$index] = $items;
+		$index = count( $this->level3data['item'] );
+		$this->level3data['item'][$index] = $items;
 	}
 
 
@@ -556,8 +556,8 @@ class mpgRecur {
 	function mpgRecur($params) {
 		$this->params = $params;
 
-		if (!$this->params["period"]) {
-			$this->params["period"] = 1;
+		if (!$this->params['period']) {
+			$this->params['period'] = 1;
 		}
 
 	}
@@ -689,14 +689,14 @@ function moneris_config() {
 
 function moneris_capture($params) {
 	$txnArray = array( "type" => "purchase", "crypt_type" => 7 );
-	$store_id = ($params["testmode"] ? "store1" : $params["store_id"]);
-	$api_token = ($params["testmode"] ? "yesguy" : $params["api_token"]);
-	$test_mode = ($params["testmode"] ? true : false);
-	$txnArray["order_id"] = sprintf( $params["order_id_format"], uniqid( $params["invoiceid"] . "." ) );
-	$txnArray["cust_id"] = $params["clientdetails"]["email"];
-	$txnArray["amount"] = $params["amount"];
-	$txnArray["pan"] = $params["cardnum"];
-	$txnArray["expdate"] = substr( $params["cardexp"], 2, 2 ) . substr( $params["cardexp"], 0, 2 );
+	$store_id = ($params['testmode'] ? "store1" : $params['store_id']);
+	$api_token = ($params['testmode'] ? "yesguy" : $params['api_token']);
+	$test_mode = ($params['testmode'] ? true : false);
+	$txnArray['order_id'] = sprintf( $params['order_id_format'], uniqid( $params['invoiceid'] . "." ) );
+	$txnArray['cust_id'] = $params['clientdetails']['email'];
+	$txnArray['amount'] = $params['amount'];
+	$txnArray['pan'] = $params['cardnum'];
+	$txnArray['expdate'] = substr( $params['cardexp'], 2, 2 ) . substr( $params['cardexp'], 0, 2 );
 	$mpgTxn = new mpgTransaction( $txnArray );
 	$mpgRequest = new mpgRequest( $mpgTxn );
 	$mpgHttpPost = new mpgHttpsPost( $store_id, $api_token, $mpgRequest, $test_mode );
@@ -708,8 +708,8 @@ function moneris_capture($params) {
 		$result = array( "status" => "error", "rawdata" => $m_result );
 	}
 	else {
-		if (( 0 <= $responseCode && $responseCode < 50 )) {
-			$result = array( "status" => "success", "transid" => $m_result["TxnNumber"], "rawdata" => $m_result );
+		if (0 <= $responseCode && $responseCode < 50) {
+			$result = array( "status" => "success", "transid" => $m_result['TxnNumber'], "rawdata" => $m_result );
 		}
 		else {
 			$result = array( "status" => "declined", "rawdata" => $m_result );
@@ -722,14 +722,14 @@ function moneris_capture($params) {
 
 function moneris_refund($params) {
 	$txnArray = array( "type" => "ind_refund", "crypt_type" => 7 );
-	$store_id = ($params["testmode"] ? "store1" : $params["store_id"]);
-	$api_token = ($params["testmode"] ? "yesguy" : $params["api_token"]);
-	$test_mode = ($params["testmode"] ? true : false);
-	$txnArray["order_id"] = sprintf( $params["order_id_format"], uniqid( $params["invoiceid"] . "." ) );
-	$txnArray["cust_id"] = $params["clientdetails"]["email"];
-	$txnArray["amount"] = $params["amount"];
-	$txnArray["pan"] = $params["cardnum"];
-	$txnArray["expdate"] = substr( $params["cardexp"], 2, 2 ) . substr( $params["cardexp"], 0, 2 );
+	$store_id = ($params['testmode'] ? "store1" : $params['store_id']);
+	$api_token = ($params['testmode'] ? "yesguy" : $params['api_token']);
+	$test_mode = ($params['testmode'] ? true : false);
+	$txnArray['order_id'] = sprintf( $params['order_id_format'], uniqid( $params['invoiceid'] . "." ) );
+	$txnArray['cust_id'] = $params['clientdetails']['email'];
+	$txnArray['amount'] = $params['amount'];
+	$txnArray['pan'] = $params['cardnum'];
+	$txnArray['expdate'] = substr( $params['cardexp'], 2, 2 ) . substr( $params['cardexp'], 0, 2 );
 	$mpgTxn = new mpgTransaction( $txnArray );
 	$mpgRequest = new mpgRequest( $mpgTxn );
 	$mpgHttpPost = new mpgHttpsPost( $store_id, $api_token, $mpgRequest, $test_mode );
@@ -741,8 +741,8 @@ function moneris_refund($params) {
 		$result = array( "status" => "error", "rawdata" => $m_result );
 	}
 	else {
-		if (( 0 <= $responseCode && $responseCode < 50 )) {
-			$result = array( "status" => "success", "transid" => $m_result["TxnNumber"], "rawdata" => $m_result );
+		if (0 <= $responseCode && $responseCode < 50) {
+			$result = array( "status" => "success", "transid" => $m_result['TxnNumber'], "rawdata" => $m_result );
 		}
 		else {
 			$result = array( "status" => "declined", "rawdata" => $m_result );

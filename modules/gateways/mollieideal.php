@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -39,7 +39,7 @@ class iDEAL_Payment {
 		$query_variables = array( "a" => "banklist", "partner_id" => $this->partner_id );
 
 		if ($this->testmode) {
-			$query_variables["testmode"] = "true";
+			$query_variables['testmode'] = "true";
 		}
 
 		$banks_xml = $this->_sendRequest( $this->api_host, $this->api_port, "/xml/ideal/", http_build_query( $query_variables, "", "&" ) );
@@ -50,7 +50,7 @@ class iDEAL_Payment {
 
 		$banks_object = $this->_XMLtoObject( $banks_xml );
 
-		if (( !$banks_object || $this->_XMlisError( $banks_object ) )) {
+		if (!$banks_object || $this->_XMlisError( $banks_object )) {
 			return false;
 		}
 
@@ -64,7 +64,7 @@ class iDEAL_Payment {
 
 
 	function createPayment($bank_id, $amount, $description, $return_url, $report_url) {
-		if (( ( ( ( !$this->setBankId( $bank_id ) || !$this->setDescription( $description ) ) || !$this->setAmount( $amount ) ) || !$this->setReturnUrl( $return_url ) ) || !$this->setReportUrl( $report_url ) )) {
+		if (( ( ( !$this->setBankId( $bank_id ) || !$this->setDescription( $description ) ) || !$this->setAmount( $amount ) ) || !$this->setReturnUrl( $return_url ) ) || !$this->setReportUrl( $report_url )) {
 			$this->error_message = "De opgegeven betalings gegevens zijn onjuist of incompleet.";
 			return false;
 		}
@@ -78,7 +78,7 @@ class iDEAL_Payment {
 
 		$create_object = $this->_XMLtoObject( $create_xml );
 
-		if (( !$create_object || $this->_XMLisError( $create_object ) )) {
+		if (!$create_object || $this->_XMLisError( $create_object )) {
 			return false;
 		}
 
@@ -97,7 +97,7 @@ class iDEAL_Payment {
 		$query_variables = array( "a" => "check", "partnerid" => $this->partner_id, "transaction_id" => $this->getTransactionId() );
 
 		if ($this->testmode) {
-			$query_variables["testmode"] = "true";
+			$query_variables['testmode'] = "true";
 		}
 
 		$check_xml = $this->_sendRequest( $this->api_host, $this->api_port, "/xml/ideal/", http_build_query( $query_variables, "", "&" ) );
@@ -108,7 +108,7 @@ class iDEAL_Payment {
 
 		$check_object = $this->_XMLtoObject( $check_xml );
 
-		if (( !$check_object || $this->_XMLisError( $check_object ) )) {
+		if (!$check_object || $this->_XMLisError( $check_object )) {
 			return false;
 		}
 
@@ -120,7 +120,7 @@ class iDEAL_Payment {
 
 
 	function CreatePaymentLink($description, $amount) {
-		if (( !$this->setDescription( $description ) || !$this->setAmount( $amount ) )) {
+		if (!$this->setDescription( $description ) || !$this->setAmount( $amount )) {
 			$this->error_message = "U moet een omschrijving Žn bedrag (in centen) opgeven voor de iDEAL link. Tevens moet het bedrag minstens " . MIN_TRANS_AMOUNT . " eurocent zijn. U gaf " . (int)$amount . " cent op.";
 			return false;
 		}
@@ -129,7 +129,7 @@ class iDEAL_Payment {
 		$create_xml = $this->_sendRequest( $this->api_host, $this->api_port, "/xml/ideal/", http_build_query( $query_variables, "", "&" ) );
 		$create_object = $this->_XMLtoObject( $create_xml );
 
-		if (( !$create_object || $this->_XMLisError( $create_object ) )) {
+		if (!$create_object || $this->_XMLisError( $create_object )) {
 			return false;
 		}
 
@@ -148,15 +148,10 @@ class iDEAL_Payment {
 			return false;
 		}
 
-		@fputs( $fp, "POST " . $path . " HTTP/1.0
-" );
-		@fputs( $fp, ( "Host: " . $hostname . "
-" ) );
-		@fputs( $fp, "Content-length: " . @strlen( $data ) . "
-" );
-		@fputs( $fp, "Connection: close
-
-" );
+		@fputs( $fp, "POST " . $path . " HTTP/1.0\n" );
+		@fputs( $fp, ( "Host: " . $hostname . "\n" ) );
+		@fputs( $fp, "Content-length: " . @strlen( $data ) . "\n" );
+		@fputs( $fp, "Connection: close\n\n" );
 		@fputs( $fp, $data );
 
 		while (!feof( $fp )) {
@@ -170,10 +165,9 @@ class iDEAL_Payment {
 			return false;
 		}
 
-		$body = preg_split( "/(\n?\n){2}/", $buf, 2 );
+		list($headers,$body) = preg_split( "/(\n?\n){2}/", $buf, 2 );
 
-		$headers = @fputs( $fp, "Content-type: application/x-www-form-urlencoded
-" );
+		@fputs( $fp, "Content-type: application/x-www-form-urlencoded\n" );
 		return $body;
 	}
 
@@ -200,7 +194,7 @@ class iDEAL_Payment {
 		if (isset( $xml->item )) {
 			$attributes = $xml->item->attributes();
 
-			if ($attributes["type"] == "error") {
+			if ($attributes['type'] == "error") {
 				$this->error_message = (bool)$xml->item->message;
 				$this->error_code = (bool)$xml->item->errorcode;
 				return true;
@@ -245,7 +239,7 @@ class iDEAL_Payment {
 
 
 	function setAmount($amount) {
-		if (!preg_match( "~^[0-9]+$~", $amount )) {
+		if (!preg_match( '~^[0-9]+$~', $amount )) {
 			return false;
 		}
 
@@ -275,7 +269,7 @@ class iDEAL_Payment {
 
 
 	function setReturnURL($return_url) {
-		if (!preg_match( "|(\w+)://([^/:]+)(:\d+)?(.*)|", $return_url )) {
+		if (!preg_match( '|(\w+)://([^/:]+)(:\d+)?(.*)|', $return_url )) {
 			return false;
 		}
 
@@ -289,7 +283,7 @@ class iDEAL_Payment {
 
 
 	function setReportURL($report_url) {
-		if (!preg_match( "|(\w+)://([^/:]+)(:\d+)?(.*)|", $report_url )) {
+		if (!preg_match( '|(\w+)://([^/:]+)(:\d+)?(.*)|', $report_url )) {
 			return false;
 		}
 
@@ -356,31 +350,31 @@ function mollieideal_config() {
 
 
 function mollieideal_link($params) {
-	$gatewaypartnerid = $params["partnerid"];
+	$gatewaypartnerid = $params['partnerid'];
 
-	if (empty( $params["customDescription"] )) {
-		$gatewaydescription = $params["description"];
+	if (empty( $params['customDescription'] )) {
+		$gatewaydescription = $params['description'];
 	}
 
-	$return_url = $params["returnurl"];
-	$report_url = $params["systemurl"] . "/modules/gateways/callback/mollieideal.php?invoiceid=" . urlencode( $params["invoiceid"] ) . "&amount=" . urlencode( $params["amount"] ) . "&fee=" . urlencode( $params["fee"] );
-	$invoiceid = $params["invoiceid"];
-	$description = $params["description"];
-	$amount = $params["amount"];
-	$currency = $params["currency"];
-	$firstname = $params["clientdetails"]["firstname"];
-	$lastname = $params["clientdetails"]["lastname"];
-	$email = $params["clientdetails"]["email"];
-	$address1 = $params["clientdetails"]["address1"];
-	$address2 = $params["clientdetails"]["address2"];
-	$city = $params["clientdetails"]["city"];
-	$state = $params["clientdetails"]["state"];
-	$postcode = $params["clientdetails"]["postcode"];
-	$country = $params["clientdetails"]["country"];
-	$phone = $params["clientdetails"]["phonenumber"];
-	$companyname = $params["companyname"];
-	$systemurl = $params["systemurl"];
-	$currency = $params["currency"];
+	$return_url = $params['returnurl'];
+	$report_url = $params['systemurl'] . "/modules/gateways/callback/mollieideal.php?invoiceid=" . urlencode( $params['invoiceid'] ) . "&amount=" . urlencode( $params['amount'] ) . "&fee=" . urlencode( $params['fee'] );
+	$invoiceid = $params['invoiceid'];
+	$description = $params['description'];
+	$amount = $params['amount'];
+	$currency = $params['currency'];
+	$firstname = $params['clientdetails']['firstname'];
+	$lastname = $params['clientdetails']['lastname'];
+	$email = $params['clientdetails']['email'];
+	$address1 = $params['clientdetails']['address1'];
+	$address2 = $params['clientdetails']['address2'];
+	$city = $params['clientdetails']['city'];
+	$state = $params['clientdetails']['state'];
+	$postcode = $params['clientdetails']['postcode'];
+	$country = $params['clientdetails']['country'];
+	$phone = $params['clientdetails']['phonenumber'];
+	$companyname = $params['companyname'];
+	$systemurl = $params['systemurl'];
+	$currency = $params['currency'];
 
 	if (!in_array( "ssl", stream_get_transports() )) {
 		$code = "<h1>Foutmelding</h1>";
@@ -390,10 +384,10 @@ function mollieideal_link($params) {
 
 	$iDEAL = new iDEAL_Payment( $gatewaypartnerid );
 
-	if (( isset( $_POST["bank_id"] ) && !empty( $_POST["bank_id"] ) )) {
+	if (isset( $_POST['bank_id'] ) && !empty( $_POST['bank_id'] )) {
 		$idealAmount = $amount * 100;
 
-		if ($iDEAL->createPayment( $_POST["bank_id"], $idealAmount, $gatewaydescription, $return_url, $report_url )) {
+		if ($iDEAL->createPayment( $_POST['bank_id'], $idealAmount, $gatewaydescription, $return_url, $report_url )) {
 			header( "Location: " . $iDEAL->getBankURL() );
 			exit();
 		}

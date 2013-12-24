@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -19,8 +19,8 @@ function webnic_getConfigArray() {
 function webnic_GetNameservers($params) {
 	$url = "pn_whois.jsp";
 	$postfields = array();
-	$postfields["source"] = $params["Source"];
-	$postfields["domain"] = $params["sld"] . "." . $params["tld"];
+	$postfields['source'] = $params['Source'];
+	$postfields['domain'] = $params['sld'] . "." . $params['tld'];
 	$rtype = "Get Nameservers";
 	$results = webnic_call( $url, $rtype, $postfields, $params );
 
@@ -30,7 +30,7 @@ function webnic_GetNameservers($params) {
 			$arr[$row[0]] = $row[1];
 		}
 
-		return array( "ns1" => $arr["ns1"], "ns2" => $arr["ns2"], "ns3" => $arr["ns3"], "ns4" => $arr["ns4"], "ns5" => $arr["ns5"] );
+		return array( "ns1" => $arr['ns1'], "ns2" => $arr['ns2'], "ns3" => $arr['ns3'], "ns4" => $arr['ns4'], "ns5" => $arr['ns5'] );
 	}
 
 
@@ -49,23 +49,23 @@ function webnic_GetNameservers($params) {
 function webnic_SaveNameservers($params) {
 	$otime = date( "Y-m-d H:i:s" );
 	
-	$ochecksum = md5( $params["Source"] . $otime . md5( $params["Password"] ) );
+	$ochecksum = md5( $params['Source'] . $otime . md5( $params['Password'] ) );
 	$url = "pn_dns.jsp";
 	$postfields = array();
-	$postfields["source"] = $params["Source"];
-	$postfields["otime"] = $otime;
-	$postfields["ochecksum"] = $ochecksum;
-	$postfields["domain"] = $params["sld"] . "." . $params["tld"];
-	$postfields["ns1"] = $params["ns1"];
-	$postfields["ns2"] = $params["ns2"];
-	$postfields["ns3"] = $params["ns3"];
-	$postfields["ns4"] = $params["ns4"];
-	$postfields["ns5"] = $params["ns5"];
-	$postfields["nsip1"] = gethostbyname( $params["ns1"] );
-	$postfields["nsip2"] = gethostbyname( $params["ns2"] );
-	$postfields["nsip3"] = gethostbyname( $params["ns3"] );
-	$postfields["nsip4"] = gethostbyname( $params["ns4"] );
-	$postfields["nsip5"] = gethostbyname( $params["ns5"] );
+	$postfields['source'] = $params['Source'];
+	$postfields['otime'] = $otime;
+	$postfields['ochecksum'] = $ochecksum;
+	$postfields['domain'] = $params['sld'] . "." . $params['tld'];
+	$postfields['ns1'] = $params['ns1'];
+	$postfields['ns2'] = $params['ns2'];
+	$postfields['ns3'] = $params['ns3'];
+	$postfields['ns4'] = $params['ns4'];
+	$postfields['ns5'] = $params['ns5'];
+	$postfields['nsip1'] = gethostbyname( $params['ns1'] );
+	$postfields['nsip2'] = gethostbyname( $params['ns2'] );
+	$postfields['nsip3'] = gethostbyname( $params['ns3'] );
+	$postfields['nsip4'] = gethostbyname( $params['ns4'] );
+	$postfields['nsip5'] = gethostbyname( $params['ns5'] );
 	$rtype = "Save Nameservers";
 	$results = webnic_call( $url, $rtype, $postfields, $params );
 }
@@ -74,8 +74,8 @@ function webnic_SaveNameservers($params) {
 function webnic_GetRegistrarLock($params) {
 	$url = "pn_whois.jsp";
 	$postfields = array();
-	$postfields["source"] = $params["Source"];
-	$postfields["domain"] = $params["sld"] . "." . $params["tld"];
+	$postfields['source'] = $params['Source'];
+	$postfields['domain'] = $params['sld'] . "." . $params['tld'];
 	$rtype = "Get Registrar Lock";
 	$results = webnic_call( $url, $rtype, $postfields, $params );
 
@@ -86,7 +86,7 @@ function webnic_GetRegistrarLock($params) {
 		}
 
 
-		if ($arr["status"] == "A") {
+		if ($arr['status'] == "A") {
 			$lockstatus = "unlocked";
 		}
 		else {
@@ -102,19 +102,19 @@ function webnic_GetRegistrarLock($params) {
 function webnic_SaveRegistrarLock($params) {
 	$otime = date( "Y-m-d H:i:s" );
 	
-	$ochecksum = md5( $params["Source"] . $otime . md5( $params["Password"] ) );
+	$ochecksum = md5( $params['Source'] . $otime . md5( $params['Password'] ) );
 	$url = "pn_protect.jsp";
 	$postfields = array();
-	$postfields["source"] = $params["Source"];
-	$postfields["otime"] = $otime;
-	$postfields["ochecksum"] = $ochecksum;
-	$postfields["domainname"] = $params["sld"] . "." . $params["tld"];
+	$postfields['source'] = $params['Source'];
+	$postfields['otime'] = $otime;
+	$postfields['ochecksum'] = $ochecksum;
+	$postfields['domainname'] = $params['sld'] . "." . $params['tld'];
 
-	if ($params["lockenabled"] == "locked") {
-		$postfields["status"] = "L";
+	if ($params['lockenabled'] == "locked") {
+		$postfields['status'] = "L";
 	}
 	else {
-		$postfields["status"] = "A";
+		$postfields['status'] = "A";
 	}
 
 	$rtype = "Save Registrar Lock";
@@ -131,85 +131,85 @@ function webnic_SaveRegistrarLock($params) {
 function webnic_RegisterDomain($params) {
 	$otime = date( "Y-m-d H:i:s" );
 	
-	$ochecksum = md5( $params["Source"] . $otime . md5( $params["Password"] ) );
-	$username = preg_replace( "/[^a-zA-Z]/", "", $params["sld"] . $params["tld"] );
+	$ochecksum = md5( $params['Source'] . $otime . md5( $params['Password'] ) );
+	$username = preg_replace( "/[^a-zA-Z]/", "", $params['sld'] . $params['tld'] );
 	$username = substr( $username, 0, 8 ) . rand( 100, 999 );
-	$password = substr( md5( $params["domainid"] ), 0, 10 );
+	$password = substr( md5( $params['domainid'] ), 0, 10 );
 	require ROOTDIR . "/includes/countriescallingcodes.php";
-	$phoneprefix = $countrycallingcodes[$params["country"]];
+	$phoneprefix = $countrycallingcodes[$params['country']];
 
-	if (!$params["companyname"]) {
-		$params["companyname"] = "-";
+	if (!$params['companyname']) {
+		$params['companyname'] = "-";
 	}
 
 	$url = "pn_newreg.jsp";
 	$postfields = array();
-	$postfields["source"] = $params["Source"];
-	$postfields["otime"] = $otime;
-	$postfields["ochecksum"] = $ochecksum;
-	$postfields["domainname"] = $params["sld"] . "." . $params["tld"];
-	$postfields["encoding"] = "iso8859-1";
-	$postfields["term"] = $params["regperiod"];
-	$postfields["ns1"] = $params["ns1"];
-	$postfields["ns2"] = $params["ns2"];
+	$postfields['source'] = $params['Source'];
+	$postfields['otime'] = $otime;
+	$postfields['ochecksum'] = $ochecksum;
+	$postfields['domainname'] = $params['sld'] . "." . $params['tld'];
+	$postfields['encoding'] = "iso8859-1";
+	$postfields['term'] = $params['regperiod'];
+	$postfields['ns1'] = $params['ns1'];
+	$postfields['ns2'] = $params['ns2'];
 
-	if ($params["ns3"]) {
-		$postfields["ns3"] = $params["ns3"];
+	if ($params['ns3']) {
+		$postfields['ns3'] = $params['ns3'];
 	}
 
 
-	if ($params["ns4"]) {
-		$postfields["ns4"] = $params["ns4"];
+	if ($params['ns4']) {
+		$postfields['ns4'] = $params['ns4'];
 	}
 
 
-	if ($params["ns5"]) {
-		$postfields["ns5"] = $params["ns5"];
+	if ($params['ns5']) {
+		$postfields['ns5'] = $params['ns5'];
 	}
 
-	$postfields["ns1ip"] = gethostbyname( $params["ns1"] );
-	$postfields["ns2ip"] = gethostbyname( $params["ns2"] );
+	$postfields['ns1ip'] = gethostbyname( $params['ns1'] );
+	$postfields['ns2ip'] = gethostbyname( $params['ns2'] );
 
-	if ($params["ns3"]) {
-		$postfields["ns3ip"] = gethostbyname( $params["ns3"] );
-	}
-
-
-	if ($params["ns4"]) {
-		$postfields["ns4ip"] = gethostbyname( $params["ns4"] );
+	if ($params['ns3']) {
+		$postfields['ns3ip'] = gethostbyname( $params['ns3'] );
 	}
 
 
-	if ($params["ns5"]) {
-		$postfields["ns5ip"] = gethostbyname( $params["ns5"] );
+	if ($params['ns4']) {
+		$postfields['ns4ip'] = gethostbyname( $params['ns4'] );
 	}
 
-	$postfields["reg_company"] = $params["companyname"];
-	$postfields["reg_fname"] = $params["firstname"];
-	$postfields["reg_lname"] = $params["lastname"];
-	$postfields["reg_addr1"] = $params["address1"];
-	$postfields["reg_addr2"] = $params["address2"];
-	$postfields["reg_state"] = $params["state"];
-	$postfields["reg_city"] = $params["city"];
-	$postfields["reg_postcode"] = $params["postcode"];
-	$postfields["reg_telephone"] = "+" . $phoneprefix . "." . preg_replace( "/[^0-9]/", "", $params["phonenumber"] );
-	$postfields["reg_country"] = $params["country"];
-	$postfields["reg_email"] = $params["email"];
-	$postfields["flag_adm"] = 1;
-	$postfields["flag_tec"] = 1;
-	$postfields["flag_bil"] = 1;
-	$postfields["username"] = $username;
-	$postfields["password"] = $password;
-	$postfields["newuser"] = "new";
-	$postfields["reg_contact_type"] = $postfields["adm_contact_type"] = $postfields["tec_contact_type"] = $postfields["bil_contact_type"] = ($params["companyname"] ? (int)"0" : "1");
-	$postfields["custom_reg1"] = $params["additionalfields"]["Identity or Registration Number"];
-	$postfields["custom_reg2"] = $params["additionalfields"]["Organization Type"];
-	$postfields["custom_reg3"] = $params["additionalfields"]["Registrant Type"];
+
+	if ($params['ns5']) {
+		$postfields['ns5ip'] = gethostbyname( $params['ns5'] );
+	}
+
+	$postfields['reg_company'] = $params['companyname'];
+	$postfields['reg_fname'] = $params['firstname'];
+	$postfields['reg_lname'] = $params['lastname'];
+	$postfields['reg_addr1'] = $params['address1'];
+	$postfields['reg_addr2'] = $params['address2'];
+	$postfields['reg_state'] = $params['state'];
+	$postfields['reg_city'] = $params['city'];
+	$postfields['reg_postcode'] = $params['postcode'];
+	$postfields['reg_telephone'] = "+" . $phoneprefix . "." . preg_replace( "/[^0-9]/", "", $params['phonenumber'] );
+	$postfields['reg_country'] = $params['country'];
+	$postfields['reg_email'] = $params['email'];
+	$postfields['flag_adm'] = 1;
+	$postfields['flag_tec'] = 1;
+	$postfields['flag_bil'] = 1;
+	$postfields['username'] = $username;
+	$postfields['password'] = $password;
+	$postfields['newuser'] = "new";
+	$postfields['reg_contact_type'] = $postfields['adm_contact_type'] = $postfields['tec_contact_type'] = $postfields['bil_contact_type'] = ($params['companyname'] ? (int)"0" : "1");
+	$postfields['custom_reg1'] = $params['additionalfields']["Identity or Registration Number"];
+	$postfields['custom_reg2'] = $params['additionalfields']["Organization Type"];
+	$postfields['custom_reg3'] = $params['additionalfields']["Registrant Type"];
 
 	if (preg_match( '/us$/i', $params['tld'] )) {
-		$nexus = $params["additionalfields"]["Nexus Category"];
-		$countrycode = $params["additionalfields"]["Nexus Country"];
-		$purpose = $params["additionalfields"]["Application Purpose"];
+		$nexus = $params['additionalfields']["Nexus Category"];
+		$countrycode = $params['additionalfields']["Nexus Country"];
+		$purpose = $params['additionalfields']["Application Purpose"];
 
 		if ($purpose == "Business use for profit") {
 			$purpose = "P1";
@@ -258,51 +258,51 @@ function webnic_RegisterDomain($params) {
 			}
 		}
 
-		$postfields["purpose"] = $purpose;
-		$postfields["nexus"] = $nexus;
-		$postfields["custom_reg3"] = $nexus;
+		$postfields['purpose'] = $purpose;
+		$postfields['nexus'] = $nexus;
+		$postfields['custom_reg3'] = $nexus;
 	}
 
 
 	if (preg_match( '/sg$/i', $params['tld'] )) {
-		if ($params["additionalfields"]["Registrant Type"] == "Individual") {
+		if ($params['additionalfields']["Registrant Type"] == "Individual") {
 			$regtype = "2";
 		}
 		else {
 			$regtype = "1";
 		}
 
-		$postfields["custom_reg1"] = $params["additionalfields"]["RCB Singapore ID"];
-		$postfields["custom_adm1"] = $params["additionalfields"]["RCB Singapore ID"];
-		$postfields["proxy"] = 0;
+		$postfields['custom_reg1'] = $params['additionalfields']["RCB Singapore ID"];
+		$postfields['custom_adm1'] = $params['additionalfields']["RCB Singapore ID"];
+		$postfields['proxy'] = 0;
 	}
 
 
 	if (preg_match( '/my$/i', $params['tld'] )) {
-		$individual = ($params["companyname"] == "-" ? "I" : "O");
-		$postfields["ctxtype"] = $individual;
+		$individual = ($params['companyname'] == "-" ? "I" : "O");
+		$postfields['ctxtype'] = $individual;
 	}
 
 
-	if (!$params["companyname"]) {
+	if (!$params['companyname']) {
 		if (preg_match( '/sg$/i', $params['tld'] )) {
-			$postfields["reg_contact_type"] = $postfields["adm_contact_type"] = $postfields["tec_contact_type"] = $postfields["bil_contact_type"] = (int)"0";
-			$postfields["custom_reg1"] = $params["additionalfields"]["RCB Singapore ID"];
-			$postfields["custom_adm1"] = $params["additionalfields"]["RCB Singapore ID"];
-			$postfields["custom_tec1"] = $params["additionalfields"]["RCB Singapore ID"];
-			$postfields["custom_bil1"] = $params["additionalfields"]["RCB Singapore ID"];
+			$postfields['reg_contact_type'] = $postfields['adm_contact_type'] = $postfields['tec_contact_type'] = $postfields['bil_contact_type'] = (int)"0";
+			$postfields['custom_reg1'] = $params['additionalfields']["RCB Singapore ID"];
+			$postfields['custom_adm1'] = $params['additionalfields']["RCB Singapore ID"];
+			$postfields['custom_tec1'] = $params['additionalfields']["RCB Singapore ID"];
+			$postfields['custom_bil1'] = $params['additionalfields']["RCB Singapore ID"];
 		}
 
-		$postfields["custom_reg3"] = $postfields["custom_adm3"] = $postfields["custom_tec3"] = $params["additionalfields"]["Date of Birth"] = $postfields["custom_bil3"] = $params["additionalfields"]["Date of Birth"];
-		$params["companyname"] = "-";
+		$postfields['custom_reg3'] = $postfields['custom_adm3'] = $postfields['custom_tec3'] = $params['additionalfields']["Date of Birth"] = $postfields['custom_bil3'] = $params['additionalfields']["Date of Birth"];
+		$params['companyname'] = "-";
 	}
 	else {
-		$postfields["custom_reg1"] = $params["additionalfields"]["RCB Singapore ID"];
-		$postfields["custom_adm1"] = $params["additionalfields"]["RCB Singapore ID"];
-		$postfields["custom_tec1"] = $params["additionalfields"]["RCB Singapore ID"];
-		$postfields["custom_bil1"] = $params["additionalfields"]["RCB Singapore ID"];
-		$postfields["reg_contact_type"] = $postfields["adm_contact_type"] = $postfields["tec_contact_type"] = $postfields["bil_contact_type"] = "1";
-		$usorgtype = $params["additionalfields"]["Organization Type"];
+		$postfields['custom_reg1'] = $params['additionalfields']["RCB Singapore ID"];
+		$postfields['custom_adm1'] = $params['additionalfields']["RCB Singapore ID"];
+		$postfields['custom_tec1'] = $params['additionalfields']["RCB Singapore ID"];
+		$postfields['custom_bil1'] = $params['additionalfields']["RCB Singapore ID"];
+		$postfields['reg_contact_type'] = $postfields['adm_contact_type'] = $postfields['tec_contact_type'] = $postfields['bil_contact_type'] = "1";
+		$usorgtype = $params['additionalfields']["Organization Type"];
 
 		if ($usorgtype == "Permanent resident of U.S") {
 			$usorgtype = "C12";
@@ -333,13 +333,13 @@ function webnic_RegisterDomain($params) {
 			$usorgtype = "C31";
 		}
 
-		$postfields["custom_reg3"] = $postfields["custom_adm3"] = $postfields["custom_tec3"] = $params["additionalfields"]["Date of Birth"] = $postfields["custom_bil3"] = $usorgtype;
+		$postfields['custom_reg3'] = $postfields['custom_adm3'] = $postfields['custom_tec3'] = $params['additionalfields']["Date of Birth"] = $postfields['custom_bil3'] = $usorgtype;
 	}
 
 
 	if (preg_match( '/(asia|tw)$/i', $params['tld'] )) {
-		$reg1value = trim( $params["additionalfields"]["Identity Number"] );
-		$legaltype = strtolower( $params["additionalfields"]["Legal Type"] );
+		$reg1value = trim( $params['additionalfields']["Identity Number"] );
+		$legaltype = strtolower( $params['additionalfields']["Legal Type"] );
 		$reg2value = "";
 		switch ($legaltype) {
 		case "corporation":
@@ -367,15 +367,15 @@ function webnic_RegisterDomain($params) {
 				break;
 		}
 
-		$postfields["custom_reg1"] = $postfields["custom_adm1"] = $postfields["custom_tec1"] = $postfields["custom_bil1"] = $reg1value;
-		$postfields["custom_reg2"] = $postfields["custom_adm2"] = $postfields["custom_tec2"] = $postfields["custom_bil2"] = $reg2value;
+		$postfields['custom_reg1'] = $postfields['custom_adm1'] = $postfields['custom_tec1'] = $postfields['custom_bil1'] = $reg1value;
+		$postfields['custom_reg2'] = $postfields['custom_adm2'] = $postfields['custom_tec2'] = $postfields['custom_bil2'] = $reg2value;
 		foreach (array( "custom_reg3", "custom_adm3", "custom_tec3", "custom_bil3" ) as $removefield) {
 			unset( $postfields[$removefield] );
 		}
 
 
-		if ( preg_match( '/asia$/i', $params['tld'] ) && !webnic_isCountryInAsia( $postfields["reg_country"] ) ) {
-			$postfields["proxy"] = 1;
+		if ( preg_match( '/asia$/i', $params['tld'] ) && !webnic_isCountryInAsia( $postfields['reg_country'] ) ) {
+			$postfields['proxy'] = 1;
 		}
 	}
 
@@ -383,16 +383,16 @@ function webnic_RegisterDomain($params) {
 	$results = webnic_call( $url, $rtype, $postfields, $params );
 
 	if (substr( $results[0], 0, 1 ) == 0) {
-		if ($params["idprotection"]) {
+		if ($params['idprotection']) {
 			$otime = date( "Y-m-d H:i:s" );
 			
-			$ochecksum = md5( $params["Source"] . $otime . md5( $params["Password"] ) );
+			$ochecksum = md5( $params['Source'] . $otime . md5( $params['Password'] ) );
 			$url = "pn_whoisprivacy.jsp";
 			$postfields = array();
-			$postfields["source"] = $params["Source"];
-			$postfields["otime"] = $otime;
-			$postfields["ochecksum"] = $ochecksum;
-			$postfields["domainname"] = $params["sld"] . "." . $params["tld"];
+			$postfields['source'] = $params['Source'];
+			$postfields['otime'] = $otime;
+			$postfields['ochecksum'] = $ochecksum;
+			$postfields['domainname'] = $params['sld'] . "." . $params['tld'];
 			$results = webnic_call( $url, $rtype, $postfields, $params );
 
 			if (substr( $results[0], 0, 1 ) == 0) {
@@ -412,74 +412,74 @@ function webnic_RegisterDomain($params) {
 function webnic_TransferDomain($params) {
 	$otime = date( "Y-m-d H:i:s" );
 	
-	$ochecksum = md5( $params["Source"] . $otime . md5( $params["Password"] ) );
-	$username = preg_replace( "/[^a-zA-Z]/", "", $params["sld"] . $params["tld"] );
+	$ochecksum = md5( $params['Source'] . $otime . md5( $params['Password'] ) );
+	$username = preg_replace( "/[^a-zA-Z]/", "", $params['sld'] . $params['tld'] );
 	$username = substr( $username, 0, 8 ) . rand( 100, 999 );
-	$password = substr( md5( $params["domainid"] ), 0, 10 );
+	$password = substr( md5( $params['domainid'] ), 0, 10 );
 	require ROOTDIR . "/includes/countriescallingcodes.php";
-	$phoneprefix = $countrycallingcodes[$params["country"]];
+	$phoneprefix = $countrycallingcodes[$params['country']];
 	$url = "pn_newtransfer.jsp";
 	$postfields = array();
-	$postfields["source"] = $params["Source"];
-	$postfields["otime"] = $otime;
-	$postfields["ochecksum"] = $ochecksum;
-	$postfields["domainname"] = $params["sld"] . "." . $params["tld"];
-	$postfields["term"] = $params["regperiod"];
-	$postfields["authinfo"] = $params["transfersecret"];
-	$postfields["userstatus"] = "NEW";
-	$postfields["username"] = $username;
-	$postfields["password"] = $password;
-	$postfields["password2"] = $password;
-	$postfields["reg_company"] = $params["companyname"];
-	$postfields["reg_fname"] = $params["firstname"];
-	$postfields["reg_lname"] = $params["lastname"];
-	$postfields["reg_addr1"] = $params["address1"];
-	$postfields["reg_addr2"] = $params["address2"];
-	$postfields["reg_state"] = $params["state"];
-	$postfields["reg_city"] = $params["city"];
-	$postfields["reg_postcode"] = $params["postcode"];
-	$postfields["reg_telephone"] = $params["fullphonenumber"];
-	$postfields["reg_country"] = $params["country"];
-	$postfields["reg_email"] = $params["email"];
-	$postfields["bil_company"] = $params["companyname"];
-	$postfields["bil_fname"] = $params["firstname"];
-	$postfields["bil_lname"] = $params["lastname"];
-	$postfields["bil_addr1"] = $params["address1"];
-	$postfields["bil_addr2"] = $params["address2"];
-	$postfields["bil_state"] = $params["state"];
-	$postfields["bil_city"] = $params["city"];
-	$postfields["bil_postcode"] = $params["postcode"];
-	$postfields["bil_telephone"] = $params["fullphonenumber"];
-	$postfields["bil_country"] = $params["country"];
-	$postfields["bil_email"] = $params["email"];
-	$postfields["adm_company"] = $params["companyname"];
-	$postfields["adm_fname"] = $params["firstname"];
-	$postfields["adm_lname"] = $params["lastname"];
-	$postfields["adm_addr1"] = $params["address1"];
-	$postfields["adm_addr2"] = $params["address2"];
-	$postfields["adm_state"] = $params["state"];
-	$postfields["adm_city"] = $params["city"];
-	$postfields["adm_postcode"] = $params["postcode"];
-	$postfields["adm_telephone"] = $params["fullphonenumber"];
-	$postfields["adm_country"] = $params["country"];
-	$postfields["adm_email"] = $params["email"];
-	$postfields["tec_company"] = $params["companyname"];
-	$postfields["tec_fname"] = $params["firstname"];
-	$postfields["tec_lname"] = $params["lastname"];
-	$postfields["tec_addr1"] = $params["address1"];
-	$postfields["tec_addr2"] = $params["address2"];
-	$postfields["tec_state"] = $params["state"];
-	$postfields["tec_city"] = $params["city"];
-	$postfields["tec_postcode"] = $params["postcode"];
-	$postfields["tec_telephone"] = $params["fullphonenumber"];
-	$postfields["tec_country"] = $params["country"];
-	$postfields["tec_email"] = $params["email"];
-	$postfields["reg_contact_type"] = $postfields["adm_contact_type"] = $postfields["tec_contact_type"] = $postfields["bil_contact_type"] = ($params["companyname"] ? (int)"0" : "1");
+	$postfields['source'] = $params['Source'];
+	$postfields['otime'] = $otime;
+	$postfields['ochecksum'] = $ochecksum;
+	$postfields['domainname'] = $params['sld'] . "." . $params['tld'];
+	$postfields['term'] = $params['regperiod'];
+	$postfields['authinfo'] = $params['transfersecret'];
+	$postfields['userstatus'] = "NEW";
+	$postfields['username'] = $username;
+	$postfields['password'] = $password;
+	$postfields['password2'] = $password;
+	$postfields['reg_company'] = $params['companyname'];
+	$postfields['reg_fname'] = $params['firstname'];
+	$postfields['reg_lname'] = $params['lastname'];
+	$postfields['reg_addr1'] = $params['address1'];
+	$postfields['reg_addr2'] = $params['address2'];
+	$postfields['reg_state'] = $params['state'];
+	$postfields['reg_city'] = $params['city'];
+	$postfields['reg_postcode'] = $params['postcode'];
+	$postfields['reg_telephone'] = $params['fullphonenumber'];
+	$postfields['reg_country'] = $params['country'];
+	$postfields['reg_email'] = $params['email'];
+	$postfields['bil_company'] = $params['companyname'];
+	$postfields['bil_fname'] = $params['firstname'];
+	$postfields['bil_lname'] = $params['lastname'];
+	$postfields['bil_addr1'] = $params['address1'];
+	$postfields['bil_addr2'] = $params['address2'];
+	$postfields['bil_state'] = $params['state'];
+	$postfields['bil_city'] = $params['city'];
+	$postfields['bil_postcode'] = $params['postcode'];
+	$postfields['bil_telephone'] = $params['fullphonenumber'];
+	$postfields['bil_country'] = $params['country'];
+	$postfields['bil_email'] = $params['email'];
+	$postfields['adm_company'] = $params['companyname'];
+	$postfields['adm_fname'] = $params['firstname'];
+	$postfields['adm_lname'] = $params['lastname'];
+	$postfields['adm_addr1'] = $params['address1'];
+	$postfields['adm_addr2'] = $params['address2'];
+	$postfields['adm_state'] = $params['state'];
+	$postfields['adm_city'] = $params['city'];
+	$postfields['adm_postcode'] = $params['postcode'];
+	$postfields['adm_telephone'] = $params['fullphonenumber'];
+	$postfields['adm_country'] = $params['country'];
+	$postfields['adm_email'] = $params['email'];
+	$postfields['tec_company'] = $params['companyname'];
+	$postfields['tec_fname'] = $params['firstname'];
+	$postfields['tec_lname'] = $params['lastname'];
+	$postfields['tec_addr1'] = $params['address1'];
+	$postfields['tec_addr2'] = $params['address2'];
+	$postfields['tec_state'] = $params['state'];
+	$postfields['tec_city'] = $params['city'];
+	$postfields['tec_postcode'] = $params['postcode'];
+	$postfields['tec_telephone'] = $params['fullphonenumber'];
+	$postfields['tec_country'] = $params['country'];
+	$postfields['tec_email'] = $params['email'];
+	$postfields['reg_contact_type'] = $postfields['adm_contact_type'] = $postfields['tec_contact_type'] = $postfields['bil_contact_type'] = ($params['companyname'] ? (int)"0" : "1");
 
 	if (preg_match( '/us$/i', $params['tld'] )) {
-		$nexus = $params["additionalfields"]["Nexus Category"];
-		$countrycode = $params["additionalfields"]["Nexus Country"];
-		$purpose = $params["additionalfields"]["Application Purpose"];
+		$nexus = $params['additionalfields']["Nexus Category"];
+		$countrycode = $params['additionalfields']["Nexus Country"];
+		$purpose = $params['additionalfields']["Application Purpose"];
 
 		if ($purpose == "Business use for profit") {
 			$purpose = "P1";
@@ -528,29 +528,29 @@ function webnic_TransferDomain($params) {
 			}
 		}
 
-		$postfields["purpose"] = $purpose;
-		$postfields["nexus"] = $nexus;
-		$postfields["custom_reg3"] = $nexus;
+		$postfields['purpose'] = $purpose;
+		$postfields['nexus'] = $nexus;
+		$postfields['custom_reg3'] = $nexus;
 	}
 
 
 	if (preg_match( '/sg$/i', $params['tld'] )) {
-		if ($params["additionalfields"]["Registrant Type"] == "Individual") {
+		if ($params['additionalfields']["Registrant Type"] == "Individual") {
 			$regtype = "2";
 		}
 		else {
 			$regtype = "1";
 		}
 
-		$postfields["custom_reg1"] = $params["additionalfields"]["RCB Singapore ID"];
-		$postfields["custom_adm1"] = $params["additionalfields"]["RCB Singapore ID"];
-		$postfields["proxy"] = 0;
+		$postfields['custom_reg1'] = $params['additionalfields']["RCB Singapore ID"];
+		$postfields['custom_adm1'] = $params['additionalfields']["RCB Singapore ID"];
+		$postfields['proxy'] = 0;
 	}
 
 
 	if (preg_match( '/my$/i', $params['tld'] )) {
-		$individual = ($params["companyname"] == "-" ? "I" : "O");
-		$postfields["ctxtype"] = $individual;
+		$individual = ($params['companyname'] == "-" ? "I" : "O");
+		$postfields['ctxtype'] = $individual;
 	}
 
 	$rtype = "Transfer Domain";
@@ -567,17 +567,17 @@ function webnic_TransferDomain($params) {
 function webnic_RenewDomain($params) {
 	$otime = date( "Y-m-d H:i:s" );
 	
-	$ochecksum = md5( $params["Source"] . $otime . md5( $params["Password"] ) );
+	$ochecksum = md5( $params['Source'] . $otime . md5( $params['Password'] ) );
 	$url = "pn_renew.jsp";
 	$postfields = array();
-	$postfields["source"] = $params["Source"];
-	$postfields["otime"] = $otime;
-	$postfields["ochecksum"] = $ochecksum;
-	$postfields["domainname"] = $params["sld"] . "." . $params["tld"];
-	$postfields["term"] = $params["regperiod"];
+	$postfields['source'] = $params['Source'];
+	$postfields['otime'] = $otime;
+	$postfields['ochecksum'] = $ochecksum;
+	$postfields['domainname'] = $params['sld'] . "." . $params['tld'];
+	$postfields['term'] = $params['regperiod'];
 
 	if (preg_match( '/asia$/i', $params['tld'] )) {
-		$postfields["proxy"] = 1;
+		$postfields['proxy'] = 1;
 	}
 
 	$rtype = "Renew Domain";
@@ -594,8 +594,8 @@ function webnic_RenewDomain($params) {
 function webnic_GetContactDetails($params) {
 	$url = "pn_whois.jsp";
 	$postfields = array();
-	$postfields["source"] = $params["Source"];
-	$postfields["domain"] = $params["sld"] . "." . $params["tld"];
+	$postfields['source'] = $params['Source'];
+	$postfields['domain'] = $params['sld'] . "." . $params['tld'];
 	$rtype = "Get Contact Details";
 	$results = webnic_call( $url, $rtype, $postfields, $params );
 
@@ -605,7 +605,7 @@ function webnic_GetContactDetails($params) {
 			$arr[$row[0]] = $row[1];
 		}
 
-		return array( "Registrant" => array( "First Name" => $arr["registrant first name"], "Last Name" => $arr["registrant last name"], "Company Name" => $arr["registrant"], "Address 1" => $arr["registrant address 1"], "Address 2" => $arr["registrant address 2"], "City" => $arr["registrant city"], "State" => $arr["registrant state"], "Country" => $arr["registrant country"], "ZIP Code" => $arr["registrant zip"], "Phone Number" => $arr["registrant phone"], "Fax Number" => $arr["registrant fax"], "Email Address" => $arr["registrant email"] ), "Admin" => array( "First Name" => $arr["admin first name"], "Last Name" => $arr["admin last name"], "Company Name" => $arr["admin company"], "Address 1" => $arr["admin address 1"], "Address 2" => $arr["admin address 2"], "City" => $arr["admin city"], "State" => $arr["admin state"], "Country" => $arr["admin country"], "ZIP Code" => $arr["admin zip"], "Phone Number" => $arr["admin phone"], "Fax Number" => $arr["admin fax"], "Email Address" => $arr["admin email"] ), "Technical" => array( "First Name" => $arr["technical first name"], "Last Name" => $arr["technical last name"], "Company Name" => $arr["technical company"], "Address 1" => $arr["technical address 1"], "Address 2" => $arr["technical address 2"], "City" => $arr["technical city"], "State" => $arr["technical state"], "Country" => $arr["technical country"], "ZIP Code" => $arr["technical zip"], "Phone Number" => $arr["technical phone"], "Fax Number" => $arr["technical fax"], "Email Address" => $arr["technical email"] ), "Billing" => array( "First Name" => $arr["billing first name"], "Last Name" => $arr["billing last name"], "Company Name" => $arr["billing company"], "Address 1" => $arr["billing address 1"], "Address 2" => $arr["billing address 2"], "City" => $arr["billing city"], "State" => $arr["billing state"], "Country" => $arr["billing country"], "ZIP Code" => $arr["billing zip"], "Phone Number" => $arr["billing phone"], "Fax Number" => $arr["billing fax"], "Email Address" => $arr["billing email"] ) );
+		return array( "Registrant" => array( "First Name" => $arr["registrant first name"], "Last Name" => $arr["registrant last name"], "Company Name" => $arr['registrant'], "Address 1" => $arr["registrant address 1"], "Address 2" => $arr["registrant address 2"], "City" => $arr["registrant city"], "State" => $arr["registrant state"], "Country" => $arr["registrant country"], "ZIP Code" => $arr["registrant zip"], "Phone Number" => $arr["registrant phone"], "Fax Number" => $arr["registrant fax"], "Email Address" => $arr["registrant email"] ), "Admin" => array( "First Name" => $arr["admin first name"], "Last Name" => $arr["admin last name"], "Company Name" => $arr["admin company"], "Address 1" => $arr["admin address 1"], "Address 2" => $arr["admin address 2"], "City" => $arr["admin city"], "State" => $arr["admin state"], "Country" => $arr["admin country"], "ZIP Code" => $arr["admin zip"], "Phone Number" => $arr["admin phone"], "Fax Number" => $arr["admin fax"], "Email Address" => $arr["admin email"] ), "Technical" => array( "First Name" => $arr["technical first name"], "Last Name" => $arr["technical last name"], "Company Name" => $arr["technical company"], "Address 1" => $arr["technical address 1"], "Address 2" => $arr["technical address 2"], "City" => $arr["technical city"], "State" => $arr["technical state"], "Country" => $arr["technical country"], "ZIP Code" => $arr["technical zip"], "Phone Number" => $arr["technical phone"], "Fax Number" => $arr["technical fax"], "Email Address" => $arr["technical email"] ), "Billing" => array( "First Name" => $arr["billing first name"], "Last Name" => $arr["billing last name"], "Company Name" => $arr["billing company"], "Address 1" => $arr["billing address 1"], "Address 2" => $arr["billing address 2"], "City" => $arr["billing city"], "State" => $arr["billing state"], "Country" => $arr["billing country"], "ZIP Code" => $arr["billing zip"], "Phone Number" => $arr["billing phone"], "Fax Number" => $arr["billing fax"], "Email Address" => $arr["billing email"] ) );
 	}
 
 	return array( "error" => $results[1] );
@@ -615,66 +615,66 @@ function webnic_GetContactDetails($params) {
 function webnic_SaveContactDetails($params) {
 	$otime = date( "Y-m-d H:i:s" );
 	
-	$ochecksum = md5( $params["Source"] . $otime . md5( $params["Password"] ) );
+	$ochecksum = md5( $params['Source'] . $otime . md5( $params['Password'] ) );
 	$url = "pn_newmod.jsp";
 	$postfields = array();
-	$postfields["source"] = $params["Source"];
-	$postfields["otime"] = $otime;
-	$postfields["ochecksum"] = $ochecksum;
-	$postfields["domainname"] = $params["sld"] . "." . $params["tld"];
-	$postfields["reg_company"] = $params["contactdetails"]["Registrant"]["Company Name"];
-	$postfields["reg_fname"] = $params["contactdetails"]["Registrant"]["First Name"];
-	$postfields["reg_lname"] = $params["contactdetails"]["Registrant"]["Last Name"];
-	$postfields["reg_addr1"] = $params["contactdetails"]["Registrant"]["Address 1"];
-	$postfields["reg_addr2"] = $params["contactdetails"]["Registrant"]["Address 2"];
-	$postfields["reg_state"] = $params["contactdetails"]["Registrant"]["State"];
-	$postfields["reg_city"] = $params["contactdetails"]["Registrant"]["City"];
-	$postfields["reg_postcode"] = $params["contactdetails"]["Registrant"]["ZIP Code"];
-	$postfields["reg_telephone"] = $params["contactdetails"]["Registrant"]["Phone Number"];
-	$postfields["reg_fax"] = $params["contactdetails"]["Registrant"]["Fax Number"];
-	$postfields["reg_country"] = $params["contactdetails"]["Registrant"]["Country"];
-	$postfields["reg_email"] = $params["contactdetails"]["Registrant"]["Email Address"];
-	$postfields["adm_company"] = $params["contactdetails"]["Admin"]["Company Name"];
-	$postfields["adm_fname"] = $params["contactdetails"]["Admin"]["First Name"];
-	$postfields["adm_lname"] = $params["contactdetails"]["Admin"]["Last Name"];
-	$postfields["adm_addr1"] = $params["contactdetails"]["Admin"]["Address 1"];
-	$postfields["adm_addr2"] = $params["contactdetails"]["Admin"]["Address 2"];
-	$postfields["adm_state"] = $params["contactdetails"]["Admin"]["State"];
-	$postfields["adm_city"] = $params["contactdetails"]["Admin"]["City"];
-	$postfields["adm_postcode"] = $params["contactdetails"]["Admin"]["ZIP Code"];
-	$postfields["adm_telephone"] = $params["contactdetails"]["Admin"]["Phone Number"];
-	$postfields["adm_fax"] = $params["contactdetails"]["Admin"]["Fax Number"];
-	$postfields["adm_country"] = $params["contactdetails"]["Admin"]["Country"];
-	$postfields["adm_email"] = $params["contactdetails"]["Admin"]["Email Address"];
-	$postfields["tec_company"] = $params["contactdetails"]["Technical"]["Company Name"];
-	$postfields["tec_fname"] = $params["contactdetails"]["Technical"]["First Name"];
-	$postfields["tec_lname"] = $params["contactdetails"]["Technical"]["Last Name"];
-	$postfields["tec_addr1"] = $params["contactdetails"]["Technical"]["Address 1"];
-	$postfields["tec_addr2"] = $params["contactdetails"]["Technical"]["Address 2"];
-	$postfields["tec_state"] = $params["contactdetails"]["Technical"]["State"];
-	$postfields["tec_city"] = $params["contactdetails"]["Technical"]["City"];
-	$postfields["tec_postcode"] = $params["contactdetails"]["Technical"]["ZIP Code"];
-	$postfields["tec_telephone"] = $params["contactdetails"]["Technical"]["Phone Number"];
-	$postfields["tec_fax"] = $params["contactdetails"]["Technical"]["Fax Number"];
-	$postfields["tec_country"] = $params["contactdetails"]["Technical"]["Country"];
-	$postfields["tec_email"] = $params["contactdetails"]["Technical"]["Email Address"];
-	$postfields["bil_company"] = $params["contactdetails"]["Billing"]["Company Name"];
-	$postfields["bil_fname"] = $params["contactdetails"]["Billing"]["First Name"];
-	$postfields["bil_lname"] = $params["contactdetails"]["Billing"]["Last Name"];
-	$postfields["bil_addr1"] = $params["contactdetails"]["Billing"]["Address 1"];
-	$postfields["bil_addr2"] = $params["contactdetails"]["Billing"]["Address 2"];
-	$postfields["bil_state"] = $params["contactdetails"]["Billing"]["State"];
-	$postfields["bil_city"] = $params["contactdetails"]["Billing"]["City"];
-	$postfields["bil_postcode"] = $params["contactdetails"]["Billing"]["ZIP Code"];
-	$postfields["bil_telephone"] = $params["contactdetails"]["Billing"]["Phone Number"];
-	$postfields["bil_fax"] = $params["contactdetails"]["Billing"]["Fax Number"];
-	$postfields["bil_country"] = $params["contactdetails"]["Billing"]["Country"];
-	$postfields["bil_email"] = $params["contactdetails"]["Billing"]["Email Address"];
+	$postfields['source'] = $params['Source'];
+	$postfields['otime'] = $otime;
+	$postfields['ochecksum'] = $ochecksum;
+	$postfields['domainname'] = $params['sld'] . "." . $params['tld'];
+	$postfields['reg_company'] = $params['contactdetails']['Registrant']["Company Name"];
+	$postfields['reg_fname'] = $params['contactdetails']['Registrant']["First Name"];
+	$postfields['reg_lname'] = $params['contactdetails']['Registrant']["Last Name"];
+	$postfields['reg_addr1'] = $params['contactdetails']['Registrant']["Address 1"];
+	$postfields['reg_addr2'] = $params['contactdetails']['Registrant']["Address 2"];
+	$postfields['reg_state'] = $params['contactdetails']['Registrant']['State'];
+	$postfields['reg_city'] = $params['contactdetails']['Registrant']['City'];
+	$postfields['reg_postcode'] = $params['contactdetails']['Registrant']["ZIP Code"];
+	$postfields['reg_telephone'] = $params['contactdetails']['Registrant']["Phone Number"];
+	$postfields['reg_fax'] = $params['contactdetails']['Registrant']["Fax Number"];
+	$postfields['reg_country'] = $params['contactdetails']['Registrant']['Country'];
+	$postfields['reg_email'] = $params['contactdetails']['Registrant']["Email Address"];
+	$postfields['adm_company'] = $params['contactdetails']['Admin']["Company Name"];
+	$postfields['adm_fname'] = $params['contactdetails']['Admin']["First Name"];
+	$postfields['adm_lname'] = $params['contactdetails']['Admin']["Last Name"];
+	$postfields['adm_addr1'] = $params['contactdetails']['Admin']["Address 1"];
+	$postfields['adm_addr2'] = $params['contactdetails']['Admin']["Address 2"];
+	$postfields['adm_state'] = $params['contactdetails']['Admin']['State'];
+	$postfields['adm_city'] = $params['contactdetails']['Admin']['City'];
+	$postfields['adm_postcode'] = $params['contactdetails']['Admin']["ZIP Code"];
+	$postfields['adm_telephone'] = $params['contactdetails']['Admin']["Phone Number"];
+	$postfields['adm_fax'] = $params['contactdetails']['Admin']["Fax Number"];
+	$postfields['adm_country'] = $params['contactdetails']['Admin']['Country'];
+	$postfields['adm_email'] = $params['contactdetails']['Admin']["Email Address"];
+	$postfields['tec_company'] = $params['contactdetails']['Technical']["Company Name"];
+	$postfields['tec_fname'] = $params['contactdetails']['Technical']["First Name"];
+	$postfields['tec_lname'] = $params['contactdetails']['Technical']["Last Name"];
+	$postfields['tec_addr1'] = $params['contactdetails']['Technical']["Address 1"];
+	$postfields['tec_addr2'] = $params['contactdetails']['Technical']["Address 2"];
+	$postfields['tec_state'] = $params['contactdetails']['Technical']['State'];
+	$postfields['tec_city'] = $params['contactdetails']['Technical']['City'];
+	$postfields['tec_postcode'] = $params['contactdetails']['Technical']["ZIP Code"];
+	$postfields['tec_telephone'] = $params['contactdetails']['Technical']["Phone Number"];
+	$postfields['tec_fax'] = $params['contactdetails']['Technical']["Fax Number"];
+	$postfields['tec_country'] = $params['contactdetails']['Technical']['Country'];
+	$postfields['tec_email'] = $params['contactdetails']['Technical']["Email Address"];
+	$postfields['bil_company'] = $params['contactdetails']['Billing']["Company Name"];
+	$postfields['bil_fname'] = $params['contactdetails']['Billing']["First Name"];
+	$postfields['bil_lname'] = $params['contactdetails']['Billing']["Last Name"];
+	$postfields['bil_addr1'] = $params['contactdetails']['Billing']["Address 1"];
+	$postfields['bil_addr2'] = $params['contactdetails']['Billing']["Address 2"];
+	$postfields['bil_state'] = $params['contactdetails']['Billing']['State'];
+	$postfields['bil_city'] = $params['contactdetails']['Billing']['City'];
+	$postfields['bil_postcode'] = $params['contactdetails']['Billing']["ZIP Code"];
+	$postfields['bil_telephone'] = $params['contactdetails']['Billing']["Phone Number"];
+	$postfields['bil_fax'] = $params['contactdetails']['Billing']["Fax Number"];
+	$postfields['bil_country'] = $params['contactdetails']['Billing']['Country'];
+	$postfields['bil_email'] = $params['contactdetails']['Billing']["Email Address"];
 
 	if (preg_match( '/us$/i', $params['tld'] )) {
-		$nexus = $params["additionalfields"]["Nexus Category"];
-		$countrycode = $params["additionalfields"]["Nexus Country"];
-		$purpose = $params["additionalfields"]["Application Purpose"];
+		$nexus = $params['additionalfields']["Nexus Category"];
+		$countrycode = $params['additionalfields']["Nexus Country"];
+		$purpose = $params['additionalfields']["Application Purpose"];
 
 		if ($purpose == "Business use for profit") {
 			$purpose = "P1";
@@ -715,9 +715,9 @@ function webnic_SaveContactDetails($params) {
 			}
 		}
 
-		$postfields["purpose"] = $purpose;
-		$postfields["nexus"] = $nexus;
-		$usorgtype = $params["additionalfields"]["Organization Type"];
+		$postfields['purpose'] = $purpose;
+		$postfields['nexus'] = $nexus;
+		$usorgtype = $params['additionalfields']["Organization Type"];
 
 		if ($usorgtype == "Permanent resident of U.S") {
 			$usorgtype = "C12";
@@ -743,48 +743,48 @@ function webnic_SaveContactDetails($params) {
 			}
 		}
 
-		$individual = ($params["companyname"] == "-" ? "I" : "O");
+		$individual = ($params['companyname'] == "-" ? "I" : "O");
 
 		if ($individual == "O") {
-			$postfields["custom_reg3"] = $postfields["custom_adm3"] = $postfields["custom_tec3"] = $postfields["custom_bil3"] = $usorgtype;
+			$postfields['custom_reg3'] = $postfields['custom_adm3'] = $postfields['custom_tec3'] = $postfields['custom_bil3'] = $usorgtype;
 		}
 	}
 
 
 	if (preg_match( '/sg$/i', $params['tld'] )) {
-		if ($params["additionalfields"]["Registrant Type"] == "Individual") {
+		if ($params['additionalfields']["Registrant Type"] == "Individual") {
 			$regtype = "2";
 		}
 		else {
 			$regtype = "1";
 		}
 
-		$postfields["custom_reg1"] = $params["additionalfields"]["RCB Singapore ID"];
-		$postfields["custom_reg2"] = $usorgtype;
-		$postfields["custom_adm1"] = $params["additionalfields"]["RCB Singapore ID"];
-		$postfields["custom_adm2"] = $usorgtype;
-		$postfields["custom_tec2"] = $usorgtype;
-		$postfields["custom_bil2"] = $usorgtype;
-		$postfields["proxy"] = 0;
+		$postfields['custom_reg1'] = $params['additionalfields']["RCB Singapore ID"];
+		$postfields['custom_reg2'] = $usorgtype;
+		$postfields['custom_adm1'] = $params['additionalfields']["RCB Singapore ID"];
+		$postfields['custom_adm2'] = $usorgtype;
+		$postfields['custom_tec2'] = $usorgtype;
+		$postfields['custom_bil2'] = $usorgtype;
+		$postfields['proxy'] = 0;
 	}
 
 
 	if (preg_match( '/hk$/i', $params['tld'] )) {
-		$individual = ($params["companyname"] == "-" ? "I" : "O");
-		$postfields["ctxtype"] = $individual;
+		$individual = ($params['companyname'] == "-" ? "I" : "O");
+		$postfields['ctxtype'] = $individual;
 
 		if ($individual == "I") {
-			$postfields["custom_reg3"] = $postfields["custom_adm3"] = $postfields["custom_tec3"] = $params["additionalfields"]["Date of Birth"] = $postfields["custom_bil3"] = $params["additionalfields"]["Date of Birth"];
+			$postfields['custom_reg3'] = $postfields['custom_adm3'] = $postfields['custom_tec3'] = $params['additionalfields']["Date of Birth"] = $postfields['custom_bil3'] = $params['additionalfields']["Date of Birth"];
 		}
 	}
 
 
 	if (preg_match( '/my$/i', $params['tld'] )) {
-		$individual = ($params["companyname"] == "-" ? "I" : "O");
-		$postfields["ctxtype"] = $individual;
+		$individual = ($params['companyname'] == "-" ? "I" : "O");
+		$postfields['ctxtype'] = $individual;
 
 		if ($individual == "I") {
-			$postfields["custom_reg3"] = $postfields["custom_adm3"] = $postfields["custom_tec3"] = $params["additionalfields"]["Date of Birth"] = $postfields["custom_bil3"] = $params["additionalfields"]["Date of Birth"];
+			$postfields['custom_reg3'] = $postfields['custom_adm3'] = $postfields['custom_tec3'] = $params['additionalfields']["Date of Birth"] = $postfields['custom_bil3'] = $params['additionalfields']["Date of Birth"];
 		}
 	}
 
@@ -802,20 +802,20 @@ function webnic_SaveContactDetails($params) {
 function webnic_IDProtectToggle($params) {
 	$otime = date( "Y-m-d H:i:s" );
 	
-	$ochecksum = md5( $params["Source"] . $otime . md5( $params["Password"] ) );
+	$ochecksum = md5( $params['Source'] . $otime . md5( $params['Password'] ) );
 	$url = "pn_whoisprivacyacti.jsp";
 	$postfields = array();
-	$postfields["source"] = $params["Source"];
-	$postfields["otime"] = $otime;
-	$postfields["ochecksum"] = $ochecksum;
-	$postfields["domain"] = $params["sld"] . "." . $params["tld"];
-	$postfields["Action"] = ($params["protectenable"] ? "act" : "deact");
+	$postfields['source'] = $params['Source'];
+	$postfields['otime'] = $otime;
+	$postfields['ochecksum'] = $ochecksum;
+	$postfields['domain'] = $params['sld'] . "." . $params['tld'];
+	$postfields['Action'] = ($params['protectenable'] ? "act" : "deact");
 	$results = webnic_call( $url, $postfields, $params );
 }
 
 
 function webnic_call($url, $rtype, $postfields, $params) {
-	if ($params["TestMode"]) {
+	if ($params['TestMode']) {
 		$url = "http://ote.webnic.cc/jsp/" . $url;
 	}
 	else {
@@ -844,7 +844,7 @@ function webnic_call($url, $rtype, $postfields, $params) {
 	$res_data = trim( $res_data );
 	$res_array = explode( "\n", $res_data );
 
-	logModuleCall( "webnic", $rtype, $query_string, $res_data, $res_array, array( $params["Source"] ) );
+	logModuleCall( "webnic", $rtype, $query_string, $res_data, $res_array, array( $params['Source'] ) );
 	return $res_array;
 }
 

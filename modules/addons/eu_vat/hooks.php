@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -15,18 +15,18 @@ function eu_vat_hook_validate_number($vars) {
 	$result = select_query( "tbladdonmodules", "", array( "module" => "eu_vat" ) );
 
 	while ($data = mysql_fetch_array( $result )) {
-		$modulevars[$data["setting"]] = $data["value"];
+		$modulevars[$data['setting']] = $data['value'];
 	}
 
 
-	if (!$modulevars["enablevalidation"]) {
+	if (!$modulevars['enablevalidation']) {
 		return false;
 	}
 
-	$result = select_query( "tblcustomfields", "id", array( "type" => "client", "fieldname" => $modulevars["vatcustomfield"] ) );
+	$result = select_query( "tblcustomfields", "id", array( "type" => "client", "fieldname" => $modulevars['vatcustomfield'] ) );
 	$data = mysql_fetch_array( $result );
-	$VAT_CUSTOM_FIELD_ID = $data["id"];
-	$vatnumber = $_POST["customfield"][$VAT_CUSTOM_FIELD_ID];
+	$VAT_CUSTOM_FIELD_ID = $data['id'];
+	$vatnumber = $_POST['customfield'][$VAT_CUSTOM_FIELD_ID];
 
 	if ($vatnumber) {
 		$vatnumber = strtoupper( $vatnumber );
@@ -34,21 +34,24 @@ function eu_vat_hook_validate_number($vars) {
 		$vat_prefix = substr( $vatnumber, 0, 2 );
 		$vat_num = substr( $vatnumber, 2 );
 		$errorcheck = false;
+    	try
+    	{
 		$taxCheck = new SoapClient( "http://ec.europa.eu/taxation_customs/vies/checkVatService.wsdl" );
 		$taxValid = $taxCheck->checkVat( array( "countryCode" => "" . $vat_prefix, "vatNumber" => "" . $vat_num ) );
-		Exception {
+		}
+		catch ( Exception $e ) {
 			$errorcheck = true;
+		}
 
-			if (( $taxValid->valid != 1 || $errorcheck )) {
-				global $errormessage;
-				global $_LANG;
+		if ( $taxValid->valid != 1 || $errorcheck ) {
+			global $errormessage;
+			global $_LANG;
 
-				if (!$_LANG["vatnumberinvalid"]) {
-					$_LANG["vatnumberinvalid"] = "The supplied VAT Number is not valid";
-				}
-
-				$errormessage .= "<li>" . $_LANG["vatnumberinvalid"];
+			if (!$_LANG['vatnumberinvalid']) {
+				$_LANG['vatnumberinvalid'] = "The supplied VAT Number is not valid";
 			}
+
+			$errormessage .= "<li>" . $_LANG['vatnumberinvalid'];
 		}
 	}
 
@@ -60,38 +63,38 @@ function eu_vat_hook_set_tax_exempt($vars) {
 	$result = select_query( "tbladdonmodules", "", array( "module" => "eu_vat" ) );
 
 	while ($data = mysql_fetch_array( $result )) {
-		$modulevars[$data["setting"]] = $data["value"];
+		$modulevars[$data['setting']] = $data['value'];
 	}
 
 
-	if (!$modulevars["taxexempt"]) {
+	if (!$modulevars['taxexempt']) {
 		return false;
 	}
 
-	$result = select_query( "tblcustomfields", "id", array( "type" => "client", "fieldname" => $modulevars["vatcustomfield"] ) );
+	$result = select_query( "tblcustomfields", "id", array( "type" => "client", "fieldname" => $modulevars['vatcustomfield'] ) );
 	$data = mysql_fetch_array( $result );
-	$VAT_CUSTOM_FIELD_ID = $data["id"];
-	$result = select_query( "tblcustomfieldsvalues", "value", array( "fieldid" => $VAT_CUSTOM_FIELD_ID, "relid" => $vars["userid"] ) );
+	$VAT_CUSTOM_FIELD_ID = $data['id'];
+	$result = select_query( "tblcustomfieldsvalues", "value", array( "fieldid" => $VAT_CUSTOM_FIELD_ID, "relid" => $vars['userid'] ) );
 	$data = mysql_fetch_array( $result );
-	$VAT_CUSTOM_FIELD_VALUE = $data["value"];
+	$VAT_CUSTOM_FIELD_VALUE = $data['value'];
 	$european_union_countries = array( "AT", "BE", "BG", "CY", "CZ", "DE", "DK", "EE", "ES", "FI", "FR", "GB", "GR", "HU", "IE", "IT", "LT", "LU", "LV", "MT", "NL", "PL", "PT", "RO", "SE", "SI", "SK" );
 
 	if ($VAT_CUSTOM_FIELD_VALUE) {
-		if (in_array( $vars["country"], $european_union_countries )) {
-			if ($modulevars["notaxexempthome"]) {
-				if ($vars["country"] != $modulevars["homecountry"]) {
-					update_query( "tblclients", array( "taxexempt" => "on" ), array( "id" => $vars["userid"] ) );
+		if (in_array( $vars['country'], $european_union_countries )) {
+			if ($modulevars['notaxexempthome']) {
+				if ($vars['country'] != $modulevars['homecountry']) {
+					update_query( "tblclients", array( "taxexempt" => "on" ), array( "id" => $vars['userid'] ) );
 					return null;
 				}
 			}
 			else {
-				update_query( "tblclients", array( "taxexempt" => "on" ), array( "id" => $vars["userid"] ) );
+				update_query( "tblclients", array( "taxexempt" => "on" ), array( "id" => $vars['userid'] ) );
 				return null;
 			}
 		}
 	}
 
-	update_query( "tblclients", array( "taxexempt" => "" ), array( "id" => $vars["userid"] ) );
+	update_query( "tblclients", array( "taxexempt" => "" ), array( "id" => $vars['userid'] ) );
 }
 
 
@@ -100,21 +103,21 @@ function eu_vat_hook_custom_invoice_number_format($vars) {
 	$result = select_query( "tbladdonmodules", "", array( "module" => "eu_vat" ) );
 
 	while ($data = mysql_fetch_array( $result )) {
-		$modulevars[$data["setting"]] = $data["value"];
+		$modulevars[$data['setting']] = $data['value'];
 	}
 
 
-	if (!$modulevars["enablecustominvoicenum"]) {
+	if (!$modulevars['enablecustominvoicenum']) {
 		return false;
 	}
 
-	$custominvoicenumformat = $modulevars["custominvoicenumformat"];
-	$custominvoicenumber = $modulevars["custominvoicenumber"];
+	$custominvoicenumformat = $modulevars['custominvoicenumformat'];
+	$custominvoicenumber = $modulevars['custominvoicenumber'];
 	$custominvoicenumformat = str_replace( "{YEAR}", date( "Y" ), $custominvoicenumformat );
 	$custominvoicenumformat = str_replace( "{MONTH}", date( "m" ), $custominvoicenumformat );
 	$custominvoicenumformat = str_replace( "{DAY}", date( "d" ), $custominvoicenumformat );
 	$custominvoicenumformat = str_replace( "{NUMBER}", $custominvoicenumber, $custominvoicenumformat );
-	update_query( "tblinvoices", array( "invoicenum" => $custominvoicenumformat ), array( "id" => $vars["invoiceid"] ) );
+	update_query( "tblinvoices", array( "invoicenum" => $custominvoicenumformat ), array( "id" => $vars['invoiceid'] ) );
 	update_query( "tbladdonmodules", array( "value" => "+1" ), array( "module" => "eu_vat", "setting" => "custominvoicenumber" ) );
 }
 
@@ -126,23 +129,23 @@ function eu_vat_hook_custom_paid_invoice_number_format($vars) {
 	$result = select_query( "tbladdonmodules", "", array( "module" => "eu_vat" ) );
 
 	while ($data = mysql_fetch_array( $result )) {
-		$modulevars[$data["setting"]] = $data["value"];
+		$modulevars[$data['setting']] = $data['value'];
 	}
 
 
-	if (( !count( $modulevars ) || !$CONFIG["SequentialInvoiceNumbering"] )) {
+	if ( !count( $modulevars ) || !$CONFIG['SequentialInvoiceNumbering'] ) {
 		return false;
 	}
 
 
-	if (!$modulevars["enablecustominvoicenum"]) {
-		$result = select_query( "tblinvoices", "invoicenum", array( "id" => $vars["invoiceid"] ) );
+	if (!$modulevars['enablecustominvoicenum']) {
+		$result = select_query( "tblinvoices", "invoicenum", array( "id" => $vars['invoiceid'] ) );
 		$data = mysql_fetch_array( $result );
 		$custominvoicenumformat = $data[0];
 	}
 	else {
-		$custominvoicenumformat = $CONFIG["SequentialInvoiceNumberFormat"];
-		$custominvoicenumber = $CONFIG["SequentialInvoiceNumberValue"];
+		$custominvoicenumformat = $CONFIG['SequentialInvoiceNumberFormat'];
+		$custominvoicenumber = $CONFIG['SequentialInvoiceNumberValue'];
 		update_query( "tblconfiguration", array( "value" => "+1" ), array( "setting" => "SequentialInvoiceNumberValue" ) );
 	}
 
@@ -150,7 +153,7 @@ function eu_vat_hook_custom_paid_invoice_number_format($vars) {
 	$custominvoicenumformat = str_replace( "{MONTH}", date( "m" ), $custominvoicenumformat );
 	$custominvoicenumformat = str_replace( "{DAY}", date( "d" ), $custominvoicenumformat );
 	$custominvoicenumformat = str_replace( "{NUMBER}", $custominvoicenumber, $custominvoicenumformat );
-	update_query( "tblinvoices", array( "invoicenum" => $custominvoicenumformat ), array( "id" => $vars["invoiceid"] ) );
+	update_query( "tblinvoices", array( "invoicenum" => $custominvoicenumformat ), array( "id" => $vars['invoiceid'] ) );
 }
 
 
@@ -159,15 +162,15 @@ function eu_vat_hook_set_invoice_date_on_payment($vars) {
 	$result = select_query( "tbladdonmodules", "", array( "module" => "eu_vat" ) );
 
 	while ($data = mysql_fetch_array( $result )) {
-		$modulevars[$data["setting"]] = $data["value"];
+		$modulevars[$data['setting']] = $data['value'];
 	}
 
 
-	if (!$modulevars["enableinvoicedatepayment"]) {
+	if (!$modulevars['enableinvoicedatepayment']) {
 		return false;
 	}
 
-	update_query( "tblinvoices", array( "date" => "now()" ), array( "id" => $vars["invoiceid"] ) );
+	update_query( "tblinvoices", array( "date" => "now()" ), array( "id" => $vars['invoiceid'] ) );
 }
 
 
@@ -180,16 +183,16 @@ function eu_vat_hook_auto_reset_numbers($vars) {
 		$result = select_query( "tbladdonmodules", "", array( "module" => "eu_vat" ) );
 
 		while ($data = mysql_fetch_array( $result )) {
-			$modulevars[$data["setting"]] = $data["value"];
+			$modulevars[$data['setting']] = $data['value'];
 		}
 
 
-		if ($modulevars["custominvoicenumautoreset"] == "monthly") {
+		if ($modulevars['custominvoicenumautoreset'] == "monthly") {
 			update_query( "tbladdonmodules", array( "value" => "1" ), array( "module" => "eu_vat", "setting" => "custominvoicenumber" ) );
 		}
 
 
-		if ($modulevars["sequentialpaidautoreset"] == "monthly") {
+		if ($modulevars['sequentialpaidautoreset'] == "monthly") {
 			update_query( "tblconfiguration", array( "value" => "1" ), array( "setting" => "SequentialInvoiceNumberValue" ) );
 		}
 	}
@@ -200,16 +203,16 @@ function eu_vat_hook_auto_reset_numbers($vars) {
 		$result = select_query( "tbladdonmodules", "", array( "module" => "eu_vat" ) );
 
 		while ($data = mysql_fetch_array( $result )) {
-			$modulevars[$data["setting"]] = $data["value"];
+			$modulevars[$data['setting']] = $data['value'];
 		}
 
 
-		if ($modulevars["custominvoicenumautoreset"] == "annually") {
+		if ($modulevars['custominvoicenumautoreset'] == "annually") {
 			update_query( "tbladdonmodules", array( "value" => "1" ), array( "module" => "eu_vat", "setting" => "custominvoicenumber" ) );
 		}
 
 
-		if ($modulevars["sequentialpaidautoreset"] == "annually") {
+		if ($modulevars['sequentialpaidautoreset'] == "annually") {
 			update_query( "tblconfiguration", array( "value" => "1" ), array( "setting" => "SequentialInvoiceNumberValue" ) );
 		}
 	}

@@ -3,15 +3,14 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  **/
 
-class WHMCS_Invoice 
-{
+class WHMCS_Invoice {
 	public $pdf = "";
 	private $invoiceid = "";
 	private $data = array();
@@ -193,7 +192,7 @@ class WHMCS_Invoice
 			$qty = $data[0];
 			$description = $data[4];
 			$amount = $data[5];
-			$taxed = $data[6] ? true : false;
+			$taxed = ($data[6] ? true : false);
 
 			if (1 < $qty) {
 				$description = $qty . " x " . $description . " @ " . $amount . $whmcs->get_lang("invoiceqtyeach");
@@ -266,7 +265,7 @@ class WHMCS_Invoice
 		$this->output['companyname'] = $whmcs->get_config("CompanyName");
 		$this->output['companyurl'] = $whmcs->get_config("Domain");
 		$companyaddress = $whmcs->get_config("InvoicePayTo");
-		$this->output['companyaddress'] = explode("\n", $companyaddress);
+		$this->output['companyaddress'] = explode("\r\n", $companyaddress);
 
 		if (trim($this->output['notes'])) {
 			$this->output['notes'] = str_replace("<br />", "", $this->output['notes']) . "\r\n";
@@ -363,7 +362,7 @@ class WHMCS_Invoice
 			$status = $data['status'];
 
 			if ($status == "Unpaid") {
-				$this->totalbalance += $balance;
+				$this->totalbalance	+= $balance;
 			}
 
 			$date = fromMySQLDate($date, 0, 1);

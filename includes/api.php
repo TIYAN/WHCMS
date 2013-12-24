@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -15,28 +15,24 @@ function apiXMLOutput($val, $lastk = "") {
 
 		if (is_array($v)) {
 			if (is_numeric($k)) {
-				echo "<" . $lastk . ">
-";
+				echo "<" . $lastk . ">\n";
 			}
 			else {
 				if (!is_numeric(key($v)) && count($v)) {
-					echo "<" . $k . ">
-";
+					echo "<" . $k . ">\n";
 				}
 			}
 
 			apiXMLOutput($v, $k);
 
 			if (is_numeric($k)) {
-				echo "</" . $lastk . ">
-";
+				echo "</" . $lastk . ">\n";
 				continue;
 			}
 
 
 			if (!is_numeric(key($v)) && count($v)) {
-				echo "</" . $k . ">
-";
+				echo "</" . $k . ">\n";
 				continue;
 			}
 
@@ -49,8 +45,7 @@ function apiXMLOutput($val, $lastk = "") {
 			$v = ("<![CDATA[" . $v . "]") . "]>";
 		}
 
-		echo "<" . $k . ">" . $v . "</" . $k . ">
-";
+		echo "<" . $k . ">" . $v . "</" . $k . ">\n";
 	}
 
 }
@@ -131,17 +126,13 @@ if ($allowed) {
 	if ($allowed) {
 		if (isValidforPath($action)) {
 			switch ($action) {
-			case "adduser": {
-					$action = "addclient";
-					break;
-				}
+			case "adduser":
+				$action = "addclient";
+				break;
 
-			case "getclientsdata": {
-				}
-
-			case "getclientsdatabyemail": {
-					$action = "getclientsdetails";
-				}
+			case "getclientsdata":
+			case "getclientsdatabyemail":
+				$action = "getclientsdetails";
 			}
 
 
@@ -174,9 +165,7 @@ if (count($apiresults)) {
 	}
 	else {
 		if ($userresponsetype == "xml") {
-			echo "<?xml version=\"1.0\" encoding=\"" . $CONFIG['Charset'] . "\"?><whmcsapi version=\"" . $CONFIG['Version'] . ("\">
-<action>" . $action . "</action>
-");
+			echo "<?xml version=\"1.0\" encoding=\"" . $CONFIG['Charset'] . "\"?>\n<whmcsapi version=\"" . $CONFIG['Version'] . ("\">\n<action>" . $action . "</action>\n");
 			apiXMLOutput($apiresults);
 			echo "</whmcsapi>";
 		}

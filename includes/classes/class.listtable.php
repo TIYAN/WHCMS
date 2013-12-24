@@ -3,15 +3,14 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  **/
 
-class WHMCS_ListTable 
-{
+class WHMCS_ListTable {
 	private $pagination = true;
     private $columns = array();
     private $rows = array();
@@ -173,7 +172,7 @@ class WHMCS_ListTable
 				$sortableheader = true;
 				$columnid = $column[0];
 				$columnname = $column[1];
-				$width = isset($column[2]) ? $column[2] : "";
+				$width = (isset($column[2]) ? $column[2] : "");
 
 				if (!$columnid) {
 					$sortableheader = false;
@@ -193,6 +192,9 @@ class WHMCS_ListTable
 
 
 			if ($columnname == "checkall") {
+				$aInt->internaljquerycode[] = "$(\"#checkall" . $this->sortableTableCount . "\").click(function () {
+    $(\"#sortabletbl" . $this->sortableTableCount . " .checkall\").attr(\"checked\",this.checked);
+});";
 				$content .= "<th width=\"20\"><input type=\"checkbox\" id=\"checkall" . $this->sortableTableCount . "\"></th>";
 				continue;
 			}

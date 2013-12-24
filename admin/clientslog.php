@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -113,7 +113,7 @@ while ($data = mysql_fetch_array($result)) {
 	$date = $data['date'];
 	$ipaddr = $data['ipaddr'];
 	$description .= " ";
-	$description = htmlentities($description, ENT_QUOTES, "UTF-8");
+	$description = whmcsHtmlspecialchars($description);
 	$description = preg_replace($patterns, $replacements, $description);
 	$tabledata[] = array(fromMySQLDate($date, "time"), "<div align=\"left\">" . $description . "</div>", $username, $ipaddr);
 }

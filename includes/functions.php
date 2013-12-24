@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -229,7 +229,7 @@ if (!function_exists("emailtpl_template")) {
 					$date = fromMySQLDate($date, 0, 1);
 
 					if ($func_messagename != "Support Ticket Feedback Request") {
-						$subject = "[Ticket ID: {\$ticket_id}] {\$ticket_subject}";
+						$subject = "[Ticket ID: {$ticket_id}] {$ticket_subject}";
 					}
 
 					$tmessage = strip_tags($tmessage);
@@ -426,7 +426,7 @@ if (!function_exists("emailtpl_template")) {
 						$query4 = "SELECT tblproductconfigoptions.id, tblproductconfigoptions.optionname AS confoption, tblproductconfigoptions.optiontype AS conftype, tblproductconfigoptionssub.optionname, tblhostingconfigoptions.qty FROM tblhostingconfigoptions INNER JOIN tblproductconfigoptions ON tblproductconfigoptions.id = tblhostingconfigoptions.configid INNER JOIN tblproductconfigoptionssub ON tblproductconfigoptionssub.id = tblhostingconfigoptions.optionid INNER JOIN tblhosting ON tblhosting.id=tblhostingconfigoptions.relid INNER JOIN tblproductconfiglinks ON tblproductconfiglinks.gid=tblproductconfigoptions.gid WHERE tblhostingconfigoptions.relid='" . (int)$id . "' AND tblproductconfiglinks.pid=tblhosting.packageid ORDER BY tblproductconfigoptions.`order`,tblproductconfigoptions.id ASC";
 						$result4 = full_query($query4);
 
-						if ($data4 = mysql_fetch_array($result4)) {
+						while ($data4 = mysql_fetch_array($result4)) {
 							$confoption = $data4['confoption'];
 							$conftype = $data4['conftype'];
 
@@ -781,7 +781,7 @@ if (!function_exists("emailtpl_template")) {
 		$email_merge_fields['company_logo_url'] = $CONFIG['LogoURL'];
 		$email_merge_fields['whmcs_url'] = $CONFIG['SystemURL'];
 		$email_merge_fields['whmcs_link'] = "<a href=\"" . $CONFIG['SystemURL'] . "\">" . $CONFIG['SystemURL'] . "</a>";
-		$email_merge_fields['signature'] = nl2br(html_entity_decode($CONFIG['Signature']));
+		$email_merge_fields['signature'] = nl2br(html_entity_decode($CONFIG['Signature'], ENT_QUOTES));
 		$email_merge_fields['date'] = date("l, jS F Y");
 		$email_merge_fields['time'] = date("g:ia");
 		$result = select_query("tblemailtemplates", "", array("name" => $func_messagename, "language" => $language));
@@ -796,8 +796,8 @@ if (!function_exists("emailtpl_template")) {
 			$message = $data['message'];
 		}
 
-		$emailglobalheader = html_entity_decode($CONFIG['EmailGlobalHeader']);
-		$emailglobalfooter = html_entity_decode($CONFIG['EmailGlobalFooter']);
+		$emailglobalheader = html_entity_decode($CONFIG['EmailGlobalHeader'], ENT_QUOTES);
+		$emailglobalfooter = html_entity_decode($CONFIG['EmailGlobalFooter'], ENT_QUOTES);
 
 		if ($emailglobalheader) {
 			$message = $emailglobalheader . "\r\n" . $message;
@@ -858,9 +858,9 @@ if (!function_exists("emailtpl_template")) {
 		$whmcs->load_class("phpmailer");
 		$mail = new PHPMailer(true);
 
-		try{
+		try {
 			$mail->From = $fromemail;
-			$mail->FromName = str_replace("&amp;", "&", $fromname);
+			$mail->FromName = html_entity_decode($fromname, ENT_QUOTES);
 
 		if ($CONFIG['MailType'] == "mail") {
 			$mail->Mailer = "mail";
@@ -886,7 +886,7 @@ if (!function_exists("emailtpl_template")) {
 				$mail->Sender = $mail->From;
 
 				if ($fromemail != $CONFIG['SMTPUsername']) {
-					$mail->AddReplyTo($fromemail, $fromname);
+					$mail->AddReplyTo($fromemail, html_entity_decode($fromname, ENT_QUOTES));
 				}
 			}
 		}
@@ -959,22 +959,20 @@ if (!function_exists("emailtpl_template")) {
 			$copyto = substr($additionalccs, 0, 0 - 1);
 		}
 
-		$mail->Subject = $subject;
+		$mail->Subject = html_entity_decode($subject, ENT_QUOTES);
 
 		if ($plaintext) {
 			$message = str_replace("<br>", "", $message);
 			$message = str_replace("<br />", "", $message);
 			$message = strip_tags($message);
-			$mail->Body = html_entity_decode($message);
+			$mail->Body = html_entity_decode($message, ENT_QUOTES);
 			$message = nl2br($message);
 		}
 		else {
 			$message_text = str_replace("<p>", "", $message);
 			$message_text = str_replace("</p>", "\r\n\r\n", $message_text);
 			$message_text = str_replace("<br>", "\r\n", $message_text);
-
 			$message_text = str_replace("<br />", "\r\n", $message_text);
-
 			$message_text = strip_tags($message_text);
 			$cssdata = "";
 
@@ -1051,7 +1049,6 @@ if (!function_exists("emailtpl_template")) {
 
 		logActivity("Email Sent to " . $firstname . " " . $lastname . " (" . $subject . ")");
 		$mail->ClearAddresses();
-
 		} catch (phpmailerException $e) {
 			logActivity("Email Sending Failed - " . $e->getMessage() . (" (User ID: " . $userid . " - Subject: " . $subject . ")"), "none");
 
@@ -1099,11 +1096,11 @@ if (!function_exists("emailtpl_template")) {
 			$result = select_query("tblticketdepartments", "name,email", array("id" => $deptid));
 			$data = mysql_fetch_array($result);
 			$mail->From = $data['email'];
-			$mail->FromName = str_replace("&amp;", "&", $CONFIG['CompanyName'] . " " . $data['name']);
+			$mail->FromName = html_entity_decode($CONFIG['CompanyName'] . " " . $data['name'], ENT_QUOTES);
 		}
 		else {
 			$mail->From = $CONFIG['SystemEmailsFromEmail'];
-			$mail->FromName = str_replace("&amp;", "&", $CONFIG['SystemEmailsFromName']);
+			$mail->FromName = html_entity_decode($CONFIG['SystemEmailsFromName'], ENT_QUOTES);
 		}
 
 		$mail->Subject = $subject;
@@ -1223,7 +1220,7 @@ if (!function_exists("emailtpl_template")) {
 		}
 
 		$email_merge_fields['company_name'] = $CONFIG['CompanyName'];
-		$email_merge_fields['signature'] = nl2br($CONFIG['Signature']);
+		$email_merge_fields['signature'] = nl2br(html_entity_decode($CONFIG['Signature'], ENT_QUOTES));
 		$email_merge_fields['whmcs_url'] = $CONFIG['SystemURL'];
 		$email_merge_fields['whmcs_link'] = "<a href=\"" . $CONFIG['SystemURL'] . "\">" . $CONFIG['SystemURL'] . "</a>";
 		$adminurl = ($CONFIG['SystemSSLURL'] ? $CONFIG['SystemSSLURL'] : $CONFIG['SystemURL']);
@@ -1251,11 +1248,11 @@ if (!function_exists("emailtpl_template")) {
 			$result = select_query("tblticketdepartments", "name,email", array("id" => $deptid));
 			$data = mysql_fetch_array($result);
 			$mail->From = $data['email'];
-			$mail->FromName = str_replace("&amp;", "&", $CONFIG['CompanyName'] . " " . $data['name']);
+			$mail->FromName = html_entity_decode($CONFIG['CompanyName'] . " " . $data['name'], ENT_QUOTES);
 		}
 		else {
 			$mail->From = $fromemail;
-			$mail->FromName = str_replace("&amp;", "&", $fromname);
+			$mail->FromName = html_entity_decode($fromname, ENT_QUOTES);
 		}
 
 		$mail->Subject = $subject;
@@ -1291,7 +1288,7 @@ if (!function_exists("emailtpl_template")) {
 			$message = str_replace("<br>", "", $message);
 			$message = str_replace("<br />", "", $message);
 			$message = strip_tags($message);
-			$mail->Body = html_entity_decode($message);
+			$mail->Body = html_entity_decode($message, ENT_QUOTES);
 		}
 		else {
 			
@@ -1667,6 +1664,8 @@ if (!function_exists("emailtpl_template")) {
 		$paytype = $data['paytype'];
 		$payamount = $data['payamount'];
 		$affcurrency = $data['currency'];
+		
+		
 
 		if ($paytype) {
 			$percentage = $fixedamount = "";
@@ -1872,7 +1871,6 @@ if (!function_exists("emailtpl_template")) {
 		$smallwordsarray = array("of", "a", "the", "and", "an", "or", "nor", "but", "is", "if", "then", "else", "when", "at", "from", "by", "on", "off", "for", "in", "out", "over", "to", "into", "with");
 		$words = explode(" ", $title);
 		foreach ($words as $key => $word) {
-
 			if ($key == 0 || !in_array($word, $smallwordsarray)) {
 				$words[$key] = ucwords($word);
 				continue;
@@ -1885,6 +1883,10 @@ if (!function_exists("emailtpl_template")) {
 
 	function sanitize($str) {
 		return $str;
+	}
+
+	function whmcsHtmlspecialchars($input) {
+		return htmlspecialchars($input, ENT_QUOTES);
 	}
 
 	/**
@@ -1972,8 +1974,8 @@ if (!function_exists("emailtpl_template")) {
 	}
 
 	function format_as_currency($amount) {
-		$amount += 9.99999999999999954748112e-7;
 		$amount = round($amount, 2);
+		$amount += 1e-006;
 		$amount = sprintf("%01.2f", $amount);
 		return $amount;
 	}
@@ -2042,7 +2044,7 @@ if (!function_exists("emailtpl_template")) {
 	}
 
 	function _hash($string) {
-		if (function_exists("sha1")) {
+		if (function_exists("sha1")) {		
 			$hash = sha1($string);
 		}
 		else {
@@ -2126,21 +2128,49 @@ if (!function_exists("emailtpl_template")) {
 		return $currency_array;
 	}
 
+	/**
+	 * Format a price based on currency
+	 *
+	 * NOTE: historically this function depended on $currency being in global scope whose contents would be an array
+	 *       with an "id" element referencing a currency definition in the database.  However, it is possible that in
+	 *       legacy codebases $currency was set via register globals, though in some of those same legacy codebases
+	 *       the user input will be validated as an int, or discarded; this is in early runtime sanitization.
+	 *       That means, $currency from global scope should always be confirmed as an array with a valid/good ref for
+	 *       "id".  So, you have a few options, but the most fool proof is probably something like:
+	 *
+	 *       $currencyId = $whmcs->get_req_var("currency");
+	 *       $currency = (is_numeric($currencyId)) ? getCurrency("", $currencyId) : getCurrency();
+	 *       $price = formatCurrency($orig_amount, $currency['id']);
+	 *
+	 *       The example doesn"t cover all scenarios, particularly those where $currency is set by some prior runtime
+	 *       logic, so please consider/test your functionality thoroughly.
+	 *
+	 *       Also, there are some other functions that may depend on $currency in the same way, so establishing
+	 *       $currency in global scope might have other "compatibility" benefits until the global $currency usage
+	 *       design can be improved
+	 *
+	 * @param float $amount
+	 * @param integer $currencyType  Currency type ID
+	 *
+	 * @return string amount
+	 */
 	function formatCurrency($amount, $currencyType = false) {
 		global $currency;
 
 		if ($currencyType === false || !is_numeric($currencyType)) {
-			$currencyType = $currency;
-		}
-
-
-		if (is_array($currencyType) && isset($currencyType['id'])) {
-			$currencyType = $currencyType['id'];
+			if (is_numeric($currency)) {
+				$currencyType = $currency;
+			}
+			else {
+				if ((is_array($currency) && isset($currency['id'])) && is_numeric($currency['id'])) {
+					$currencyType = $currency['id'];
+				}
+			}
 		}
 
 		$currencyDetails = array();
 
-		if (is_numeric($currencyType)) {
+		if (is_numeric($currencyType) && 0 < $currencyType) {
 			$currencyDetails = getCurrency("", $currencyType);
 		}
 
@@ -2149,7 +2179,7 @@ if (!function_exists("emailtpl_template")) {
 			$currencyDetails = getCurrency();
 		}
 
-		$amount += 9.99999999999999954748112e-7;
+		$amount += 1e-006;
 		$amount = round($amount, 2);
 
 		if ($currencyDetails['format'] == 1) {
@@ -2368,8 +2398,7 @@ if (!function_exists("emailtpl_template")) {
 
 		require ROOTDIR . "/includes/api/" . $cmd . ".php";
 		foreach ($apivalues1 as $k => $v) {
-			unset($_REQUEST[$k]);
-			unset($_POST[$k]);
+			unset($$k);
 		}
 
 		$whmcs->reset_input();
@@ -2444,7 +2473,7 @@ if (!function_exists("emailtpl_template")) {
 			$file = $_SERVER['SCRIPT_NAME'];
 		}
 
-		$filenamePattern = "/^[a-zA-Z0-9~\._\/\:\-]*$/";
+		$filenamePattern = '/^[a-zA-Z0-9~\._\/\:\-]*$/';
 
 		if (preg_match($filenamePattern, $file) !== 1) {
 			exit(sprintf("Invalid filename for redirect: %s", htmlspecialchars($file, ENT_QUOTES)));
@@ -2457,7 +2486,7 @@ if (!function_exists("emailtpl_template")) {
 			$file = $whmcs->get_config("SystemURL") . "/" . $file;
 		}
 
-		$AnyMultipleSlashNotPrecededByColonPattern = "/([^:]|^)\/\/+/";
+		$AnyMultipleSlashNotPrecededByColonPattern = '/([^:]|^)\/\/+/';
 		$precedingCharacterIfAnyWithOneSlash = '$1/';
 		$file = preg_replace($AnyMultipleSlashNotPrecededByColonPattern, $precedingCharacterIfAnyWithOneSlash, $file);
 
@@ -2467,9 +2496,9 @@ if (!function_exists("emailtpl_template")) {
 
 
 		if (is_string($vars) && strpos($vars, "=") !== false) {
-			$urlEncodedNewline = urlencode("\r\n");
+			$urlEncodedNewline = urlencode("\n");
 
-			$urlEncodedCarrageReturn = urlencode("\r\n");
+			$urlEncodedCarrageReturn = urlencode("\r");
 			$newlinePattern = "/[\n\r]|(" . $urlEncodedNewline . ")|(" . $urlEncodedCarrageReturn . ")/i";
 			$vars = sprintf("?%s", preg_replace($newlinePattern, "", trim($vars)));
 		}
@@ -2533,7 +2562,7 @@ if (!function_exists("emailtpl_template")) {
 	}
 
 	function autoHyperLink($message) {
-		$message = preg_replace("/((http(s?):\/\/)|(www\.))([\w\.]+)([a-zA-Z0-9?&%#~.;:\/=+_-]+)/i", "<a href=\"http://\" target=\"_blank\">$1</a>", $message);
+		$message = preg_replace('/((http(s?):\/\/)|(www\.))([\w\.]+)([a-zA-Z0-9?&%#~.;:\/=+_-]+)/i', '<a href="http://" target="_blank">$1</a>', $message);
 		return $message;
 	}
 
@@ -2576,7 +2605,7 @@ if (!function_exists("emailtpl_template")) {
 		}
 
 
-		if (escapeshellcmd($filename) != $filename) {
+		if (whmcsEscapeshellcmd($filename) != $filename) {
 			return false;
 		}
 
@@ -2630,6 +2659,112 @@ if (!function_exists("emailtpl_template")) {
 
 		return true;
 	}
-}
 
+	/**
+	 * Clears both the end-user and admin template caches.
+	 */
+	function clearSmartyCaches() {
+		global $templates_compiledir;
+
+		$smarty = new Smarty();
+		$smarty->compile_dir = $templates_compiledir;
+		$smarty->clear_all_cache();
+		$smarty->clear_compiled_tpl();
+		$src = "<?php\r\nheader(\"Location: ../index.php\");";
+		file_put_contents($templates_compiledir . "/index.php", $src);
+		unset($src);
+	}
+
+	/**
+	 * Determine if a PHP function is disabled via ini setting.
+	 *
+	 * @param string $function
+	 * @return bool
+	 */
+	function functionEnabled($function) {
+		return strpos(ini_get("disabled_functions"), $function) === false;
+	}
+
+	/**
+	 * Determine if the system is running a version of the Microsoft Windows
+	 * operating system.
+	 *
+	 * @return bool
+	 */
+	function runningWindowsOs() {
+		return in_array(PHP_OS, array("Windows", "WIN32", "WINNT"));
+	}
+
+	/**
+	 * Get the location of the final mismatched quote in a string.
+	 *
+	 * A string has mismatched quotation marks in it if it has an odd number of
+	 * quotation marks in it. If a string has mismatched quotes then return the
+	 * position of the mismatched quote in the string. Otherwise, the string has
+	 * matching quotes in it, so return false.
+	 *
+	 * @param $string
+	 * @param string $quoteCharacter
+	 * @return int|false
+	 */
+	function mismatchedQuotePosition($string, $quoteCharacter = "\"") {
+		return substr_count($string, $quoteCharacter) % 2 == 0 ? false : strrpos($string, $quoteCharacter);
+	}
+
+	/**
+	 * A PHP implementation of escapeshellcmd().
+	 *
+	 * Some hosts add the escapeshellcmd() function to the disabled_functions
+	 * php.ini directive. Perform escapeshellcmd() manually in those cases.
+	 *
+	 * @see http://www.php.net/manual/en/function.escapeshellcmd.php
+	 * @param string $string
+	 * @return string
+	 */
+	function whmcsEscapeshellcmd($string) {
+		if (function_exists("escapeshellcmd") && functionEnabled("escapeshellcmd")) {
+			return escapeshellcmd($string);
+		}
+
+		$shellCharacters = array("#", "&", ";", "`", "|", "*", "?", "~", "<", ">", "^", "(", ")", "[", "]", "{", "}", "\$", chr(10), chr(255));
+
+		if (runningWindowsOs()) {
+			$shellCharacters[] = "%";
+			$shellCharacters[] = "\\";
+			$string = str_replace($shellCharacters, " ", $string);
+			$quotePosition = mismatchedQuotePosition($string);
+
+			if ($quotePosition !== false) {
+				$string = substr_replace($string, " ", $quotePosition, 1);
+			}
+
+				$quotePosition = mismatchedQuotePosition($string, "'");
+
+				if ($quotePosition !== false) {
+					$string = substr_replace($string, " ", $quotePosition, 1);
+				}
+		}
+		else {
+			$string = str_replace("\\", "\\\\", $string);
+			foreach ($shellCharacters as $shellCharacter) {
+				$string = str_replace($shellCharacter, "\\" . $shellCharacter, $string);
+			}
+
+			$quotePosition = mismatchedQuotePosition($string);
+
+			if ($quotePosition !== false) {
+				$string = substr_replace($string, '\"', $quotePosition, 1);
+			}
+
+			$quotePosition = mismatchedQuotePosition($string, '\'');
+		
+
+			if ($quotePosition !== false) {
+				$string = substr_replace($string, "'", $quotePosition, 1);
+			}
+		}
+
+		return $string;
+	}
+}
 ?>

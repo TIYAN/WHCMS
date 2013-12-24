@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -23,9 +23,9 @@ function licensing_ConfigOptions() {
 	$result = select_query( "tbladdons", "", "", "name", "ASC" );
 
 	while ($data = mysql_fetch_array( $result )) {
-		$addonid = $data["id"];
-		$addonname = $data["name"];
-		$addonpackages = $data["packages"];
+		$addonid = $data['id'];
+		$addonname = $data['name'];
+		$addonpackages = $data['packages'];
 		$addonpackages = explode( ",", $addonpackages );
 
 		if (in_array( $id, $addonpackages )) {
@@ -71,35 +71,35 @@ function licensing_CreateAccount($params) {
 		return "Your WHMCS license key is not enabled to use the Licensing Addon yet. Navigate to Addons > Licensing Manager to resolve.";
 	}
 
-	$result = select_query( "mod_licensing", "COUNT(*)", array( "serviceid" => $params["serviceid"] ) );
+	$result = select_query( "mod_licensing", "COUNT(*)", array( "serviceid" => $params['serviceid'] ) );
 	$data = mysql_fetch_array( $result );
 
 	if ($data[0]) {
 		return "A license has already been generated for this item";
 	}
 
-	$length = $params["configoption1"];
-	$prefix = $params["configoption2"];
+	$length = $params['configoption1'];
+	$prefix = $params['configoption2'];
 	$licensekey = licensing_genkey( $length, $prefix );
-	insert_query( "mod_licensing", array( "serviceid" => $params["serviceid"], "licensekey" => $licensekey, "validdomain" => "", "validip" => "", "validdirectory" => "", "reissues" => "0", "status" => "Reissued" ) );
+	insert_query( "mod_licensing", array( "serviceid" => $params['serviceid'], "licensekey" => $licensekey, "validdomain" => "", "validip" => "", "validdirectory" => "", "reissues" => "0", "status" => "Reissued" ) );
 	updateService( array( "domain" => $licensekey, "username" => "", "password" => "" ) );
-	$addonid = explode( "|", $params["configoption7"] );
+	$addonid = explode( "|", $params['configoption7'] );
 	$addonid = $addonid[0];
 
 	if ($addonid) {
-		$result = select_query( "tblhosting", "orderid,paymentmethod", array( "id" => $params["serviceid"] ) );
+		$result = select_query( "tblhosting", "orderid,paymentmethod", array( "id" => $params['serviceid'] ) );
 		$data = mysql_fetch_array( $result );
-		$orderid = $data["orderid"];
-		$paymentmethod = $data["paymentmethod"];
+		$orderid = $data['orderid'];
+		$paymentmethod = $data['paymentmethod'];
 		$result = select_query( "tbladdons", "", array( "id" => $addonid ) );
 		$data = mysql_fetch_array( $result );
-		$addonname = $data["name"];
-		$result = select_query( "tblpricing", "", array( "relid" => $addonid, "type" => "addon", "currency" => $params["clientsdetails"]["currency"] ) );
+		$addonname = $data['name'];
+		$result = select_query( "tblpricing", "", array( "relid" => $addonid, "type" => "addon", "currency" => $params['clientsdetails']['currency'] ) );
 		$data2 = mysql_fetch_array( $result );
-		$addonsetupfee = $data2["msetupfee"];
-		$addonrecurring = $data2["monthly"];
-		$addonbillingcycle = $data["billingcycle"];
-		$addontax = $data["tax"];
+		$addonsetupfee = $data2['msetupfee'];
+		$addonrecurring = $data2['monthly'];
+		$addonbillingcycle = $data['billingcycle'];
+		$addontax = $data['tax'];
 
 		if ($addonbillingcycle == "Monthly") {
 			$nextduedate = date( "Y-m-d", mktime( 0, 0, 0, date( "m" ) + 1, date( "d" ), date( "Y" ) ) );
@@ -128,7 +128,7 @@ function licensing_CreateAccount($params) {
 			}
 		}
 
-		insert_query( "tblhostingaddons", array( "orderid" => $orderid, "hostingid" => $params["serviceid"], "addonid" => $addonid, "setupfee" => $addonsetupfee, "recurring" => $addonrecurring, "billingcycle" => $addonbillingcycle, "tax" => $addontax, "status" => "Active", "regdate" => "now()", "nextduedate" => $nextduedate, "nextinvoicedate" => $nextduedate, "paymentmethod" => $paymentmethod ) );
+		insert_query( "tblhostingaddons", array( "orderid" => $orderid, "hostingid" => $params['serviceid'], "addonid" => $addonid, "setupfee" => $addonsetupfee, "recurring" => $addonrecurring, "billingcycle" => $addonbillingcycle, "tax" => $addontax, "status" => "Active", "regdate" => "now()", "nextduedate" => $nextduedate, "nextinvoicedate" => $nextduedate, "paymentmethod" => $paymentmethod ) );
 	}
 
 	return "success";
@@ -140,14 +140,14 @@ function licensing_SuspendAccount($params) {
 		return "Your WHMCS license key is not enabled to use the Licensing Addon yet. Navigate to Addons > Licensing Manager to resolve.";
 	}
 
-	$result = select_query( "mod_licensing", "COUNT(*)", array( "serviceid" => $params["serviceid"] ) );
+	$result = select_query( "mod_licensing", "COUNT(*)", array( "serviceid" => $params['serviceid'] ) );
 	$data = mysql_fetch_array( $result );
 
 	if (!$data[0]) {
 		return "No license exists for this item";
 	}
 
-	update_query( "mod_licensing", array( "status" => "Suspended" ), array( "serviceid" => $params["serviceid"] ) );
+	update_query( "mod_licensing", array( "status" => "Suspended" ), array( "serviceid" => $params['serviceid'] ) );
 	return "success";
 }
 
@@ -157,14 +157,14 @@ function licensing_UnsuspendAccount($params) {
 		return "Your WHMCS license key is not enabled to use the Licensing Addon yet. Navigate to Addons > Licensing Manager to resolve.";
 	}
 
-	$result = select_query( "mod_licensing", "COUNT(*)", array( "serviceid" => $params["serviceid"] ) );
+	$result = select_query( "mod_licensing", "COUNT(*)", array( "serviceid" => $params['serviceid'] ) );
 	$data = mysql_fetch_array( $result );
 
 	if (!$data[0]) {
 		return "No license exists for this item";
 	}
 
-	update_query( "mod_licensing", array( "status" => "Active" ), array( "serviceid" => $params["serviceid"] ) );
+	update_query( "mod_licensing", array( "status" => "Active" ), array( "serviceid" => $params['serviceid'] ) );
 	return "success";
 }
 
@@ -174,14 +174,14 @@ function licensing_TerminateAccount($params) {
 		return "Your WHMCS license key is not enabled to use the Licensing Addon yet. Navigate to Addons > Licensing Manager to resolve.";
 	}
 
-	$result = select_query( "mod_licensing", "COUNT(*)", array( "serviceid" => $params["serviceid"] ) );
+	$result = select_query( "mod_licensing", "COUNT(*)", array( "serviceid" => $params['serviceid'] ) );
 	$data = mysql_fetch_array( $result );
 
 	if (!$data[0]) {
 		return "No license exists for this item";
 	}
 
-	update_query( "mod_licensing", array( "status" => "Expired" ), array( "serviceid" => $params["serviceid"] ) );
+	update_query( "mod_licensing", array( "status" => "Expired" ), array( "serviceid" => $params['serviceid'] ) );
 	return "success";
 }
 
@@ -203,7 +203,7 @@ function licensing_reissue($params) {
 		return "Your WHMCS license key is not enabled to use the Licensing Addon yet. Navigate to Addons > Licensing Manager to resolve.";
 	}
 
-	$result = select_query( "mod_licensing", "id,status,reissues", array( "serviceid" => $params["serviceid"] ) );
+	$result = select_query( "mod_licensing", "id,status,reissues", array( "serviceid" => $params['serviceid'] ) );
 	$data = mysql_fetch_array( $result );
 
 	if (!$data[0]) {
@@ -211,7 +211,7 @@ function licensing_reissue($params) {
 	}
 
 
-	if (( !$_SESSION["adminid"] && !$params["configoption3"] )) {
+	if (!$_SESSION['adminid'] && !$params['configoption3']) {
 		return "This license key is not allowed to be reissued";
 	}
 
@@ -222,12 +222,12 @@ function licensing_reissue($params) {
 
 	$maxreissues = get_query_val( "tbladdonmodules", "value", array( "module" => "licensing", "setting" => "maxreissues" ) );
 
-	if (( ( !$_SESSION["adminid"] && $maxreissues ) && $maxreissues <= $data[2] )) {
+	if (( !$_SESSION['adminid'] && $maxreissues ) && $maxreissues <= $data[2]) {
 		return "The maximum number of reissues allowed has been reached for this license - please contact support";
 	}
 
-	update_query( "mod_licensing", array( "reissues" => "+1", "status" => "Reissued" ), array( "serviceid" => $params["serviceid"] ) );
-	run_hook( "LicensingAddonReissue", array( "licenseid" => get_query_val( "mod_licensing", "id", array( "serviceid" => $params["serviceid"] ) ), "serviceid" => $params["serviceid"] ) );
+	update_query( "mod_licensing", array( "reissues" => "+1", "status" => "Reissued" ), array( "serviceid" => $params['serviceid'] ) );
+	run_hook( "LicensingAddonReissue", array( "licenseid" => get_query_val( "mod_licensing", "id", array( "serviceid" => $params['serviceid'] ) ), "serviceid" => $params['serviceid'] ) );
 	return "success";
 }
 
@@ -237,14 +237,14 @@ function licensing_reissuereset($params) {
 		return "Your WHMCS license key is not enabled to use the Licensing Addon yet. Navigate to Addons > Licensing Manager to resolve.";
 	}
 
-	$result = select_query( "mod_licensing", "id,status,reissues", array( "serviceid" => $params["serviceid"] ) );
+	$result = select_query( "mod_licensing", "id,status,reissues", array( "serviceid" => $params['serviceid'] ) );
 	$data = mysql_fetch_array( $result );
 
 	if (!$data[0]) {
 		return "No license exists for this item";
 	}
 
-	update_query( "mod_licensing", array( "reissues" => "0" ), array( "serviceid" => $params["serviceid"] ) );
+	update_query( "mod_licensing", array( "reissues" => "0" ), array( "serviceid" => $params['serviceid'] ) );
 	return "success";
 }
 
@@ -254,21 +254,21 @@ function licensing_revoke($params) {
 		return "Your WHMCS license key is not enabled to use the Licensing Addon yet. Navigate to Addons > Licensing Manager to resolve.";
 	}
 
-	$result = select_query( "mod_licensing", "COUNT(*)", array( "serviceid" => $params["serviceid"] ) );
+	$result = select_query( "mod_licensing", "COUNT(*)", array( "serviceid" => $params['serviceid'] ) );
 	$data = mysql_fetch_array( $result );
 
 	if (!$data[0]) {
 		return "No license exists for this item";
 	}
 
-	delete_query( "mod_licensing", array( "serviceid" => $params["serviceid"] ) );
-	update_query( "tblhosting", array( "domain" => "" ), array( "id" => $params["serviceid"] ) );
+	delete_query( "mod_licensing", array( "serviceid" => $params['serviceid'] ) );
+	update_query( "tblhosting", array( "domain" => "" ), array( "id" => $params['serviceid'] ) );
 	return "success";
 }
 
 
 function licensing_manage($params) {
-	$result = select_query( "mod_licensing", "id", array( "serviceid" => $params["serviceid"] ) );
+	$result = select_query( "mod_licensing", "id", array( "serviceid" => $params['serviceid'] ) );
 	$data = mysql_fetch_array( $result );
 
 	if (!$data[0]) {
@@ -297,18 +297,18 @@ function licensing_AdminServicesTabFields($params) {
 		return "Your WHMCS license key is not enabled to use the Licensing Addon yet. Navigate to Addons > Licensing Manager to resolve.";
 	}
 
-	$result = select_query( "mod_licensing", "", array( "serviceid" => $params["serviceid"] ) );
+	$result = select_query( "mod_licensing", "", array( "serviceid" => $params['serviceid'] ) );
 	$data = mysql_fetch_array( $result );
-	$licenseid = $data["id"];
+	$licenseid = $data['id'];
 
 	if ($licenseid) {
-		$licensekey = $data["licensekey"];
-		$validdomain = $data["validdomain"];
-		$validip = $data["validip"];
-		$validdirectory = $data["validdirectory"];
-		$reissues = $data["reissues"];
-		$status = $data["status"];
-		$lastaccess = $data["lastaccess"];
+		$licensekey = $data['licensekey'];
+		$validdomain = $data['validdomain'];
+		$validip = $data['validip'];
+		$validdirectory = $data['validdirectory'];
+		$reissues = $data['reissues'];
+		$status = $data['status'];
+		$lastaccess = $data['lastaccess'];
 
 		if ($lastaccess == "0000-00-00 00:00:00") {
 			$lastaccess = "Never";
@@ -345,11 +345,11 @@ function licensing_AdminServicesTabFields($params) {
 		$result = select_query( "mod_licensinglog", "", array( "licenseid" => $licenseid ), "id", "DESC", "0,10" );
 
 		while ($data = mysql_fetch_array( $result )) {
-			$domain = $data["domain"];
-			$ip = $data["ip"];
-			$path = $data["path"];
-			$message = $data["message"];
-			$datetime = $data["datetime"];
+			$domain = $data['domain'];
+			$ip = $data['ip'];
+			$path = $data['path'];
+			$message = $data['message'];
+			$datetime = $data['datetime'];
 			$datetime = fromMySQLDate( $datetime, true );
 			$tabledata[] = array( $datetime, $domain, $ip, $path, $message );
 		}
@@ -364,7 +364,7 @@ function licensing_AdminServicesTabFields($params) {
 
 
 function licensing_AdminServicesTabFieldsSave($params) {
-	update_query( "mod_licensing", array( "validdomain" => licensing_valid_input_clean( $_POST["modulefields"][0] ), "validip" => licensing_valid_input_clean( $_POST["modulefields"][1] ), "validdirectory" => licensing_valid_input_clean( $_POST["modulefields"][2] ), "status" => $_POST["modulefields"][3] ), array( "serviceid" => $params["serviceid"] ) );
+	update_query( "mod_licensing", array( "validdomain" => licensing_valid_input_clean( $_POST['modulefields'][0] ), "validip" => licensing_valid_input_clean( $_POST['modulefields'][1] ), "validdirectory" => licensing_valid_input_clean( $_POST['modulefields'][2] ), "status" => $_POST['modulefields'][3] ), array( "serviceid" => $params['serviceid'] ) );
 }
 
 
@@ -373,24 +373,24 @@ function licensing_ChangePackage($params) {
 		return "Your WHMCS license key is not enabled to use the Licensing Addon yet. Navigate to Addons > Licensing Manager to resolve.";
 	}
 
-	$addonid = explode( "|", $params["configoption7"] );
+	$addonid = explode( "|", $params['configoption7'] );
 	$addonid = $addonid[0];
 
 	if ($addonid) {
-		$currentaddon = get_query_val( "tblhostingaddons", "id", array( "hostingid" => $params["serviceid"], "addonid" => $addonid, "status" => "Active" ) );
+		$currentaddon = get_query_val( "tblhostingaddons", "id", array( "hostingid" => $params['serviceid'], "addonid" => $addonid, "status" => "Active" ) );
 
 		if (!$currentaddon) {
-			$data = get_query_vals( "tblhosting", "billingcycle,paymentmethod", array( "id" => $params["serviceid"] ) );
-			$paymentmethod = $data["paymentmethod"];
-			$billingcycle = ($data["billingcycle"] == "One Time" ? "onetime" : strtolower( $data["billingcycle"] ));
-			$orderid = get_query_val( "tblupgrades", "orderid", array( "type" => "package", "relid" => $params["serviceid"], "newvalue" => "" . $params["packageid"] . "," . $billingcycle ) );
+			$data = get_query_vals( "tblhosting", "billingcycle,paymentmethod", array( "id" => $params['serviceid'] ) );
+			$paymentmethod = $data['paymentmethod'];
+			$billingcycle = ($data['billingcycle'] == "One Time" ? "onetime" : strtolower( $data['billingcycle'] ));
+			$orderid = get_query_val( "tblupgrades", "orderid", array( "type" => "package", "relid" => $params['serviceid'], "newvalue" => "" . $params['packageid'] . "," . $billingcycle ) );
 			$data = get_query_vals( "tbladdons", "name,tax,billingcycle", array( "id" => $addonid ) );
-			$addonname = $data["name"];
-			$addonbillingcycle = $data["billingcycle"];
-			$addontax = $data["tax"];
-			$data = get_query_vals( "tblpricing", "", array( "relid" => $addonid, "type" => "addon", "currency" => $params["clientsdetails"]["currency"] ) );
-			$addonsetupfee = $data["msetupfee"];
-			$addonrecurring = $data["monthly"];
+			$addonname = $data['name'];
+			$addonbillingcycle = $data['billingcycle'];
+			$addontax = $data['tax'];
+			$data = get_query_vals( "tblpricing", "", array( "relid" => $addonid, "type" => "addon", "currency" => $params['clientsdetails']['currency'] ) );
+			$addonsetupfee = $data['msetupfee'];
+			$addonrecurring = $data['monthly'];
 
 			if ($addonbillingcycle == "Monthly") {
 				$nextduedate = date( "Y-m-d", mktime( 0, 0, 0, date( "m" ) + 1, date( "d" ), date( "Y" ) ) );
@@ -419,7 +419,7 @@ function licensing_ChangePackage($params) {
 				}
 			}
 
-			insert_query( "tblhostingaddons", array( "orderid" => $orderid, "hostingid" => $params["serviceid"], "addonid" => $addonid, "setupfee" => $addonsetupfee, "recurring" => $addonrecurring, "billingcycle" => $addonbillingcycle, "tax" => $addontax, "status" => "Active", "regdate" => "now()", "nextduedate" => $nextduedate, "nextinvoicedate" => $nextduedate, "paymentmethod" => $paymentmethod ) );
+			insert_query( "tblhostingaddons", array( "orderid" => $orderid, "hostingid" => $params['serviceid'], "addonid" => $addonid, "setupfee" => $addonsetupfee, "recurring" => $addonrecurring, "billingcycle" => $addonbillingcycle, "tax" => $addontax, "status" => "Active", "regdate" => "now()", "nextduedate" => $nextduedate, "nextinvoicedate" => $nextduedate, "paymentmethod" => $paymentmethod ) );
 		}
 	}
 

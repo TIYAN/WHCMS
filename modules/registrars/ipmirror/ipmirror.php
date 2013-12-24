@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -103,9 +103,9 @@ function _ipmirror_init($params, $function) {
 	$_IPMIRROR_CURR_FUNC = $function;
 	_ipmirror_initGlobals( $params );
 
-	if ($_IPMIRROR_CONFIG["debugMode"]) {
+	if ($_IPMIRROR_CONFIG['debugMode']) {
 		error_reporting( E_ALL );
-		$params["function"] = $function;
+		$params['function'] = $function;
 		_ipmirror_printArray( $params );
 	}
 
@@ -134,35 +134,35 @@ function _ipmirror_initGlobals($params) {
 	global $_IPMIRROR_SYNC;
 
 	$_IPMIRROR_CONFIG = array();
-	$_IPMIRROR_CONFIG["testMode"] = FALSE;
-	$_IPMIRROR_CONFIG["rapiUrl"] = $params["ccTLDBoxUrl"];
-	$_IPMIRROR_CONFIG["username"] = $params["Username"];
-	$_IPMIRROR_CONFIG["password"] = $params["Password"];
+	$_IPMIRROR_CONFIG['testMode'] = FALSE;
+	$_IPMIRROR_CONFIG['rapiUrl'] = $params['ccTLDBoxUrl'];
+	$_IPMIRROR_CONFIG['username'] = $params['Username'];
+	$_IPMIRROR_CONFIG['password'] = $params['Password'];
 
-	if (substr( $_IPMIRROR_CONFIG["rapiURL"], 0 - 1 ) != "/") {
+	if (substr( $_IPMIRROR_CONFIG['rapiURL'], 0 - 1 ) != "/") {
 		$_IPMIRROR_CONFIG->rapiURL .= "/";
 	}
 
-	$_IPMIRROR_CONFIG["activateSync"] = !empty( $params["ActivateSync"] );
-	$_IPMIRROR_CONFIG["syncNextDueDate"] = !empty( $params["SyncNextDueDate"] );
-	$_IPMIRROR_CONFIG["syncIDProtection"] = !empty( $params["SyncIDProtection"] );
-	$_IPMIRROR_CONFIG["connTimeout"] = (empty( $params["ConnectionTimeout"] ) ? 20 : $params["ConnectionTimeout"]);
-	$_IPMIRROR_CONFIG["execTimeout"] = (empty( $params["ExecutionTimeout"] ) ? 60 : $params["ExecutionTimeout"]);
-	$_IPMIRROR_CONFIG["allowRegContactChange"] = !empty( $params["AllowRegContactChange"] );
-	$_IPMIRROR_CONFIG["allowAdminContactChange"] = !empty( $params["AllowAdminContactChange"] );
-	$_IPMIRROR_CONFIG["allowTechContactChange"] = !empty( $params["AllowTechContactChange"] );
-	$_IPMIRROR_CONFIG["allowBillContactChange"] = !empty( $params["AllowBillContactChange"] );
-	$_IPMIRROR_CONFIG["isAdmin"] = ( $_IPMIRROR_SYNC || !empty( $_SESSION["adminid"] ) );
-	$_IPMIRROR_CONFIG["showAllContactFlds"] = $_IPMIRROR_CONFIG["isAdmin"];
-	$_IPMIRROR_CONFIG["defRegContactId"] = $params["DefaultRegContactId"];
-	$_IPMIRROR_CONFIG["defAdminContactId"] = $params["DefaultAdminContactId"];
-	$_IPMIRROR_CONFIG["defTechContactId"] = $params["DefaultTechContactId"];
-	$_IPMIRROR_CONFIG["defBillContactId"] = $params["DefaultBillContactId"];
-	$_IPMIRROR_CONFIG["autoCreateNs"] = TRUE;
-	$_IPMIRROR_CONFIG["debugMode"] = ( !empty( $params["DebugMode"] ) && $_IPMIRROR_CONFIG["isAdmin"] );
-	$_IPMIRROR_CONFIG["zoneRecTypesDisp"] = array( "A", "CNAME", "MX", "TXT", "redirect", "cloak" );
-	$_IPMIRROR_CONFIG["zoneRecTypesWHMCS"] = array( "A", "CNAME", "MX", "TXT", "URL", "FRAME" );
-	$_IPMIRROR_CONFIG["defNsAddr"] = "10.1.1.1";
+	$_IPMIRROR_CONFIG['activateSync'] = !empty( $params['ActivateSync'] );
+	$_IPMIRROR_CONFIG['syncNextDueDate'] = !empty( $params['SyncNextDueDate'] );
+	$_IPMIRROR_CONFIG['syncIDProtection'] = !empty( $params['SyncIDProtection'] );
+	$_IPMIRROR_CONFIG['connTimeout'] = (empty( $params['ConnectionTimeout'] ) ? 20 : $params['ConnectionTimeout']);
+	$_IPMIRROR_CONFIG['execTimeout'] = (empty( $params['ExecutionTimeout'] ) ? 60 : $params['ExecutionTimeout']);
+	$_IPMIRROR_CONFIG['allowRegContactChange'] = !empty( $params['AllowRegContactChange'] );
+	$_IPMIRROR_CONFIG['allowAdminContactChange'] = !empty( $params['AllowAdminContactChange'] );
+	$_IPMIRROR_CONFIG['allowTechContactChange'] = !empty( $params['AllowTechContactChange'] );
+	$_IPMIRROR_CONFIG['allowBillContactChange'] = !empty( $params['AllowBillContactChange'] );
+	$_IPMIRROR_CONFIG['isAdmin'] = ( $_IPMIRROR_SYNC || !empty( $_SESSION['adminid'] ) );
+	$_IPMIRROR_CONFIG['showAllContactFlds'] = $_IPMIRROR_CONFIG['isAdmin'];
+	$_IPMIRROR_CONFIG['defRegContactId'] = $params['DefaultRegContactId'];
+	$_IPMIRROR_CONFIG['defAdminContactId'] = $params['DefaultAdminContactId'];
+	$_IPMIRROR_CONFIG['defTechContactId'] = $params['DefaultTechContactId'];
+	$_IPMIRROR_CONFIG['defBillContactId'] = $params['DefaultBillContactId'];
+	$_IPMIRROR_CONFIG['autoCreateNs'] = TRUE;
+	$_IPMIRROR_CONFIG['debugMode'] = ( !empty( $params['DebugMode'] ) && $_IPMIRROR_CONFIG['isAdmin'] );
+	$_IPMIRROR_CONFIG['zoneRecTypesDisp'] = array( "A", "CNAME", "MX", "TXT", "redirect", "cloak" );
+	$_IPMIRROR_CONFIG['zoneRecTypesWHMCS'] = array( "A", "CNAME", "MX", "TXT", "URL", "FRAME" );
+	$_IPMIRROR_CONFIG['defNsAddr'] = "10.1.1.1";
 	$_IPMIRROR_ERR_MESS = array( "domain_already_reg" => "The domain is already registered", "unknown_curl_error" => "Unknown CURL error" );
 	$_IPMIRROR_CONTACT_HDRS = array( "Registrant", "Administrative", "Technical", "Billing" );
 	$_IPMIRROR_CONTACT_LBLS = array( "upd1" => array( "ind" => "Individual", "org" => "Organisation", "id" => "Contact ID", "type" => "Contact Type", "rcbid" => "Comp. Reg. No.", "icno" => "IC Number", "company" => "Company Name", "title" => "Title", "firstname" => "First Name", "lastname" => "Last Name", "address1" => "Address 1", "address2" => "Address 2", "city" => "City", "state" => "State", "country" => "Country", "postcode" => "Postcode", "phone" => "Phone Number", "fax" => "Fax Number", "email" => "Email Address" ), "upd2" => array( "firstname" => "First Name", "lastname" => "Last Name", "address1" => "Address 1", "address2" => "Address 2", "city" => "City", "state" => "State", "postcode" => "Postcode", "phone" => "Phone Number", "email" => "Email" ) );
@@ -181,25 +181,25 @@ function _ipmirror_callRapi($cmd, $params) {
 		$first = false;
 	}
 
-	$url = $_IPMIRROR_CONFIG["rapiUrl"] . $cmd . "?" . $param . "&loginID=" . $_IPMIRROR_CONFIG["username"] . "&password=" . $_IPMIRROR_CONFIG["password"];
+	$url = $_IPMIRROR_CONFIG['rapiUrl'] . $cmd . "?" . $param . "&loginID=" . $_IPMIRROR_CONFIG['username'] . "&password=" . $_IPMIRROR_CONFIG['password'];
 	$ch = curl_init();
 	curl_setopt( $ch, CURLOPT_URL, $url );
 	curl_setopt( $ch, CURLOPT_SSL_VERIFYPEER, 0 );
 	curl_setopt( $ch, CURLOPT_SSL_VERIFYHOST, 1 );
-	curl_setopt( $ch, CURLOPT_CONNECTTIMEOUT, $_IPMIRROR_CONFIG["connTimeout"] );
-	curl_setopt( $ch, CURLOPT_TIMEOUT, $_IPMIRROR_CONFIG["execTimeout"] );
+	curl_setopt( $ch, CURLOPT_CONNECTTIMEOUT, $_IPMIRROR_CONFIG['connTimeout'] );
+	curl_setopt( $ch, CURLOPT_TIMEOUT, $_IPMIRROR_CONFIG['execTimeout'] );
 	curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 );
 	$output = curl_exec( $ch );
 
-	if (( $output === false || empty( $output ) )) {
-		$result = array( "0", curl_errno( $ch ), (trim( curl_error( $ch ) ) == "" ? $_IPMIRROR_ERR_MESS["unknown_curl_error"] : curl_error( $ch )) );
+	if ($output === false || empty( $output )) {
+		$result = array( "0", curl_errno( $ch ), (trim( curl_error( $ch ) ) == "" ? $_IPMIRROR_ERR_MESS['unknown_curl_error'] : curl_error( $ch )) );
 	}
 	else {
-		preg_match( "/<BODY>(?:\r\n)*(.*)(?:\r\n)*<\/BODY>/i", $output, $matches );
+		preg_match( '/<BODY>(?:\r\n)*(.*)(?:\r\n)*<\/BODY>/i', $output, $matches );
 		$result = explode( ";", $matches[1] );
 		$last = array_pop( $result );
 
-		if (( !empty( $result ) && !empty( $last ) )) {
+		if (!empty( $result ) && !empty( $last )) {
 			array_push( $result, $last );
 		}
 
@@ -211,7 +211,7 @@ function _ipmirror_callRapi($cmd, $params) {
 
 	curl_close( $ch );
 
-	if ($_IPMIRROR_CONFIG["debugMode"]) {
+	if ($_IPMIRROR_CONFIG['debugMode']) {
 		print $url . "<br><br>
 
 ";
@@ -260,23 +260,23 @@ function _ipmirror_formatPhone($phone) {
 function _ipmirror_GetNameservers($params) {
 	_ipmirror_init( $params, "_ipmirror_GetNameservers" );
 	$values = array();
-	$result = _ipmirror_rapi_queryDomain( $params["sld"] . "." . $params["tld"] );
+	$result = _ipmirror_rapi_queryDomain( $params['sld'] . "." . $params['tld'] );
 
 	if ($error = _ipmirror_getErrorMsg()) {
-		$values["error"] = $error;
+		$values['error'] = $error;
 		return $values;
 	}
 
-	$values["ns1"] = $result[9];
-	$values["ns2"] = $result[10];
+	$values['ns1'] = $result[9];
+	$values['ns2'] = $result[10];
 
 	if (!empty( $result[11] )) {
-		$values["ns3"] = $result[11];
+		$values['ns3'] = $result[11];
 	}
 
 
 	if (!empty( $result[12] )) {
-		$values["ns4"] = $result[12];
+		$values['ns4'] = $result[12];
 	}
 
 	return $values;
@@ -289,7 +289,7 @@ function _ipmirror_SaveNameservers($params) {
 	_ipmirror_init( $params, "_ipmirror_SaveNameservers" );
 	$values = array();
 
-	if ($_IPMIRROR_CONFIG["autoCreateNs"]) {
+	if ($_IPMIRROR_CONFIG['autoCreateNs']) {
 		$error = _ipmirror_checkCreateNameservers( $params );
 	}
 	else {
@@ -298,13 +298,13 @@ function _ipmirror_SaveNameservers($params) {
 
 
 	if (empty( $error )) {
-		$result = _ipmirror_rapi_changeDNS( $params["sld"] . "." . $params["tld"], $params["ns1"], $params["ns2"], $params["ns3"], $params["ns4"] );
+		$result = _ipmirror_rapi_changeDNS( $params['sld'] . "." . $params['tld'], $params['ns1'], $params['ns2'], $params['ns3'], $params['ns4'] );
 		$error = _ipmirror_getErrorMsg();
 	}
 
 
 	if (!empty( $error )) {
-		$values["error"] = $error;
+		$values['error'] = $error;
 	}
 
 	return $values;
@@ -314,10 +314,10 @@ function _ipmirror_SaveNameservers($params) {
 function _ipmirror_RegisterNameserver($params) {
 	_ipmirror_init( $params, "_ipmirror_RegisterNameserver" );
 	$values = array();
-	$result = _ipmirror_rapi_createHost( $params["nameserver"], $params["ipaddress"] );
+	$result = _ipmirror_rapi_createHost( $params['nameserver'], $params['ipaddress'] );
 
 	if ($error = _ipmirror_getErrorMsg()) {
-		$values["error"] = $error;
+		$values['error'] = $error;
 	}
 
 	return $values;
@@ -327,10 +327,10 @@ function _ipmirror_RegisterNameserver($params) {
 function _ipmirror_ModifyNameserver($params) {
 	_ipmirror_init( $params, "_ipmirror_ModifyNameserver" );
 	$values = array();
-	$result = _ipmirror_rapi_updateHost( $params["nameserver"], $params["newipaddress"] );
+	$result = _ipmirror_rapi_updateHost( $params['nameserver'], $params['newipaddress'] );
 
 	if ($error = _ipmirror_getErrorMsg()) {
-		$values["error"] = $error;
+		$values['error'] = $error;
 	}
 
 	return $values;
@@ -340,10 +340,10 @@ function _ipmirror_ModifyNameserver($params) {
 function _ipmirror_DeleteNameserver($params) {
 	_ipmirror_init( $params, "_ipmirror_DeleteNameserver" );
 	$values = array();
-	$result = _ipmirror_rapi_deleteHost( $params["nameserver"] );
+	$result = _ipmirror_rapi_deleteHost( $params['nameserver'] );
 
 	if ($error = _ipmirror_getErrorMsg()) {
-		$values["error"] = $error;
+		$values['error'] = $error;
 	}
 
 	return $values;
@@ -352,7 +352,7 @@ function _ipmirror_DeleteNameserver($params) {
 
 function _ipmirror_GetRegistrarLock($params) {
 	_ipmirror_init( $params, "_ipmirror_GetRegistrarLock" );
-	$result = _ipmirror_rapi_queryDomain( $params["sld"] . "." . $params["tld"] );
+	$result = _ipmirror_rapi_queryDomain( $params['sld'] . "." . $params['tld'] );
 
 	if (_ipmirror_getErrorMsg()) {
 		return "unlocked";
@@ -365,10 +365,10 @@ function _ipmirror_GetRegistrarLock($params) {
 function _ipmirror_SaveRegistrarLock($params) {
 	_ipmirror_init( $params, "_ipmirror_SaveRegistrarLock" );
 	$values = array();
-	$result = _ipmirror_rapi_updateStatus( $params["sld"] . "." . $params["tld"], (strtoupper( $params["lockenabled"] ) == "LOCKED" ? "LOCK" : "UNLOCK") );
+	$result = _ipmirror_rapi_updateStatus( $params['sld'] . "." . $params['tld'], (strtoupper( $params['lockenabled'] ) == "LOCKED" ? "LOCK" : "UNLOCK") );
 
 	if ($error = _ipmirror_getErrorMsg()) {
-		$values["error"] = $error;
+		$values['error'] = $error;
 	}
 
 	return $values;
@@ -378,24 +378,24 @@ function _ipmirror_SaveRegistrarLock($params) {
 function _ipmirror_GetEmailForwarding($params) {
 	_ipmirror_init( $params, "_ipmirror_GetEmailForwarding" );
 	$values = array();
-	$dName = $params["sld"] . "." . $params["tld"];
+	$dName = $params['sld'] . "." . $params['tld'];
 	$zoneRecs = _ipmirror_getZoneRecords( $dName );
 
-	if (!empty( $zoneRecs["error"] )) {
+	if (!empty( $zoneRecs['error'] )) {
 		return $values;
 	}
 
 	foreach ($zoneRecs as $zoneRec) {
 
-		if ($zoneRec["type"] == "email") {
-			$values[$zoneRec["id"]]["prefix"] = $zoneRec["source"];
-			$values[$zoneRec["id"]]["forwardto"] = $zoneRec["destination"];
+		if ($zoneRec['type'] == "email") {
+			$values[$zoneRec['id']]['prefix'] = $zoneRec['source'];
+			$values[$zoneRec['id']]['forwardto'] = $zoneRec['destination'];
 			continue;
 		}
 	}
 
 	session_start();
-	$_SESSION["_IPMIRROR_EMAIL_FWD"] = $values;
+	$_SESSION['_IPMIRROR_EMAIL_FWD'] = $values;
 	return $values;
 }
 
@@ -403,22 +403,22 @@ function _ipmirror_GetEmailForwarding($params) {
 function _ipmirror_SaveEmailForwarding($params) {
 	_ipmirror_init( $params, "_ipmirror_SaveEmailForwarding" );
 	$values = array();
-	$dName = $params["sld"] . "." . $params["tld"];
-	$recsOld = $_SESSION["_IPMIRROR_EMAIL_FWD"];
-	foreach ($params["prefix"] as $id => $newSource) {
-		$newDestination = $params["forwardto"][$id];
+	$dName = $params['sld'] . "." . $params['tld'];
+	$recsOld = $_SESSION['_IPMIRROR_EMAIL_FWD'];
+	foreach ($params['prefix'] as $id => $newSource) {
+		$newDestination = $params['forwardto'][$id];
 
-		if (( ( empty( $newDestination ) && !empty( $newSource ) ) || ( empty( $newSource ) && !empty( $newDestination ) ) )) {
+		if (( empty( $newDestination ) && !empty( $newSource ) ) || ( empty( $newSource ) && !empty( $newDestination ) )) {
 			continue;
 		}
 
 
 		if (empty( $recsOld[$id] )) {
-			if (( !empty( $newSource ) && !empty( $newDestination ) )) {
+			if (!empty( $newSource ) && !empty( $newDestination )) {
 				$result = _ipmirror_rapi_createEmailForwardingRecord( $dName, $newSource, $newDestination );
 
 				if ($error = _ipmirror_getErrorMsg()) {
-					$values["error"] = $error;
+					$values['error'] = $error;
 					return $values;
 				}
 			}
@@ -427,25 +427,25 @@ function _ipmirror_SaveEmailForwarding($params) {
 		}
 
 
-		if (( empty( $newSource ) && empty( $newDestination ) )) {
+		if (empty( $newSource ) && empty( $newDestination )) {
 			$result = _ipmirror_rapi_deleteEmailForwardingRecord( $dName, $id );
 
 			if ($error = _ipmirror_getErrorMsg()) {
-				$values["error"] = $error;
+				$values['error'] = $error;
 				return $values;
 			}
 
 			continue;
 		}
 
-		$oldSource = $recsOld[$id]["prefix"];
-		$oldDestination = $recsOld[$id]["forwardto"];
+		$oldSource = $recsOld[$id]['prefix'];
+		$oldDestination = $recsOld[$id]['forwardto'];
 
-		if (( $newSource != $oldSource || $newDestination != $oldDestination )) {
+		if ($newSource != $oldSource || $newDestination != $oldDestination) {
 			$_result = _ipmirror_rapi_updateEmailForwardingRecord( $dName, $id, $newSource, $newDestination );
 
 			if ($error = _ipmirror_getErrorMsg()) {
-				$values["error"] = $error;
+				$values['error'] = $error;
 				return $values;
 			}
 
@@ -462,35 +462,35 @@ function _ipmirror_GetDNS($params) {
 
 	_ipmirror_init( $params, "_ipmirror_GetDNS" );
 	$values = array();
-	$dName = $params["sld"] . "." . $params["tld"];
+	$dName = $params['sld'] . "." . $params['tld'];
 	$zoneRecs = _ipmirror_getZoneRecords( $dName );
 
-	if (!empty( $zoneRecs["error"] )) {
+	if (!empty( $zoneRecs['error'] )) {
 		return $values;
 	}
 
 	foreach ($zoneRecs as $zoneRec) {
 
-		if (in_array( $zoneRec["type"], $_IPMIRROR_CONFIG["zoneRecTypesDisp"] )) {
-			if ($zoneRec["type"] == "redirect") {
+		if (in_array( $zoneRec['type'], $_IPMIRROR_CONFIG['zoneRecTypesDisp'] )) {
+			if ($zoneRec['type'] == "redirect") {
 				$whmcsType = "URL";
 			}
 			else {
-				if ($zoneRec["type"] == "cloak") {
+				if ($zoneRec['type'] == "cloak") {
 					$whmcsType = "FRAME";
 				}
 				else {
-					$whmcsType = $zoneRec["type"];
+					$whmcsType = $zoneRec['type'];
 				}
 			}
 
-			$values[] = array( "id" => $zoneRec["id"], "hostname" => $zoneRec["source"], "type" => $whmcsType, "address" => $zoneRec["destination"], "priority" => $zoneRec["priority"] );
+			$values[] = array( "id" => $zoneRec['id'], "hostname" => $zoneRec['source'], "type" => $whmcsType, "address" => $zoneRec['destination'], "priority" => $zoneRec['priority'] );
 			continue;
 		}
 	}
 
 	session_start();
-	$_SESSION["_IPMIRROR_HOST_RECORDS"] = $values;
+	$_SESSION['_IPMIRROR_HOST_RECORDS'] = $values;
 	return $values;
 }
 
@@ -500,51 +500,51 @@ function _ipmirror_SaveDNS($params) {
 
 	_ipmirror_init( $params, "_ipmirror_SaveDNS" );
 	$values = array();
-	$dName = $params["sld"] . "." . $params["tld"];
-	$dnsRecsNew = $params["dnsrecords"];
-	$dnsRecsOld = $_SESSION["_IPMIRROR_HOST_RECORDS"];
+	$dName = $params['sld'] . "." . $params['tld'];
+	$dnsRecsNew = $params['dnsrecords'];
+	$dnsRecsOld = $_SESSION['_IPMIRROR_HOST_RECORDS'];
 	$mxRecPriorities = array();
 	foreach ($dnsRecsOld as $dnsRecOld) {
 
-		if ($dnsRecOld["type"] == "MX") {
-			if (empty( $mxRecPriorities[$dnsRecOld["hostname"]] )) {
-				$mxRecPriorities[$dnsRecOld["hostname"]] = $dnsRecOld["priority"];
+		if ($dnsRecOld['type'] == "MX") {
+			if (empty( $mxRecPriorities[$dnsRecOld['hostname']] )) {
+				$mxRecPriorities[$dnsRecOld['hostname']] = $dnsRecOld['priority'];
 				continue;
 			}
 
-			$mxRecPriorities[$dnsRecOld["hostname"]] = max( $mxRecPriorities[$dnsRecOld["hostname"]], $dnsRecOld["priority"] );
+			$mxRecPriorities[$dnsRecOld['hostname']] = max( $mxRecPriorities[$dnsRecOld['hostname']], $dnsRecOld['priority'] );
 			continue;
 		}
 	}
 
 	foreach ($dnsRecsNew as $i => $dnsRecNew) {
 
-		if (!in_array( $dnsRecNew["type"], $_IPMIRROR_CONFIG["zoneRecTypesWHMCS"] )) {
+		if (!in_array( $dnsRecNew['type'], $_IPMIRROR_CONFIG['zoneRecTypesWHMCS'] )) {
 			continue;
 		}
 
 
 		if (empty( $dnsRecsOld[$i] )) {
-			if (empty( $dnsRecNew["address"] )) {
+			if (empty( $dnsRecNew['address'] )) {
 				continue;
 			}
 
 
-			if ($dnsRecNew["type"] == "MX") {
-				if (empty( $mxRecPriorities[$dnsRecNew["hostname"]] )) {
+			if ($dnsRecNew['type'] == "MX") {
+				if (empty( $mxRecPriorities[$dnsRecNew['hostname']] )) {
 					$priority = 28;
 				}
 				else {
-					$priority = min( $mxRecPriorities[$dnsRecNew["hostname"]] + 5, 250 );
+					$priority = min( $mxRecPriorities[$dnsRecNew['hostname']] + 5, 250 );
 				}
 
-				$mxRecPriorities[$dnsRecNew["hostname"]] = $priority;
+				$mxRecPriorities[$dnsRecNew['hostname']] = $priority;
 			}
 			else {
 				$priority = 8;
 			}
 
-			switch ($dnsRecNew["type"]) {
+			switch ($dnsRecNew['type']) {
 			case "A": {
 				}
 
@@ -555,23 +555,23 @@ function _ipmirror_SaveDNS($params) {
 				}
 
 			case "TXT": {
-					$result = _ipmirror_rapi_createZoneRecord( $dName, $dnsRecNew["type"], $dnsRecNew["hostname"], $priority, $dnsRecNew["address"] );
+					$result = _ipmirror_rapi_createZoneRecord( $dName, $dnsRecNew['type'], $dnsRecNew['hostname'], $priority, $dnsRecNew['address'] );
 					break;
 				}
 
 			case "URL": {
-					$result = _ipmirror_rapi_createWebForwardingRecord( $dName, "redirect", $dnsRecNew["hostname"], $dnsRecNew["address"], "", "", "" );
+					$result = _ipmirror_rapi_createWebForwardingRecord( $dName, "redirect", $dnsRecNew['hostname'], $dnsRecNew['address'], "", "", "" );
 					break;
 				}
 
 			case "FRAME": {
-					$result = _ipmirror_rapi_createWebForwardingRecord( $dName, "cloak", $dnsRecNew["hostname"], $dnsRecNew["address"], "", "", "" );
+					$result = _ipmirror_rapi_createWebForwardingRecord( $dName, "cloak", $dnsRecNew['hostname'], $dnsRecNew['address'], "", "", "" );
 				}
 			}
 
 
 			if ($error = _ipmirror_getErrorMsg()) {
-				$values["error"] = $error;
+				$values['error'] = $error;
 				return $values;
 			}
 
@@ -580,17 +580,17 @@ function _ipmirror_SaveDNS($params) {
 
 		$dnsRecOld = $dnsRecsOld[$i];
 
-		if (( empty( $dnsRecNew["hostname"] ) && empty( $dnsRecNew["address"] ) )) {
-			if (( $dnsRecNew["type"] == "URL" || $dnsRecNew["type"] == "FRAME" )) {
-				$result = _ipmirror_rapi_deleteWebForwardingRecord( $dName, $dnsRecOld["id"] );
+		if (empty( $dnsRecNew['hostname'] ) && empty( $dnsRecNew['address'] )) {
+			if ($dnsRecNew['type'] == "URL" || $dnsRecNew['type'] == "FRAME") {
+				$result = _ipmirror_rapi_deleteWebForwardingRecord( $dName, $dnsRecOld['id'] );
 			}
 			else {
-				$result = _ipmirror_rapi_deleteZoneRecord( $dName, $dnsRecOld["id"] );
+				$result = _ipmirror_rapi_deleteZoneRecord( $dName, $dnsRecOld['id'] );
 			}
 
 
 			if ($error = _ipmirror_getErrorMsg()) {
-				$values["error"] = $error;
+				$values['error'] = $error;
 				return $values;
 			}
 
@@ -598,8 +598,8 @@ function _ipmirror_SaveDNS($params) {
 		}
 
 
-		if (( !empty( $dnsRecNew["address"] ) && ( $dnsRecNew["hostname"] != $dnsRecOld["hostname"] || $dnsRecNew["address"] != $dnsRecOld["address"] ) )) {
-			switch ($dnsRecNew["type"]) {
+		if (!empty( $dnsRecNew['address'] ) && ( $dnsRecNew['hostname'] != $dnsRecOld['hostname'] || $dnsRecNew['address'] != $dnsRecOld['address'] )) {
+			switch ($dnsRecNew['type']) {
 			case "A": {
 				}
 
@@ -610,23 +610,23 @@ function _ipmirror_SaveDNS($params) {
 				}
 
 			case "TXT": {
-					$result = _ipmirror_rapi_updateZoneRecord( $dName, $dnsRecOld["id"], $dnsRecNew["hostname"], $dnsRecOld["priority"], $dnsRecNew["address"] );
+					$result = _ipmirror_rapi_updateZoneRecord( $dName, $dnsRecOld['id'], $dnsRecNew['hostname'], $dnsRecOld['priority'], $dnsRecNew['address'] );
 					break;
 				}
 
 			case "URL": {
-					$result = _ipmirror_rapi_updateWebForwardingRecord( $dName, $dnsRecOld["id"], "redirect", $dnsRecNew["hostname"], $dnsRecNew["address"], "", "", "" );
+					$result = _ipmirror_rapi_updateWebForwardingRecord( $dName, $dnsRecOld['id'], "redirect", $dnsRecNew['hostname'], $dnsRecNew['address'], "", "", "" );
 					break;
 				}
 
 			case "FRAME": {
-					$result = _ipmirror_rapi_updateWebForwardingRecord( $dName, $dnsRecOld["id"], "cloak", $dnsRecNew["hostname"], $dnsRecNew["address"], "", "", "" );
+					$result = _ipmirror_rapi_updateWebForwardingRecord( $dName, $dnsRecOld['id'], "cloak", $dnsRecNew['hostname'], $dnsRecNew['address'], "", "", "" );
 				}
 			}
 
 
 			if ($error = _ipmirror_getErrorMsg()) {
-				$values["error"] = $error;
+				$values['error'] = $error;
 				return $values;
 				continue;
 			}
@@ -644,7 +644,7 @@ function _ipmirror_getZoneRecords($dName) {
 	$result = _ipmirror_rapi_queryZone( $dName );
 
 	if ($error = _ipmirror_getErrorMsg()) {
-		$zoneRecs["error"] = $error;
+		$zoneRecs['error'] = $error;
 		return $zoneRecs;
 	}
 
@@ -656,11 +656,11 @@ function _ipmirror_getZoneRecords($dName) {
 			continue;
 		}
 
-		$zoneRec["id"] = $zoneRecId;
-		$zoneRec["type"] = $result[2];
-		$zoneRec["source"] = $result[3];
-		$zoneRec["destination"] = $result[4];
-		$zoneRec["priority"] = (empty( $result[5] ) ? 0 : $result[5]);
+		$zoneRec['id'] = $zoneRecId;
+		$zoneRec['type'] = $result[2];
+		$zoneRec['source'] = $result[3];
+		$zoneRec['destination'] = $result[4];
+		$zoneRec['priority'] = (empty( $result[5] ) ? 0 : $result[5]);
 		$zoneRecs[] = $zoneRec;
 	}
 
@@ -685,24 +685,24 @@ function _ipmirror_createTransferDomain($mode, $params) {
 	global $_IPMIRROR_ERR_MESS;
 
 	$values = array();
-	$dName = $params["sld"] . "." . $params["tld"];
+	$dName = $params['sld'] . "." . $params['tld'];
 	$result = _ipmirror_rapi_queryDomain( $dName );
 	$error = _ipmirror_getErrorMsg();
 
 	if (empty( $error )) {
-		$values["error"] = $_IPMIRROR_ERR_MESS( "domain_already_reg" );
+		$values['error'] = $_IPMIRROR_ERR_MESS( "domain_already_reg" );
 		return $values;
 	}
 
 	foreach (array( "Reg", "Admin", "Tech", "Bill" ) as $contactCode) {
 		$contactIDs[$contactCode] = _ipmirror_createContact( $params, $contactCode );
 
-		if ($contactIDs[$contactCode]["contactId"] == FALSE) {
-			$values["error"] = _ipmirror_getErrorMsg();
+		if ($contactIDs[$contactCode]['contactId'] == FALSE) {
+			$values['error'] = _ipmirror_getErrorMsg();
 			foreach ($contactIDs as $contactCode => $contactData) {
 
-				if (( $contactData["contactId"] !== FALSE && !$contactData["hasDefault"] )) {
-					$dummyResult = _ipmirror_rapi_deleteContact( $contactData["contactId"] );
+				if ($contactData['contactId'] !== FALSE && !$contactData['hasDefault']) {
+					$dummyResult = _ipmirror_rapi_deleteContact( $contactData['contactId'] );
 					continue;
 				}
 			}
@@ -713,7 +713,7 @@ function _ipmirror_createTransferDomain($mode, $params) {
 
 
 	if ($mode == "C") {
-		if ($_IPMIRROR_CONFIG["autoCreateNs"]) {
+		if ($_IPMIRROR_CONFIG['autoCreateNs']) {
 			$error = _ipmirror_checkCreateNameservers( $params );
 		}
 		else {
@@ -722,22 +722,22 @@ function _ipmirror_createTransferDomain($mode, $params) {
 
 
 		if (empty( $error )) {
-			$results = _ipmirror_rapi_createDomain( $dName, $params["regperiod"], $contactIDs["Reg"]["contactId"], $contactIDs["Admin"]["contactId"], $contactIDs["Tech"]["contactId"], $contactIDs["Bill"]["contactId"], $params["ns1"], $params["ns2"], $params["ns3"], $params["ns4"], $params["idprotection"] );
+			$results = _ipmirror_rapi_createDomain( $dName, $params['regperiod'], $contactIDs['Reg']['contactId'], $contactIDs['Admin']['contactId'], $contactIDs['Tech']['contactId'], $contactIDs['Bill']['contactId'], $params['ns1'], $params['ns2'], $params['ns3'], $params['ns4'], $params['idprotection'] );
 			$error = _ipmirror_getErrorMsg();
 		}
 	}
 	else {
-		$results = _ipmirror_rapi_transferIn( $dName, $params["regperiod"], $params["transfersecret"], $contactIDs["Reg"]["contactId"], $contactIDs["Admin"]["contactId"], $contactIDs["Tech"]["contactId"], $contactIDs["Bill"]["contactId"] );
+		$results = _ipmirror_rapi_transferIn( $dName, $params['regperiod'], $params['transfersecret'], $contactIDs['Reg']['contactId'], $contactIDs['Admin']['contactId'], $contactIDs['Tech']['contactId'], $contactIDs['Bill']['contactId'] );
 		$error = _ipmirror_getErrorMsg();
 	}
 
 
 	if (!empty( $error )) {
-		$values["error"] = $error;
+		$values['error'] = $error;
 		foreach ($contactIDs as $contactCode => $contactData) {
 
-			if (( $contactData["contactId"] !== FALSE && !$contactData["hasDefault"] )) {
-				$dummyResult = _ipmirror_rapi_deleteContact( $contactData["contactId"] );
+			if ($contactData['contactId'] !== FALSE && !$contactData['hasDefault']) {
+				$dummyResult = _ipmirror_rapi_deleteContact( $contactData['contactId'] );
 				continue;
 			}
 		}
@@ -750,7 +750,7 @@ function _ipmirror_createTransferDomain($mode, $params) {
 function _ipmirror_createContact($params, $contactCode) {
 	global $_IPMIRROR_CONFIG;
 
-	$defContactId = _ipmirror_getClientDefContact( $params["userid"], $contactCode );
+	$defContactId = _ipmirror_getClientDefContact( $params['userid'], $contactCode );
 
 	if (empty( $defContactId )) {
 		$defContactId = $_IPMIRROR_CONFIG["def" . $contactCode . "ContactId"];
@@ -776,16 +776,16 @@ function _ipmirror_createContact($params, $contactCode) {
 	$fax = "";
 	$email = $params[$prefix . "email"];
 
-	if (substr( $params["tld"], 0 - 2 ) == "sg") {
-		$type = ($params["additionalfields"]["Registrant Type"] == "Individual" ? "2" : "1");
+	if (substr( $params['tld'], 0 - 2 ) == "sg") {
+		$type = ($params['additionalfields']["Registrant Type"] == "Individual" ? "2" : "1");
 	}
 	else {
 		$type = (empty( $params[$prefix . "companyname"] ) ? "2" : "1");
 	}
 
 
-	if (substr( $params["tld"], 0 - 2 ) == "sg") {
-		$rcbId = $params["additionalfields"]["RCB/Singapore ID"];
+	if (substr( $params['tld'], 0 - 2 ) == "sg") {
+		$rcbId = $params['additionalfields']["RCB/Singapore ID"];
 	}
 	else {
 		$rcbId = "n/a";
@@ -807,7 +807,7 @@ function _ipmirror_getClientDefContact($clientId, $contactCode) {
 	$rows = select_query( "tblcustomfields cf, tblcustomfieldsvalues cfv", "cfv.value AS value", "cf.type='client' AND lower(cf.fieldname)='" . $fieldname . "' AND cf.id=cfv.fieldid AND cfv.relid=" . $clientId );
 
 	while ($row = mysql_fetch_array( $rows )) {
-		$defContactId = $row["value"];
+		$defContactId = $row['value'];
 	}
 
 	mysql_free_result( $rows );
@@ -830,7 +830,7 @@ function _ipmirror_checkCreateNameservers($params) {
 				$ip = _ipmirror_getIPAddress( $host );
 
 				if (empty( $ip )) {
-					$ip = $_IPMIRROR_CONFIG["defNsAddr"];
+					$ip = $_IPMIRROR_CONFIG['defNsAddr'];
 				}
 
 				$result = _ipmirror_rapi_createHost( $host, $ip );
@@ -857,7 +857,7 @@ function _ipmirror_checkCreateNameservers($params) {
 function _ipmirror_getIPAddress($host, $timeout = 3, $tries = 1) {
 	$query = shell_exec( "dig " . $host . " A  +noall +answer +short +tries=" . $tries . " +time=" . $timeout );
 
-	if (preg_match( "/((\d{1,3}\.){3}\d{1,3})/m", $query, $matches )) {
+	if (preg_match( '/((\d{1,3}\.){3}\d{1,3})/m', $query, $matches )) {
 		return trim( $matches[1] );
 	}
 
@@ -868,10 +868,10 @@ function _ipmirror_getIPAddress($host, $timeout = 3, $tries = 1) {
 function _ipmirror_RenewDomain($params) {
 	_ipmirror_init( $params, "_ipmirror_RenewDomain" );
 	$values = array();
-	$result = _ipmirror_rapi_renewDomain( $params["sld"] . "." . $params["tld"], $params["regperiod"] );
+	$result = _ipmirror_rapi_renewDomain( $params['sld'] . "." . $params['tld'], $params['regperiod'] );
 
 	if ($error = _ipmirror_getErrorMsg()) {
-		$values["error"] = $error;
+		$values['error'] = $error;
 	}
 
 	return $values;
@@ -892,7 +892,7 @@ function _ipmirror_hasSafestWhois($dName) {
 		return TRUE;
 	}
 
-	$values["error"] = _ipmirror_getErrorMsg();
+	$values['error'] = _ipmirror_getErrorMsg();
 	return $values;
 }
 
@@ -903,32 +903,32 @@ function _ipmirror_GetContactDetails($params) {
 
 	_ipmirror_init( $params, "_ipmirror_GetContactDetails" );
 	$values = array();
-	$result = _ipmirror_rapi_queryDomain( $params["sld"] . "." . $params["tld"] );
+	$result = _ipmirror_rapi_queryDomain( $params['sld'] . "." . $params['tld'] );
 
 	if ($error = _ipmirror_getErrorMsg()) {
-		$values["error"] = $error;
+		$values['error'] = $error;
 		return $values;
 	}
 
 	$Ids = array_slice( $result, 5, 4 );
 
-	if (!$_IPMIRROR_CONFIG["isAdmin"]) {
-		if (!$_IPMIRROR_CONFIG["allowRegContactChange"]) {
+	if (!$_IPMIRROR_CONFIG['isAdmin']) {
+		if (!$_IPMIRROR_CONFIG['allowRegContactChange']) {
 			$Ids[0] = "";
 		}
 
 
-		if (!$_IPMIRROR_CONFIG["allowAdminContactChange"]) {
+		if (!$_IPMIRROR_CONFIG['allowAdminContactChange']) {
 			$Ids[1] = "";
 		}
 
 
-		if (!$_IPMIRROR_CONFIG["allowTechContactChange"]) {
+		if (!$_IPMIRROR_CONFIG['allowTechContactChange']) {
 			$Ids[2] = "";
 		}
 
 
-		if (!$_IPMIRROR_CONFIG["allowBillContactChange"]) {
+		if (!$_IPMIRROR_CONFIG['allowBillContactChange']) {
 			$Ids[3] = "";
 		}
 	}
@@ -949,7 +949,7 @@ function _ipmirror_GetContactDetails($params) {
 			}
 
 
-			if (( $Ids[$i] == $Ids[$j] && $i != $j )) {
+			if ($Ids[$i] == $Ids[$j] && $i != $j) {
 				break;
 			}
 
@@ -958,7 +958,7 @@ function _ipmirror_GetContactDetails($params) {
 				$result = _ipmirror_rapi_queryContact( $Ids[$i] );
 
 				if ($error = _ipmirror_getErrorMsg()) {
-					$values["error"] = $error;
+					$values['error'] = $error;
 					return $values;
 				}
 
@@ -975,19 +975,19 @@ function _ipmirror_GetContactDetails($params) {
 
 				$type = (( $result[1] == "PER" || $result[1] == "2" ) ? "2" : "1");
 				$values[$header] = _ipmirror_extractContactDetails( $Ids[$i], $type, $result );
-				$contacts[$header]["id"] = $Ids[$i];
-				$contacts[$header]["type"] = $type;
-				$contacts[$header]["title"] = $result[4];
-				$contacts[$header]["fax"] = $result[13];
-				$contacts[$header]["firstname"] = $result[5];
-				$contacts[$header]["lastname"] = $result[6];
-				$contacts[$header]["address1"] = $result[7];
-				$contacts[$header]["address2"] = $result[8];
-				$contacts[$header]["city"] = $result[9];
-				$contacts[$header]["state"] = $result[15];
-				$contacts[$header]["postcode"] = $result[10];
-				$contacts[$header]["phone"] = $result[12];
-				$contacts[$header]["email"] = $result[14];
+				$contacts[$header]['id'] = $Ids[$i];
+				$contacts[$header]['type'] = $type;
+				$contacts[$header]['title'] = $result[4];
+				$contacts[$header]['fax'] = $result[13];
+				$contacts[$header]['firstname'] = $result[5];
+				$contacts[$header]['lastname'] = $result[6];
+				$contacts[$header]['address1'] = $result[7];
+				$contacts[$header]['address2'] = $result[8];
+				$contacts[$header]['city'] = $result[9];
+				$contacts[$header]['state'] = $result[15];
+				$contacts[$header]['postcode'] = $result[10];
+				$contacts[$header]['phone'] = $result[12];
+				$contacts[$header]['email'] = $result[14];
 			}
 
 			++$j;
@@ -997,7 +997,7 @@ function _ipmirror_GetContactDetails($params) {
 	}
 
 	session_start();
-	$_SESSION["_IPMIRROR_CONT_DATA"] = $contacts;
+	$_SESSION['_IPMIRROR_CONT_DATA'] = $contacts;
 	return $values;
 }
 
@@ -1006,40 +1006,40 @@ function _ipmirror_extractContactDetails($Id, $type, $result) {
 	global $_IPMIRROR_CONTACT_LBLS;
 	global $_IPMIRROR_CONFIG;
 
-	if ($_IPMIRROR_CONFIG["showAllContactFlds"]) {
-		$contact[$_IPMIRROR_CONTACT_LBLS["upd1"]["id"]] = $Id;
-		$contact[$_IPMIRROR_CONTACT_LBLS["upd1"]["type"]] = ($type == "1" ? $_IPMIRROR_CONTACT_LBLS["upd1"]["org"] : $_IPMIRROR_CONTACT_LBLS["upd1"]["ind"]);
-		$contact[$_IPMIRROR_CONTACT_LBLS["upd1"]["title"]] = $result[4];
+	if ($_IPMIRROR_CONFIG['showAllContactFlds']) {
+		$contact[$_IPMIRROR_CONTACT_LBLS['upd1']['id']] = $Id;
+		$contact[$_IPMIRROR_CONTACT_LBLS['upd1']['type']] = ($type == "1" ? $_IPMIRROR_CONTACT_LBLS['upd1']['org'] : $_IPMIRROR_CONTACT_LBLS['upd1']['ind']);
+		$contact[$_IPMIRROR_CONTACT_LBLS['upd1']['title']] = $result[4];
 	}
 
-	$contact[$_IPMIRROR_CONTACT_LBLS["upd1"]["firstname"]] = $result[5];
-	$contact[$_IPMIRROR_CONTACT_LBLS["upd1"]["lastname"]] = $result[6];
+	$contact[$_IPMIRROR_CONTACT_LBLS['upd1']['firstname']] = $result[5];
+	$contact[$_IPMIRROR_CONTACT_LBLS['upd1']['lastname']] = $result[6];
 
 	if ($type == "1") {
-		$contact[$_IPMIRROR_CONTACT_LBLS["upd1"]["company"]] = $result[2];
+		$contact[$_IPMIRROR_CONTACT_LBLS['upd1']['company']] = $result[2];
 	}
 
 
-	if (( $_IPMIRROR_CONFIG["showAllContactFlds"] && !empty( $result[3] ) )) {
+	if ($_IPMIRROR_CONFIG['showAllContactFlds'] && !empty( $result[3] )) {
 		if ($type == "1") {
-			$contact[$_IPMIRROR_CONTACT_LBLS["upd1"]["rcbid"]] = $result[3];
+			$contact[$_IPMIRROR_CONTACT_LBLS['upd1']['rcbid']] = $result[3];
 		}
 		else {
-			$contact[$_IPMIRROR_CONTACT_LBLS["upd1"]["icno"]] = $result[3];
+			$contact[$_IPMIRROR_CONTACT_LBLS['upd1']['icno']] = $result[3];
 		}
 	}
 
-	$contact[$_IPMIRROR_CONTACT_LBLS["upd1"]["email"]] = $result[14];
-	$contact[$_IPMIRROR_CONTACT_LBLS["upd1"]["address1"]] = $result[7];
-	$contact[$_IPMIRROR_CONTACT_LBLS["upd1"]["address2"]] = $result[8];
-	$contact[$_IPMIRROR_CONTACT_LBLS["upd1"]["city"]] = $result[9];
-	$contact[$_IPMIRROR_CONTACT_LBLS["upd1"]["postcode"]] = $result[10];
-	$contact[$_IPMIRROR_CONTACT_LBLS["upd1"]["state"]] = $result[15];
-	$contact[$_IPMIRROR_CONTACT_LBLS["upd1"]["country"]] = $result[11];
-	$contact[$_IPMIRROR_CONTACT_LBLS["upd1"]["phone"]] = $result[12];
+	$contact[$_IPMIRROR_CONTACT_LBLS['upd1']['email']] = $result[14];
+	$contact[$_IPMIRROR_CONTACT_LBLS['upd1']['address1']] = $result[7];
+	$contact[$_IPMIRROR_CONTACT_LBLS['upd1']['address2']] = $result[8];
+	$contact[$_IPMIRROR_CONTACT_LBLS['upd1']['city']] = $result[9];
+	$contact[$_IPMIRROR_CONTACT_LBLS['upd1']['postcode']] = $result[10];
+	$contact[$_IPMIRROR_CONTACT_LBLS['upd1']['state']] = $result[15];
+	$contact[$_IPMIRROR_CONTACT_LBLS['upd1']['country']] = $result[11];
+	$contact[$_IPMIRROR_CONTACT_LBLS['upd1']['phone']] = $result[12];
 
-	if ($_IPMIRROR_CONFIG["showAllContactFlds"]) {
-		$contact[$_IPMIRROR_CONTACT_LBLS["upd1"]["fax"]] = $result[13];
+	if ($_IPMIRROR_CONFIG['showAllContactFlds']) {
+		$contact[$_IPMIRROR_CONTACT_LBLS['upd1']['fax']] = $result[13];
 	}
 
 	return $contact;
@@ -1049,13 +1049,13 @@ function _ipmirror_extractContactDetails($Id, $type, $result) {
 function _ipmirror_SaveContactDetails($params) {
 	_ipmirror_init( $params, "_ipmirror_SaveContactDetails" );
 	$values = array();
-	$wc = (isset( $_REQUEST["wc"] ) ? $_REQUEST["wc"] : NULL);
-	$oldContacts = $_SESSION["_IPMIRROR_CONT_DATA"];
+	$wc = (isset( $_REQUEST['wc'] ) ? $_REQUEST['wc'] : NULL);
+	$oldContacts = $_SESSION['_IPMIRROR_CONT_DATA'];
 	foreach ($oldContacts as $header => $oldContact) {
 		$usePredefinedContact = ( isset( $wc[$header] ) && $wc[$header] == "contact" );
 
-		if ($error = _ipmirror_updateContactDetails( $oldContact, $params["contactdetails"][$header], $usePredefinedContact )) {
-			$values["error"] = $error;
+		if ($error = _ipmirror_updateContactDetails( $oldContact, $params['contactdetails'][$header], $usePredefinedContact )) {
+			$values['error'] = $error;
 			return $values;
 		}
 	}
@@ -1069,24 +1069,24 @@ function _ipmirror_updateContactDetails($oldContact, $newContact, $usePredefined
 	global $_IPMIRROR_CONFIG;
 
 	if ($usePredefinedContact) {
-		if (( ( ( ( ( ( ( ( $oldContact["firstname"] != $newContact[$_IPMIRROR_CONTACT_LBLS["upd2"]["firstname"]] || $oldContact["lastname"] != $newContact[$_IPMIRROR_CONTACT_LBLS["upd2"]["lastname"]] ) || $oldContact["address1"] != $newContact[$_IPMIRROR_CONTACT_LBLS["upd2"]["address1"]] ) || $oldContact["address2"] != $newContact[$_IPMIRROR_CONTACT_LBLS["upd2"]["address2"]] ) || $oldContact["city"] != $newContact[$_IPMIRROR_CONTACT_LBLS["upd2"]["city"]] ) || $oldContact["postcode"] != $newContact[$_IPMIRROR_CONTACT_LBLS["upd2"]["postcode"]] ) || $oldContact["state"] != $newContact[$_IPMIRROR_CONTACT_LBLS["upd2"]["state"]] ) || $oldContact["phone"] != $newContact[$_IPMIRROR_CONTACT_LBLS["upd2"]["phone"]] ) || $oldContact["email"] != $newContact[$_IPMIRROR_CONTACT_LBLS["upd2"]["email"]] )) {
-			$result = _ipmirror_rapi_updateContact( $oldContact["id"], $oldContact["type"], $oldContact["title"], $newContact[$_IPMIRROR_CONTACT_LBLS["upd2"]["firstname"]], $newContact[$_IPMIRROR_CONTACT_LBLS["upd2"]["lastname"]], $newContact[$_IPMIRROR_CONTACT_LBLS["upd2"]["address1"]], $newContact[$_IPMIRROR_CONTACT_LBLS["upd2"]["address2"]], $newContact[$_IPMIRROR_CONTACT_LBLS["upd2"]["city"]], $newContact[$_IPMIRROR_CONTACT_LBLS["upd2"]["postcode"]], $newContact[$_IPMIRROR_CONTACT_LBLS["upd2"]["state"]], $newContact[$_IPMIRROR_CONTACT_LBLS["upd2"]["phone"]], $oldContact["fax"], $newContact[$_IPMIRROR_CONTACT_LBLS["upd2"]["email"]] );
+		if (( ( ( ( ( ( ( $oldContact['firstname'] != $newContact[$_IPMIRROR_CONTACT_LBLS['upd2']['firstname']] || $oldContact['lastname'] != $newContact[$_IPMIRROR_CONTACT_LBLS['upd2']['lastname']] ) || $oldContact['address1'] != $newContact[$_IPMIRROR_CONTACT_LBLS['upd2']['address1']] ) || $oldContact['address2'] != $newContact[$_IPMIRROR_CONTACT_LBLS['upd2']['address2']] ) || $oldContact['city'] != $newContact[$_IPMIRROR_CONTACT_LBLS['upd2']['city']] ) || $oldContact['postcode'] != $newContact[$_IPMIRROR_CONTACT_LBLS['upd2']['postcode']] ) || $oldContact['state'] != $newContact[$_IPMIRROR_CONTACT_LBLS['upd2']['state']] ) || $oldContact['phone'] != $newContact[$_IPMIRROR_CONTACT_LBLS['upd2']['phone']] ) || $oldContact['email'] != $newContact[$_IPMIRROR_CONTACT_LBLS['upd2']['email']]) {
+			$result = _ipmirror_rapi_updateContact( $oldContact['id'], $oldContact['type'], $oldContact['title'], $newContact[$_IPMIRROR_CONTACT_LBLS['upd2']['firstname']], $newContact[$_IPMIRROR_CONTACT_LBLS['upd2']['lastname']], $newContact[$_IPMIRROR_CONTACT_LBLS['upd2']['address1']], $newContact[$_IPMIRROR_CONTACT_LBLS['upd2']['address2']], $newContact[$_IPMIRROR_CONTACT_LBLS['upd2']['city']], $newContact[$_IPMIRROR_CONTACT_LBLS['upd2']['postcode']], $newContact[$_IPMIRROR_CONTACT_LBLS['upd2']['state']], $newContact[$_IPMIRROR_CONTACT_LBLS['upd2']['phone']], $oldContact['fax'], $newContact[$_IPMIRROR_CONTACT_LBLS['upd2']['email']] );
 			return _ipmirror_getErrorMsg();
 		}
 	}
 	else {
-		if (!$_IPMIRROR_CONFIG["showAllContactFlds"]) {
-			$title = $oldContact["title"];
-			$fax = $oldContact["fax"];
+		if (!$_IPMIRROR_CONFIG['showAllContactFlds']) {
+			$title = $oldContact['title'];
+			$fax = $oldContact['fax'];
 		}
 		else {
-			$title = $newContact[$_IPMIRROR_CONTACT_LBLS["upd1"]["title"]];
-			$fax = $newContact[$_IPMIRROR_CONTACT_LBLS["upd1"]["fax"]];
+			$title = $newContact[$_IPMIRROR_CONTACT_LBLS['upd1']['title']];
+			$fax = $newContact[$_IPMIRROR_CONTACT_LBLS['upd1']['fax']];
 		}
 
 
-		if (( ( ( ( ( ( ( ( ( ( $oldContact["title"] != $title || $oldContact["firstname"] != $newContact[$_IPMIRROR_CONTACT_LBLS["upd1"]["firstname"]] ) || $oldContact["lastname"] != $newContact[$_IPMIRROR_CONTACT_LBLS["upd1"]["lastname"]] ) || $oldContact["address1"] != $newContact[$_IPMIRROR_CONTACT_LBLS["upd1"]["address1"]] ) || $oldContact["address2"] != $newContact[$_IPMIRROR_CONTACT_LBLS["upd1"]["address2"]] ) || $oldContact["city"] != $newContact[$_IPMIRROR_CONTACT_LBLS["upd1"]["city"]] ) || $oldContact["postcode"] != $newContact[$_IPMIRROR_CONTACT_LBLS["upd1"]["postcode"]] ) || $oldContact["state"] != $newContact[$_IPMIRROR_CONTACT_LBLS["upd1"]["state"]] ) || $oldContact["phone"] != $newContact[$_IPMIRROR_CONTACT_LBLS["upd1"]["phone"]] ) || $oldContact["fax"] != $fax ) || $oldContact["email"] != $newContact[$_IPMIRROR_CONTACT_LBLS["upd1"]["email"]] )) {
-			$result = _ipmirror_rapi_updateContact( $oldContact["id"], $oldContact["type"], $title, $newContact[$_IPMIRROR_CONTACT_LBLS["upd1"]["firstname"]], $newContact[$_IPMIRROR_CONTACT_LBLS["upd1"]["lastname"]], $newContact[$_IPMIRROR_CONTACT_LBLS["upd1"]["address1"]], $newContact[$_IPMIRROR_CONTACT_LBLS["upd1"]["address2"]], $newContact[$_IPMIRROR_CONTACT_LBLS["upd1"]["city"]], $newContact[$_IPMIRROR_CONTACT_LBLS["upd1"]["postcode"]], $newContact[$_IPMIRROR_CONTACT_LBLS["upd1"]["state"]], $newContact[$_IPMIRROR_CONTACT_LBLS["upd1"]["phone"]], $fax, $newContact[$_IPMIRROR_CONTACT_LBLS["upd1"]["email"]] );
+		if (( ( ( ( ( ( ( ( ( $oldContact['title'] != $title || $oldContact['firstname'] != $newContact[$_IPMIRROR_CONTACT_LBLS['upd1']['firstname']] ) || $oldContact['lastname'] != $newContact[$_IPMIRROR_CONTACT_LBLS['upd1']['lastname']] ) || $oldContact['address1'] != $newContact[$_IPMIRROR_CONTACT_LBLS['upd1']['address1']] ) || $oldContact['address2'] != $newContact[$_IPMIRROR_CONTACT_LBLS['upd1']['address2']] ) || $oldContact['city'] != $newContact[$_IPMIRROR_CONTACT_LBLS['upd1']['city']] ) || $oldContact['postcode'] != $newContact[$_IPMIRROR_CONTACT_LBLS['upd1']['postcode']] ) || $oldContact['state'] != $newContact[$_IPMIRROR_CONTACT_LBLS['upd1']['state']] ) || $oldContact['phone'] != $newContact[$_IPMIRROR_CONTACT_LBLS['upd1']['phone']] ) || $oldContact['fax'] != $fax ) || $oldContact['email'] != $newContact[$_IPMIRROR_CONTACT_LBLS['upd1']['email']]) {
+			$result = _ipmirror_rapi_updateContact( $oldContact['id'], $oldContact['type'], $title, $newContact[$_IPMIRROR_CONTACT_LBLS['upd1']['firstname']], $newContact[$_IPMIRROR_CONTACT_LBLS['upd1']['lastname']], $newContact[$_IPMIRROR_CONTACT_LBLS['upd1']['address1']], $newContact[$_IPMIRROR_CONTACT_LBLS['upd1']['address2']], $newContact[$_IPMIRROR_CONTACT_LBLS['upd1']['city']], $newContact[$_IPMIRROR_CONTACT_LBLS['upd1']['postcode']], $newContact[$_IPMIRROR_CONTACT_LBLS['upd1']['state']], $newContact[$_IPMIRROR_CONTACT_LBLS['upd1']['phone']], $fax, $newContact[$_IPMIRROR_CONTACT_LBLS['upd1']['email']] );
 			return _ipmirror_getErrorMsg();
 		}
 	}
@@ -1104,12 +1104,12 @@ function _ipmirror_rapi_createContact($type, $orgName, $rcbID, $title, $firstNam
 	$cmdParams = array( "type" => $type, "rcbID" => $rcbID, "title" => $title, "firstName" => $firstName, "lastName" => $lastName, "street1" => $street1, "city" => $city, "postalCode" => $postalCode, "state" => $state, "country" => $country, "tel" => $tel, "fax" => $fax, "email" => $email, "languageCode" => "ENG" );
 
 	if (!empty( $street2 )) {
-		$cmdParams["street2"] = $street2;
+		$cmdParams['street2'] = $street2;
 	}
 
 
 	if ($type == "1") {
-		$cmdParams["orgName"] = $orgName;
+		$cmdParams['orgName'] = $orgName;
 	}
 
 	return _ipmirror_callRapi( "createContact", $cmdParams );
@@ -1120,13 +1120,13 @@ function _ipmirror_rapi_updateContact($contactId, $type, $title, $firstName, $la
 	$cmdParams = array( "contactID" => $contactId, "title" => $title, "street1" => $street1, "city" => $city, "postalCode" => $postalCode, "state" => $state, "tel" => $tel, "fax" => $fax, "email" => $email, "languageCode" => "ENG" );
 
 	if ($type == "1") {
-		$cmdParams["firstName"] = $firstName;
-		$cmdParams["lastName"] = $lastName;
+		$cmdParams['firstName'] = $firstName;
+		$cmdParams['lastName'] = $lastName;
 	}
 
 
 	if (!empty( $street2 )) {
-		$cmdParams["street2"] = $street2;
+		$cmdParams['street2'] = $street2;
 	}
 
 	return _ipmirror_callRapi( "updateContact", $cmdParams );
@@ -1147,17 +1147,17 @@ function _ipmirror_rapi_createDomain($dName, $term, $regID, $adminID, $techID, $
 	$cmdParams = array( "dName" => $dName, "encoding" => "ENG", "term" => $term, "regID" => $regID, "adminID" => $adminID, "techID" => $techID, "billID" => $billID, "ns1" => $ns1, "ns2" => $ns2 );
 
 	if (!empty( $ns3 )) {
-		$cmdParams["ns3"] = $ns3;
+		$cmdParams['ns3'] = $ns3;
 	}
 
 
 	if (!empty( $ns4 )) {
-		$cmdParams["ns4"] = $ns4;
+		$cmdParams['ns4'] = $ns4;
 	}
 
 
 	if (!empty( $idprotection )) {
-		$cmdParams["whoisProxy"] = "safestWhois";
+		$cmdParams['whoisProxy'] = "safestWhois";
 	}
 
 	return _ipmirror_callRapi( "createDomain", $cmdParams );
@@ -1180,12 +1180,12 @@ function _ipmirror_rapi_changeDNS($dName, $ns1, $ns2, $ns3, $ns4) {
 	$cmdParams = array( "dName" => $dName, "ns1" => $ns1, "ns2" => $ns2 );
 
 	if (!empty( $ns3 )) {
-		$cmdParams["ns3"] = $ns3;
+		$cmdParams['ns3'] = $ns3;
 	}
 
 
 	if (!empty( $ns3 )) {
-		$cmdParams["ns4"] = $ns4;
+		$cmdParams['ns4'] = $ns4;
 	}
 
 	return _ipmirror_callRapi( "changeDNS", $cmdParams );
@@ -1258,17 +1258,17 @@ function _ipmirror_rapi_createWebForwardingRecord($dName, $detailType, $source, 
 	$cmdParams = array( "dName" => $dName, "detailType" => $detailType, "source" => $source, "destination" => $destination );
 
 	if (!empty( $title )) {
-		$cmdParams["title"] = $title;
+		$cmdParams['title'] = $title;
 	}
 
 
 	if (!empty( $metaDesc )) {
-		$cmdParams["metaDesc"] = $metaDesc;
+		$cmdParams['metaDesc'] = $metaDesc;
 	}
 
 
 	if (!empty( $metaKey )) {
-		$cmdPrams["metaKey"] = $metaKey;
+		$cmdPrams['metaKey'] = $metaKey;
 	}
 
 	return _ipmirror_callRapi( "createWebForwardingRecord", $cmdParams );
@@ -1279,17 +1279,17 @@ function _ipmirror_rapi_updateWebForwardingRecord($dName, $id, $detailType, $sou
 	$cmdParams = array( "dName" => $dName, "id" => $id, "detailType" => $detailType, "source" => $source, "destination" => $destination );
 
 	if (!empty( $title )) {
-		$cmdParams["title"] = $title;
+		$cmdParams['title'] = $title;
 	}
 
 
 	if (!empty( $metaDesc )) {
-		$cmdParams["metaDesc"] = $metaDesc;
+		$cmdParams['metaDesc'] = $metaDesc;
 	}
 
 
 	if (!empty( $metaKey )) {
-		$cmdPrams["metaKey"] = $metaKey;
+		$cmdPrams['metaKey'] = $metaKey;
 	}
 
 	return _ipmirror_callRapi( "updateWebForwardingRecord", $cmdParams );

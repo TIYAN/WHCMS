@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -20,27 +20,27 @@ function libertyreserve_activate() {
 function libertyreserve_link($params) {
 	global $CONFIG;
 
-	$lr_acc = $params["lr_acc"];
-	$lr_store = $params["lr_store"];
-	$invoiceid = $params["invoiceid"];
-	$description = $params["description"];
-	$amount = $params["amount"];
-	$duedate = $params["duedate"];
-	$firstname = $params["clientdetails"]["firstname"];
-	$lastname = $params["clientdetails"]["lastname"];
-	$email = $params["clientdetails"]["email"];
-	$address1 = $params["clientdetails"]["address1"];
-	$address2 = $params["clientdetails"]["address2"];
-	$city = $params["clientdetails"]["city"];
-	$state = $params["clientdetails"]["state"];
-	$postcode = $params["clientdetails"]["postcode"];
-	$country = $params["clientdetails"]["country"];
-	$phone = $params["clientdetails"]["phone"];
-	$companyname = $params["companyname"];
-	$systemurl = $params["systemurl"];
-	$currency = $params["currency"];
+	$lr_acc = $params['lr_acc'];
+	$lr_store = $params['lr_store'];
+	$invoiceid = $params['invoiceid'];
+	$description = $params['description'];
+	$amount = $params['amount'];
+	$duedate = $params['duedate'];
+	$firstname = $params['clientdetails']['firstname'];
+	$lastname = $params['clientdetails']['lastname'];
+	$email = $params['clientdetails']['email'];
+	$address1 = $params['clientdetails']['address1'];
+	$address2 = $params['clientdetails']['address2'];
+	$city = $params['clientdetails']['city'];
+	$state = $params['clientdetails']['state'];
+	$postcode = $params['clientdetails']['postcode'];
+	$country = $params['clientdetails']['country'];
+	$phone = $params['clientdetails']['phone'];
+	$companyname = $params['companyname'];
+	$systemurl = $params['systemurl'];
+	$currency = $params['currency'];
 	$lr_comments = "" . $description;
-	$url = $CONFIG["SystemURL"] . "/modules/gateways/callback/libertyreserve.php";
+	$url = $CONFIG['SystemURL'] . "/modules/gateways/callback/libertyreserve.php";
 	$code = "<form method=\"post\" action=\"https://sci.libertyreserve.com\" >
 <input type=\"hidden\" name=\"lr_acc\" value=\"" . $lr_acc . "\" />
 <input type=\"hidden\" name=\"lr_store\" value=\"" . $lr_store . "\" />
@@ -49,9 +49,9 @@ function libertyreserve_link($params) {
 <input type=\"hidden\" name=\"invoiceid\" value=\"" . $invoiceid . "\" />
 <input type=\"hidden\" name=\"id\" value=\"" . $invoiceid . "\" />
 <input type=\"hidden\" name=\"lr_success_url\" value=\"" . $url . "\" />
-<input type=\"hidden\" name=\"lr_fail_url\" value=\"" . $params["returnurl"] . "\" />
+<input type=\"hidden\" name=\"lr_fail_url\" value=\"" . $params['returnurl'] . "\" />
 <input type=\"hidden\" name=\"lr_amnt\" value=\"" . $amount . "\" />
-<input type=\"submit\" value=\"" . $params["langpaynow"] . "\"><br />
+<input type=\"submit\" value=\"" . $params['langpaynow'] . "\"><br />
 <img src=\"https://www.libertyreserve.com/downloads/banners/accept3.gif\" border=\"0\" alt=\"We Accept Liberty Reserve\" />
 </form>";
 	return $code;

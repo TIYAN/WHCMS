@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -31,8 +31,7 @@ function project_management_timesoutput($vars, $taskid) {
 			$timecount += $timerend - $timerstart;
 			$totaltimecount += $timerend - $timerstart;
 			$show_startresume = "true";
-			$invoicelinedesc .= " > " . $starttime . " - " . $endtime . " (" . $totaltime . " " . $vars['_lang']['hours'] . ")
-";
+			$invoicelinedesc .= " > " . $starttime . " - " . $endtime . " (" . $totaltime . " " . $vars['_lang']['hours'] . ")\r\n";
 		}
 	}
 
@@ -146,207 +145,192 @@ else {
 		exit();
 	}
 	else {
-		if ($a == "addmsg") {
-			if (project_management_checkperm("Post Messages")) {
-				$message = ticketAutoHyperlinks(nl2br($_POST['msg']));
-				$projectsdir = $attachments_dir . "projects/" . $projectid . "/";
-				$projectsdir2 = $attachments_dir . "projects/";
-				$attachments = array();
+if ($a == "addmsg") {
+  if (project_management_checkperm("Post Messages")) {
+    $message = ticketAutoHyperlinks(nl2br($_POST['msg']));
+    $projectsdir = $attachments_dir."projects/".$projectid."/";
+    $projectsdir2 = $attachments_dir."projects/";
+    $attachments = array();
 
-				if ($_FILES['attachments']['name'][0]) {
-					if (!is_dir($projectsdir2)) {
-						mkdir($projectsdir2);
-					}
+    if ($_FILES['attachments']['name'][0]) {
+      if (!is_dir($projectsdir2)) {
+        mkdir($projectsdir2);
+      }
 
+      if (!is_dir($projectsdir)) {
+        mkdir($projectsdir);
+      }
 
-					if (!is_dir($projectsdir)) {
-						mkdir($projectsdir);
-					}
+      foreach($_FILES['attachments']['name'] as $num => $filename) {
 
-					foreach ($_FILES['attachments']['name'] as $num => $filename) {
+        if (empty($_FILES['attachments']['name']) || empty($_FILES['attachments']['name'][$num])) {
+          continue;
+        }
 
-						if (empty($_FILES['attachments']['name']) || empty($_FILES['attachments']['name'][$num])) {
-							continue;
-						}
+        if (!isFileNameSafe($_FILES['attachments']['name'][$num])) {
+          $aInt->gracefulExit("Invalid upload filename.  Valid filenames contain only alpha-numeric, dot, hyphen and underscore characters.");
+          exit();
+        }
 
+        $filename = trim($filename);
+        $filename = preg_replace("/[^a-zA-Z0-9-_. ]/", "", $filename);
+        mt_srand(time());
+        $rand = mt_rand(100000, 999999);
+        $newfilename = $rand."_".$filename;
+        move_uploaded_file($_FILES['attachments']['tmp_name'][$num], $projectsdir.$newfilename);
+        $attachments[] = $newfilename;
+      }
+    }
 
-						if (!isFileNameSafe($_FILES['attachments']['name'][$num])) {
-							$aInt->gracefulExit("Invalid upload filename.  Valid filenames contain only alpha-numeric, dot, hyphen and underscore characters.");
-							exit();
-						}
+    insert_query("mod_projectmessages", array("projectid" => $projectid, "date" => "now()", "message" => $message, "attachments" => implode(",", $attachments), "adminid" => $_SESSION['adminid']));
+    project_management_log($projectid, $vars['_lang']['newmsgposted']);
+    redir("module=project_management&m=view&projectid=". (int) $projectid);
+  }
+} else {
+  if ($a == "updatestaffmsg") {
+    $msgid = $_POST['msgid'];
+    $msgtxt = html_entity_decode($_POST['msgtxt']);
+    update_query("mod_projectmessages", array("message" => $msgtxt), array("id" => $msgid));
+    project_management_log($projectid, "Edited Staff Message");
+    echo nl2br(ticketAutoHyperlinks($msgtxt));
+    exit();
+  } else {
+    if ($a == "deletestaffmsg") {
+      if (project_management_checkperm("Delete Messages")) {
+        $msgid = (int) $_REQUEST['id'];
+        $attachments = explode(",", get_query_val("mod_projectmessages", "attachments", array("id" => $msgid)));
+        $projectsdir = $attachments_dir."projects/".$projectid."/";
+        foreach($attachments as $i => $attachment) {
+          deleteFile($projectsdir, $attachments[(int) $i]);
+          project_management_log($projectid, $vars['_lang']['deletedattachment']." ".substr($attachments[$i], 7));
+        }
 
-						$filename = trim($filename);
-						$filename = preg_replace("/[^a-zA-Z0-9-_. ]/", "", $filename);
-						mt_srand(time());
-						$rand = mt_rand(100000, 999999);
-						$newfilename = $rand . "_" . $filename;
-						move_uploaded_file($_FILES['attachments']['tmp_name'][$num], $projectsdir . $newfilename);
-						$attachments[] = $newfilename;
-					}
-				}
+        delete_query("mod_projectmessages", array("id" => $msgid));
+        project_management_log($projectid, "Deleted Staff Message");
+        echo $msgid;
+      } else {
+        echo "0";
+      }
 
-				insert_query("mod_projectmessages", array("projectid" => $projectid, "date" => "now()", "message" => $message, "attachments" => implode(",", $attachments), "adminid" => $_SESSION['adminid']));
-				project_management_log($projectid, $vars['_lang']['newmsgposted']);
-				redir("module=project_management&m=view&projectid=" . (int)$projectid);
-			}
-		}
-		else {
-			if ($a == "updatestaffmsg") {
-				$msgid = $_POST['msgid'];
-				$msgtxt = html_entity_decode($_POST['msgtxt']);
-				update_query("mod_projectmessages", array("message" => $msgtxt), array("id" => $msgid));
-				project_management_log($projectid, "Edited Staff Message");
-				echo nl2br(ticketAutoHyperlinks($msgtxt));
-				exit();
-			}
-			else {
-				if ($a == "deletestaffmsg") {
-					if (project_management_checkperm("Delete Messages")) {
-						$msgid = (int)$_REQUEST['id'];
-						$attachments = explode(",", get_query_val("mod_projectmessages", "attachments", array("id" => $msgid)));
-						$projectsdir = $attachments_dir . "projects/" . $projectid . "/";
-						foreach ($attachments as $i => $attachment) {
-							deleteFile($projectsdir, $attachments[(int)$i]);
-							project_management_log($projectid, $vars['_lang']['deletedattachment'] . " " . substr($attachments[$i], 7));
-						}
+      exit();
+    } else {
+      if ($a == "hookstarttimer") {
+        $projectid = $_REQUEST['projectid'];
+        $ticketnum = $_REQUEST['ticketnum'];
+        $taskid = $_REQUEST['taskid'];
+        $title = $_REQUEST['title'];
 
-						delete_query("mod_projectmessages", array("id" => $msgid));
-						project_management_log($projectid, "Deleted Staff Message");
-						echo $msgid;
-					}
-					else {
-						echo "0";
-					}
+        if (!$taskid && $title) {
+          $taskid = insert_query("mod_projecttasks", array("projectid" => $projectid, "task" => $title, "created" => "now()"));
+          project_management_log($projectid, $vars['_lang']['addedtask'].$title);
+        }
 
-					exit();
-				}
-				else {
-					if ($a == "hookstarttimer") {
-						$projectid = $_REQUEST['projectid'];
-						$ticketnum = $_REQUEST['ticketnum'];
-						$taskid = $_REQUEST['taskid'];
-						$title = $_REQUEST['title'];
+        $timerid = insert_query("mod_projecttimes", array("projectid" => $projectid, "taskid" => $taskid, "start" => time(), "adminid" => $_SESSION['adminid']));
+        project_management_log($projectid, $vars['_lang']['startedtimerfortask'].get_query_val("mod_projecttasks", "task", array("id" => $taskid)));
 
-						if (!$taskid && $title) {
-							$taskid = insert_query("mod_projecttasks", array("projectid" => $projectid, "task" => $title, "created" => "now()"));
-							project_management_log($projectid, $vars['_lang']['addedtask'] . $title);
-						}
+        if ($timerid) {
+          $result = select_query("mod_projecttimes", "mod_projecttimes.id, mod_projecttimes.projectid, mod_project.title, mod_projecttimes.taskid, mod_projecttasks.task, mod_projecttimes.start", array("mod_projecttimes.adminid" => $_SESSION['adminid'], "mod_projecttimes.end" => "", "mod_project.ticketids" => array("sqltype" => "LIKE", "value" => (int) $ticketnum)), "", "", "", "mod_projecttasks ON mod_projecttimes.taskid=mod_projecttasks.id INNER JOIN mod_project ON mod_projecttimes.projectid=mod_project.id");
 
-						$timerid = insert_query("mod_projecttimes", array("projectid" => $projectid, "taskid" => $taskid, "start" => time(), "adminid" => $_SESSION['adminid']));
-						project_management_log($projectid, $vars['_lang']['startedtimerfortask'] . get_query_val("mod_projecttasks", "task", array("id" => $taskid)));
+          while ($data = mysql_fetch_array($result)) {
+            echo "<div class=\"stoptimer".$data['id']."\" style=\"padding-bottom:10px;\"><em>".$data['title']." - Project ID ".$data['projectid']."</em><br />&nbsp;&raquo; ".$data['task']."<br />Started at ".fromMySQLDate(date("Y-m-d H:i:s", $data['start']), 1).":".date("s", $data['start'])." - <a href=\"#\" onclick=\"projectendtimersubmit('".$data['projectid']."','".$data['id']."');return false\"><strong>Stop Timer</strong></a></div>";
+          }
+        } else {
+          echo "0";
+        }
 
-						if ($timerid) {
-							$result = select_query("mod_projecttimes", "mod_projecttimes.id, mod_projecttimes.projectid, mod_project.title, mod_projecttimes.taskid, mod_projecttasks.task, mod_projecttimes.start", array("mod_projecttimes.adminid" => $_SESSION['adminid'], "mod_projecttimes.end" => "", "mod_project.ticketids" => array("sqltype" => "LIKE", "value" => (int)$ticketnum)), "", "", "", "mod_projecttasks ON mod_projecttimes.taskid=mod_projecttasks.id INNER JOIN mod_project ON mod_projecttimes.projectid=mod_project.id");
+        exit();
+      } else {
+        if ($a == "hookendtimer") {
+          $timerid = $_POST['timerid'];
+          $ticketnum = $_POST['ticketnum'];
+          $taskid = get_query_val("mod_projecttimes", "taskid", array("id" => $timerid, "adminid" => $_SESSION['adminid']));
+          $projectid = get_query_val("mod_projecttimes", "projectid", array("id" => $timerid, "adminid" => $_SESSION['adminid']));
+          update_query("mod_projecttimes", array("end" => time()), array("id" => $timerid, "taskid" => $taskid, "adminid" => $_SESSION['adminid']));
+          project_management_log($projectid, $vars['_lang']['stoppedtimerfortask'].get_query_val("mod_projecttasks", "task", array("id" => $taskid)));
 
-							while ($data = mysql_fetch_array($result)) {
-								echo "<div class=\"stoptimer" . $data['id'] . "\" style=\"padding-bottom:10px;\"><em>" . $data['title'] . " - Project ID " . $data['projectid'] . "</em><br />&nbsp;&raquo; " . $data['task'] . "<br />Started at " . fromMySQLDate(date("Y-m-d H:i:s", $data['start']), 1) . ":" . date("s", $data['start']) . " - <a href=\"#\" onclick=\"projectendtimersubmit('" . $data['projectid'] . "','" . $data['id'] . "');return false\"><strong>Stop Timer</strong></a></div>";
-							}
-						}
-						else {
-							echo "0";
-						}
+          if (!$taskid) {
+            echo "0";
+          } else {
+            $result = select_query("mod_projecttimes", "mod_projecttimes.id, mod_projecttimes.projectid, mod_project.title, mod_projecttimes.taskid, mod_projecttasks.task, mod_projecttimes.start", array("mod_projecttimes.adminid" => $_SESSION['adminid'], "mod_projecttimes.end" => "", "mod_project.ticketids" => array("sqltype" => "LIKE", "value" => (int) $ticketnum)), "", "", "", "mod_projecttasks ON mod_projecttimes.taskid=mod_projecttasks.id INNER JOIN mod_project ON mod_projecttimes.projectid=mod_project.id");
 
-						exit();
-					}
-					else {
-						if ($a == "hookendtimer") {
-							$timerid = $_POST['timerid'];
-							$ticketnum = $_POST['ticketnum'];
-							$taskid = get_query_val("mod_projecttimes", "taskid", array("id" => $timerid, "adminid" => $_SESSION['adminid']));
-							$projectid = get_query_val("mod_projecttimes", "projectid", array("id" => $timerid, "adminid" => $_SESSION['adminid']));
-							update_query("mod_projecttimes", array("end" => time()), array("id" => $timerid, "taskid" => $taskid, "adminid" => $_SESSION['adminid']));
-							project_management_log($projectid, $vars['_lang']['stoppedtimerfortask'] . get_query_val("mod_projecttasks", "task", array("id" => $taskid)));
+            while ($data = mysql_fetch_array($result)) {
+              echo "<div class=\"stoptimer".$data['id']."\" style=\"padding-bottom:10px;\"><em>".$data['title']." - Project ID ".$data['projectid']."</em><br />&nbsp;&raquo; ".$data['task']."<br />Started at ".fromMySQLDate(date("Y-m-d H:i:s", $data['start']), 1).":".date("s", $data['start'])." - <a href=\"#\" onclick=\"projectendtimersubmit('".$data['projectid']."','".$data['id']."');return false\"><strong>Stop Timer</strong></a></div>";
+            }
+          }
 
-							if (!$taskid) {
-								echo "0";
-							}
-							else {
-								$result = select_query("mod_projecttimes", "mod_projecttimes.id, mod_projecttimes.projectid, mod_project.title, mod_projecttimes.taskid, mod_projecttasks.task, mod_projecttimes.start", array("mod_projecttimes.adminid" => $_SESSION['adminid'], "mod_projecttimes.end" => "", "mod_project.ticketids" => array("sqltype" => "LIKE", "value" => (int)$ticketnum)), "", "", "", "mod_projecttasks ON mod_projecttimes.taskid=mod_projecttasks.id INNER JOIN mod_project ON mod_projecttimes.projectid=mod_project.id");
+          exit();
+        } else {
+          if ($a == "starttimer") {
+            $projectid = (int) $_REQUEST['projectid'];
+            $taskid = (int) $_REQUEST['taskid'];
+            $activetimers = select_query("mod_projecttimes", "id", array("end" => "", "projectid" => $projectid, "taskid" => $taskid, "adminid" => $_SESSION['adminid']));
 
-								while ($data = mysql_fetch_array($result)) {
-									echo "<div class=\"stoptimer" . $data['id'] . "\" style=\"padding-bottom:10px;\"><em>" . $data['title'] . " - Project ID " . $data['projectid'] . "</em><br />&nbsp;&raquo; " . $data['task'] . "<br />Started at " . fromMySQLDate(date("Y-m-d H:i:s", $data['start']), 1) . ":" . date("s", $data['start']) . " - <a href=\"#\" onclick=\"projectendtimersubmit('" . $data['projectid'] . "','" . $data['id'] . "');return false\"><strong>Stop Timer</strong></a></div>";
-								}
-							}
+            if ($activetimersdata = mysql_fetch_assoc($activetimers)) {
+              update_query("mod_projecttimes", array("end" => time()), array("id" => $activetimersdata['id']));
+            }
 
-							exit();
-						}
-						else {
-							if ($a == "starttimer") {
-								$projectid = (int)$_REQUEST['projectid'];
-								$taskid = (int)$_REQUEST['taskid'];
-								$activetimers = select_query("mod_projecttimes", "id", array("end" => "", "projectid" => $projectid, "taskid" => $taskid, "adminid" => $_SESSION['adminid']));
+            $timerstart = time();
 
-								while ($activetimersdata = mysql_fetch_assoc($activetimers)) {
-									update_query("mod_projecttimes", array("end" => time()), array("id" => $activetimersdata['id']));
-								}
+            if ($projectid && $taskid) {
+              $timerid = insert_query("mod_projecttimes", array("projectid" => $projectid, "taskid" => $taskid, "start" => $timerstart, "adminid" => $_SESSION['adminid']));
+              project_management_log($projectid, $vars['_lang']['startedtimerfortask'].get_query_val("mod_projecttasks", "task", array("id" => $taskid)));
 
-								$timerstart = time();
+              if ($timerid) {
+                $timeradmin = get_query_val("tbladmins", "CONCAT(firstname,' ',lastname)", array("id" => $_SESSION['adminid']));
+                $starttime = fromMySQLDate(date("Y-m-d H:i:s", $timerstart), 1).":".date("s", $timerstart);
+                $endtimerlink = (($timerdata['adminid'] == $_SESSION['adminid'] || project_management_check_masteradmin()) ? "<a rel=\"".$timerid."\" id=\"ajaxendtimertaskid".$taskid."\" class=\"ajaxendtimer timerlink\">".$vars['_lang']['endtimer']."</a>": $vars['_lang']['inprogress']);
+                $deltimerlink = (($timerdata['adminid'] == $_SESSION['adminid'] || project_management_check_masteradmin()) ? "<a onclick=\"deleteTimer('".$timerid."','".$taskid."')\" href=\"#\"><img src=\"images/delete.gif\"></a>": "");
+                $endtime = ($timerend ? fromMySQLDate(date("Y-m-d H:i:s", $timerend), 1).":".date("s", $timerend) : $endtimerlink);
+                $totaltime = ($timerend ? project_management_sec2hms($timerend - $timerstart) : "In Progress");
+                echo "<tr bgcolor=\"#ffffff\" class=\"time taskholder".$taskid."\"><td>".$timeradmin."</td><td>".$starttime."</td><td id=\"ajaxendtimertaskholderid".$timerid."\">".$endtime."</td><td id=\"ajaxtimerstatusholderid".$timerid."\">".$totaltime."</td><td>".$deltimerlink."</td></tr>";
+              }
+            } else {
+              echo $projectid." ".$taskid;
+            }
 
-								if ($projectid && $taskid) {
-									$timerid = insert_query("mod_projecttimes", array("projectid" => $projectid, "taskid" => $taskid, "start" => $timerstart, "adminid" => $_SESSION['adminid']));
-									project_management_log($projectid, $vars['_lang']['startedtimerfortask'] . get_query_val("mod_projecttasks", "task", array("id" => $taskid)));
+            exit();
+          } else {
+            if ($a == "endtimer") {
+              $timerid = $_REQUEST['timerid'];
+              $projectid = $_REQUEST['projectid'];
+              $taskid = $_REQUEST['taskid'];
+              update_query("mod_projecttimes", array("end" => time()), array("id" => $timerid, "taskid" => $taskid));
+              logActivity(get_query_val("mod_projecttimes", "end-start", array("id" => $timerid, "taskid" => $taskid)));
+              $duration = project_management_sec2hms(get_query_val("mod_projecttimes", "end-start", array("id" => $timerid, "taskid" => $taskid)));
+              project_management_log($projectid, $vars['_lang']['stoppedtimerfortask'].get_query_val("mod_projecttasks", "task", array("id" => $taskid)));
 
-									if ($timerid) {
-										$timeradmin = get_query_val("tbladmins", "CONCAT(firstname,' ',lastname)", array("id" => $_SESSION['adminid']));
-										$starttime = fromMySQLDate(date("Y-m-d H:i:s", $timerstart), 1) . ":" . date("s", $timerstart);
-										$endtimerlink = (($timerdata['adminid'] == $_SESSION['adminid'] || project_management_check_masteradmin()) ? "<a rel=\"" . $timerid . "\" id=\"ajaxendtimertaskid" . $taskid . "\" class=\"ajaxendtimer timerlink\">" . $vars['_lang']['endtimer'] . "</a>" : $vars['_lang']['inprogress']);
-										$deltimerlink = (($timerdata['adminid'] == $_SESSION['adminid'] || project_management_check_masteradmin()) ? "<a onclick=\"deleteTimer('" . $timerid . "','" . $taskid . "')\" href=\"#\"><img src=\"images/delete.gif\"></a>" : "");
-										$endtime = ($timerend ? fromMySQLDate(date("Y-m-d H:i:s", $timerend), 1) . ":" . date("s", $timerend) : $endtimerlink);
-										$totaltime = ($timerend ? project_management_sec2hms($timerend - $timerstart) : "In Progress");
-										echo "<tr bgcolor=\"#ffffff\" class=\"time taskholder" . $taskid . "\"><td>" . $timeradmin . "</td><td>" . $starttime . "</td><td id=\"ajaxendtimertaskholderid" . $timerid . "\">" . $endtime . "</td><td id=\"ajaxtimerstatusholderid" . $timerid . "\">" . $totaltime . "</td><td>" . $deltimerlink . "</td></tr>";
-									}
-								}
-								else {
-									echo $projectid . " " . $taskid;
-								}
+              if ($_REQUEST['ajax']) {
+                echo json_encode(array("time" => fromMySQLDate(date("Y-m-d H:i:s"), 1).":".date("s"), "duration" => $duration));
+              } else {
+                redir("module=project_management&m=view&projectid=". (int) $projectid);
+              }
 
-								exit();
-							}
-							else {
-								if ($a == "endtimer") {
-									$timerid = $_REQUEST['timerid'];
-									$projectid = $_REQUEST['projectid'];
-									$taskid = $_REQUEST['taskid'];
-									update_query("mod_projecttimes", array("end" => time()), array("id" => $timerid, "taskid" => $taskid));
-									logActivity(get_query_val("mod_projecttimes", "end-start", array("id" => $timerid, "taskid" => $taskid)));
-									$duration = project_management_sec2hms(get_query_val("mod_projecttimes", "end-start", array("id" => $timerid, "taskid" => $taskid)));
-									project_management_log($projectid, $vars['_lang']['stoppedtimerfortask'] . get_query_val("mod_projecttasks", "task", array("id" => $taskid)));
+              exit();
+            } else {
+              if ($a == "deletetimer") {
+                $timerid = $_REQUEST['id'];
+                $taskid = $_REQUEST['taskid'];
+                delete_query("mod_projecttimes", array("id" => $timerid, "taskid" => $taskid));
+                project_management_log($projectid, $vars['_lang']['deletedtimerfortask'].get_query_val("mod_projecttasks", "task", array("id" => $taskid)));
+                redir("module=project_management&m=view&projectid=". (int) $projectid);
+                exit();
+              } else {
+                if ($a == "addtask") {
+                  $newtask = trim($_POST['newtask']);
+                  $maxorder = get_query_val("mod_projecttasks", "MAX(`order`)", array("projectid" => $projectid));
 
-									if ($_REQUEST['ajax']) {
-										echo json_encode(array("time" => fromMySQLDate(date("Y-m-d H:i:s"), 1) . ":" . date("s"), "duration" => $duration));
-									}
-									else {
-										redir("module=project_management&action=manage&projectid=" . (int)$projectid);
-									}
+                  if ($newtask) {
+                    $taskid = insert_query("mod_projecttasks", array("projectid" => $projectid, "task" => $newtask, "created" => "now()", "order" => $maxorder + 1));
+                    project_management_log($projectid, $vars['_lang']['addedtask'].$newtask);
+                  }
 
-									exit();
-								}
-								else {
-									if ($a == "deletetimer") {
-										$timerid = $_REQUEST['id'];
-										$taskid = $_REQUEST['taskid'];
-										delete_query("mod_projecttimes", array("id" => $timerid, "taskid" => $taskid));
-										project_management_log($projectid, $vars['_lang']['deletedtimerfortask'] . get_query_val("mod_projecttasks", "task", array("id" => $taskid)));
-										redir("module=project_management&action=manage&projectid=" . (int)$projectid);
-										exit();
-									}
-									else {
-										if ($a == "addtask") {
-											$newtask = trim($_POST['newtask']);
-											$maxorder = get_query_val("mod_projecttasks", "MAX(`order`)", array("projectid" => $projectid));
-
-											if ($newtask) {
-												$taskid = insert_query("mod_projecttasks", array("projectid" => $projectid, "task" => $newtask, "created" => "now()", "order" => $maxorder + 1));
-												project_management_log($projectid, $vars['_lang']['addedtask'] . $newtask);
-											}
-
-											$taskedit = (project_management_checkperm("Edit Tasks") ? " <a href=\"" . str_replace("&m=view", "&m=edittask", $modulelink) . "&id=" . $taskid . "\"><img src=\"images/edit.gif\" align=\"absmiddle\" /></a>" : "");
-											$taskdelete = (project_management_checkperm("Delete Tasks") ? " <a href=\"#\" onclick=\"deleteTask(" . $taskid . ");return false\"><img src=\"images/delete.gif\" align=\"absmiddle\" /></a>" : "");
-											$timesoutput = project_management_timesoutput($vars, $taskid);
-											$notesoutput = "<div style=\"margin-top:5px;\"><table width=\"95%\" align=\"center\"><tr><td><textarea rows=\"3\" style=\"width:100%\" id=\"tasknotestxtarea" . $taskid . "\">" . $tasknotes . "</textarea></td><td width=\"120\" align=\"right\"><input type=\"button\" id=\"savetasknotestxtarea" . $taskid . "\" class=\"savetasknotestxtarea\" value=\"" . $vars['_lang']['savenotes'] . "\" /></td></tr></table></div>";
-											$tasknotes = "<a class=\"tasknotestoggler\" id=\"tasknotestogglerclicker" . $taskid . "\"><img src=\"../modules/addons/project_management/images/" . ($tasknotes ? "" : "no") . "notes.png\" align=\"absmiddle\" title=\"View/Edit Notes\" /></a>";
-											$tmptaskshtml = "";
-											$taskshtml = "<tr id=\"taskholder" . $taskid . "\">
+                  $taskedit = (project_management_checkperm("Edit Tasks") ? " <a href=\"".str_replace("&m=view", "&m=edittask", $modulelink)."&id=".$taskid."\"><img src=\"images/edit.gif\" align=\"absmiddle\" /></a>": "");
+                  $taskdelete = (project_management_checkperm("Delete Tasks") ? " <a href=\"#\" onclick=\"deleteTask(".$taskid.");return false\"><img src=\"images/delete.gif\" align=\"absmiddle\" /></a>": "");
+                  $timesoutput = project_management_timesoutput($vars, $taskid);
+                  $notesoutput = "<div style=\"margin-top:5px;\"><table width=\"95%\" align=\"center\"><tr><td><textarea rows=\"3\" style=\"width:100%\" id=\"tasknotestxtarea".$taskid."\">".$tasknotes."</textarea></td><td width=\"120\" align=\"right\"><input type=\"button\" id=\"savetasknotestxtarea".$taskid."\" class=\"savetasknotestxtarea\" value=\"".$vars['_lang']['savenotes']."\" /></td></tr></table></div>";
+                  $tasknotes = "<a class=\"tasknotestoggler\" id=\"tasknotestogglerclicker".$taskid."\"><img src=\"../modules/addons/project_management/images/". ($tasknotes ? "": "no")."notes.png\" align=\"absmiddle\" title=\"View/Edit Notes\" /></a>";
+                  $tmptaskshtml = "";
+                  $taskshtml = "<tr id=\"taskholder".$taskid."\">
     <td class=\"sortcol\"></td>
     <td>
 	<table width=\"100%\" cellspacing=\"0\" cellpadding=\"0\">
@@ -356,398 +340,397 @@ else {
 	</table>
     </td>
 </tr>";
-											echo $taskshtml;
-											exit();
-										}
-else {
-if ($a == "updatetask") {
-  if ($_REQUEST['taskid']) {
-    update_query("mod_projecttasks", array("completed" => ($_REQUEST['status'] == "checked" ? "1": "0")), array("id" => (int) $_REQUEST['taskid']));
-  }
-
-  $taskstatusdata = project_management_tasksstatus($projectid, $vars);
-  echo $taskstatusdata['html'];
-  exit();
+echo $taskshtml;
+exit();
 } else {
-  if ($a == "savetasksorder") {
-    $torderarr = explode("&amp;", $_REQUEST['torderarr']);
-    $tonum = 0;
-    foreach($torderarr as $v) {
-      $v = explode("tasks[]=taskholder", $v);
-
-      if ($v[1]) {
-        update_query("mod_projecttasks", array("order" => $tonum), array("id" => $v[1])); ++$tonum;
-        continue;
-      }
+  if ($a == "updatetask") {
+    if ($_REQUEST['taskid']) {
+      update_query("mod_projecttasks", array("completed" => ($_REQUEST['status'] == "checked" ? "1": "0")), array("id" => (int) $_REQUEST['taskid']));
     }
 
+    $taskstatusdata = project_management_tasksstatus($projectid, $vars);
+    echo $taskstatusdata['html'];
     exit();
   } else {
-    if ($a == "savetasknotes") {
-      if ($_REQUEST['taskid']) {
-        update_query("mod_projecttasks", array("notes" => $_REQUEST['notes']), array("id" => (int) $_REQUEST['taskid']));
-        echo "1";
-      } else {
-        echo "0";
+    if ($a == "savetasksorder") {
+      $torderarr = explode("&amp;", $_REQUEST['torderarr']);
+      $tonum = 0;
+      foreach($torderarr as $v) {
+        $v = explode("tasks[]=taskholder", $v);
+
+        if ($v[1]) {
+          update_query("mod_projecttasks", array("order" => $tonum), array("id" => $v[1])); ++$tonum;
+          continue;
+        }
       }
 
       exit();
     } else {
-      if ($a == "deletetask") {
-        if (project_management_checkperm("Delete Tasks")) {
-          $id = $_REQUEST['id'];
-          delete_query("mod_projecttasks", array("projectid" => $projectid, "id" => $id));
-          delete_query("mod_projecttimes", array("taskid" => $id));
-          project_management_log($projectid, $vars['_lang']['deletedtask']);
-          echo $id;
-          exit();
+      if ($a == "savetasknotes") {
+        if ($_REQUEST['taskid']) {
+          update_query("mod_projecttasks", array("notes" => $_REQUEST['notes']), array("id" => (int) $_REQUEST['taskid']));
+          echo "1";
+        } else {
+          echo "0";
         }
+
+        exit();
       } else {
-        if ($a == "deleteticket") {
-          if (project_management_checkperm("Associate Tickets")) {
-            $result = select_query("mod_project", "ticketids", array("id" => $projectid));
-            $data = mysql_fetch_array($result);
-            $ticketids = explode(",", $data['ticketids']);
-            project_management_log($projectid, $vars['_lang']['deletedticketrelationship'].$ticketids[$_REQUEST['id']]);
-            unset($ticketids[$_REQUEST['id']]);
-            update_query("mod_project", array("ticketids" => implode(",", $ticketids), "lastmodified" => "now()"), array("id" => $projectid));
-            echo $_REQUEST['id'];
+        if ($a == "deletetask") {
+          if (project_management_checkperm("Delete Tasks")) {
+            $id = $_REQUEST['id'];
+            delete_query("mod_projecttasks", array("projectid" => $projectid, "id" => $id));
+            delete_query("mod_projecttimes", array("taskid" => $id));
+            project_management_log($projectid, $vars['_lang']['deletedtask']);
+            echo $id;
             exit();
           }
         } else {
-          if ($a == "projectsave") {
-            $logmsg = "";
-            $result = select_query("mod_project", "", array("id" => $projectid));
-            $data = mysql_fetch_array($result);
-            $updateqry['userid'] = $_POST['userid'];
-            $updateqry['title'] = $_POST['title'];
-            $updateqry['adminid'] = $_POST['adminid'];
-            $updateqry['created'] = toMySQLDate($_POST['created']);
-            $updateqry['duedate'] = toMySQLDate($_POST['duedate']);
-            $updateqry['lastmodified'] = "now()";
-
-            if ($_POST['completed']) {
-              update_query("mod_projecttasks", array("completed" => "1"), array("projectid" => $projectid));
+          if ($a == "deleteticket") {
+            if (project_management_checkperm("Associate Tickets")) {
+              $result = select_query("mod_project", "ticketids", array("id" => $projectid));
+              $data = mysql_fetch_array($result);
+              $ticketids = explode(",", $data['ticketids']);
+              project_management_log($projectid, $vars['_lang']['deletedticketrelationship'].$ticketids[$_REQUEST['id']]);
+              unset($ticketids[$_REQUEST['id']]);
+              update_query("mod_project", array("ticketids" => implode(",", $ticketids), "lastmodified" => "now()"), array("id" => $projectid));
+              echo $_REQUEST['id'];
+              exit();
             }
-
-            if (!$logmsg) {
-              if ($updateqry['title'] && $updateqry['title'] != $data['title']) {
-                $changes[] = $vars['_lang']['titlechangedfrom'].$data['title']." to ".$updateqry['title'];
-              }
-
-              if (isset($updateqry['userid']) && $updateqry['userid'] != $data['userid']) {
-                $changes[] = $vars['_lang']['assignedclientchangedfrom'].$data['userid']." ".$vars['_lang']['to']." ".$updateqry['userid'];
-              }
-
-              if ($updateqry['adminid'] != $data['adminid']) {
-                $changes[] = $vars['_lang']['assignedadminchangedfrom']. ($data['adminid'] ? getAdminName($data['adminid']) : "Nobody")." ".$vars['_lang']['to']." ". ($updateqry['adminid'] ? getAdminName($updateqry['adminid']) : "Nobody");
-              }
-
-              if ($_POST['created'] && $_POST['created'] != fromMySQLDate($data['created'])) {
-                $changes[] = $vars['_lang']['creationdatechangedfrom'].fromMySQLDate($data['created'])." to ".$_POST['created'];
-              }
-
-              if ($_POST['duedate'] && $_POST['duedate'] != fromMySQLDate($data['duedate'])) {
-                $changes[] = $vars['_lang']['duedatechangedfrom'].fromMySQLDate($data['duedate'])." to ".$_POST['duedate'];
-              }
-
-              if ($_POST['newticketid']) {
-                $changes[] = $vars['_lang']['addednewrelatedticket'].$_POST['newticketid'];
-              }
-
-              if ($updateqry['notes'] && $updateqry['notes'] != $data['notes']) {
-                $changes[] = $vars['_lang']['notesupdated'];
-              }
-
-              if ($updateqry['completed'] && $updateqry['completed'] != $data['completed']) {
-                $changes[] = $vars['_lang']['projectmarkedcompleted'];
-              }
-
-              $logmsg = $vars['_lang']['updatedproject'].implode(", ", $changes);
-            }
-
-            if (count($changes)) {
-              project_management_log($projectid, $logmsg);
-            }
-
-            update_query("mod_project", $updateqry, array("id" => $projectid));
-            echo project_management_daysleft($_POST['duedate'], $vars);
-            exit();
           } else {
-            if ($a == "statussave") {
-              if (project_management_checkperm("Update Status")) {
-                $status = db_escape_string($_POST['status']);
-                $statuses = explode(",", $vars['statusvalues']);
-                $statusarray = array();
-                foreach($statuses as $tmpstatus) {
-                  $tmpstatus = explode("|", $tmpstatus, 2);
-                  $statusarray[] = $tmpstatus[0];
-                }
+            if ($a == "projectsave") {
+              $logmsg = "";
+              $result = select_query("mod_project", "", array("id" => $projectid));
+              $data = mysql_fetch_array($result);
+              $updateqry['userid'] = $_POST['userid'];
+              $updateqry['title'] = $_POST['title'];
+              $updateqry['adminid'] = $_POST['adminid'];
+              $updateqry['created'] = toMySQLDate($_POST['created']);
+              $updateqry['duedate'] = toMySQLDate($_POST['duedate']);
+              $updateqry['lastmodified'] = "now()";
 
-                if (in_array($status, $statusarray)) {
-                  $oldstatus = get_query_val("mod_project", "status", array("id" => $projectid));
-                  $updateqry = array("status" => $status);
-
-                  if (in_array($status, explode(",", $vars['completedstatuses']))) {
-                    $updateqry['completed'] = "1";
-                  } else {
-                    $updateqry['completed'] = "0";
-                  }
-
-                  update_query("mod_project", $updateqry, array("id" => $projectid));
-                  project_management_log($projectid, $vars['_lang']['statuschangedfrom'].$oldstatus." ".$vars['_lang']['to']." ".$status);
-                }
+              if ($_POST['completed']) {
+                update_query("mod_projecttasks", array("completed" => "1"), array("projectid" => $projectid));
               }
 
+              if (!$logmsg) {
+                if ($updateqry['title'] && $updateqry['title'] != $data['title']) {
+                  $changes[] = $vars['_lang']['titlechangedfrom'].$data['title']." to ".$updateqry['title'];
+                }
+
+                if (isset($updateqry['userid']) && $updateqry['userid'] != $data['userid']) {
+                  $changes[] = $vars['_lang']['assignedclientchangedfrom'].$data['userid']." ".$vars['_lang']['to']." ".$updateqry['userid'];
+                }
+
+                if ($updateqry['adminid'] != $data['adminid']) {
+                  $changes[] = $vars['_lang']['assignedadminchangedfrom']. ($data['adminid'] ? getAdminName($data['adminid']) : "Nobody")." ".$vars['_lang']['to']." ". ($updateqry['adminid'] ? getAdminName($updateqry['adminid']) : "Nobody");
+                }
+
+                if ($_POST['created'] && $_POST['created'] != fromMySQLDate($data['created'])) {
+                  $changes[] = $vars['_lang']['creationdatechangedfrom'].fromMySQLDate($data['created'])." to ".$_POST['created'];
+                }
+
+                if ($_POST['duedate'] && $_POST['duedate'] != fromMySQLDate($data['duedate'])) {
+                  $changes[] = $vars['_lang']['duedatechangedfrom'].fromMySQLDate($data['duedate'])." to ".$_POST['duedate'];
+                }
+
+                if ($_POST['newticketid']) {
+                  $changes[] = $vars['_lang']['addednewrelatedticket'].$_POST['newticketid'];
+                }
+
+                if ($updateqry['notes'] && $updateqry['notes'] != $data['notes']) {
+                  $changes[] = $vars['_lang']['notesupdated'];
+                }
+
+                if ($updateqry['completed'] && $updateqry['completed'] != $data['completed']) {
+                  $changes[] = $vars['_lang']['projectmarkedcompleted'];
+                }
+
+                $logmsg = $vars['_lang']['updatedproject'].implode(", ", $changes);
+              }
+
+              if (count($changes)) {
+                project_management_log($projectid, $logmsg);
+              }
+
+              update_query("mod_project", $updateqry, array("id" => $projectid));
+              echo project_management_daysleft($_POST['duedate'], $vars);
               exit();
             } else {
-              if ($a == "addattachment") {
-                $projectsdir = $attachments_dir."projects/".$projectid."/";
-                $projectsdir2 = $attachments_dir."projects/";
-
-                if (!is_dir($projectsdir2)) {
-                  mkdir($projectsdir2);
-                }
-
-                if (!is_dir($projectsdir)) {
-                  mkdir($projectsdir);
-                }
-
-                $attachments = explode(",", get_query_val("mod_project", "attachments", array("id" => $projectid)));
-
-                if (empty($attachments[0])) {
-                  unset($attachments[0]);
-                }
-
-                if ($_FILES['attachments']['name'][0]) {
-                  foreach($_FILES['attachments']['name'] as $num => $filename) {
-
-                    if (empty($_FILES['attachments']['name']) || empty($_FILES['attachments']['name'][$num])) {
-                      continue;
-                    }
-
-                    if (!isFileNameSafe($_FILES['attachments']['name'][$num])) {
-                      $aInt->gracefulExit("Invalid upload filename.  Valid filenames contain only alpha-numeric, dot, hyphen and underscore characters.");
-                      exit();
-                    }
-
-                    $filename = trim($filename);
-                    $filename = preg_replace("/[^a-zA-Z0-9-_. ]/", "", $filename);
-                    mt_srand(time());
-                    $rand = mt_rand(100000, 999999);
-                    $newfilename = $rand."_".$filename;
-                    move_uploaded_file($_FILES['attachments']['tmp_name'][$num], $projectsdir.$newfilename);
-                    $attachments[] = $newfilename;
-                    update_query("mod_project", array("attachments" => implode(",", $attachments)), array("id" => $projectid));
-                    project_management_log($projectid, $vars['_lang']['addedattachment']." ".$filename);
-                  }
-                }
-
-                redir("module=project_management");
-              } else {
-                if ($a == "deleteattachment") {
-                  if (project_management_check_masteradmin()) {
-                    $attachments = explode(",", get_query_val("mod_project", "attachments", array("id" => (int) $projectid)));
-                    $projectsdir = $attachments_dir."projects/".$projectid."/";
-                    $i = (int) $_REQUEST['i'];
-                    deleteFile($projectsdir, $attachments[$i]);
-                    project_management_log($projectid, $vars['_lang']['deletedattachment']." ".substr($attachments[$i], 7));
-                    unset($attachments[$i]);
-                    update_query("mod_project", array("attachments" => implode(",", $attachments), "lastmodified" => "now()"), array("id" => (int) $projectid));
+              if ($a == "statussave") {
+                if (project_management_checkperm("Update Status")) {
+                  $status = db_escape_string($_POST['status']);
+                  $statuses = explode(",", $vars['statusvalues']);
+                  $statusarray = array();
+                  foreach($statuses as $tmpstatus) {
+                    $tmpstatus = explode("|", $tmpstatus, 2);
+                    $statusarray[] = $tmpstatus[0];
                   }
 
-                  redir("module=project_management&action=manage&projectid=". (int) $projectid);
-                } else {
-                  if ($a == "addquickinvoice") {
-                    $newinvoice = trim($_REQUEST['newinvoice']);
-                    $newinvoiceamt = trim($_REQUEST['newinvoiceamt']);
+                  if (in_array($status, $statusarray)) {
+                    $oldstatus = get_query_val("mod_project", "status", array("id" => $projectid));
+                    $updateqry = array("status" => $status);
 
-                    if ($newinvoice && $newinvoiceamt) {
-                      $userid = get_query_val("mod_project", "userid", array("id" => $projectid));
-                      $gateway = (function_exists("getClientsPaymentMethod") ? getClientsPaymentMethod($userid) : "paypal");
-
-                      if ($CONFIG['TaxEnabled'] == "on") {
-                        $clientsdetails = getClientsDetails($userid);
-
-                        if (!$clientsdetails['taxexempt']) {
-                          $state = $clientsdetails['state'];
-                          $country = $clientsdetails['country'];
-                          $taxdata = getTaxRate(1, $state, $country);
-                          $taxdata2 = getTaxRate(2, $state, $country);
-                          $taxrate = $taxdata['rate'];
-                          $taxrate2 = $taxdata2['rate'];
-                        }
-                      }
-
-                      $invoiceid = insert_query("tblinvoices", array("date" => "now()", "duedate" => "now()", "userid" => $userid, "status" => "Unpaid", "paymentmethod" => $gateway, "taxrate" => $taxrate, "taxrate2" => $taxrate2));
-                      insert_query("tblinvoiceitems", array("invoiceid" => $invoiceid, "userid" => $userid, "type" => "Project", "relid" => $projectid, "description" => $newinvoice, "paymentmethod" => $gateway, "amount" => $newinvoiceamt, "taxed" => "1"));
-                      updateInvoiceTotal($invoiceid);
-                      $invoiceids = get_query_val("mod_project", "invoiceids", array("id" => $projectid));
-                      $invoiceids = explode(",", $invoiceids);
-                      $invoiceids[] = $invoiceid;
-                      $invoiceids = implode(",", $invoiceids);
-                      update_query("mod_project", array("invoiceids" => $invoiceids), array("id" => $projectid));
-                      project_management_log($projectid, $vars['_lang']['addedquickinvoice']." ".$invoiceid, $userid);
-
-                      if (1 < $CONFIG['InvoiceIncrement']) {
-                        $invoiceincrement = $CONFIG['InvoiceIncrement'] - 1;
-                        $counter = 1;
-
-                        while ($counter <= $invoiceincrement) {
-                          $tempinvoiceid = insert_query("tblinvoices", array("date" => "now()"));
-                          delete_query("tblinvoices", array("id" => $tempinvoiceid));
-                          $counter += 1;
-                        }
-                      }
-
-                      run_hook("InvoiceCreationAdminArea", array("invoiceid" => $invoiceid));
-                    }
-
-                    redir("module=project_management&action=manage&projectid=". (int) $projectid);
-                  } else {
-                    if ($a == "gettimesheethead") {
-                      echo "<link href=\"../includes/jscript/css/ui.all.css\" type=\"text/css /><script src=\"../includes/jscript/jquery.js\"></script><script src=\"../includes/jscript/jqueryui.js\"></script>";
-                      exit();
+                    if (in_array($status, explode(",", $vars['completedstatuses']))) {
+                      $updateqry['completed'] = "1";
                     } else {
-                      if ($a == "gettimesheet") {
-                        if (project_management_checkperm("Bill Tasks")) {
-                          echo "<form method=\"post\" action=\"".$modulelink."&a=dynamicinvoicegenerate\">
-<div class=\"box\">
-<table width=\"100%\" border=\"0\" cellspacing=\"2\" cellpadding=\"3\" class=\"tasks\" id=\"tasks\"><tr bgcolor=\"#efefef\">
-	<th width=\"60%\">".$vars['_lang']['description']."</th><th width=\"10%\">".$vars['_lang']['hours']."</th><th width=\"14%\">".$vars['_lang']['rate']."</th><th width=\"15%\">".$vars['_lang']['amount']."</th><th width=\"20\"></th></tr>";
-                          $dti = 0;
-                          $tasksresult = select_query("mod_projecttasks", "id,task", array("projectid" => $projectid, "billed" => "0"));
+                      $updateqry['completed'] = "0";
+                    }
 
-                          while ($tasksdata = mysql_fetch_assoc($tasksresult)) {
-                            $dynamictimes[$dti]['seconds'] = get_query_val("mod_projecttimes", "SUM(end-start)", array("taskid" => $tasksdata['id'], "donotbill" => 0));
-                            $dynamictimes[$dti]['description'] = $tasksdata['task'];
-                            $dynamictimes[$dti]['rate'] = $vars['hourlyrate'];
-                            $dynamictimes[$dti]['amount'] = $dynamictimes[$dti]['rate'] * ($dynamictimes[$dti]['seconds'] / 3600);
+                    update_query("mod_project", $updateqry, array("id" => $projectid));
+                    project_management_log($projectid, $vars['_lang']['statuschangedfrom'].$oldstatus." ".$vars['_lang']['to']." ".$status);
+                  }
+                }
 
-                            if (0 < $dynamictimes[$dti]['seconds']) {
-                              echo "<tr id=\"dynamictaskinvoiceitemholder".$dti."\">
-			<td><input type=\"hidden\" name=\"taskid[".$dti."]\" value=\"".$tasksdata['id']."\" /><input style=\"width:99%\" type=\"text\" name=\"description[".$dti."]\" value=\"".$dynamictimes[$dti]['description']."\" /></td>
-			<td><input type=\"hidden\" id=\"dynamicbillhours".$dti."\" name=\"hours[".$dti."]\" value=\"".round($dynamictimes[$dti]['seconds'] / 3600, 2)."\" /><input type=\"text\" name=\"displayhours[".$dti."]\" class=\"dynamicbilldisplayhours\" id=\"dynamicbilldisplayhours".$dti."\" name=\"hours[".$dti."]\" value=\"".project_management_sec2hms($dynamictimes[$dti]['seconds'])."\" /></td>
-			<td><input type=\"text\" class=\"dynamicbillrate\" id=\"dynamicbillrate".$dti."\" name=\"rate[".$dti."]\" value=\"".format_as_currency($dynamictimes[$dti]['rate'])."\" /></td>
-			<td><input type=\"text\" id=\"dynamicbillamount".$dti."\" name=\"amount[".$dti."]\" value=\"".format_as_currency($dynamictimes[$dti]['amount'], 2)."\" /></td>
-			<td><a class=\"deldynamictaskinvoice\" id=\"deldynamictaskinvoice".$dti."\"><img src=\"images/delete.gif\"></a></td></tr>";
-                            }
+                exit();
+              } else {
+                if ($a == "addattachment") {
+                  $projectsdir = $attachments_dir."projects/".$projectid."/";
+                  $projectsdir2 = $attachments_dir."projects/";
 
-                            ++$dti;
+                  if (!is_dir($projectsdir2)) {
+                    mkdir($projectsdir2);
+                  }
+
+                  if (!is_dir($projectsdir)) {
+                    mkdir($projectsdir);
+                  }
+
+                  $attachments = explode(",", get_query_val("mod_project", "attachments", array("id" => $projectid)));
+
+                  if (empty($attachments[0])) {
+                    unset($attachments[0]);
+                  }
+
+                  if ($_FILES['attachments']['name'][0]) {
+                    foreach($_FILES['attachments']['name'] as $num => $filename) {
+
+                      if (empty($_FILES['attachments']['name']) || empty($_FILES['attachments']['name'][$num])) {
+                        continue;
+                      }
+
+                      if (!isFileNameSafe($_FILES['attachments']['name'][$num])) {
+                        $aInt->gracefulExit("Invalid upload filename.  Valid filenames contain only alpha-numeric, dot, hyphen and underscore characters.");
+                        exit();
+                      }
+
+                      $filename = trim($filename);
+                      $filename = preg_replace("/[^a-zA-Z0-9-_. ]/", "", $filename);
+                      mt_srand(time());
+                      $rand = mt_rand(100000, 999999);
+                      $newfilename = $rand."_".$filename;
+                      move_uploaded_file($_FILES['attachments']['tmp_name'][$num], $projectsdir.$newfilename);
+                      $attachments[] = $newfilename;
+                      update_query("mod_project", array("attachments" => implode(",", $attachments)), array("id" => $projectid));
+                      project_management_log($projectid, $vars['_lang']['addedattachment']." ".$filename);
+                    }
+                  }
+
+                  redir("module=project_management&m=view&projectid=". (int) $projectid);
+                } else {
+                  if ($a == "deleteattachment") {
+                    if (project_management_check_masteradmin()) {
+                      $attachments = explode(",", get_query_val("mod_project", "attachments", array("id" => (int) $projectid)));
+                      $projectsdir = $attachments_dir."projects/".$projectid."/";
+                      $i = (int) $_REQUEST['i'];
+                      deleteFile($projectsdir, $attachments[$i]);
+                      project_management_log($projectid, $vars['_lang']['deletedattachment']." ".substr($attachments[$i], 7));
+                      unset($attachments[$i]);
+                      update_query("mod_project", array("attachments" => implode(",", $attachments), "lastmodified" => "now()"), array("id" => (int) $projectid));
+                    }
+
+                    redir("module=project_management&m=view&projectid=". (int) $projectid);
+                  } else {
+                    if ($a == "addquickinvoice") {
+                      $newinvoice = trim($_REQUEST['newinvoice']);
+                      $newinvoiceamt = trim($_REQUEST['newinvoiceamt']);
+
+                      if ($newinvoice && $newinvoiceamt) {
+                        $userid = get_query_val("mod_project", "userid", array("id" => $projectid));
+                        $gateway = (function_exists("getClientsPaymentMethod") ? getClientsPaymentMethod($userid) : "paypal");
+
+                        if ($CONFIG['TaxEnabled'] == "on") {
+                          $clientsdetails = getClientsDetails($userid);
+
+                          if (!$clientsdetails['taxexempt']) {
+                            $state = $clientsdetails['state'];
+                            $country = $clientsdetails['country'];
+                            $taxdata = getTaxRate(1, $state, $country);
+                            $taxdata2 = getTaxRate(2, $state, $country);
+                            $taxrate = $taxdata['rate'];
+                            $taxrate2 = $taxdata2['rate'];
                           }
-
-                          echo "</table></div><p align=\"center\"><input type=\"submit\" value=\"".$vars['_lang']['generatenow']."\" />&nbsp;<input type=\"submit\" onClick=\"form.action='".$modulelink."&a=dynamicinvoicegenerate&sendinvoicegenemail=true'\" value=\"".$vars['_lang']['generatenowandemail']."\" />&nbsp;<input type=\"button\" id=\"dynamictasksinvoicecancel\" value=\"".$vars['_lang']['cancel']."\" /></p>
-		</form>";
                         }
 
+                        $invoiceid = insert_query("tblinvoices", array("date" => "now()", "duedate" => "now()", "userid" => $userid, "status" => "Unpaid", "paymentmethod" => $gateway, "taxrate" => $taxrate, "taxrate2" => $taxrate2));
+                        insert_query("tblinvoiceitems", array("invoiceid" => $invoiceid, "userid" => $userid, "type" => "Project", "relid" => $projectid, "description" => $newinvoice, "paymentmethod" => $gateway, "amount" => $newinvoiceamt, "taxed" => "1"));
+                        updateInvoiceTotal($invoiceid);
+                        $invoiceids = get_query_val("mod_project", "invoiceids", array("id" => $projectid));
+                        $invoiceids = explode(",", $invoiceids);
+                        $invoiceids[] = $invoiceid;
+                        $invoiceids = implode(",", $invoiceids);
+                        update_query("mod_project", array("invoiceids" => $invoiceids), array("id" => $projectid));
+                        project_management_log($projectid, $vars['_lang']['addedquickinvoice']." ".$invoiceid, $userid);
+
+                        if (1 < $CONFIG['InvoiceIncrement']) {
+                          $invoiceincrement = $CONFIG['InvoiceIncrement'] - 1;
+                          $counter = 1;
+
+                          while ($counter <= $invoiceincrement) {
+                            $tempinvoiceid = insert_query("tblinvoices", array("date" => "now()"));
+                            delete_query("tblinvoices", array("id" => $tempinvoiceid));
+                            $counter += 1;
+                          }
+                        }
+
+                        run_hook("InvoiceCreationAdminArea", array("invoiceid" => $invoiceid));
+                      }
+
+                      redir("module=project_management&m=view&projectid=". (int) $projectid);
+                    } else {
+                      if ($a == "gettimesheethead") {
+                        echo "<link href=\"../includes/jscript/css/ui.all.css\" type=\"text/css /><script src=\"../includes/jscript/jquery.js\"></script><script src=\"../includes/jscript/jqueryui.js\"></script>";
                         exit();
                       } else {
-                        if ($a == "dynamicinvoicegenerate") {
-                          if (!project_management_checkperm("Bill Tasks")) {
-                            redir("module=project_management");
-                          }
+                        if ($a == "gettimesheet") {
+                          if (project_management_checkperm("Bill Tasks")) {
+                            echo "<form method=\"post\" action=\"".$modulelink."&a=dynamicinvoicegenerate\">
+<div class=\"box\">
+<table width=\"100%\" border=\"0\" cellspacing=\"2\" cellpadding=\"3\" class=\"tasks\" id=\"tasks\"><tr bgcolor=\"#efefef\">
+	<th width=\"60%\">" . $vars['_lang']['description'] . "</th><th width=\"10%\">" . $vars['_lang']['hours'] . "</th><th width=\"14%\">" . $vars['_lang']['rate'] . "</th><th width=\"15%\">" . $vars['_lang']['amount'] . "</th><th width=\"20\"></th></tr>";
+$dti = 0;
+$tasksresult = select_query("mod_projecttasks", "id,task", array("projectid" => $projectid, "billed" => "0"));
 
-                          $userid = get_query_val("mod_project", "userid", array("id" => $projectid));
-                          $gateway = (function_exists("getClientsPaymentMethod") ? getClientsPaymentMethod($userid) : "paypal");
+while ($tasksdata = mysql_fetch_assoc($tasksresult)) {
+  $dynamictimes[$dti]['seconds'] = get_query_val("mod_projecttimes", "SUM(end-start)", array("taskid" => $tasksdata['id'], "donotbill" => 0));
+  $dynamictimes[$dti]['description'] = $tasksdata['task'];
+  $dynamictimes[$dti]['rate'] = $vars['hourlyrate'];
+  $dynamictimes[$dti]['amount'] = $dynamictimes[$dti]['rate'] * ($dynamictimes[$dti]['seconds'] / 3600);
 
-                          if ($CONFIG['TaxEnabled'] == "on") {
-                            $clientsdetails = getClientsDetails($userid);
+  if (0 < $dynamictimes[$dti]['seconds']) {
+    echo "<tr id=\"dynamictaskinvoiceitemholder".$dti."\">
+			<td><input type=\"hidden\" name=\"taskid[" . $dti . "]\" value=\"" . $tasksdata['id'] . "\" /><input style=\"width:99%\" type=\"text\" name=\"description[" . $dti . "]\" value=\"" . $dynamictimes[$dti]['description'] . "\" /></td>
+			<td><input type=\"hidden\" id=\"dynamicbillhours" . $dti . "\" name=\"hours[" . $dti . "]\" value=\"" . round($dynamictimes[$dti]['seconds'] / 3600, 2) . "\" /><input type=\"text\" name=\"displayhours[" . $dti . "]\" class=\"dynamicbilldisplayhours\" id=\"dynamicbilldisplayhours" . $dti . "\" name=\"hours[" . $dti . "]\" value=\"" . project_management_sec2hms($dynamictimes[$dti]['seconds']) . "\" /></td>
+			<td><input type=\"text\" class=\"dynamicbillrate\" id=\"dynamicbillrate" . $dti . "\" name=\"rate[" . $dti . "]\" value=\"" . format_as_currency($dynamictimes[$dti]['rate']) . "\" /></td>
+			<td><input type=\"text\" id=\"dynamicbillamount" . $dti . "\" name=\"amount[" . $dti . "]\" value=\"" . format_as_currency($dynamictimes[$dti]['amount'], 2) . "\" /></td>
+			<td><a class=\"deldynamictaskinvoice\" id=\"deldynamictaskinvoice" . $dti . "\"><img src=\"images/delete.gif\"></a></td></tr>";
+}
 
-                            if (!$clientsdetails['taxexempt']) {
-                              $state = $clientsdetails['state'];
-                              $country = $clientsdetails['country'];
-                              $taxdata = getTaxRate(1, $state, $country);
-                              $taxdata2 = getTaxRate(2, $state, $country);
-                              $taxrate = $taxdata['rate'];
-                              $taxrate2 = $taxdata2['rate'];
-                            }
-                          }
+++$dti;
+}
 
-                          $invoiceid = insert_query("tblinvoices", array("date" => "now()", "duedate" => "now()", "userid" => $userid, "status" => "Unpaid", "paymentmethod" => $gateway, "taxrate" => $taxrate, "taxrate2" => $taxrate2));
-                          foreach($_REQUEST['taskid'] as $taski => $taskid) {
-                            update_query("mod_projecttasks", array("billed" => 1), array("id" => $taskid));
-                          }
+echo "</table></div><p align=\"center\"><input type=\"submit\" value=\"".$vars['_lang']['generatenow']."\" />&nbsp;<input type=\"submit\" onClick=\"form.action='".$modulelink."&a=dynamicinvoicegenerate&sendinvoicegenemail=true'\" value=\"".$vars['_lang']['generatenowandemail']."\" />&nbsp;<input type=\"button\" id=\"dynamictasksinvoicecancel\" value=\"".$vars['_lang']['cancel']."\" /></p>
+		</form>";
+}
 
-                          foreach($_REQUEST['description'] as $desci => $description) {
+exit();
+} else {
+  if ($a == "dynamicinvoicegenerate") {
+    if (!project_management_checkperm("Bill Tasks")) {
+      redir("module=project_management");
+    }
 
-                            if ((($description && $_REQUEST['displayhours'][$desci]) && $_REQUEST['rate'][$desci]) && $_REQUEST['amount'][$desci]) {
-                              $description .= " - ".$_REQUEST['displayhours'][$desci]." ".$vars['_lang']['hours'];
+    $userid = get_query_val("mod_project", "userid", array("id" => $projectid));
+    $gateway = (function_exists("getClientsPaymentMethod") ? getClientsPaymentMethod($userid) : "paypal");
 
-                              if ($_REQUEST['rate'][$desci] != $vars['hourlyrate']) {
-                                $amount = $_REQUEST['hours'][$desci] * $_REQUEST['rate'][$desci];
-                              } else {
-                                $amount = $_REQUEST['amount'][$desci];
-                              }
+    if ($CONFIG['TaxEnabled'] == "on") {
+      $clientsdetails = getClientsDetails($userid);
 
-                              insert_query("tblinvoiceitems", array("invoiceid" => $invoiceid, "userid" => $userid, "type" => "Project", "relid" => $projectid, "description" => $description, "paymentmethod" => $gateway, "amount" => round($amount, 2), "taxed" => "1"));
-                              updateInvoiceTotal($invoiceid);
+      if (!$clientsdetails['taxexempt']) {
+        $state = $clientsdetails['state'];
+        $country = $clientsdetails['country'];
+        $taxdata = getTaxRate(1, $state, $country);
+        $taxdata2 = getTaxRate(2, $state, $country);
+        $taxrate = $taxdata['rate'];
+        $taxrate2 = $taxdata2['rate'];
+      }
+    }
 
-                              if (1 < $CONFIG['InvoiceIncrement']) {
-                                $invoiceincrement = $CONFIG['InvoiceIncrement'] - 1;
-                                $counter = 1;
+    $invoiceid = insert_query("tblinvoices", array("date" => "now()", "duedate" => "now()", "userid" => $userid, "status" => "Unpaid", "paymentmethod" => $gateway, "taxrate" => $taxrate, "taxrate2" => $taxrate2));
+    foreach($_REQUEST['taskid'] as $taski => $taskid) {
+      update_query("mod_projecttasks", array("billed" => 1), array("id" => $taskid));
+    }
 
-                                while ($counter <= $invoiceincrement) {
-                                  $tempinvoiceid = insert_query("tblinvoices", array("date" => "now()"));
-                                  delete_query("tblinvoices", array("id" => $tempinvoiceid));
-                                  $counter += 1;
-                                }
+    foreach($_REQUEST['description'] as $desci => $description) {
 
-                                continue;
-                              }
+      if ((($description && $_REQUEST['displayhours'][$desci]) && $_REQUEST['rate'][$desci]) && $_REQUEST['amount'][$desci]) {
+        $description .= " - ".$_REQUEST['displayhours'][$desci]." ".$vars['_lang']['hours'];
 
-                              continue;
-                            }
-                          }
-
-                          $invoiceids = get_query_val("mod_project", "invoiceids", array("id" => $projectid));
-                          $invoiceids = explode(",", $invoiceids);
-                          $invoiceids[] = $invoiceid;
-                          $invoiceids = implode(",", $invoiceids);
-                          update_query("mod_project", array("invoiceids" => $invoiceids), array("id" => $projectid));
-
-                          if ($invoiceid && $_REQUEST['sendinvoicegenemail'] == "true") {
-                            sendMessage("Invoice Created", $invoiceid);
-                          }
-
-                          project_management_log($projectid, $vars['_lang']['createdtimebasedinvoice']." ".$invoiceid, $userid);
-                          run_hook("InvoiceCreationAdminArea", array("invoiceid" => $invoiceid));
-                          redir("module=project_management");
-                          exit();
-                        } else {
-                          if ($a == "savetasklist") {
-                            $tasksarray = array();
-                            $result = select_query("mod_projecttasks", "", array("projectid" => $_REQUEST['projectid']), "order", "ASC");
-
-                            while ($data = mysql_fetch_array($result)) {
-                              $tasksarray[] = array("task" => $data['task'], "notes" => $data['notes'], "adminid" => $data['adminid'], "duedate" => $data['duedate']);
-                            }
-
-                            insert_query("mod_projecttasktpls", array("name" => $_REQUEST['taskname'], "tasks" => serialize($tasksarray)));
-                          } else {
-                            if ($a == "loadtasklist") {
-                              $maxorder = get_query_val("mod_projecttasks", "MAX(`order`)", array("projectid" => $_REQUEST['projectid']));
-                              $result = select_query("mod_projecttasktpls", "tasks", array("id" => $_REQUEST['tasktplid']));
-                              $data = mysql_fetch_array($result);
-                              $tasks = unserialize($data['tasks']);
-                              foreach($tasks as $task) {++$maxorder;
-                                insert_query("mod_projecttasks", array("projectid" => $_REQUEST['projectid'], "task" => $task['task'], "notes" => $task['notes'], "adminid" => $task['adminid'], "created" => "now()", "order" => $maxorder));
-                              }
-
-                              redir("module=project_management&m=view&projectid=".$_REQUEST['projectid']);
-                            }
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
+        if ($_REQUEST['rate'][$desci] != $vars['hourlyrate']) {
+          $amount = $_REQUEST['hours'][$desci] * $_REQUEST['rate'][$desci];
+        } else {
+          $amount = $_REQUEST['amount'][$desci];
         }
+
+        insert_query("tblinvoiceitems", array("invoiceid" => $invoiceid, "userid" => $userid, "type" => "Project", "relid" => $projectid, "description" => $description, "paymentmethod" => $gateway, "amount" => round($amount, 2), "taxed" => "1"));
+        updateInvoiceTotal($invoiceid);
+
+        if (1 < $CONFIG['InvoiceIncrement']) {
+          $invoiceincrement = $CONFIG['InvoiceIncrement'] - 1;
+          $counter = 1;
+
+          while ($counter <= $invoiceincrement) {
+            $tempinvoiceid = insert_query("tblinvoices", array("date" => "now()"));
+            delete_query("tblinvoices", array("id" => $tempinvoiceid));
+            $counter += 1;
+          }
+
+          continue;
+        }
+
+        continue;
+      }
+    }
+
+    $invoiceids = get_query_val("mod_project", "invoiceids", array("id" => $projectid));
+    $invoiceids = explode(",", $invoiceids);
+    $invoiceids[] = $invoiceid;
+    $invoiceids = implode(",", $invoiceids);
+    update_query("mod_project", array("invoiceids" => $invoiceids), array("id" => $projectid));
+
+    if ($invoiceid && $_REQUEST['sendinvoicegenemail'] == "true") {
+      sendMessage("Invoice Created", $invoiceid);
+    }
+
+    project_management_log($projectid, $vars['_lang']['createdtimebasedinvoice']." ".$invoiceid, $userid);
+    run_hook("InvoiceCreationAdminArea", array("invoiceid" => $invoiceid));
+    redir("module=project_management&m=view&projectid=". (int) $projectid);
+    exit();
+  } else {
+    if ($a == "savetasklist") {
+      $tasksarray = array();
+      $result = select_query("mod_projecttasks", "", array("projectid" => $_REQUEST['projectid']), "order", "ASC");
+
+      while ($data = mysql_fetch_array($result)) {
+        $tasksarray[] = array("task" => $data['task'], "notes" => $data['notes'], "adminid" => $data['adminid'], "duedate" => $data['duedate']);
+      }
+
+      insert_query("mod_projecttasktpls", array("name" => $_REQUEST['taskname'], "tasks" => serialize($tasksarray)));
+    } else {
+      if ($a == "loadtasklist") {
+        $maxorder = get_query_val("mod_projecttasks", "MAX(`order`)", array("projectid" => $_REQUEST['projectid']));
+        $result = select_query("mod_projecttasktpls", "tasks", array("id" => $_REQUEST['tasktplid']));
+        $data = mysql_fetch_array($result);
+        $tasks = unserialize($data['tasks']);
+        foreach($tasks as $task) {++$maxorder;
+          insert_query("mod_projecttasks", array("projectid" => $_REQUEST['projectid'], "task" => $task['task'], "notes" => $task['notes'], "adminid" => $task['adminid'], "created" => "now()", "order" => $maxorder));
+        }
+
+        redir("module=project_management&m=view&projectid=". (int) $projectid);
       }
     }
   }
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
 }
 }
 }

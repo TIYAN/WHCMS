@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -16,7 +16,7 @@ function paypal_addon_config() {
 	$result = select_query( "tbladminroles", "", "", "name", "ASC" );
 
 	while ($data = mysql_fetch_array( $result )) {
-		$configarray["fields"]["showbalance" . $data["id"]] = array( "FriendlyName" => $baltitle, "Type" => "yesno", "Description" => "Display PayPal Balance on Homepage for <strong>" . $data["name"] . "</strong> users" );
+		$configarray['fields']["showbalance" . $data['id']] = array( "FriendlyName" => $baltitle, "Type" => "yesno", "Description" => "Display PayPal Balance on Homepage for <strong>" . $data['name'] . "</strong> users" );
 		$baltitle = "";
 	}
 
@@ -27,14 +27,14 @@ function paypal_addon_config() {
 function paypal_addon_output($vars) {
 	global $aInt;
 
-	$modulelink = $vars["modulelink"];
+	$modulelink = $vars['modulelink'];
 	$url = "https://api-3t.paypal.com/nvp";
-	$startdate = trim( $_REQUEST["startdate"] );
-	$enddate = trim( $_REQUEST["enddate"] );
-	$transid = trim( $_REQUEST["transid"] );
-	$email = trim( $_REQUEST["email"] );
-	$receiptid = trim( $_REQUEST["receiptid"] );
-	$search = trim( $_REQUEST["search"] );
+	$startdate = trim( $_REQUEST['startdate'] );
+	$enddate = trim( $_REQUEST['enddate'] );
+	$transid = trim( $_REQUEST['transid'] );
+	$email = trim( $_REQUEST['email'] );
+	$receiptid = trim( $_REQUEST['receiptid'] );
+	$search = trim( $_REQUEST['search'] );
 
 	if (!$startdate) {
 		$startdate = fromMySQLDate( date( "Y-m-d", mktime( 0, 0, 0, date( "m" ) - 1, date( "d" ) + 1, date( "Y" ) ) ) );
@@ -64,12 +64,12 @@ function paypal_addon_output($vars) {
 
 	if ($transid) {
 		$postfields = $resultsarray = array();
-		$postfields["USER"] = $vars["username"];
-		$postfields["PWD"] = $vars["password"];
-		$postfields["SIGNATURE"] = $vars["signature"];
-		$postfields["METHOD"] = "GetTransactionDetails";
-		$postfields["TRANSACTIONID"] = $transid;
-		$postfields["VERSION"] = "3.0";
+		$postfields['USER'] = $vars['username'];
+		$postfields['PWD'] = $vars['password'];
+		$postfields['SIGNATURE'] = $vars['signature'];
+		$postfields['METHOD'] = "GetTransactionDetails";
+		$postfields['TRANSACTIONID'] = $transid;
+		$postfields['VERSION'] = "3.0";
 		$result = curlCall( $url, $postfields );
 		$resultsarray2 = explode( "&", $result );
 		foreach ($resultsarray2 as $line) {
@@ -77,25 +77,25 @@ function paypal_addon_output($vars) {
 			$resultsarray[$line[0]] = urldecode( $line[1] );
 		}
 
-		$errormessage = $resultsarray["L_LONGMESSAGE0"];
-		$payerstatus = $resultsarray["PAYERSTATUS"];
-		$countrycode = $resultsarray["COUNTRYCODE"];
-		$invoiceid = $resultsarray["INVNUM"];
-		$timestamp = $resultsarray["TIMESTAMP"];
-		$firstname = $resultsarray["FIRSTNAME"];
-		$lastname = $resultsarray["LASTNAME"];
-		$email = $resultsarray["EMAIL"];
-		$transactionid = $resultsarray["TRANSACTIONID"];
-		$transactiontype = $resultsarray["TRANSACTIONTYPE"];
-		$paymenttype = $resultsarray["PAYMENTTYPE"];
-		$ordertime = $resultsarray["ORDERTIME"];
-		$amount = $resultsarray["AMT"];
-		$fee = $resultsarray["FEEAMT"];
-		$paymentstatus = $resultsarray["PAYMENTSTATUS"];
-		$description = $resultsarray["L_NAME0"];
-		$currencycode = $resultsarray["L_CURRENCYCODE0"];
-		$exchrate = $resultsarray["EXCHANGERATE"];
-		$settleamt = $resultsarray["SETTLEAMT"];
+		$errormessage = $resultsarray['L_LONGMESSAGE0'];
+		$payerstatus = $resultsarray['PAYERSTATUS'];
+		$countrycode = $resultsarray['COUNTRYCODE'];
+		$invoiceid = $resultsarray['INVNUM'];
+		$timestamp = $resultsarray['TIMESTAMP'];
+		$firstname = $resultsarray['FIRSTNAME'];
+		$lastname = $resultsarray['LASTNAME'];
+		$email = $resultsarray['EMAIL'];
+		$transactionid = $resultsarray['TRANSACTIONID'];
+		$transactiontype = $resultsarray['TRANSACTIONTYPE'];
+		$paymenttype = $resultsarray['PAYMENTTYPE'];
+		$ordertime = $resultsarray['ORDERTIME'];
+		$amount = $resultsarray['AMT'];
+		$fee = $resultsarray['FEEAMT'];
+		$paymentstatus = $resultsarray['PAYMENTSTATUS'];
+		$description = $resultsarray['L_NAME0'];
+		$currencycode = $resultsarray['L_CURRENCYCODE0'];
+		$exchrate = $resultsarray['EXCHANGERATE'];
+		$settleamt = $resultsarray['SETTLEAMT'];
 
 		if ($errormessage) {
 			echo "<p><b>PayPal API Error Message</b></p><p>" . $errormessage . "</p>";
@@ -133,11 +133,11 @@ function paypal_addon_output($vars) {
 
 		$result = select_query( "tblinvoices", "tblinvoices.id,tblinvoices.status,tblinvoices.userid,tblclients.firstname,tblclients.lastname", array( "tblinvoices.id" => $invoiceid ), "", "", "", "tblclients ON tblclients.id=tblinvoices.userid" );
 		$data = mysql_fetch_array( $result );
-		$whmcs_invoiceid = $data["id"];
-		$whmcs_status = $data["status"];
-		$whmcs_userid = $data["userid"];
-		$whmcs_firstname = $data["firstname"];
-		$whmcs_lastname = $data["lastname"];
+		$whmcs_invoiceid = $data['id'];
+		$whmcs_status = $data['status'];
+		$whmcs_userid = $data['userid'];
+		$whmcs_firstname = $data['firstname'];
+		$whmcs_lastname = $data['lastname'];
 
 		if (!$whmcs_invoiceid) {
 			$whmcs_status = "No Matching Invoice Found";
@@ -152,14 +152,14 @@ function paypal_addon_output($vars) {
 </table>";
 		$result = select_query( "tblaccounts", "", array( "transid" => $transactionid ) );
 		$data = mysql_fetch_array( $result );
-		$whmcstransid = $data["id"];
-		$date = $data["date"];
-		$invoiceid = $data["invoiceid"];
-		$amountin = $data["amountin"];
-		$fees = $data["fees"];
+		$whmcstransid = $data['id'];
+		$date = $data['date'];
+		$invoiceid = $data['invoiceid'];
+		$amountin = $data['amountin'];
+		$fees = $data['fees'];
 		$result = select_query( "tblinvoices", "", array( "id" => $invoiceid ) );
 		$data = mysql_fetch_array( $result );
-		$status = $data["status"];
+		$status = $data['status'];
 
 		if ($invoiceid) {
 			$date = fromMySQLDate( $date );
@@ -185,31 +185,31 @@ function paypal_addon_output($vars) {
 		$startdate = date( "c", strtotime( toMySQLDate( $startdate ) ) ) . "<br>";
 		$enddate = date( "c", strtotime( toMySQLDate( $enddate ) ) ) . "<br>";
 		$postfields = $resultsarray = array();
-		$postfields["USER"] = $vars["username"];
-		$postfields["PWD"] = $vars["password"];
-		$postfields["SIGNATURE"] = $vars["signature"];
-		$postfields["METHOD"] = "TransactionSearch";
+		$postfields['USER'] = $vars['username'];
+		$postfields['PWD'] = $vars['password'];
+		$postfields['SIGNATURE'] = $vars['signature'];
+		$postfields['METHOD'] = "TransactionSearch";
 
 		if ($startdate) {
-			$postfields["STARTDATE"] = $startdate;
+			$postfields['STARTDATE'] = $startdate;
 		}
 
 
 		if ($enddate) {
-			$postfields["ENDDATE"] = $enddate;
+			$postfields['ENDDATE'] = $enddate;
 		}
 
 
 		if ($email) {
-			$postfields["EMAIL"] = $email;
+			$postfields['EMAIL'] = $email;
 		}
 
 
 		if ($receiptid) {
-			$postfields["RECEIPTID"] = $receiptid;
+			$postfields['RECEIPTID'] = $receiptid;
 		}
 
-		$postfields["VERSION"] = "51.0";
+		$postfields['VERSION'] = "51.0";
 		$result = curlCall( $url, $postfields );
 		$resultsarray2 = explode( "&", $result );
 		foreach ($resultsarray2 as $line) {
@@ -218,13 +218,13 @@ function paypal_addon_output($vars) {
 		}
 
 
-		if (( !empty( $resultsarray["L_ERRORCODE0"] ) && $resultsarray["L_ERRORCODE0"] != "11002" )) {
-			echo "<p><b>PayPal API Error Message</b></p><p>" . $resultsarray["L_SEVERITYCODE0"] . " Code: " . $resultsarray["L_ERRORCODE0"] . " - " . $resultsarray["L_SHORTMESSAGE0"] . " - " . $resultsarray["L_LONGMESSAGE0"] . "</p>";
+		if ( !empty( $resultsarray['L_ERRORCODE0'] ) && $resultsarray['L_ERRORCODE0'] != "11002" ) {
+			echo "<p><b>PayPal API Error Message</b></p><p>" . $resultsarray['L_SEVERITYCODE0'] . " Code: " . $resultsarray['L_ERRORCODE0'] . " - " . $resultsarray['L_SHORTMESSAGE0'] . " - " . $resultsarray['L_LONGMESSAGE0'] . "</p>";
 			return null;
 		}
 
 
-		if ($resultsarray["L_ERRORCODE0"] == "11002") {
+		if ($resultsarray['L_ERRORCODE0'] == "11002") {
 			global $infobox;
 
 			infoBox( "Search Results Truncated", "There were more than 100 matching transactions for the selected criteria. Please make your search parameters more specific to see all results" );
@@ -235,9 +235,9 @@ function paypal_addon_output($vars) {
 		$i = 0;
 
 		while ($i < 100) {
-			if (( $resultsarray["L_TYPE" . $i] == "Payment" && !empty( $resultsarray["L_EMAIL" . $i] ) )) {
+			if ( $resultsarray["L_TYPE" . $i] == "Payment" && !empty( $resultsarray["L_EMAIL" . $i] ) ) {
 				$data = get_query_vals( "tblaccounts", "tblclients.id AS userid, tblclients.firstname,tblclients.lastname,tblclients.companyname,tblaccounts.invoiceid,tblinvoices.total,tblinvoices.status", array( "transid" => $resultsarray["L_TRANSACTIONID" . $i] ), "", "", "", " tblclients ON tblclients.id = tblaccounts.userid INNER JOIN tblinvoices ON tblinvoices.id = tblaccounts.invoiceid" );
-				$tabledata[] = $testarray = array( "clientname" => ($data["invoiceid"] ? ($data["companyname"] ? "<a href=\"clientssummary.php?userid=" . $data["userid"] . "\">" . $data["firstname"] . " " . $data["lastname"] . " (" . $data["companyname"] . ")</a>" : "<a href=\"clientssummary.php?userid=" . $data["userid"] . "\">" . $data["firstname"] . " " . $data["lastname"] . "</a>") : "Trans ID Not Found in WHMCS"), "transid" => "<a href=\"addonmodules.php?module=paypal_addon&search=1&transid=" . $resultsarray["L_TRANSACTIONID" . $i] . "\">" . $resultsarray["L_TRANSACTIONID" . $i] . "<a/>", "datetime" => fromMySQLDate( $resultsarray["L_TIMESTAMP" . $i], true ), "name" => $resultsarray["L_NAME" . $i], "email" => $resultsarray["L_EMAIL" . $i], "amt" => $resultsarray["L_NETAMT" . $i], "fee" => $resultsarray["L_FEEAMT" . $i], "curcode" => $resultsarray["L_CURRENCYCODE" . $i], "status" => $resultsarray["L_STATUS" . $i], "invoiceid" => ($data["invoiceid"] ? "<a href=\"invoices.php?action=edit&id=" . $data["invoiceid"] . "\">" . $data["invoiceid"] . "</a>" : "-"), "invoiceamt" => ($data["invoiceid"] ? $data["total"] : "-"), "invoicestatus" => ($data["invoiceid"] ? $data["status"] : "-") );
+				$tabledata[] = $testarray = array( "clientname" => ($data['invoiceid'] ? ($data['companyname'] ? "<a href=\"clientssummary.php?userid=" . $data['userid'] . "\">" . $data['firstname'] . " " . $data['lastname'] . " (" . $data['companyname'] . ")</a>" : "<a href=\"clientssummary.php?userid=" . $data['userid'] . "\">" . $data['firstname'] . " " . $data['lastname'] . "</a>") : "Trans ID Not Found in WHMCS"), "transid" => "<a href=\"addonmodules.php?module=paypal_addon&search=1&transid=" . $resultsarray["L_TRANSACTIONID" . $i] . "\">" . $resultsarray["L_TRANSACTIONID" . $i] . "<a/>", "datetime" => fromMySQLDate( $resultsarray["L_TIMESTAMP" . $i], true ), "name" => $resultsarray["L_NAME" . $i], "email" => $resultsarray["L_EMAIL" . $i], "amt" => $resultsarray["L_NETAMT" . $i], "fee" => $resultsarray["L_FEEAMT" . $i], "curcode" => $resultsarray["L_CURRENCYCODE" . $i], "status" => $resultsarray["L_STATUS" . $i], "invoiceid" => ($data['invoiceid'] ? "<a href=\"invoices.php?action=edit&id=" . $data['invoiceid'] . "\">" . $data['invoiceid'] . "</a>" : "-"), "invoiceamt" => ($data['invoiceid'] ? $data['total'] : "-"), "invoicestatus" => ($data['invoiceid'] ? $data['status'] : "-") );
 			}
 
 			++$i;

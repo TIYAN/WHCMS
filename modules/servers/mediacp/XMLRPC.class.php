@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -46,7 +46,7 @@ class IXR_Value {
 
 
 	function calculateType() {
-		if (( $this->data === true || $this->data === false )) {
+		if ($this->data === true || $this->data === false) {
 			return "boolean";
 		}
 
@@ -61,12 +61,12 @@ class IXR_Value {
 		}
 
 
-		if (( is_object( $this->data ) && is_a( $this->data, "IXR_Date" ) )) {
+		if (is_object( $this->data ) && is_a( $this->data, "IXR_Date" )) {
 			return "date";
 		}
 
 
-		if (( is_object( $this->data ) && is_a( $this->data, "IXR_Base64" ) )) {
+		if (is_object( $this->data ) && is_a( $this->data, "IXR_Base64" )) {
 			return "base64";
 		}
 
@@ -141,7 +141,7 @@ class IXR_Message {
 
 
 	function parse() {
-		$this->message = preg_replace( "/<\?xml(.*)?\?" . ">/", "", $this->message );
+		$this->message = preg_replace( '/<\?xml(.*)?\?' . '>/', '', $this->message );
 
 		if (trim( $this->message ) == "") {
 			return false;
@@ -160,8 +160,8 @@ class IXR_Message {
 		xml_parser_free( $this->_parser );
 
 		if ($this->messageType == "fault") {
-			$this->faultCode = $this->params[0]["faultCode"];
-			$this->faultString = $this->params[0]["faultString"];
+			$this->faultCode = $this->params[0]['faultCode'];
+			$this->faultString = $this->params[0]['faultString'];
 		}
 
 		return true;
@@ -408,7 +408,7 @@ class IXR_Server {
 
 
 	function error($error, $message = false) {
-		if (( $message && !is_object( $error ) )) {
+		if ($message && !is_object( $error )) {
 			$error = new IXR_Error( $error, $message );
 		}
 
@@ -459,8 +459,8 @@ class IXR_Server {
 	function multiCall($methodcalls) {
 		$return = array();
 		foreach ($methodcalls as $call) {
-			$method = $call["methodName"];
-			$params = $call["params"];
+			$method = $call['methodName'];
+			$params = $call['params'];
 
 			if ($method == "system.multicall") {
 				$result = new IXR_Error( 0 - 32600, "Recursive calls to system.multicall are forbidden" );
@@ -535,9 +535,9 @@ class IXR_Client {
 	function IXR_Client($server, $path = false, $port = 80) {
 		if (!$path) {
 			$bits = parse_url( $server );
-			$this->server = $bits["host"];
-			$this->port = (isset( $bits["port"] ) ? $bits["port"] : 80);
-			$this->path = (isset( $bits["path"] ) ? $bits["path"] : "/");
+			$this->server = $bits['host'];
+			$this->port = (isset( $bits['port'] ) ? $bits['port'] : 80);
+			$this->path = (isset( $bits['path'] ) ? $bits['path'] : "/");
 
 			if (!$this->path) {
 				$this->path = "/";
@@ -787,7 +787,7 @@ class IXR_IntrospectionServer extends IXR_Server {
 	function IXR_IntrospectionServer() {
 		$this->setCallbacks();
 		$this->setCapabilities();
-		$this->capabilities["introspection"] = array( "specUrl" => "http://xmlrpc.usefulinc.com/doc/reserved.html", "specVersion" => 1 );
+		$this->capabilities['introspection'] = array( "specUrl" => "http://xmlrpc.usefulinc.com/doc/reserved.html", "specVersion" => 1 );
 		$this->addCallback( "system.methodSignature", "this:methodSignature", array( "array", "string" ), "Returns an array describing the return type and required parameters of a method" );
 		$this->addCallback( "system.getCapabilities", "this:getCapabilities", array( "struct" ), "Returns a struct describing the XML-RPC specifications supported by this server" );
 		$this->addCallback( "system.listMethods", "this:listMethods", array( "array" ), "Returns an array of available methods on this server" );
@@ -803,7 +803,7 @@ class IXR_IntrospectionServer extends IXR_Server {
 
 
 	function call($methodname, $args) {
-		if (( $args && !is_array( $args ) )) {
+		if ($args && !is_array( $args )) {
 			$args = array( $args );
 		}
 
@@ -835,7 +835,7 @@ class IXR_IntrospectionServer extends IXR_Server {
 				}
 
 			case "i4": {
-					if (( is_array( $arg ) || !is_int( $arg ) )) {
+					if (is_array( $arg ) || !is_int( $arg )) {
 						$ok = false;
 					}
 
@@ -854,7 +854,7 @@ class IXR_IntrospectionServer extends IXR_Server {
 				}
 
 			case "boolean": {
-					if (( $arg !== false && $arg !== true )) {
+					if ($arg !== false && $arg !== true) {
 						$ok = false;
 					}
 
@@ -1018,7 +1018,7 @@ class IXR_IntrospectionServer extends IXR_Server {
 
 
 	function error($error, $message = false) {
-		if (( $message && !is_object( $error ) )) {
+		if ($message && !is_object( $error )) {
 			$error = new IXR_Error( $error, $message );
 		}
 
@@ -1069,8 +1069,8 @@ class IXR_IntrospectionServer extends IXR_Server {
 	function multiCall($methodcalls) {
 		$return = array();
 		foreach ($methodcalls as $call) {
-			$method = $call["methodName"];
-			$params = $call["params"];
+			$method = $call['methodName'];
+			$params = $call['params'];
 
 			if ($method == "system.multicall") {
 				$result = new IXR_Error( 0 - 32600, "Recursive calls to system.multicall are forbidden" );
@@ -1120,9 +1120,9 @@ class IXR_ClientMulticall extends IXR_Client {
 	function IXR_Client($server, $path = false, $port = 80) {
 		if (!$path) {
 			$bits = parse_url( $server );
-			$this->server = $bits["host"];
-			$this->port = (isset( $bits["port"] ) ? $bits["port"] : 80);
-			$this->path = (isset( $bits["path"] ) ? $bits["path"] : "/");
+			$this->server = $bits['host'];
+			$this->port = (isset( $bits['port'] ) ? $bits['port'] : 80);
+			$this->path = (isset( $bits['path'] ) ? $bits['path'] : "/");
 
 			if (!$this->path) {
 				$this->path = "/";

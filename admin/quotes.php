@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -87,8 +87,7 @@ if ($action == "getproddetails") {
 	$configoptions = getCartConfigOptions($pid, "", $billingcycle);
 
 	if (count($configoptions)) {
-		echo "<p><b>Configurable Options</b></p>
-<table>";
+		echo "<p><b>Configurable Options</b></p>\r\n<table>";
 		foreach ($configoptions as $configoption) {
 			$optionid = $configoption['id'];
 			$optionhidden = $configoption['hidden'];
@@ -167,7 +166,6 @@ if ($action == "getproddetails") {
 
 
 if ($action == "loadprod") {
-	check_token("WHMCS.admin.default");
 	$result = select_query("tblquotes", "userid,currency", array("id" => $id));
 	$data = mysql_fetch_array($result);
 	$userid = $data['userid'];
@@ -179,7 +177,7 @@ $(document).ready(function(){
 $(\"#addproduct\").change(function () {
     if (this.options[this.selectedIndex].value) {
         $(\"#add_desc\").val(this.options[this.selectedIndex].text);
-        $.post(\"quotes.php\", { action: \"getproddetails\", currency: " . $currency['id'] . ", pid: this.options[this.selectedIndex].value },
+        $.post(\"quotes.php\", { action: \"getproddetails\", currency: " . $currency['id'] . ", pid: this.options[this.selectedIndex].value, token: \"" . generate_token("plain") . "\" },
         function(data){
             $(\"#configops\").html(data);
         });
@@ -192,6 +190,7 @@ function selectproduct() {
 }
 </script>
 <form id=\"addfrm\" onsubmit=\"selectproduct();return false\">
+" . generate_token("form") . "
 <p><b>Product/Service</b></p><p><select name=\"pid\" id=\"addproduct\" style=\"width:95%;\"><option>Choose a product...</option>";
 	$query = "SELECT tblproducts.id,tblproductgroups.name AS groupname,tblproducts.name AS productname FROM tblproducts INNER JOIN tblproductgroups ON tblproductgroups.id=tblproducts.gid ORDER BY tblproductgroups.`order`,tblproducts.`order`,tblproducts.name ASC";
 	$result = full_query($query);

@@ -27,7 +27,7 @@ function widget_activity_log($vars) {
     $result = select_query("tblactivitylog","","","id","DESC","0,10");
     while ($data = mysql_fetch_array($result)) {
         $description = $data["description"].' ';
-        $description = htmlentities($description, ENT_QUOTES, "UTF-8");
+        $description = whmcsHtmlspecialchars($description);
         $description = preg_replace($patterns, $replacements, $description);
         $content .= $description.'<br /><span style="font-size:11px;">&nbsp; - '.fromMySQLDate($data["date"],true).' - '.$data['user'].' - '.$data['ipaddr'].'</span><br />';
     }

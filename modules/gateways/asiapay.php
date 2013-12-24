@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -19,7 +19,7 @@ function asiapay_activate() {
 function asiapay_capture($params) {
 	global $CONFIG;
 
-	if ($params["testmode"]) {
+	if ($params['testmode']) {
 		$posturl = "https://test.paydollar.com/b2cDemo/eng/dPayment/payComp.jsp";
 	}
 	else {
@@ -27,106 +27,106 @@ function asiapay_capture($params) {
 	}
 
 
-	if ($params["cardtype"] == "Visa") {
+	if ($params['cardtype'] == "Visa") {
 		$cardtype = "VISA";
 	}
 	else {
-		if ($params["cardtype"] == "MasterCard") {
+		if ($params['cardtype'] == "MasterCard") {
 			$cardtype = "Master";
 		}
 		else {
-			if ($params["cardtype"] == "Diners Club") {
+			if ($params['cardtype'] == "Diners Club") {
 				$cardtype = "Diners";
 			}
 			else {
-				if ($params["cardtype"] == "American Express") {
+				if ($params['cardtype'] == "American Express") {
 					$cardtype = "AMEX";
 				}
 				else {
-					$cardtype = $params["cardtype"];
+					$cardtype = $params['cardtype'];
 				}
 			}
 		}
 	}
 
 	$postfields = array();
-	$postfields["merchantId"] = $params["merchantid"];
-	$postfields["amount"] = $params["amount"];
-	$postfields["orderRef"] = $params["invoiceid"];
+	$postfields['merchantId'] = $params['merchantid'];
+	$postfields['amount'] = $params['amount'];
+	$postfields['orderRef'] = $params['invoiceid'];
 
-	if ($params["currency"] == "HKD") {
+	if ($params['currency'] == "HKD") {
 		$poststr .= "currCode=344&";
 	}
 	else {
-		if ($params["currency"] == "SGD") {
+		if ($params['currency'] == "SGD") {
 			$poststr .= "currCode=702&";
 		}
 		else {
-			if ($params["currency"] == "CNY") {
+			if ($params['currency'] == "CNY") {
 				$poststr .= "currCode=156&";
 			}
 			else {
-				if ($params["currency"] == "JPY") {
+				if ($params['currency'] == "JPY") {
 					$poststr .= "currCode=392&";
 				}
 				else {
-					if ($params["currency"] == "TWD") {
+					if ($params['currency'] == "TWD") {
 						$poststr .= "currCode=901&";
 					}
 					else {
-						if ($params["currency"] == "AUD") {
+						if ($params['currency'] == "AUD") {
 							$poststr .= "currCode=036&";
 						}
 						else {
-							if ($params["currency"] == "EUR") {
+							if ($params['currency'] == "EUR") {
 								$poststr .= "currCode=978&";
 							}
 							else {
-								if ($params["currency"] == "GBP") {
+								if ($params['currency'] == "GBP") {
 									$poststr .= "currCode=826&";
 								}
 								else {
-									if ($params["currency"] == "CAD") {
+									if ($params['currency'] == "CAD") {
 										$poststr .= "currCode=124&";
 									}
 									else {
-										if ($params["currency"] == "MOP") {
+										if ($params['currency'] == "MOP") {
 											$poststr .= "currCode=446&";
 										}
 										else {
-											if ($params["currency"] == "PHP") {
+											if ($params['currency'] == "PHP") {
 												$poststr .= "currCode=608&";
 											}
 											else {
-												if ($params["currency"] == "THB") {
+												if ($params['currency'] == "THB") {
 													$poststr .= "currCode=764&";
 												}
 												else {
-													if ($params["currency"] == "MYR") {
+													if ($params['currency'] == "MYR") {
 														$poststr .= "currCode=458&";
 													}
 													else {
-														if ($params["currency"] == "IDR") {
+														if ($params['currency'] == "IDR") {
 															$poststr .= "currCode=360&";
 														}
 														else {
-															if ($params["currency"] == "KRW") {
+															if ($params['currency'] == "KRW") {
 																$poststr .= "currCode=410&";
 															}
 															else {
-																if ($params["currency"] == "SAR") {
+																if ($params['currency'] == "SAR") {
 																	$poststr .= "currCode=682&";
 																}
 																else {
-																	if ($params["currency"] == "NZD") {
+																	if ($params['currency'] == "NZD") {
 																		$poststr .= "currCode=554&";
 																	}
 																	else {
-																		if ($params["currency"] == "AED") {
+																		if ($params['currency'] == "AED") {
 																			$poststr .= "currCode=784&";
 																		}
 																		else {
-																			if ($params["currency"] == "BND") {
+																			if ($params['currency'] == "BND") {
 																				$poststr .= "currCode=096&";
 																			}
 																			else {
@@ -151,17 +151,17 @@ function asiapay_capture($params) {
 		}
 	}
 
-	$postfields["pMethod"] = $cardtype;
-	$postfields["cardNo"] = $params["cardnum"];
-	$postfields["securityCode"] = $params["cccvv"];
-	$postfields["cardHolder"] = $params["clientdetails"]["firstname"] . " " . $params["clientdetails"]["lastname"];
-	$postfields["epMonth"] = substr( $params["cardexp"], 0, 2 );
-	$postfields["epYear"] = substr( $params["cardexp"], 2, 2 );
-	$postfields["payType"] = "N";
-	$postfields["successUrl"] = $params["systemurl"] . "/modules/gateways/callback/asiapay.php";
-	$postfields["failUrl"] = $params["systemurl"] . "/modules/gateways/callback/asiapay.php";
-	$postfields["errorUrl"] = $params["systemurl"] . "/modules/gateways/callback/asiapay.php";
-	$postfields["lang"] = "E";
+	$postfields['pMethod'] = $cardtype;
+	$postfields['cardNo'] = $params['cardnum'];
+	$postfields['securityCode'] = $params['cccvv'];
+	$postfields['cardHolder'] = $params['clientdetails']['firstname'] . " " . $params['clientdetails']['lastname'];
+	$postfields['epMonth'] = substr( $params['cardexp'], 0, 2 );
+	$postfields['epYear'] = substr( $params['cardexp'], 2, 2 );
+	$postfields['payType'] = "N";
+	$postfields['successUrl'] = $params['systemurl'] . "/modules/gateways/callback/asiapay.php";
+	$postfields['failUrl'] = $params['systemurl'] . "/modules/gateways/callback/asiapay.php";
+	$postfields['errorUrl'] = $params['systemurl'] . "/modules/gateways/callback/asiapay.php";
+	$postfields['lang'] = "E";
 	$poststr = "";
 	foreach ($postfields as $k => $v) {
 		$poststr .= "" . $k . "=" . urlencode( $v ) . "&";
@@ -194,7 +194,7 @@ function asiapay_capture($params) {
 	}
 
 
-	if (( !$data["errorMsg"] && !$data["Ref"] )) {
+	if ( !$data['errorMsg'] && !$data['Ref'] ) {
 		return array( "status" => "success", "transid" => $transid, "rawdata" => $data );
 	}
 
@@ -206,7 +206,7 @@ if (!defined( "WHMCS" )) {
 	exit( "This file cannot be accessed directly" );
 }
 
-$GATEWAYMODULE["asiapayname"] = "asiapay";
-$GATEWAYMODULE["asiapayvisiblename"] = "AsiaPay";
-$GATEWAYMODULE["asiapaytype"] = "CC";
+$GATEWAYMODULE['asiapayname'] = "asiapay";
+$GATEWAYMODULE['asiapayvisiblename'] = "AsiaPay";
+$GATEWAYMODULE['asiapaytype'] = "CC";
 ?>

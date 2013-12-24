@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -453,7 +453,7 @@ else {
 		$paymentmethod = $data['paymentmethod'];
 		$paymentmethod = $gatewaysarray[$paymentmethod];
 		$orderstatus = $data['status'];
-		get_query_val("tblorderstatuses", "showpending", array("title" => $orderstatus));
+		$showpending = get_query_val("tblorderstatuses", "showpending", array("title" => $orderstatus));
 		$amount = $data['amount'];
 		$client = $aInt->outputClientLink($userid, $data['firstname'], $data['lastname'], $data['companyname'], $data['groupid']);
 		$address = $data['address1'];
@@ -718,6 +718,10 @@ $.post(\"" . $_SERVER['PHP_SELF'] . "?action=ajaxchangeorderstatus&id=" . $id . 
 		echo $aInt->lang("orders", "items");
 		echo "</b></p>
 
+<form method=\"post\" action=\"whois.php\" target=\"_blank\" id=\"frmWhois\">
+<input type=\"hidden\" name=\"domain\" value=\"\" id=\"frmWhoisDomain\" />
+</form>
+
 <form method=\"post\" action=\"";
 		echo $_SERVER['PHP_SELF'];
 		echo "?action=view&id=";
@@ -775,7 +779,7 @@ $.post(\"" . $_SERVER['PHP_SELF'] . "?action=ajaxchangeorderstatus&id=" . $id . 
 			$servertype = $data['servertype'];
 
 			if ($domain && $producttype != "other") {
-				$domain .= "<br />(<a href=\"http://" . $domain . "\" target=\"_blank\" style=\"color:#cc0000\">www</a> <a href=\"whois.php?domain=" . $domain . "\" target=\"_blank\">" . $aInt->lang("domains", "whois") . "</a> <a href=\"http://www.intodns.com/" . $domain . "\" target=\"_blank\" style=\"color:#006633\">intoDNS</a>)";
+				$domain .= "<br />(<a href=\"http://" . $domain . "\" target=\"_blank\" style=\"color:#cc0000\">www</a> <a href=\"#\" onclick=\"$('#frmWhoisDomain').val('" . addslashes($domain) . "');$('#frmWhois').submit();return false\">" . $aInt->lang("domains", "whois") . "</a> <a href=\"http://www.intodns.com/" . $domain . "\" target=\"_blank\" style=\"color:#006633\">intoDNS</a>)";
 			}
 
 			echo "<tr><td align=\"center\"><a href=\"clientsservices.php?userid=" . $userid . "&id=" . $hostingid . "\"><b>";
@@ -845,7 +849,7 @@ $.post(\"" . $_SERVER['PHP_SELF'] . "?action=ajaxchangeorderstatus&id=" . $id . 
 		$predefinedaddons = array();
 		$result = select_query("tbladdons", "", "");
 
-		while ($data = $showpending = mysql_fetch_array($result)) {
+		while ($data = mysql_fetch_array($result)) {
 			$addon_id = $data['id'];
 			$addon_name = $data['name'];
 			$addon_welcomeemail = $data['welcomeemail'];

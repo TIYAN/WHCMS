@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -53,7 +53,7 @@ if ($action == "send" && $messagename == "newmessage") {
 if ($action == "delete") {
 	check_token("WHMCS.admin.default");
 	delete_query("tblemails", array("id" => $id));
-	redir();
+	redir("userid=" . $userid);
 }
 
 $aInt->valUserID($userid);
@@ -82,7 +82,7 @@ while ($data = mysql_fetch_array($result)) {
 		$subject = $aInt->lang("emails", "nosubject");
 	}
 
-	$tabledata[] = array($date, "<a href=\"#\" onClick=\"window.open('clientsemails.php?&displaymessage=true&id=" . $id . "','','width=650,height=400,scrollbars=yes');return false\">" . $subject . "</a>", "<a href=\"sendmessage.php?resend=true&emailid=" . $id . "\"><img src=\"images/icons/resendemail.png\" border=\"0\" alt=\"" . $aInt->lang("emails", "resendemail") . "\"></a>", "<a href=\"#\" onClick=\"doDelete('" . $id . "')\"><img src=\"images/delete.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"" . $aInt->lang("global", "delete") . "\" /></a>");
+	$tabledata[] = array($date, "<a href=\"#\" onClick=\"window.open('clientsemails.php?&displaymessage=true&id=" . $id . "','','width=650,height=400,scrollbars=yes');return false\">" . $subject . "</a>", "<a href=\"sendmessage.php?resend=true&emailid=" . $id . "\"><img src=\"images/icons/resendemail.png\" border=\"0\" alt=\"" . $aInt->lang("emails", "resendemail") . "\"></a>", "<a href=\"#\" onClick=\"doDelete('" . $id . "');return false\"><img src=\"images/delete.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"" . $aInt->lang("global", "delete") . "\" /></a>");
 }
 
 echo $aInt->sortableTable(array(array("date", $aInt->lang("fields", "date")), array("subject", $aInt->lang("emails", "subject")), "", ""), $tabledata);

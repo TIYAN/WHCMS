@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -236,7 +236,7 @@ class EwayPayment {
 
 
 	function doPayment() {
-		$xmlRequest = "<ewaygateway>" . "<ewayCustomerID>" . htmlentities( $this->myCustomerID ) . "</ewayCustomerID>" . "<ewayTotalAmount>" . htmlentities( $this->myTotalAmount ) . "</ewayTotalAmount>" . "<ewayCustomerFirstName><![CDATA[" . htmlentities( $this->myCustomerFirstname ) . "]]></ewayCustomerFirstName>" . "<ewayCustomerLastName><![CDATA[" . htmlentities( $this->myCustomerLastname ) . "]]></ewayCustomerLastName>" . "<ewayCustomerEmail>" . htmlentities( $this->myCustomerEmail ) . "</ewayCustomerEmail>" . "<ewayCustomerAddress><![CDATA[" . htmlentities( $this->myCustomerAddress ) . "]]></ewayCustomerAddress>" . "<ewayCustomerPostcode>" . htmlentities( $this->myCustomerPostcode ) . "</ewayCustomerPostcode>" . "<ewayCustomerInvoiceDescription>" . htmlentities( $this->myCustomerInvoiceDescription ) . "</ewayCustomerInvoiceDescription>" . "<ewayCustomerInvoiceRef>" . htmlentities( $this->myCustomerInvoiceRef ) . "</ewayCustomerInvoiceRef>" . "<ewayCardHoldersName><![CDATA[" . htmlentities( $this->myCardHoldersName ) . "]]></ewayCardHoldersName>" . "<ewayCardNumber>" . htmlentities( $this->myCardNumber ) . "</ewayCardNumber>" . "<ewayCardExpiryMonth>" . htmlentities( $this->myCardExpiryMonth ) . "</ewayCardExpiryMonth>" . "<ewayCardExpiryYear>" . htmlentities( $this->myCardExpiryYear ) . "</ewayCardExpiryYear>" . "<ewayCVN>" . htmlentities( $this->myCardCVN ) . "</ewayCVN>" . "<ewayTrxnNumber>" . htmlentities( $this->myTrxnNumber ) . "</ewayTrxnNumber>" . "<ewayCustomerIPAddress>" . $_SERVER["REMOTE_ADDR"] . "</ewayCustomerIPAddress>" . "<ewayCustomerBillingCountry>" . htmlentities( $this->myCustomerCountry ) . "</ewayCustomerBillingCountry>" . "<ewayOption1>" . htmlentities( $this->myOption1 ) . "</ewayOption1>" . "<ewayOption2>" . htmlentities( $this->myOption2 ) . "</ewayOption2>" . "<ewayOption3>" . htmlentities( $this->myOption3 ) . "</ewayOption3>" . "</ewaygateway>";
+		$xmlRequest = "<ewaygateway>" . "<ewayCustomerID>" . htmlentities( $this->myCustomerID ) . "</ewayCustomerID>" . "<ewayTotalAmount>" . htmlentities( $this->myTotalAmount ) . "</ewayTotalAmount>" . "<ewayCustomerFirstName><![CDATA[" . htmlentities( $this->myCustomerFirstname ) . "]]></ewayCustomerFirstName>" . "<ewayCustomerLastName><![CDATA[" . htmlentities( $this->myCustomerLastname ) . "]]></ewayCustomerLastName>" . "<ewayCustomerEmail>" . htmlentities( $this->myCustomerEmail ) . "</ewayCustomerEmail>" . "<ewayCustomerAddress><![CDATA[" . htmlentities( $this->myCustomerAddress ) . "]]></ewayCustomerAddress>" . "<ewayCustomerPostcode>" . htmlentities( $this->myCustomerPostcode ) . "</ewayCustomerPostcode>" . "<ewayCustomerInvoiceDescription>" . htmlentities( $this->myCustomerInvoiceDescription ) . "</ewayCustomerInvoiceDescription>" . "<ewayCustomerInvoiceRef>" . htmlentities( $this->myCustomerInvoiceRef ) . "</ewayCustomerInvoiceRef>" . "<ewayCardHoldersName><![CDATA[" . htmlentities( $this->myCardHoldersName ) . "]]></ewayCardHoldersName>" . "<ewayCardNumber>" . htmlentities( $this->myCardNumber ) . "</ewayCardNumber>" . "<ewayCardExpiryMonth>" . htmlentities( $this->myCardExpiryMonth ) . "</ewayCardExpiryMonth>" . "<ewayCardExpiryYear>" . htmlentities( $this->myCardExpiryYear ) . "</ewayCardExpiryYear>" . "<ewayCVN>" . htmlentities( $this->myCardCVN ) . "</ewayCVN>" . "<ewayTrxnNumber>" . htmlentities( $this->myTrxnNumber ) . "</ewayTrxnNumber>" . "<ewayCustomerIPAddress>" . $_SERVER['REMOTE_ADDR'] . "</ewayCustomerIPAddress>" . "<ewayCustomerBillingCountry>" . htmlentities( $this->myCustomerCountry ) . "</ewayCustomerBillingCountry>" . "<ewayOption1>" . htmlentities( $this->myOption1 ) . "</ewayOption1>" . "<ewayOption2>" . htmlentities( $this->myOption2 ) . "</ewayOption2>" . "<ewayOption3>" . htmlentities( $this->myOption3 ) . "</ewayOption3>" . "</ewaygateway>";
 		$ch = curl_init();
 		curl_setopt( $ch, CURLOPT_URL, $this->myGatewayURL );
 		curl_setopt( $ch, CURLOPT_POST, 1 );
@@ -255,15 +255,15 @@ class EwayPayment {
 			xml_parse( $this->parser, $xmlResponse, TRUE );
 
 			if (xml_get_error_code( $this->parser ) == XML_ERROR_NONE) {
-				$this->myResultTrxnStatus = $this->xmlData["ewayTrxnStatus"];
-				$this->myResultTrxnNumber = $this->xmlData["ewayTrxnNumber"];
-				$this->myResultTrxnOption1 = $this->xmlData["ewayTrxnOption1"];
-				$this->myResultTrxnOption2 = $this->xmlData["ewayTrxnOption2"];
-				$this->myResultTrxnOption3 = $this->xmlData["ewayTrxnOption3"];
-				$this->myResultTrxnReference = $this->xmlData["ewayTrxnReference"];
-				$this->myResultAuthCode = $this->xmlData["ewayAuthCode"];
-				$this->myResultReturnAmount = $this->xmlData["ewayReturnAmount"];
-				$this->myResultTrxnError = $this->xmlData["ewayTrxnError"];
+				$this->myResultTrxnStatus = $this->xmlData['ewayTrxnStatus'];
+				$this->myResultTrxnNumber = $this->xmlData['ewayTrxnNumber'];
+				$this->myResultTrxnOption1 = $this->xmlData['ewayTrxnOption1'];
+				$this->myResultTrxnOption2 = $this->xmlData['ewayTrxnOption2'];
+				$this->myResultTrxnOption3 = $this->xmlData['ewayTrxnOption3'];
+				$this->myResultTrxnReference = $this->xmlData['ewayTrxnReference'];
+				$this->myResultAuthCode = $this->xmlData['ewayAuthCode'];
+				$this->myResultReturnAmount = $this->xmlData['ewayReturnAmount'];
+				$this->myResultTrxnError = $this->xmlData['ewayTrxnError'];
 				$this->myError = 0;
 				$this->myErrorMessage = "";
 			}
@@ -277,7 +277,7 @@ class EwayPayment {
 		else {
 			$this->myError = curl_errno( $ch ) + EWAY_CURL_ERROR_OFFSET;
 			$this->myErrorMessage = curl_error( $ch );
-			$this->xmlData["CurlError"] = curl_errno( $ch ) . " - " . curl_error( $ch );
+			$this->xmlData['CurlError'] = curl_errno( $ch ) . " - " . curl_error( $ch );
 		}
 
 		curl_close( $ch );
@@ -295,11 +295,11 @@ function eway_config() {
 
 
 function eway_capture($params) {
-	if ($params["testmode"]) {
+	if ($params['testmode']) {
 		$url = "https://www.eway.com.au/gateway/xmltest/testpage.asp";
 	}
 	else {
-		if (( $params["beagle"] && $params["cccvv"] )) {
+		if ( $params['beagle'] && $params['cccvv'] ) {
 			$url = "https://www.eway.com.au/gateway_cvn/xmlbeagle.asp";
 		}
 		else {
@@ -307,24 +307,24 @@ function eway_capture($params) {
 		}
 	}
 
-	$eway = new EwayPayment( $params["customerid"], $url );
-	$eway->setCustomerFirstname( $params["clientdetails"]["firstname"] );
-	$eway->setCustomerLastname( $params["clientdetails"]["lastname"] );
-	$eway->setCustomerEmail( $params["clientdetails"]["email"] );
-	$eway->setCustomerAddress( $params["clientdetails"]["address1"] . ", " . $params["clientdetails"]["city"] . ", " . $params["clientdetails"]["state"] );
-	$eway->setCustomerPostcode( $params["clientdetails"]["postcode"] );
-	$eway->setCustomerCountry( $params["clientdetails"]["country"] );
-	$eway->setCustomerInvoiceDescription( $params["description"] );
-	$eway->setCustomerInvoiceRef( $params["invoiceid"] );
-	$eway->setCardHoldersName( $params["clientdetails"]["firstname"] . " " . $params["clientdetails"]["lastname"] );
-	$eway->setCardNumber( $params["cardnum"] );
-	$eway->setCardExpiryMonth( substr( $params["cardexp"], 0, 2 ) );
-	$eway->setCardExpiryYear( substr( $params["cardexp"], 2, 2 ) );
-	$eway->setCardCVN( $params["cccvv"] );
-	$eway->setTrxnNumber( $params["invoiceid"] );
-	$eway->setTotalAmount( round( $params["amount"] * 100, 2 ) );
+	$eway = new EwayPayment( $params['customerid'], $url );
+	$eway->setCustomerFirstname( $params['clientdetails']['firstname'] );
+	$eway->setCustomerLastname( $params['clientdetails']['lastname'] );
+	$eway->setCustomerEmail( $params['clientdetails']['email'] );
+	$eway->setCustomerAddress( $params['clientdetails']['address1'] . ", " . $params['clientdetails']['city'] . ", " . $params['clientdetails']['state'] );
+	$eway->setCustomerPostcode( $params['clientdetails']['postcode'] );
+	$eway->setCustomerCountry( $params['clientdetails']['country'] );
+	$eway->setCustomerInvoiceDescription( $params['description'] );
+	$eway->setCustomerInvoiceRef( $params['invoiceid'] );
+	$eway->setCardHoldersName( $params['clientdetails']['firstname'] . " " . $params['clientdetails']['lastname'] );
+	$eway->setCardNumber( $params['cardnum'] );
+	$eway->setCardExpiryMonth( substr( $params['cardexp'], 0, 2 ) );
+	$eway->setCardExpiryYear( substr( $params['cardexp'], 2, 2 ) );
+	$eway->setCardCVN( $params['cccvv'] );
+	$eway->setTrxnNumber( $params['invoiceid'] );
+	$eway->setTotalAmount( round( $params['amount'] * 100, 2 ) );
 	$desc = "Action => Capture
-Client => " . $params["clientdetails"]["firstname"] . " " . $params["clientdetails"]["lastname"] . "
+Client => " . $params['clientdetails']['firstname'] . " " . $params['clientdetails']['lastname'] . "
 ";
 	$result = $eway->doPayment();
 	foreach ($eway->xmlData as $key => $value) {
@@ -346,24 +346,24 @@ function eway_refund($params) {
 
 	$url = "https://www.eway.com.au/gateway/xmlpaymentrefund.asp";
 	$xml = "<ewaygateway>
-<ewayCustomerID>" . $params["customerid"] . "</ewayCustomerID>
-<ewayTotalAmount>" . $params["amount"] * 100 . "</ewayTotalAmount>
-<ewayCardExpiryMonth>" . substr( $params["expdate"], 0, 2 ) . "</ewayCardExpiryMonth>
-<ewayCardExpiryYear>" . substr( $params["expdate"], 2, 2 ) . "</ewayCardExpiryYear>
-<ewayOriginalTrxnNumber>" . $params["transid"] . "</ewayOriginalTrxnNumber>
+<ewayCustomerID>" . $params['customerid'] . "</ewayCustomerID>
+<ewayTotalAmount>" . $params['amount'] * 100 . "</ewayTotalAmount>
+<ewayCardExpiryMonth>" . substr( $params['expdate'], 0, 2 ) . "</ewayCardExpiryMonth>
+<ewayCardExpiryYear>" . substr( $params['expdate'], 2, 2 ) . "</ewayCardExpiryYear>
+<ewayOriginalTrxnNumber>" . $params['transid'] . "</ewayOriginalTrxnNumber>
 <ewayOption1></ewayOption1>
 <ewayOption2></ewayOption2>
 <ewayOption3></ewayOption3>
-<ewayRefundPassword>" . $params["refundpw"] . "</ewayRefundPassword>
+<ewayRefundPassword>" . $params['refundpw'] . "</ewayRefundPassword>
 </ewaygateway>";
 	$data = curlCall( $url, $xml );
 	$results = XMLtoArray( $data );
 
-	if ($results["EWAYRESPONSE"]["EWAYTRXNSTATUS"] == "True") {
-		return array( "status" => "success", "transid" => $results["EWAYRESPONSE"]["EWAYTRXNREFERENCE"], "rawdata" => $results["EWAYRESPONSE"] );
+	if ($results['EWAYRESPONSE']['EWAYTRXNSTATUS'] == "True") {
+		return array( "status" => "success", "transid" => $results['EWAYRESPONSE']['EWAYTRXNREFERENCE'], "rawdata" => $results['EWAYRESPONSE'] );
 	}
 
-	return array( "status" => "error", "rawdata" => $results["EWAYRESPONSE"] );
+	return array( "status" => "error", "rawdata" => $results['EWAYRESPONSE'] );
 }
 
 

@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -21,13 +21,8 @@ System SSL URL: " . $CONFIG['SystemSSLURL'] . "</textarea>";
 }
 
 $language = ((isset($_REQUEST['language']) && in_array($_REQUEST['language'], $whmcs->getValidLanguages())) ? $_REQUEST['language'] : "");
-header("Content-Type: application/rss+xml");
-echo "<?xml version=\"1.0\" encoding=\"" . $CONFIG['Charset'] . "\"?><rss version=\"2.0\" xmlns:atom=\"http://www.w3.org/2005/Atom\">
-<channel>
-<atom:link href=\"" . $CONFIG['SystemURL'] . "/announcementsrss.php\" rel=\"self\" type=\"application/rss+xml\" />
-<title><![CDATA[" . $CONFIG['CompanyName'] . "]]></title>
-<description><![CDATA[" . $CONFIG['CompanyName'] . " " . $_LANG['announcementstitle'] . " " . $_LANG['rssfeed'] . "]]></description>
-<link>" . $CONFIG['SystemURL'] . "/announcements.php</link>";
+header("Content-Type: application/rss+xml; charset=" . $CONFIG['Charset']);
+echo "<?xml version=\"1.0\" encoding=\"" . $CONFIG['Charset'] . "\"?>\n<rss version=\"2.0\" xmlns:atom=\"http://www.w3.org/2005/Atom\">\n<channel>\n<atom:link href=\"" . $CONFIG['SystemURL'] . "/announcementsrss.php\" rel=\"self\" type=\"application/rss+xml\" />\n<title><![CDATA[" . $CONFIG['CompanyName'] . "]]></title>\n<description><![CDATA[" . $CONFIG['CompanyName'] . " " . $_LANG['announcementstitle'] . " " . $_LANG['rssfeed'] . "]]></description>\n<link>" . $CONFIG['SystemURL'] . "/announcements.php</link>";
 $result = select_query("tblannouncements", "*", array("published" => "on"), "date", "DESC");
 
 while ($data = mysql_fetch_array($result)) {

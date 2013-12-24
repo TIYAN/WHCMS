@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -17,8 +17,8 @@ function bulkpricingupdater_config() {
 
 
 function bulkpricingupdater_output($vars) {
-	$modulelink = $vars["modulelink"];
-	$step = (isset( $_REQUEST["step"] ) ? $_REQUEST["step"] : "");
+	$modulelink = $vars['modulelink'];
+	$step = (isset( $_REQUEST['step'] ) ? $_REQUEST['step'] : "");
 
 	if (!$step) {
 		echo "
@@ -39,25 +39,25 @@ function bulkpricingupdater_output($vars) {
 		$result = select_query( "tblproducts", "tblproducts.id,tblproducts.gid,tblproducts.name,tblproductgroups.name AS groupname", "", "tblproductgroups`.`order` ASC,`tblproducts`.`order` ASC,`name", "ASC", "", "tblproductgroups ON tblproducts.gid=tblproductgroups.id" );
 
 		while ($data = mysql_fetch_array( $result )) {
-			$pid = $data["id"];
-			$pname = $data["name"];
-			$ptype = $data["groupname"];
+			$pid = $data['id'];
+			$pname = $data['name'];
+			$ptype = $data['groupname'];
 			echo "<option value=\"" . $pid . "\">" . $ptype . " - " . $pname . "</option>";
 		}
 
 		$result = select_query( "tbladdons", "", "", "name", "ASC" );
 
 		while ($data = mysql_fetch_array( $result )) {
-			$id = $data["id"];
-			$name = $data["name"];
-			$description = $data["description"];
+			$id = $data['id'];
+			$name = $data['name'];
+			$description = $data['description'];
 			echo "<option value=\"A" . $id . "\">Addon - " . $name . "</option>";
 		}
 
 		$result = select_query( "tbldomainpricing", "DISTINCT extension", "", "extension", "ASC" );
 
 		while ($data = mysql_fetch_array( $result )) {
-			$tld = $data["extension"];
+			$tld = $data['extension'];
 			echo "<option value=\"D" . $tld . "\">Domain - " . $tld . "</option>";
 		}
 
@@ -97,13 +97,13 @@ function bulkpricingupdater_output($vars) {
 		$result = select_query( "tblcurrencies", "id,code", "", "code", "ASC" );
 
 		while ($data = mysql_fetch_array( $result )) {
-			echo "<option value=\"" . $data["id"] . "\"";
+			echo "<option value=\"" . $data['id'] . "\"";
 
-			if ($data["id"] == $currency) {
+			if ($data['id'] == $currency) {
 				echo " selected";
 			}
 
-			echo ">" . $data["code"] . "</option>";
+			echo ">" . $data['code'] . "</option>";
 		}
 
 		echo "</select></td><td class=\"fieldlabel\">Current Price</td><td class=\"fieldarea\"><input type=\"text\" name=\"currentprice\" size=\"10\" value=\"\" /> (Optional)</td></tr>
@@ -125,12 +125,12 @@ function bulkpricingupdater_output($vars) {
 	}
 
 	check_token();
-	$productids = $_REQUEST["productids"];
-	$status = $_REQUEST["status"];
-	$billingcycle = $_REQUEST["billingcycle"];
-	$currid = (int)$_REQUEST["currid"];
-	$currentprice = $_REQUEST["currentprice"];
-	$newprice = $_REQUEST["newprice"];
+	$productids = $_REQUEST['productids'];
+	$status = $_REQUEST['status'];
+	$billingcycle = $_REQUEST['billingcycle'];
+	$currid = (int)$_REQUEST['currid'];
+	$currentprice = $_REQUEST['currentprice'];
+	$newprice = $_REQUEST['newprice'];
 	$statusmatches = db_build_in_array( $status );
 	$billingcyclematches = db_build_in_array( $billingcycle );
 

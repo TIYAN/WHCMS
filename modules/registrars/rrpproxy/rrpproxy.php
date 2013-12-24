@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -19,7 +19,7 @@ function rrpproxy_getConfigArray() {
 function rrpproxy_call($params, $request) {
 	$url = "https://api.rrpproxy.net/api/call.cgi?";
 
-	if ($params["TestMode"]) {
+	if ($params['TestMode']) {
 		$url = "https://api-ote.rrpproxy.net/api/call.cgi?";
 	}
 
@@ -34,7 +34,7 @@ function rrpproxy_call($params, $request) {
 		$query_string = $request;
 	}
 
-	$url .= "s_login=" . urlencode( $params["Username"] ) . "&s_pw=" . urlencode( $params["Password"] ) . "&" . $query_string;
+	$url .= "s_login=" . urlencode( $params['Username'] ) . "&s_pw=" . urlencode( $params['Password'] ) . "&" . $query_string;
 	$ch = curl_init();
 	curl_setopt( $ch, CURLOPT_URL, $url );
 	curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 );
@@ -58,37 +58,37 @@ function rrpproxy_call($params, $request) {
 
 
 	if (substr( $retval, 0, 4 ) == "CURL") {
-		$result["code"] = "999";
-		$result["description"] = $retval;
+		$result['code'] = "999";
+		$result['description'] = $retval;
 	}
 	else {
 		if (!$retval) {
-			$result["code"] = "998";
-			$result["description"] = "An unhandled exception occurred";
+			$result['code'] = "998";
+			$result['description'] = "An unhandled exception occurred";
 		}
 	}
 
 	$action = explode( "&", $query_string );
 	$action = $action[0];
 	$action = str_replace( "command=", "", $action );
-	logModuleCall( "rrpproxy", $action, $url, $retval, $result, array( $params["Username"], $params["Password"] ) );
+	logModuleCall( "rrpproxy", $action, $url, $retval, $result, array( $params['Username'], $params['Password'] ) );
 	return $result;
 }
 
 
 function rrpproxy_GetNameservers($params) {
-	$domain = $params["sld"] . "." . $params["tld"];
+	$domain = $params['sld'] . "." . $params['tld'];
 	$result = rrpproxy_call( $params, "command=StatusDomain&domain=" . $domain );
 
-	if ($result["code"] == "200") {
-		$values["ns1"] = $result["property[nameserver][0]"];
-		$values["ns2"] = $result["property[nameserver][1]"];
-		$values["ns3"] = $result["property[nameserver][2]"];
-		$values["ns4"] = $result["property[nameserver][3]"];
-		$values["ns5"] = $result["property[nameserver][4]"];
+	if ($result['code'] == "200") {
+		$values['ns1'] = $result["property[nameserver][0]"];
+		$values['ns2'] = $result["property[nameserver][1]"];
+		$values['ns3'] = $result["property[nameserver][2]"];
+		$values['ns4'] = $result["property[nameserver][3]"];
+		$values['ns5'] = $result["property[nameserver][4]"];
 	}
 	else {
-		$values["error"] = $result["description"];
+		$values['error'] = $result['description'];
 	}
 
 	return $values;
@@ -96,11 +96,11 @@ function rrpproxy_GetNameservers($params) {
 
 
 function rrpproxy_SaveNameservers($params) {
-	$domain = $params["sld"] . "." . $params["tld"];
-	$result = rrpproxy_call( $params, "command=ModifyDomain&domain=" . $domain . "&nameserver0=" . $params["ns1"] . "&nameserver1=" . $params["ns2"] . "&nameserver2=" . $params["ns3"] . "&nameserver3=" . $params["ns4"] . "&nameserver4=" . $params["ns5"] );
+	$domain = $params['sld'] . "." . $params['tld'];
+	$result = rrpproxy_call( $params, "command=ModifyDomain&domain=" . $domain . "&nameserver0=" . $params['ns1'] . "&nameserver1=" . $params['ns2'] . "&nameserver2=" . $params['ns3'] . "&nameserver3=" . $params['ns4'] . "&nameserver4=" . $params['ns5'] );
 
-	if ($result["code"] != "200") {
-		$values["error"] = $result["description"];
+	if ($result['code'] != "200") {
+		$values['error'] = $result['description'];
 	}
 
 	return $values;
@@ -108,55 +108,55 @@ function rrpproxy_SaveNameservers($params) {
 
 
 function rrpproxy_RegisterDomain($params) {
-	$result = rrpproxy_call( $params, "command=AddContact&firstname=" . urlencode( $params["firstname"] ) . "&lastname=" . urlencode( $params["lastname"] ) . "&street=" . urlencode( $params["address1"] ) . "&city=" . urlencode( $params["city"] ) . "&zip=" . urlencode( $params["postcode"] ) . "&country=" . urlencode( $params["country"] ) . "&phone=" . urlencode( $params["phonenumber"] ) . "&email=" . urlencode( $params["email"] ) . "&organization=" . urlencode( $params["companyname"] ) . "&state=" . urlencode( $params["state"] ) );
+	$result = rrpproxy_call( $params, "command=AddContact&firstname=" . urlencode( $params['firstname'] ) . "&lastname=" . urlencode( $params['lastname'] ) . "&street=" . urlencode( $params['address1'] ) . "&city=" . urlencode( $params['city'] ) . "&zip=" . urlencode( $params['postcode'] ) . "&country=" . urlencode( $params['country'] ) . "&phone=" . urlencode( $params['phonenumber'] ) . "&email=" . urlencode( $params['email'] ) . "&organization=" . urlencode( $params['companyname'] ) . "&state=" . urlencode( $params['state'] ) );
 
-	if ($result["code"] == "200") {
+	if ($result['code'] == "200") {
 		$contactid = $result["property[contact][0]"];
 	}
 	else {
-		$values["error"] = $result["description"];
+		$values['error'] = $result['description'];
 		return $values;
 	}
 
-	$result = rrpproxy_call( $params, "command=AddContact&firstname=" . urlencode( $params["firstname"] ) . "&lastname=" . urlencode( $params["lastname"] . "Admin" ) . "&street=" . urlencode( $params["address1"] ) . "&city=" . urlencode( $params["city"] ) . "&zip=" . urlencode( $params["postcode"] ) . "&country=" . urlencode( $params["country"] ) . "&phone=" . urlencode( $params["phonenumber"] ) . "&email=" . urlencode( $params["email"] ) . "&organization=" . urlencode( $params["companyname"] ) . "&state=" . urlencode( $params["state"] ) );
+	$result = rrpproxy_call( $params, "command=AddContact&firstname=" . urlencode( $params['firstname'] ) . "&lastname=" . urlencode( $params['lastname'] . "Admin" ) . "&street=" . urlencode( $params['address1'] ) . "&city=" . urlencode( $params['city'] ) . "&zip=" . urlencode( $params['postcode'] ) . "&country=" . urlencode( $params['country'] ) . "&phone=" . urlencode( $params['phonenumber'] ) . "&email=" . urlencode( $params['email'] ) . "&organization=" . urlencode( $params['companyname'] ) . "&state=" . urlencode( $params['state'] ) );
 
-	if ($result["code"] == "200") {
+	if ($result['code'] == "200") {
 		$admincontactid = $result["property[contact][0]"];
 	}
 	else {
-		$values["error"] = $result["description"];
+		$values['error'] = $result['description'];
 		return $values;
 	}
 
-	$domain = $params["sld"] . "." . $params["tld"];
+	$domain = $params['sld'] . "." . $params['tld'];
 	$postfields = array();
-	$postfields["command"] = "AddDomain";
-	$postfields["domain"] = $domain;
-	$postfields["period"] = $params["regperiod"];
-	$postfields["ownercontact0"] = $contactid;
-	$postfields["admincontact0"] = $contactid;
-	$postfields["techcontact0"] = $contactid;
-	$postfields["billingcontact0"] = $contactid;
-	$postfields["nameserver0"] = $params["ns1"];
-	$postfields["nameserver1"] = $params["ns2"];
+	$postfields['command'] = "AddDomain";
+	$postfields['domain'] = $domain;
+	$postfields['period'] = $params['regperiod'];
+	$postfields['ownercontact0'] = $contactid;
+	$postfields['admincontact0'] = $contactid;
+	$postfields['techcontact0'] = $contactid;
+	$postfields['billingcontact0'] = $contactid;
+	$postfields['nameserver0'] = $params['ns1'];
+	$postfields['nameserver1'] = $params['ns2'];
 
-	if ($params["ns3"]) {
-		$postfields["nameserver2"] = $params["ns3"];
+	if ($params['ns3']) {
+		$postfields['nameserver2'] = $params['ns3'];
 	}
 
 
-	if ($params["ns4"]) {
-		$postfields["nameserver3"] = $params["ns4"];
+	if ($params['ns4']) {
+		$postfields['nameserver3'] = $params['ns4'];
 	}
 
 
-	if ($params["ns5"]) {
-		$postfields["nameserver4"] = $params["ns5"];
+	if ($params['ns5']) {
+		$postfields['nameserver4'] = $params['ns5'];
 	}
 
 
-	if (preg_match( "/ca$/i", $params["tld"] )) {
-		$legaltype = $params["additionalfields"]["Legal Type"];
+	if (preg_match( '/ca$/i', $params['tld'] )) {
+		$legaltype = $params['additionalfields']["Legal Type"];
 
 		if ($legaltype == "Corporation") {
 			$legaltype = "CCO";
@@ -237,13 +237,13 @@ function rrpproxy_RegisterDomain($params) {
 			$legaltype = "OMK";
 		}
 
-		$postfields["X-CA-LEGAL-TYPE"] = $legaltype;
+		$postfields['X-CA-LEGAL-TYPE'] = $legaltype;
 		$postfields["X-CA-TRADEMARK:"] = "0";
 	}
 
 
-	if (preg_match( "/tel$/i", $params["tld"] )) {
-		$legaltype = $params["additionalfields"]["Legal Type"];
+	if (preg_match( '/tel$/i', $params['tld'] )) {
+		$legaltype = $params['additionalfields']["Legal Type"];
 
 		if ($legaltype == "Legal Person") {
 			$legaltype = "Legal";
@@ -252,62 +252,62 @@ function rrpproxy_RegisterDomain($params) {
 			$legaltype = "Natural";
 		}
 
-		$whoisoptout = $params["additionalfields"]["WHOIS Opt-out"];
+		$whoisoptout = $params['additionalfields']["WHOIS Opt-out"];
 		$whoisoptout = ($whoisoptout ? "1" : "0");
-		$postfields["X-TEL-PUBLISH-WHOIS"] = $whoisoptout;
-		$postfields["X-TEL-WHOISTYPE"] = $legaltype;
+		$postfields['X-TEL-PUBLISH-WHOIS'] = $whoisoptout;
+		$postfields['X-TEL-WHOISTYPE'] = $legaltype;
 	}
 
 
-	if (preg_match( "/it$/i", $params["tld"] )) {
-		$personaldata = $params["additionalfields"]["Publish Personal Data"];
+	if (preg_match( '/it$/i', $params['tld'] )) {
+		$personaldata = $params['additionalfields']["Publish Personal Data"];
 
 		if (!empty( $personaldata )) {
-			$postfields["X-IT-CONSENTFORPUBLISHING"] = "1";
+			$postfields['X-IT-CONSENTFORPUBLISHING'] = "1";
 		}
 		else {
-			$postfields["X-IT-CONSENTFORPUBLISHING"] = "0";
+			$postfields['X-IT-CONSENTFORPUBLISHING'] = "0";
 		}
 
-		$acceptsec3 = $params["additionalfields"]["Accept Section 3 of .IT registrar contract"];
+		$acceptsec3 = $params['additionalfields']["Accept Section 3 of .IT registrar contract"];
 
 		if (!empty( $acceptsec3 )) {
-			$postfields["X-IT-SECT3-LIABILITY"] = "1";
+			$postfields['X-IT-SECT3-LIABILITY'] = "1";
 		}
 		else {
-			$postfields["X-IT-SECT3-LIABILITY"] = "0";
+			$postfields['X-IT-SECT3-LIABILITY'] = "0";
 		}
 
-		$acceptsec5 = $params["additionalfields"]["Accept Section 5 of .IT registrar contract"];
+		$acceptsec5 = $params['additionalfields']["Accept Section 5 of .IT registrar contract"];
 
 		if (!empty( $acceptsec5 )) {
-			$postfields["X-IT-SECT5-PERSONAL-DATA-FOR-REGISTRATION"] = "1";
+			$postfields['X-IT-SECT5-PERSONAL-DATA-FOR-REGISTRATION'] = "1";
 		}
 		else {
-			$postfields["X-IT-SECT5-PERSONAL-DATA-FOR-REGISTRATION"] = "0";
+			$postfields['X-IT-SECT5-PERSONAL-DATA-FOR-REGISTRATION'] = "0";
 		}
 
-		$acceptsec6 = $params["additionalfields"]["Accept Section 6 of .IT registrar contract"];
+		$acceptsec6 = $params['additionalfields']["Accept Section 6 of .IT registrar contract"];
 
 		if (!empty( $acceptsec6 )) {
-			$postfields["X-IT-SECT6-PERSONAL-DATA-FOR-DIFFUSION"] = "1";
+			$postfields['X-IT-SECT6-PERSONAL-DATA-FOR-DIFFUSION'] = "1";
 		}
 		else {
-			$postfields["X-IT-SECT6-PERSONAL-DATA-FOR-DIFFUSION"] = "0";
+			$postfields['X-IT-SECT6-PERSONAL-DATA-FOR-DIFFUSION'] = "0";
 		}
 
-		$acceptsec7 = $params["additionalfields"]["Accept Section 7 of .IT registrar contract"];
+		$acceptsec7 = $params['additionalfields']["Accept Section 7 of .IT registrar contract"];
 
 		if (!empty( $acceptsec6 )) {
-			$postfields["X-IT-SECT7-EXPLICIT-ACCEPTANCE"] = "1";
+			$postfields['X-IT-SECT7-EXPLICIT-ACCEPTANCE'] = "1";
 		}
 		else {
-			$postfields["X-IT-SECT7-EXPLICIT-ACCEPTANCE"] = "0";
+			$postfields['X-IT-SECT7-EXPLICIT-ACCEPTANCE'] = "0";
 		}
 
-		$taxid = $params["additionalfields"]["Tax ID"];
-		$postfields["X-IT-PIN"] = $taxid;
-		$legaltype = $params["additionalfields"]["Legal Type"];
+		$taxid = $params['additionalfields']["Tax ID"];
+		$postfields['X-IT-PIN'] = $taxid;
+		$legaltype = $params['additionalfields']["Legal Type"];
 
 		if ($legaltype == "Italian and foreign natural persons") {
 			$legaltype = "1";
@@ -343,12 +343,12 @@ function rrpproxy_RegisterDomain($params) {
 			$legaltype = "7";
 		}
 
-		$postfields["X-IT-ENTITY-TYPE"] = $legaltype;
+		$postfields['X-IT-ENTITY-TYPE'] = $legaltype;
 	}
 
 
-	if (preg_match( "/us$/i", $params["tld"] )) {
-		$nexuspurpose = $params["additionalfields"]["Application Purpose"];
+	if (preg_match( '/us$/i', $params['tld'] )) {
+		$nexuspurpose = $params['additionalfields']["Application Purpose"];
 
 		if ($nexuspurpose == "Business use for profit") {
 			$nexuspurpose = "P1";
@@ -384,23 +384,23 @@ function rrpproxy_RegisterDomain($params) {
 			$nexuspurpose = "P5";
 		}
 
-		$postfields["X-US-NEXUS-APPPURPOSE"] = $nexuspurpose;
-		$postfields["X-US-NEXUS-CATEGORY"] = $params["additionalfields"]["Nexus Category"];
+		$postfields['X-US-NEXUS-APPPURPOSE'] = $nexuspurpose;
+		$postfields['X-US-NEXUS-CATEGORY'] = $params['additionalfields']["Nexus Category"];
 	}
 
 
-	if (preg_match( "/es$/i", $params["tld"] )) {
-		$postfields["X-ES-ACCEPT-SPECIAL-TAC"] = "0";
+	if (preg_match( '/es$/i', $params['tld'] )) {
+		$postfields['X-ES-ACCEPT-SPECIAL-TAC'] = "0";
 	}
 
 
-	if (preg_match( "/de$/i", $params["tld"] )) {
-		$postfields["X-DE-ACCEPT-TRUSTEE-TAC"] = "0";
+	if (preg_match( '/de$/i', $params['tld'] )) {
+		$postfields['X-DE-ACCEPT-TRUSTEE-TAC'] = "0";
 	}
 
 
-	if (preg_match( "/es$/i", $params["tld"] )) {
-		$idformtype = $params["additionalfields"]["ID Form Type"];
+	if (preg_match( '/es$/i', $params['tld'] )) {
+		$idformtype = $params['additionalfields']["ID Form Type"];
 
 		if ($idformtype == "Other Identification") {
 			$idformtype = "0";
@@ -421,19 +421,19 @@ function rrpproxy_RegisterDomain($params) {
 			$idformtype = "3";
 		}
 
-		$postfields["X-ES-REGISTRANT-TIPO-IDENTIFICACION"] = $idformtype;
-		$postfields["X-ES-REGISTRANT-IDENTIFICACION "] = $params["additionalfields"]["ID Form Number"];
+		$postfields['X-ES-REGISTRANT-TIPO-IDENTIFICACION'] = $idformtype;
+		$postfields["X-ES-REGISTRANT-IDENTIFICACION "] = $params['additionalfields']["ID Form Number"];
 	}
 
 
-	if (preg_match( "/eu$/i", $params["tld"] )) {
-		$postfields["X-EU-ACCEPT-TRUSTEE-TAC"] = "0";
+	if (preg_match( '/eu$/i', $params['tld'] )) {
+		$postfields['X-EU-ACCEPT-TRUSTEE-TAC'] = "0";
 	}
 
 	$result = rrpproxy_call( $params, $postfields );
 
-	if ($result["code"] != "200") {
-		$values["error"] = $result["description"];
+	if ($result['code'] != "200") {
+		$values['error'] = $result['description'];
 	}
 
 	return $values;
@@ -441,11 +441,11 @@ function rrpproxy_RegisterDomain($params) {
 
 
 function rrpproxy_TransferDomain($params) {
-	$domain = $params["sld"] . "." . $params["tld"];
-	$result = rrpproxy_call( $params, "command=TransferDomain&domain=" . $domain . "&auth=" . $params["transfersecret"] . "&action=REQUEST" );
+	$domain = $params['sld'] . "." . $params['tld'];
+	$result = rrpproxy_call( $params, "command=TransferDomain&domain=" . $domain . "&auth=" . $params['transfersecret'] . "&action=REQUEST" );
 
-	if ($result["code"] != "200") {
-		$values["error"] = $result["description"];
+	if ($result['code'] != "200") {
+		$values['error'] = $result['description'];
 	}
 
 	return $values;
@@ -453,16 +453,16 @@ function rrpproxy_TransferDomain($params) {
 
 
 function rrpproxy_RenewDomain($params) {
-	$domain = $params["sld"] . "." . $params["tld"];
-	$result = select_query( "tbldomains", "expirydate", array( "id" => $params["domainid"] ) );
+	$domain = $params['sld'] . "." . $params['tld'];
+	$result = select_query( "tbldomains", "expirydate", array( "id" => $params['domainid'] ) );
 	$data = mysql_fetch_array( $result );
-	$expirydate = $data["expirydate"];
+	$expirydate = $data['expirydate'];
 	$expirydate = explode( "-", $expirydate );
 	$expyear = $expirydate[0];
-	$result = rrpproxy_call( $params, "command=RenewDomain&domain=" . $domain . "&period=" . $params["regperiod"] . "&expiration=" . $expyear );
+	$result = rrpproxy_call( $params, "command=RenewDomain&domain=" . $domain . "&period=" . $params['regperiod'] . "&expiration=" . $expyear );
 
-	if ($result["code"] != "200") {
-		$values["error"] = $result["description"];
+	if ($result['code'] != "200") {
+		$values['error'] = $result['description'];
 	}
 
 	return $values;
@@ -470,26 +470,26 @@ function rrpproxy_RenewDomain($params) {
 
 
 function rrpproxy_GetContactDetails($params) {
-	$domain = $params["sld"] . "." . $params["tld"];
+	$domain = $params['sld'] . "." . $params['tld'];
 	$result = rrpproxy_call( $params, "command=StatusDomain&domain=" . $domain );
 	$ownercontact = $result["property[owner contact][0]"];
 	$admincontact = $result["property[admin contact][0]"];
 	$result = rrpproxy_call( $params, "command=StatusContact&contact=" . $ownercontact );
 
-	if ($result["code"] == "200") {
-		$values["Owner"] = array( "First Name" => $result["property[first name][0]"], "Last Name" => $result["property[last name][0]"], "Organisation" => $result["property[organization][0]"], "Street" => $result["property[street][0]"], "City" => $result["property[city][0]"], "State" => $result["property[state][0]"], "Zip" => $result["property[zip][0]"], "Country" => $result["property[country][0]"], "Phone" => $result["property[phone][0]"], "Fax" => $result["property[fax][0]"], "Email" => $result["property[email][0]"] );
+	if ($result['code'] == "200") {
+		$values['Owner'] = array( "First Name" => $result["property[first name][0]"], "Last Name" => $result["property[last name][0]"], "Organisation" => $result["property[organization][0]"], "Street" => $result["property[street][0]"], "City" => $result["property[city][0]"], "State" => $result["property[state][0]"], "Zip" => $result["property[zip][0]"], "Country" => $result["property[country][0]"], "Phone" => $result["property[phone][0]"], "Fax" => $result["property[fax][0]"], "Email" => $result["property[email][0]"] );
 	}
 	else {
-		$values["error"] = $result["description"];
+		$values['error'] = $result['description'];
 	}
 
 	$result = rrpproxy_call( $params, "command=StatusContact&contact=" . $admincontact );
 
-	if ($result["code"] == "200") {
-		$values["Admin"] = array( "First Name" => $result["property[first name][0]"], "Last Name" => $result["property[last name][0]"], "Organisation" => $result["property[organization][0]"], "Street" => $result["property[street][0]"], "City" => $result["property[city][0]"], "State" => $result["property[state][0]"], "Zip" => $result["property[zip][0]"], "Country" => $result["property[country][0]"], "Phone" => $result["property[phone][0]"], "Fax" => $result["property[fax][0]"], "Email" => $result["property[email][0]"] );
+	if ($result['code'] == "200") {
+		$values['Admin'] = array( "First Name" => $result["property[first name][0]"], "Last Name" => $result["property[last name][0]"], "Organisation" => $result["property[organization][0]"], "Street" => $result["property[street][0]"], "City" => $result["property[city][0]"], "State" => $result["property[state][0]"], "Zip" => $result["property[zip][0]"], "Country" => $result["property[country][0]"], "Phone" => $result["property[phone][0]"], "Fax" => $result["property[fax][0]"], "Email" => $result["property[email][0]"] );
 	}
 	else {
-		$values["error"] = $result["description"];
+		$values['error'] = $result['description'];
 	}
 
 	return $values;
@@ -497,15 +497,15 @@ function rrpproxy_GetContactDetails($params) {
 
 
 function rrpproxy_SaveContactDetails($params) {
-	$domain = $params["sld"] . "." . $params["tld"];
+	$domain = $params['sld'] . "." . $params['tld'];
 	$result = rrpproxy_call( $params, "command=StatusDomain&domain=" . $domain );
 	$ownercontact = $result["property[owner contact][0]"];
 	$admincontact = $result["property[admin contact][0]"];
-	$result = rrpproxy_call( $params, "command=ModifyContact&contact=" . $ownercontact . "&firstname=" . $params["contactdetails"]["Owner"]["First Name"] . "&lastname=" . $params["contactdetails"]["Owner"]["Last Name"] . "&organization=" . $params["contactdetails"]["Owner"]["Organisation"] . "&street=" . urlencode( $params["contactdetails"]["Owner"]["Street"] ) . "&city=" . urlencode( $params["contactdetails"]["Owner"]["City"] ) . "&state=" . urlencode( $params["contactdetails"]["Owner"]["State"] ) . "&zip=" . urlencode( $params["contactdetails"]["Owner"]["Zip"] ) . "&country=" . $params["contactdetails"]["Owner"]["Country"] . "&phone=" . urlencode( $params["contactdetails"]["Owner"]["Phone"] ) . "&fax=" . urlencode( $params["contactdetails"]["Owner"]["Fax"] ) . "&email=" . urlencode( $params["contactdetails"]["Owner"]["Email"] ) );
-	$result = rrpproxy_call( $params, "command=ModifyContact&contact=" . $admincontact . "&firstname=" . $params["contactdetails"]["Admin"]["First Name"] . "&lastname=" . $params["contactdetails"]["Admin"]["Last Name"] . "&organization=" . $params["contactdetails"]["Admin"]["Organisation"] . "&street=" . urlencode( $params["contactdetails"]["Admin"]["Street"] ) . "&city=" . urlencode( $params["contactdetails"]["Admin"]["City"] ) . "&state=" . urlencode( $params["contactdetails"]["Admin"]["State"] ) . "&zip=" . urlencode( $params["contactdetails"]["Admin"]["Zip"] ) . "&country=" . $params["contactdetails"]["Admin"]["Country"] . "&phone=" . urlencode( $params["contactdetails"]["Admin"]["Phone"] ) . "&fax=" . urlencode( $params["contactdetails"]["Admin"]["Fax"] ) . "&email=" . urlencode( $params["contactdetails"]["Admin"]["Email"] ) );
+	$result = rrpproxy_call( $params, "command=ModifyContact&contact=" . $ownercontact . "&firstname=" . $params['contactdetails']['Owner']["First Name"] . "&lastname=" . $params['contactdetails']['Owner']["Last Name"] . "&organization=" . $params['contactdetails']['Owner']['Organisation'] . "&street=" . urlencode( $params['contactdetails']['Owner']['Street'] ) . "&city=" . urlencode( $params['contactdetails']['Owner']['City'] ) . "&state=" . urlencode( $params['contactdetails']['Owner']['State'] ) . "&zip=" . urlencode( $params['contactdetails']['Owner']['Zip'] ) . "&country=" . $params['contactdetails']['Owner']['Country'] . "&phone=" . urlencode( $params['contactdetails']['Owner']['Phone'] ) . "&fax=" . urlencode( $params['contactdetails']['Owner']['Fax'] ) . "&email=" . urlencode( $params['contactdetails']['Owner']['Email'] ) );
+	$result = rrpproxy_call( $params, "command=ModifyContact&contact=" . $admincontact . "&firstname=" . $params['contactdetails']['Admin']["First Name"] . "&lastname=" . $params['contactdetails']['Admin']["Last Name"] . "&organization=" . $params['contactdetails']['Admin']['Organisation'] . "&street=" . urlencode( $params['contactdetails']['Admin']['Street'] ) . "&city=" . urlencode( $params['contactdetails']['Admin']['City'] ) . "&state=" . urlencode( $params['contactdetails']['Admin']['State'] ) . "&zip=" . urlencode( $params['contactdetails']['Admin']['Zip'] ) . "&country=" . $params['contactdetails']['Admin']['Country'] . "&phone=" . urlencode( $params['contactdetails']['Admin']['Phone'] ) . "&fax=" . urlencode( $params['contactdetails']['Admin']['Fax'] ) . "&email=" . urlencode( $params['contactdetails']['Admin']['Email'] ) );
 
-	if ($result["code"] != "200") {
-		$values["error"] = $result["description"];
+	if ($result['code'] != "200") {
+		$values['error'] = $result['description'];
 	}
 
 	return $values;
@@ -513,14 +513,14 @@ function rrpproxy_SaveContactDetails($params) {
 
 
 function rrpproxy_GetEPPCode($params) {
-	$domain = $params["sld"] . "." . $params["tld"];
+	$domain = $params['sld'] . "." . $params['tld'];
 	$result = rrpproxy_call( $params, "command=StatusDomain&domain=" . $domain );
 
-	if ($result["code"] == "200") {
-		$values["eppcode"] = $result["property[auth][0]"];
+	if ($result['code'] == "200") {
+		$values['eppcode'] = $result["property[auth][0]"];
 	}
 	else {
-		$values["error"] = $result["description"];
+		$values['error'] = $result['description'];
 	}
 
 	return $values;

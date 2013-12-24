@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -13,23 +13,23 @@
 function cleanSystemURL($url, $secure = false, $keepempty = false) {
 	global $whmcs;
 
-	if ($url == "" || !preg_match("/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i", $url)) {
+	if ($url == "" || !preg_match('/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i', $url)) {
 		if ($keepempty == true) {
 			return "";
 		}
 
 
 		if ($secure == true) {
-			$url = "https://" . $_SERVER['SERVER_NAME'] . preg_replace("#/[^/]*\.php$#simU", "/", $_SERVER['PHP_SELF']);
+			$url = "https://" . $_SERVER['SERVER_NAME'] . preg_replace('#/[^/]*\.php$#simU', '/', $_SERVER['PHP_SELF']);
 		}
 		else {
-			$url = "http://" . $_SERVER['SERVER_NAME'] . preg_replace("#/[^/]*\.php$#simU", "/", $_SERVER['PHP_SELF']);
+			$url = "http://" . $_SERVER['SERVER_NAME'] . preg_replace('#/[^/]*\.php$#simU', '/', $_SERVER['PHP_SELF']);
 		}
 	}
 	else {
-		$url = str_replace("\\", "", trim($url));
+		$url = str_replace('\\', '', trim($url));
 
-			if (!preg_match("~^(?:ht)tps?://~i", $url)) {
+			if (!preg_match('~^(?:ht)tps?://~i', $url)) {
 			if ($secure == true) {
 				$url = "https://" . $url;
 			}
@@ -38,7 +38,7 @@ function cleanSystemURL($url, $secure = false, $keepempty = false) {
 			}
 		}
 
-		$url = preg_replace("~^https?://[^/]+$~", ";/", $url);
+		$url = preg_replace('~^https?://[^/]+$~', ';/', $url);
 	}
 
 

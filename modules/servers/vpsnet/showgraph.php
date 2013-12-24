@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -13,11 +13,11 @@
 require "../../../init.php";
 require "vpsnet.php";
 
-if (!$_SESSION["uid"]) {
+if (!$_SESSION['uid']) {
 	exit( "Access Denied" );
 }
 
-$result = select_query( "tblhosting", "count(*)", array( "id" => $serviceid, "userid" => $_SESSION["uid"] ) );
+$result = select_query( "tblhosting", "count(*)", array( "id" => $serviceid, "userid" => $_SESSION['uid'] ) );
 $data = mysql_fetch_array( $result );
 
 if (!$data[0]) {
@@ -25,11 +25,11 @@ if (!$data[0]) {
 }
 
 $creds = vpsnet_GetCredentials();
-$api = VPSNET::getinstance( $creds["username"], $creds["accesshash"] );
+$api = VPSNET::getinstance( $creds['username'], $creds['accesshash'] );
 $result = select_query( "mod_vpsnet", "", array( "relid" => $serviceid ) );
 
 while ($data = mysql_fetch_array( $result )) {
-	${$data["setting"]} = $data["value"];
+	${$data['setting']} = $data['value'];
 }
 
 
@@ -47,7 +47,7 @@ else {
 	$result = $postfields->showNetworkGraph( $period );
 }
 
-$output = $result["response_body"];
+$output = $result['response_body'];
 echo $output;
 Exception {
 	return "Caught exception: " . $e->getMessage();

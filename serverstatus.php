@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -60,11 +60,11 @@ if ($whmcs->get_req_var("getstats")) {
 	$num = $whmcs->get_req_var("num");
 	$statusaddress = $servers[$num]['statusaddr'];
 	$filecontents = curlCall($statusaddress, "");
-	preg_match("/\<load\>(.*?)\<\/load\>/", $filecontents, $serverload);
-	preg_match("/\<uptime\>(.*?)\<\/uptime\>/", $filecontents, $uptime);
-	preg_match("/\<phpver\>(.*?)\<\/phpver\>/", $filecontents, $phpver);
-	preg_match("/\<mysqlver\>(.*?)\<\/mysqlver\>/", $filecontents, $mysqlver);
-	preg_match("/\<zendver\>(.*?)\<\/zendver\>/", $filecontents, $zendver);
+	preg_match('/\<load\>(.*?)\<\/load\>/', $filecontents, $serverload);
+	preg_match('/\<uptime\>(.*?)\<\/uptime\>/', $filecontents, $uptime);
+	preg_match('/\<phpver\>(.*?)\<\/phpver\>/', $filecontents, $phpver);
+	preg_match('/\<mysqlver\>(.*?)\<\/mysqlver\>/', $filecontents, $mysqlver);
+	preg_match('/\<zendver\>(.*?)\<\/zendver\>/', $filecontents, $zendver);
 	$serverload = $serverload[1];
 	$uptime = $uptime[1];
 	$phpver = $phpver[1];

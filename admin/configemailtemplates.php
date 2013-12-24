@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -156,7 +156,7 @@ if ($action == "") {
 
 		update_query("tblemailtemplates", array("fromname" => $fromname, "fromemail" => $fromemail, "attachments" => implode(",", $attachments), "disabled" => $disabled, "copyto" => $copyto, "plaintext" => $plaintext), array("id" => $id));
 		foreach ($subject as $key => $value) {
-			update_query("tblemailtemplates", array("subject" => html_entity_decode($value), "message" => html_entity_decode($message[$key])), array("id" => $key));
+			update_query("tblemailtemplates", array("subject" => html_entity_decode($value, ENT_QUOTES), "message" => html_entity_decode($message[$key], ENT_QUOTES)), array("id" => $key));
 		}
 
 
@@ -365,7 +365,6 @@ else {
 
 		if ($plaintextchange) {
 			if ($plaintext) {
-				
 				$message = str_replace("\r\n\r\n", "</p><p>", $message);
 				$message = str_replace("\r\n", "<br>", $message);
 
@@ -376,7 +375,6 @@ else {
 				$message = str_replace("<p>", "", $message);
 				$message = str_replace("</p>", "\r\n\r\n", $message);
 				$message = str_replace("<br>", "\r\n", $message);
-
 				$message = str_replace("<br />", "\r\n", $message);
 
 				$message = strip_tags($message);

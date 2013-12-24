@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -125,7 +125,7 @@ function centovacast_QueryAllRows() {
  */
 function centovacast_UserExists($username) {
 	$row = centovacast_QueryOneRow( "SELECT id FROM tblhosting WHERE username=\"%s\"", $username );
-	return isset( $row["id"] ) ? (int)$row["id"] : false;
+	return isset( $row['id'] ) ? (int)$row['id'] : false;
 }
 
 
@@ -194,7 +194,7 @@ function centovacast_GeneratePassword($maxlength = 8) {
  * @return string The generated username.
  */
 function centovacast_UniqueUsername($client, $minlength = 4, $maxlength = 8) {
-	if (strlen( $client["companyname"] )) {
+	if (strlen( $client['companyname'] )) {
 		$companyname = preg_replace( '/[^a-z]+/i', '', strtolower( $client['companyname'] ) );
 		$username = substr( $companyname, 0, $maxlength );
 
@@ -253,14 +253,14 @@ function centovacast_UniqueUsername($client, $minlength = 4, $maxlength = 8) {
  */
 function centovacast_GetCCURL(&$params, $error) {
 	$error = false;
-	$ccurl = $params["serverhostname"];
+	$ccurl = $params['serverhostname'];
 
 	if (!preg_match( '#^https?://#', $ccurl )) {
 		$error = "Invalid 'Hostname' setting in WHMCS configuration for Centova Cast.  Per the documentation the 'Hostname' field must contain the complete URL to Centova Cast, not just a hostname.";
 		return false;
 	}
 
-	return $params["serverhostname"];
+	return $params['serverhostname'];
 }
 
 
@@ -275,8 +275,8 @@ function centovacast_GetCCURL(&$params, $error) {
  * @return array an array containing the username and password
  */
 function centovacast_GetServerCredentials($params, $serverapi = false) {
-	$serverusername = $params["serverusername"];
-	$serverpassword = $params["serverpassword"];
+	$serverusername = $params['serverusername'];
+	$serverpassword = $params['serverpassword'];
 
 	if ( $serverusername != "admin" || $serverapi ) {
 		$serverpassword = $serverusername . "|" . $serverpassword;
@@ -297,80 +297,80 @@ function centovacast_GetServerCredentials($params, $serverapi = false) {
  * @return bool|string true on success, an error string on failure
  */
 function centovacast_GetAPIArgs(&$params, $arguments) {
-	$packageid = $params["packageid"];
-	$templatename = $params["configoption1"];
-	$maxlisteners = $params["configoption2"];
-	$maxbitrate = $params["configoption3"];
-	$xferquota = $params["configoption4"];
-	$diskquota = $params["configoption5"];
-	$autostart = $params["configoption6"];
-	$mountlimit = $params["configoption7"];
-	$webproxy = $params["configoption8"];
-	$autodj = $params["configoption9"];
-	$maxaccounts = $params["configoption10"];
-	$maxbw = $params["configoption11"];
+	$packageid = $params['packageid'];
+	$templatename = $params['configoption1'];
+	$maxlisteners = $params['configoption2'];
+	$maxbitrate = $params['configoption3'];
+	$xferquota = $params['configoption4'];
+	$diskquota = $params['configoption5'];
+	$autostart = $params['configoption6'];
+	$mountlimit = $params['configoption7'];
+	$webproxy = $params['configoption8'];
+	$autodj = $params['configoption9'];
+	$maxaccounts = $params['configoption10'];
+	$maxbw = $params['configoption11'];
 
 	if (!strlen( $templatename )) {
 		return "Missing account template name in WHMCS package configuration for package " . $packageid . "; check your WHMCS package configuration.";
 	}
 
-	$arguments["template"] = $templatename;
+	$arguments['template'] = $templatename;
 
 	if (strlen( $maxlisteners )) {
-		$arguments["maxclients"] = $maxlisteners;
+		$arguments['maxclients'] = $maxlisteners;
 	}
 
 
 	if (strlen( $maxbitrate )) {
-		$arguments["maxbitrate"] = $maxbitrate;
+		$arguments['maxbitrate'] = $maxbitrate;
 	}
 
 
 	if (strlen( $xferquota )) {
-		$arguments["transferlimit"] = $xferquota;
+		$arguments['transferlimit'] = $xferquota;
 	}
 
 
 	if (strlen( $diskquota )) {
-		$arguments["diskquota"] = $diskquota;
+		$arguments['diskquota'] = $diskquota;
 	}
 
 
 	if (strlen( $autostart )) {
-		$arguments["autostart"] = ($autostart == "yes" ? 1 : 0);
+		$arguments['autostart'] = ($autostart == "yes" ? 1 : 0);
 	}
 
 
 	if (strlen( $mountlimit )) {
-		$arguments["mountlimit"] = max( 1, (int)$mountlimit );
+		$arguments['mountlimit'] = max( 1, (int)$mountlimit );
 	}
 
 
 	if (strlen( $webproxy )) {
-		$arguments["allowproxy"] = (strtolower( $webproxy[0] ) == "d" ? 0 : 1);
+		$arguments['allowproxy'] = (strtolower( $webproxy[0] ) == "d" ? 0 : 1);
 	}
 
 
 	if (strlen( $autodj )) {
-		$arguments["usesource"] = (strtolower( $webproxy[0] ) == "d" ? 1 : 2);
+		$arguments['usesource'] = (strtolower( $webproxy[0] ) == "d" ? 1 : 2);
 	}
 
 
 	if (strlen( $maxaccounts )) {
-		$arguments["resellerusers"] = $maxaccounts;
+		$arguments['resellerusers'] = $maxaccounts;
 	}
 
 
 	if (strlen( $maxbw )) {
-		$arguments["resellerbandwidth"] = $maxbw;
+		$arguments['resellerbandwidth'] = $maxbw;
 	}
 
 	$addonmap = array( CC_TXT_MAXCLIENTS => "maxclients", CC_TXT_MAXBITRATE => "maxbitrate", CC_TXT_XFERLIMIT => "transferlimit", CC_TXT_DISKQUOTA => "diskquota", CC_TXT_MAXBW => "resellerbandwidth", CC_TXT_MAXACCT => "resellerusers", CC_TXT_MOUNTLIMIT => "mountlimit" );
 
-	if (is_array( $params["configoptions"] )) {
-		foreach ($params["configoptions"] as $caption => $value) {
+	if (is_array( $params['configoptions'] )) {
+		foreach ($params['configoptions'] as $caption => $value) {
 
-			if (( strlen( $value ) && isset( $addonmap[$caption] ) )) {
+			if (strlen( $value ) && isset( $addonmap[$caption] )) {
 				$optionname = $addonmap[$caption];
 				$value = preg_replace( "/[^0-9]/", "", $value );
 				$arguments[$optionname] = $value;
@@ -393,21 +393,21 @@ function centovacast_GetAPIArgs(&$params, $arguments) {
  * @return string
  */
 function centovacast_CreateAccount($params) {
-	$serverip = $params["serverip"];
+	$serverip = $params['serverip'];
 	$serverpassword = centovacast_GetServerCredentials( $params )[1];
 	$username = $serverusername = centovacast_GetServerCredentials( $params )[0];
-	$password = $params["password"];
+	$password = $params['password'];
 
 	if ( !strlen( $username ) || is_numeric( $username ) ) {
-		$params["username"] = $username = centovacast_UniqueUsername( $params["clientsdetails"] );
+		$params['username'] = $username = centovacast_UniqueUsername( $params['clientsdetails'] );
 		$query = sprintf( "UPDATE tblhosting SET username=\"%s\"", mysql_real_escape_string( $username ) );
 
 		if (!strlen( $password )) {
-			$params["password"] = $password = centovacast_GeneratePassword();
+			$params['password'] = $password = centovacast_GeneratePassword();
 			$query .= sprintf( ",password=\"%s\"", mysql_real_escape_string( encrypt( $password ) ) );
 		}
 
-		$query .= sprintf( " WHERE id=\"%s\"", $params["accountid"] );
+		$query .= sprintf( " WHERE id=\"%s\"", $params['accountid'] );
 
 		if (!full_query( $query )) {
 			return "Error updating hosting table: " . mysql_error();
@@ -416,12 +416,12 @@ function centovacast_CreateAccount($params) {
 
 	centovacast_GetCCURL( $params, &$urlerror );
 
-	if (false === $ccurl = $params["username"]) {
+	if (false === $ccurl = $params['username']) {
 		return $urlerror;
 	}
 
-	$clientsdetails = $params["clientsdetails"];
-	$arguments = array( "hostname" => "auto", "ipaddress" => "auto", "port" => "auto", "username" => $username, "adminpassword" => $password, "sourcepassword" => $password . "dj", "email" => $clientsdetails["email"], "title" => sprintf( "%s Stream", (strlen( $clientsdetails["companyname"] ) ? $clientsdetails["companyname"] : $clientsdetails["lastname"]) ), "organization" => $clientsdetails["companyname"], "introfile" => "", "fallbackfile" => "", "autorebuildlist" => 1 );
+	$clientsdetails = $params['clientsdetails'];
+	$arguments = array( "hostname" => "auto", "ipaddress" => "auto", "port" => "auto", "username" => $username, "adminpassword" => $password, "sourcepassword" => $password . "dj", "email" => $clientsdetails['email'], "title" => sprintf( "%s Stream", (strlen( $clientsdetails['companyname'] ) ? $clientsdetails['companyname'] : $clientsdetails['lastname']) ), "organization" => $clientsdetails['companyname'], "introfile" => "", "fallbackfile" => "", "autorebuildlist" => 1 );
 	$error = centovacast_GetAPIArgs( $params, &$arguments );
 
 	if (is_string( $error )) {
@@ -430,7 +430,7 @@ function centovacast_CreateAccount($params) {
 
 	$system = new CCSystemAPIClient( $ccurl );
 
-	if ($_REQUEST["ccmoduledebug"]) {
+	if ($_REQUEST['ccmoduledebug']) {
 		$system->debug = true;
 	}
 
@@ -438,19 +438,19 @@ function centovacast_CreateAccount($params) {
 	logModuleCall( "centovacast", "create", $system->raw_request, $system->raw_response, NULL, NULL );
 
 	if ($system->success) {
-		$account = $system->data["account"];
-		$account["sourcepassword"] = $arguments["sourcepassword"];
+		$account = $system->data['account'];
+		$account['sourcepassword'] = $arguments['sourcepassword'];
 		$tblhostingid = (int)centovacast_UserExists( $username );
 
 		if ($tblhostingid) {
 			$res = centovacast_QueryOneRow( "SELECT packageid FROM tblhosting WHERE id=%d", $tblhostingid );
-			$packageid = (isset( $res["packageid"] ) ? (int)$res["packageid"] : false);
+			$packageid = (isset( $res['packageid'] ) ? (int)$res['packageid'] : false);
 
 			if ($packageid) {
 				$customfields = centovacast_QueryAllRows( "SELECT id,fieldname FROM tblcustomfields WHERE relid=%d", $packageid );
 				foreach ($customfields as $k => $customfield) {
-					$fieldname = $customfield["fieldname"];
-					$fieldid = (int)$customfield["id"];
+					$fieldname = $customfield['fieldname'];
+					$fieldid = (int)$customfield['id'];
 
 					if (isset( $account[$fieldname] )) {
 						$value = $account[$fieldname];
@@ -480,8 +480,8 @@ function centovacast_CreateAccount($params) {
  */
 function centovacast_ChangePackage($params) {
 	list($serverusername,$serverpassword) = centovacast_GetServerCredentials( $params, true );
-	$username = $params["username"];
-	$password = $params["password"];
+	$username = $params['username'];
+	$password = $params['password'];
 
 	if (false === $ccurl = centovacast_GetCCURL( $params, &$urlerror )) {
 		return $urlerror;
@@ -500,9 +500,9 @@ function centovacast_ChangePackage($params) {
 		return "Error fetching account information from Centova Cast";
 	}
 
-	$account = $server->data["account"];
+	$account = $server->data['account'];
 
-	if ( !is_array( $account ) || !isset( $account["username"] ) ) {
+	if ( !is_array( $account ) || !isset( $account['username'] ) ) {
 		return "Account does not exist in Centova Cast";
 	}
 
@@ -512,7 +512,7 @@ function centovacast_ChangePackage($params) {
 		return $error;
 	}
 
-	unset( $account["template"] );
+	unset( $account['template'] );
 	$server->call( "reconfigure", $username, $serverpassword, $account );
 	logModuleCall( "centovacast", "changepackage", $server->raw_request, $server->raw_response, NULL, NULL );
 	return $server->success ? "success" : $server->error;
@@ -530,7 +530,7 @@ function centovacast_ChangePackage($params) {
  */
 function centovacast_TerminateAccount($params) {
 	list($serverusername,$serverpassword) = centovacast_GetServerCredentials( $params );
-	$username = $params["username"];
+	$username = $params['username'];
 
 	if (false === $ccurl = centovacast_GetCCURL( $params, &$urlerror )) {
 		return $urlerror;
@@ -555,7 +555,7 @@ function centovacast_TerminateAccount($params) {
  */
 function centovacast_SuspendAccount($params) {
 	list($serverusername,$serverpassword) = centovacast_GetServerCredentials( $params );
-	$username = $params["username"];
+	$username = $params['username'];
 
 	if (false === $ccurl = centovacast_GetCCURL( $params, &$urlerror )) {
 		return $urlerror;
@@ -580,7 +580,7 @@ function centovacast_SuspendAccount($params) {
  */
 function centovacast_UnsuspendAccount($params) {
 	list($serverusername,$serverpassword) = centovacast_GetServerCredentials( $params );
-	$username = $params["username"];
+	$username = $params['username'];
 
 	if (false === $ccurl = centovacast_GetCCURL( $params, &$urlerror )) {
 		return $urlerror;
@@ -605,8 +605,8 @@ function centovacast_UnsuspendAccount($params) {
  */
 function centovacast_ChangePassword($params) {
 	list($serverusername,$serverpassword) = centovacast_GetServerCredentials( $params, true );
-	$username = $params["username"];
-	$password = $params["password"];
+	$username = $params['username'];
+	$password = $params['password'];
 
 	if (false === $ccurl = centovacast_GetCCURL( $params, &$urlerror )) {
 		return $urlerror;
@@ -625,13 +625,13 @@ function centovacast_ChangePassword($params) {
 		return "Error fetching account information from Centova Cast";
 	}
 
-	$account = $server->data["account"];
+	$account = $server->data['account'];
 
-	if ( !is_array( $account ) || !isset( $account["username"] ) ) {
+	if ( !is_array( $account ) || !isset( $account['username'] ) ) {
 		return "Account does not exist in Centova Cast";
 	}
 
-	$account["adminpassword"] = $password;
+	$account['adminpassword'] = $password;
 	$server->call( "reconfigure", $username, $serverpassword, $account );
 	logModuleCall( "centovacast", "changepassword", $server->raw_request, $server->raw_response, NULL, NULL );
 	return $server->success ? "success" : $server->error;
@@ -665,8 +665,8 @@ function centovacast_ClientArea($params) {
 		return $urlerror;
 	}
 
-	$username = $params["username"];
-	$password = $params["password"];
+	$username = $params['username'];
+	$password = $params['password'];
 
 	if (substr( $ccurl, 0 - 1 ) != "/") {
 		$ccurl .= "/";
@@ -700,15 +700,15 @@ function centovacast_ClientArea($params) {
  */
 function centovacast_AdminLink($params) {
 	$query = "SELECT hostname FROM tblservers WHERE tblservers.ipaddress=\"%s\" AND tblservers.username=\"%s\" AND tblservers.type=\"centovacast\" LIMIT 1";
-	$res = centovacast_QueryOneRow( $query, $params["serverip"], $params["serverusername"] );
+	$res = centovacast_QueryOneRow( $query, $params['serverip'], $params['serverusername'] );
 
-	if (!$res["hostname"]) {
+	if (!$res['hostname']) {
 		return "";
 	}
 
-	$params["serverhostname"] = $res["hostname"];
-	$serverusername = $params["serverusername"];
-	$serverpassword = $params["serverpassword"];
+	$params['serverhostname'] = $res['hostname'];
+	$serverusername = $params['serverusername'];
+	$serverpassword = $params['serverpassword'];
 
 	if (false === $ccurl = centovacast_GetCCURL( $params, &$urlerror )) {
 		return $urlerror;
@@ -743,7 +743,7 @@ function centovacast_SetState($params, $newstate) {
 	}
 
 	list($serverusername,$serverpassword) = centovacast_GetServerCredentials( $params, true );
-	$username = $params["username"];
+	$username = $params['username'];
 
 	if (false === $ccurl = centovacast_GetCCURL( $params, &$urlerror )) {
 		return $urlerror;
@@ -817,7 +817,7 @@ function centovacast_UsageUpdate($params) {
 
 	$system = new CCSystemAPIClient( $ccurl );
 
-	if ($_REQUEST["ccmoduledebug"]) {
+	if ($_REQUEST['ccmoduledebug']) {
 		$system->debug = true;
 	}
 
@@ -834,15 +834,15 @@ function centovacast_UsageUpdate($params) {
 		return "Error fetching account information from Centova Cast";
 	}
 
-	$accounts = $system->data["row"];
+	$accounts = $system->data['row'];
 
 	if ( !is_array( $accounts ) || !count( $accounts ) ) {
 		return "No accounts in Centova Cast";
 	}
 
-	$serverid = $params["serverid"];
+	$serverid = $params['serverid'];
 	foreach ($accounts as $k => $values) {
-		update_query( "tblhosting", array( "diskused" => $values["diskusage"], "disklimit" => max( 0, $values["diskquota"] ), "bwused" => $values["transferusage"], "bwlimit" => max( 0, $values["transferlimit"] ), "lastupdate" => "now()" ), array( "server" => $serverid, "username" => $values["username"] ) );
+		update_query( "tblhosting", array( "diskused" => $values['diskusage'], "disklimit" => max( 0, $values['diskquota'] ), "bwused" => $values['transferusage'], "bwlimit" => max( 0, $values['transferlimit'] ), "lastupdate" => "now()" ), array( "server" => $serverid, "username" => $values['username'] ) );
 	}
 
 	return "success";

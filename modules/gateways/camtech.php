@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -18,23 +18,23 @@ function camtech_activate() {
 
 
 function camtech_capture($params) {
-	$invoiceid = $params["invoiceid"];
-	$host = $params["paymenturl"];
+	$invoiceid = $params['invoiceid'];
+	$host = $params['paymenturl'];
 	$timestamp = camtech_getGMTtimestamp();
-	$vars = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" . "<SecurePayMessage>" . "<MessageInfo>" . "<messageID>8af793f9af34bea0cf40f5fb5c630c</messageID>" . "<messageTimestamp>" . urlencode( $timestamp ) . "</messageTimestamp>" . "<timeoutValue>60</timeoutValue>" . "<apiVersion>xml-4.2</apiVersion>" . "</MessageInfo>" . "<MerchantInfo>" . "<merchantID>" . $params["mid"] . "</merchantID>" . "<password>" . $params["password"] . "</password>" . "</MerchantInfo>" . "<RequestType>Payment</RequestType>" . "<Payment>" . "<TxnList count=\"1\">" . "<Txn ID=\"1\">" . "<txnType>0</txnType>" . "<txnSource>0</txnSource>" . "<amount>" . $params["amount"] * 100 . "</amount>" . "<purchaseOrderNo>" . $invoiceid . "</purchaseOrderNo>" . "<CreditCardInfo>" . "<cardNumber>" . $params["cardnum"] . "</cardNumber>";
+	$vars = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" . "<SecurePayMessage>" . "<MessageInfo>" . "<messageID>8af793f9af34bea0cf40f5fb5c630c</messageID>" . "<messageTimestamp>" . urlencode( $timestamp ) . "</messageTimestamp>" . "<timeoutValue>60</timeoutValue>" . "<apiVersion>xml-4.2</apiVersion>" . "</MessageInfo>" . "<MerchantInfo>" . "<merchantID>" . $params['mid'] . "</merchantID>" . "<password>" . $params['password'] . "</password>" . "</MerchantInfo>" . "<RequestType>Payment</RequestType>" . "<Payment>" . "<TxnList count=\"1\">" . "<Txn ID=\"1\">" . "<txnType>0</txnType>" . "<txnSource>0</txnSource>" . "<amount>" . $params['amount'] * 100 . "</amount>" . "<purchaseOrderNo>" . $invoiceid . "</purchaseOrderNo>" . "<CreditCardInfo>" . "<cardNumber>" . $params['cardnum'] . "</cardNumber>";
 
-	if ($params["cccvv"] != "") {
-		$vars .= "<cvv>" . $params["cccvv"] . "</cvv>";
+	if ($params['cccvv'] != "") {
+		$vars .= "<cvv>" . $params['cccvv'] . "</cvv>";
 	}
 
-	$vars .= "<expiryDate>" . camtech_exp_month( $params["cardexp"] ) . "/" . camtech_exp_year( $params["cardexp"] ) . "</expiryDate>" . "</CreditCardInfo>" . "</Txn>" . "</TxnList>" . "</Payment>" . "</SecurePayMessage>";
+	$vars .= "<expiryDate>" . camtech_exp_month( $params['cardexp'] ) . "/" . camtech_exp_year( $params['cardexp'] ) . "</expiryDate>" . "</CreditCardInfo>" . "</Txn>" . "</TxnList>" . "</Payment>" . "</SecurePayMessage>";
 	$response = camtech_openSocket( $host, $vars );
 	$xmlres = array();
 	$xmlres = camtech_makeXMLTree( $response );
-	$transid = trim( $xmlres[SecurePayMessage][Payment][TxnList][Txn][txnID] );
-	$approved = trim( $xmlres[SecurePayMessage][Payment][TxnList][Txn][approved] );
+	$transid = trim( $xmlres['SecurePayMessage'][Payment][TxnList][Txn]['txnID'] );
+	$approved = trim( $xmlres['SecurePayMessage'][Payment][TxnList][Txn]['approved'] );
 	$result = ($approved == "Yes" ? "success" : "");
-	$responseCode = trim( $xmlres[SecurePayMessage][Payment][TxnList][Txn][responseCode] );
+	$responseCode = trim( $xmlres['SecurePayMessage'][Payment][TxnList][Txn]['responseCode'] );
 	$desc = "responseCode = " . $responseCode . "
 ";
 	$desc .= "transaction id = " . $transid . "
@@ -50,9 +50,9 @@ function camtech_capture($params) {
 
 function camtech_link($params) {
 	$code = "
-  <form method=\"post\" action=\"" . $params["systemurl"] . "/creditcard.php\" name=\"paymentfrm\">
-  <input type=\"hidden\" name=\"invoiceid\" value=\"" . $params["invoiceid"] . "\">
-  <input type=\"submit\" value=\"" . $params["langpaynow"] . "\">
+  <form method=\"post\" action=\"" . $params['systemurl'] . "/creditcard.php\" name=\"paymentfrm\">
+  <input type=\"hidden\" name=\"invoiceid\" value=\"" . $params['invoiceid'] . "\">
+  <input type=\"submit\" value=\"" . $params['langpaynow'] . "\">
   </form>";
 	return $code;
 }
@@ -137,7 +137,7 @@ if (!defined( "WHMCS" )) {
 	exit( "This file cannot be accessed directly" );
 }
 
-$GATEWAYMODULE["camtechname"] = "camtech";
-$GATEWAYMODULE["camtechvisiblename"] = "Camtech";
-$GATEWAYMODULE["camtechtype"] = "CC";
+$GATEWAYMODULE['camtechname'] = "camtech";
+$GATEWAYMODULE['camtechvisiblename'] = "Camtech";
+$GATEWAYMODULE['camtechtype'] = "CC";
 ?>

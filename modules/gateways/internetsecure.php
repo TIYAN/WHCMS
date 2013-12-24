@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -109,9 +109,9 @@ function internetsecure_activate() {
 
 
 function internetsecure_link($params) {
-	$code = "<form method=\"post\" action=\"" . $params["systemurl"] . "/creditcard.php\" name=\"paymentfrm\">
-<input type=\"hidden\" name=\"invoiceid\" value=\"" . $params["invoiceid"] . "\">
-<input type=\"submit\" value=\"" . $params["langpaynow"] . "\">
+	$code = "<form method=\"post\" action=\"" . $params['systemurl'] . "/creditcard.php\" name=\"paymentfrm\">
+<input type=\"hidden\" name=\"invoiceid\" value=\"" . $params['invoiceid'] . "\">
+<input type=\"submit\" value=\"" . $params['langpaynow'] . "\">
 </form>";
 	return $code;
 }
@@ -120,11 +120,11 @@ function internetsecure_link($params) {
 function internetsecure_capture($params) {
 	global $CONFIG;
 
-	$loginid = $params["cadloginid"];
+	$loginid = $params['cadloginid'];
 
-	if (( $params["cadloginid"] && $params["usdloginid"] )) {
-		if ($params["currency"] == "USD") {
-			$loginid = $params["usdloginid"];
+	if ($params['cadloginid'] && $params['usdloginid']) {
+		if ($params['currency'] == "USD") {
+			$loginid = $params['usdloginid'];
 		}
 	}
 
@@ -132,11 +132,11 @@ function internetsecure_capture($params) {
 	$gateway_url = "https://secure.internetsecure.com/process.cgi";
 	$auth->seturl( $gateway_url );
 	$auth->add_field( "x_login", $loginid );
-	$auth->add_field( "x_tran_key", $params["transkey"] );
+	$auth->add_field( "x_tran_key", $params['transkey'] );
 	$auth->add_field( "x_version", "3.1" );
 	$auth->add_field( "x_type", "AUTH_CAPTURE" );
 
-	if ($params["testmode"] == "on") {
+	if ($params['testmode'] == "on") {
 		$auth->add_field( "x_test_request", "TRUE" );
 	}
 
@@ -144,23 +144,23 @@ function internetsecure_capture($params) {
 	$auth->add_field( "x_delim_data", "TRUE" );
 	$auth->add_field( "x_delim_char", "|" );
 	$auth->add_field( "x_encap_char", "" );
-	$auth->add_field( "x_invoice_num", $params["invoiceid"] );
-	$auth->add_field( "x_description", $CONFIG["CompanyName"] . " Invoice #" . $params["invoiceid"] );
-	$auth->add_field( "x_first_name", $params["clientdetails"]["firstname"] );
-	$auth->add_field( "x_last_name", $params["clientdetails"]["lastname"] );
-	$auth->add_field( "x_address", $params["clientdetails"]["address1"] );
-	$auth->add_field( "x_city", $params["clientdetails"]["city"] );
-	$auth->add_field( "x_state", $params["clientdetails"]["state"] );
-	$auth->add_field( "x_zip", $params["clientdetails"]["postcode"] );
-	$auth->add_field( "x_country", $params["clientdetails"]["country"] );
-	$auth->add_field( "x_phone", $params["clientdetails"]["phonenumber"] );
-	$auth->add_field( "x_email", $params["clientdetails"]["email"] );
+	$auth->add_field( "x_invoice_num", $params['invoiceid'] );
+	$auth->add_field( "x_description", $CONFIG['CompanyName'] . " Invoice #" . $params['invoiceid'] );
+	$auth->add_field( "x_first_name", $params['clientdetails']['firstname'] );
+	$auth->add_field( "x_last_name", $params['clientdetails']['lastname'] );
+	$auth->add_field( "x_address", $params['clientdetails']['address1'] );
+	$auth->add_field( "x_city", $params['clientdetails']['city'] );
+	$auth->add_field( "x_state", $params['clientdetails']['state'] );
+	$auth->add_field( "x_zip", $params['clientdetails']['postcode'] );
+	$auth->add_field( "x_country", $params['clientdetails']['country'] );
+	$auth->add_field( "x_phone", $params['clientdetails']['phonenumber'] );
+	$auth->add_field( "x_email", $params['clientdetails']['email'] );
 	$auth->add_field( "x_email_customer", "FALSE" );
 	$auth->add_field( "x_method", "CC" );
-	$auth->add_field( "x_card_num", $params["cardnum"] );
-	$auth->add_field( "x_amount", $params["amount"] );
-	$auth->add_field( "x_exp_date", $params["cardexp"] );
-	$auth->add_field( "x_card_code", $params["cccvv"] );
+	$auth->add_field( "x_card_num", $params['cardnum'] );
+	$auth->add_field( "x_amount", $params['amount'] );
+	$auth->add_field( "x_exp_date", $params['cardexp'] );
+	$auth->add_field( "x_card_code", $params['cccvv'] );
 	switch ($auth->process()) {
 	case 1: {
 			array( "status" => "success", "transid" => $auth->response["Transaction ID"], "rawdata" => $auth->dump_response() );
@@ -175,7 +175,7 @@ if (!defined( "WHMCS" )) {
 	exit( "This file cannot be accessed directly" );
 }
 
-$GATEWAYMODULE["internetsecurename"] = "internetsecure";
-$GATEWAYMODULE["internetsecurevisiblename"] = "InternetSecure";
-$GATEWAYMODULE["internetsecuretype"] = "CC";
+$GATEWAYMODULE['internetsecurename'] = "internetsecure";
+$GATEWAYMODULE['internetsecurevisiblename'] = "InternetSecure";
+$GATEWAYMODULE['internetsecuretype'] = "CC";
 ?>

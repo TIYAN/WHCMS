@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -127,10 +127,10 @@ class CCBaseAPIClient {
 		stream_get_contents( $fp );
 		$response = $this->http_request_error = "";
 		fclose( $fp );
-		$headers = $metadata["wrapper_data"];
+		$headers = $metadata['wrapper_data'];
 
-		if (isset( $headers["headers"] )) {
-			$headers = $headers["headers"];
+		if (isset( $headers['headers'] )) {
+			$headers = $headers['headers'];
 		}
 
 		$message = explode( " ", array_shift( $headers ), 3 )[2];
@@ -154,7 +154,7 @@ class CCBaseAPIClient {
 	 */
 	function http_request_httpretriever($url, $postdata) {
 		$http = new HTTPRetriever();
-		$http->headers["User-Agent"] = "Centova Cast PHP API Client";
+		$http->headers['User-Agent'] = "Centova Cast PHP API Client";
 
 		if (!$http->post( $url, $postdata )) {
 			$this->set_error( "Error contacting server: " . $http->get_error() );
@@ -483,10 +483,10 @@ function http_request_php($url, $postdata) {
 	stream_get_contents( $fp );
 	$response = $this->http_request_error = "";
 	fclose( $fp );
-	$headers = $metadata["wrapper_data"];
+	$headers = $metadata['wrapper_data'];
 
-	if (isset( $headers["headers"] )) {
-		$headers = $headers["headers"];
+	if (isset( $headers['headers'] )) {
+		$headers = $headers['headers'];
 	}
 
 	$message = explode( " ", array_shift( $headers ), 3 )[2];
@@ -510,7 +510,7 @@ function http_request_php($url, $postdata) {
  */
 function http_request_httpretriever($url, $postdata) {
 	$http = new HTTPRetriever();
-	$http->headers["User-Agent"] = "Centova Cast PHP API Client";
+	$http->headers['User-Agent'] = "Centova Cast PHP API Client";
 
 	if (!$http->post( $url, $postdata )) {
 		$this->set_error( "Error contacting server: " . $http->get_error() );
@@ -827,10 +827,10 @@ function http_request_php($url, $postdata) {
 	stream_get_contents( $fp );
 	$response = $this->http_request_error = "";
 	fclose( $fp );
-	$headers = $metadata["wrapper_data"];
+	$headers = $metadata['wrapper_data'];
 
-	if (isset( $headers["headers"] )) {
-		$headers = $headers["headers"];
+	if (isset( $headers['headers'] )) {
+		$headers = $headers['headers'];
 	}
 
 	$message = explode( " ", array_shift( $headers ), 3 )[2];
@@ -854,7 +854,7 @@ function http_request_php($url, $postdata) {
  */
 function http_request_httpretriever($url, $postdata) {
 	$http = new HTTPRetriever();
-	$http->headers["User-Agent"] = "Centova Cast PHP API Client";
+	$http->headers['User-Agent'] = "Centova Cast PHP API Client";
 
 	if (!$http->post( $url, $postdata )) {
 		$this->set_error( "Error contacting server: " . $http->get_error() );

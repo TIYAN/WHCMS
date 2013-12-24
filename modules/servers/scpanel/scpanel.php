@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -17,30 +17,30 @@ function scpanel_ConfigOptions() {
 
 
 function scpanel_AdminLink($params) {
-	$code = "<form action=\"http://" . $params["serverip"] . ":2086/login/\" method=\"post\" target=\"_blank\"><input type=\"hidden\" name=\"user\" value=\"" . $params["serverusername"] . "\"><input type=\"hidden\" name=\"pass\" value=\"" . $params["serverpassword"] . "\"><input type=\"submit\" value=\"WHM\"></form>";
+	$code = "<form action=\"http://" . $params['serverip'] . ":2086/login/\" method=\"post\" target=\"_blank\"><input type=\"hidden\" name=\"user\" value=\"" . $params['serverusername'] . "\"><input type=\"hidden\" name=\"pass\" value=\"" . $params['serverpassword'] . "\"><input type=\"submit\" value=\"WHM\"></form>";
 	return $code;
 }
 
 
 function scpanel_CreateAccount($params) {
-	$sAuth = base64_encode( $params["serverusername"] . ":" . $params["serverpassword"] );
+	$sAuth = base64_encode( $params['serverusername'] . ":" . $params['serverpassword'] );
 
-	if ($params["configoption15"]) {
-		$params["domain"] = $params["configoption5"] . $params["configoption15"];
-		$params["username"] = "sc" . $params["domain"];
-		$params["username"] = str_replace( ".", "", $params["username"] );
-		$params["username"] = str_replace( "-", "", $params["username"] );
-		$params["username"] = substr( $params["username"], 0, 8 );
+	if ($params['configoption15']) {
+		$params['domain'] = $params['configoption5'] . $params['configoption15'];
+		$params['username'] = "sc" . $params['domain'];
+		$params['username'] = str_replace( ".", "", $params['username'] );
+		$params['username'] = str_replace( "-", "", $params['username'] );
+		$params['username'] = substr( $params['username'], 0, 8 );
 	}
 
-	update_query( "tblhosting", array( "domain" => $params["domain"], "username" => $params["username"] ), array( "id" => (int)$params["serviceid"] ) );
+	update_query( "tblhosting", array( "domain" => $params['domain'], "username" => $params['username'] ), array( "id" => (int)$params['serviceid'] ) );
 	$cpanelpassword = createServerPassword();
-	$sHTTP = "GET /scripts/wwwacct?domain=" . urlencode( $params["domain"] ) . "&username=" . urlencode( $params["username"] ) . "&password=" . urlencode( $cpanelpassword ) . "&plan=" . urlencode( $params["configoption12"] ) . ( ( "&x=
+	$sHTTP = "GET /scripts/wwwacct?domain=" . urlencode( $params['domain'] ) . "&username=" . urlencode( $params['username'] ) . "&password=" . urlencode( $cpanelpassword ) . "&plan=" . urlencode( $params['configoption12'] ) . ( ( "&x=
  HTTP/1.0
 Authorization: Basic " . $sAuth . "
 " ) . "
 " );
-	$ch = curl_init( "http://" . $params["serverip"] . ":2086/xml-api/createacct?username=" . urlencode( $params["username"] ) . "&plan=" . urlencode( $params["configoption12"] ) . "&password=" . urlencode( $cpanelpassword ) . "&domain=" . urlencode( $params["domain"] ) );
+	$ch = curl_init( "http://" . $params['serverip'] . ":2086/xml-api/createacct?username=" . urlencode( $params['username'] ) . "&plan=" . urlencode( $params['configoption12'] ) . "&password=" . urlencode( $cpanelpassword ) . "&domain=" . urlencode( $params['domain'] ) );
 	$header = array( "Authorization: Basic " . $sAuth );
 	curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 );
 	curl_setopt( $ch, CURLOPT_HTTPHEADER, $header );
@@ -57,116 +57,116 @@ Authorization: Basic " . $sAuth . "
 
 
 	if ($result == "success") {
-		if ($params["configoption7"] == "on") {
-			$params["configoption7"] = "yes";
+		if ($params['configoption7'] == "on") {
+			$params['configoption7'] = "yes";
 		}
 		else {
-			$params["configoption7"] = "no";
+			$params['configoption7'] = "no";
 		}
 
 
-		if ($params["configoption9"] == "on") {
-			$params["configoption9"] = "yes";
-		}
-		else {
-			$params["configoption9"] = "no";
-		}
-
-
-		if ($params["configoption10"] == "on") {
-			$params["configoption10"] = "yes";
+		if ($params['configoption9'] == "on") {
+			$params['configoption9'] = "yes";
 		}
 		else {
-			$params["configoption10"] = "no";
+			$params['configoption9'] = "no";
 		}
 
 
-		if ($params["configoption11"] == "on") {
-			$params["configoption11"] = "yes";
+		if ($params['configoption10'] == "on") {
+			$params['configoption10'] = "yes";
 		}
 		else {
-			$params["configoption11"] = "no";
+			$params['configoption10'] = "no";
 		}
 
 
-		if ($params["configoption13"]) {
+		if ($params['configoption11'] == "on") {
+			$params['configoption11'] = "yes";
+		}
+		else {
+			$params['configoption11'] = "no";
+		}
+
+
+		if ($params['configoption13']) {
 			$params->configoption13 .= "M";
 		}
 
 
-		if ($params["configoption14"]) {
+		if ($params['configoption14']) {
 			$params->configoption14 .= "M";
 		}
 
-		$access_url = $params["serverip"] . "/~" . $params["username"];
+		$access_url = $params['serverip'] . "/~" . $params['username'];
 		$url = "http://" . $access_url . "/install.php";
 		$data = file_get_contents( $url );
 		logModuleCall( "scpanel", "", $url, $data );
 		$url = "http://" . $access_url . "/scp/index.php";
 		$data = file_get_contents( $url );
 		logModuleCall( "scpanel", "", $url, $data );
-		$url = "http://" . $access_url . "/scp/install/api/1.php?user=" . $params["configoption1"] . "&pass=" . $params["configoption2"] . "&os=" . $params["configoption3"];
+		$url = "http://" . $access_url . "/scp/install/api/1.php?user=" . $params['configoption1'] . "&pass=" . $params['configoption2'] . "&os=" . $params['configoption3'];
 		$data = file_get_contents( $url );
 		logModuleCall( "scpanel", "", $url, $data );
 
-		if (( $data != "OK" && $result == "success" )) {
+		if ($data != "OK" && $result == "success") {
 			$result = titleCase( $data );
 			return $result;
 		}
 
-		$url = "http://" . $access_url . "/scp/install/api/2.php?user=" . $params["configoption1"] . "&pass=" . $params["configoption2"] . "&os=" . $params["configoption3"] . "&maxuser=" . $params["configoption4"] . "&password=" . $params["password"] . "&portbase=" . $params["configoption5"] . "&destip=" . $params["serverip"];
+		$url = "http://" . $access_url . "/scp/install/api/2.php?user=" . $params['configoption1'] . "&pass=" . $params['configoption2'] . "&os=" . $params['configoption3'] . "&maxuser=" . $params['configoption4'] . "&password=" . $params['password'] . "&portbase=" . $params['configoption5'] . "&destip=" . $params['serverip'];
 		$data = file_get_contents( $url );
 		logModuleCall( "scpanel", "", $url, $data );
 
-		if (( $data != "OK" && $result == "success" )) {
+		if ($data != "OK" && $result == "success") {
 			$result = titleCase( $data );
 			return $result;
 		}
 
-		$url = "http://" . $access_url . "/scp/install/api/3.php?user=" . $params["configoption1"] . "&pass=" . $params["configoption2"] . "&server_host=" . $params["serverip"] . "&server_port=" . $params["configoption5"];
+		$url = "http://" . $access_url . "/scp/install/api/3.php?user=" . $params['configoption1'] . "&pass=" . $params['configoption2'] . "&server_host=" . $params['serverip'] . "&server_port=" . $params['configoption5'];
 		$data = file_get_contents( $url );
 		logModuleCall( "scpanel", "", $url, $data );
 
-		if (( $data != "OK" && $result == "success" )) {
+		if ($data != "OK" && $result == "success") {
 			$result = titleCase( $data );
 			return $result;
 		}
 
-		$url = "http://" . $access_url . "/scp/install/api/4.php?user=" . $params["configoption1"] . "&pass=" . $params["configoption2"] . "&maxtraffic=" . $params["configoption6"] . "&trafficabuse=" . $params["configoption7"] . "&maxbitrate=" . $params["configoption8"] . "&bitrateabuse=" . $params["configoption9"] . "&intro_backup_max_size=" . $params["configoption13"] . "&ondemand_max_size=" . $params["configoption14"] . "&ondemand=" . $params["configoption10"] . "&proxy=" . $params["configoption11"];
+		$url = "http://" . $access_url . "/scp/install/api/4.php?user=" . $params['configoption1'] . "&pass=" . $params['configoption2'] . "&maxtraffic=" . $params['configoption6'] . "&trafficabuse=" . $params['configoption7'] . "&maxbitrate=" . $params['configoption8'] . "&bitrateabuse=" . $params['configoption9'] . "&intro_backup_max_size=" . $params['configoption13'] . "&ondemand_max_size=" . $params['configoption14'] . "&ondemand=" . $params['configoption10'] . "&proxy=" . $params['configoption11'];
 		$data = file_get_contents( $url );
 		logModuleCall( "scpanel", "", $url, $data );
 
-		if (( $data != "OK" && $result == "success" )) {
+		if ($data != "OK" && $result == "success") {
 			$result = titleCase( $data );
 			return $result;
 		}
 
-		$url = "http://" . $access_url . "/scp/install/api/5.php?user=" . $params["configoption1"] . "&pass=" . $params["configoption2"] . "&username=" . $params["username"] . "&password=" . $params["password"] . "&name=" . urlencode( $params["clientsdetails"]["firstname"] . " " . $params["clientsdetails"]["lastname"] ) . "&user_mail=" . urlencode( $params["clientsdetails"]["email"] ) . "&allow_admin_mail=ON&allow_user_mail=OFF";
+		$url = "http://" . $access_url . "/scp/install/api/5.php?user=" . $params['configoption1'] . "&pass=" . $params['configoption2'] . "&username=" . $params['username'] . "&password=" . $params['password'] . "&name=" . urlencode( $params['clientsdetails']['firstname'] . " " . $params['clientsdetails']['lastname'] ) . "&user_mail=" . urlencode( $params['clientsdetails']['email'] ) . "&allow_admin_mail=ON&allow_user_mail=OFF";
 		$data = file_get_contents( $url );
 		logModuleCall( "scpanel", "", $url, $data );
 
-		if (( $data != "OK" && $result == "success" )) {
+		if ($data != "OK" && $result == "success") {
 			$result = titleCase( $data );
 			return $result;
 		}
 
-		$url = "http://" . $access_url . "/scp/install/api/6.php?user=" . $params["configoption1"] . "&pass=" . $params["configoption2"] . "&action=start";
+		$url = "http://" . $access_url . "/scp/install/api/6.php?user=" . $params['configoption1'] . "&pass=" . $params['configoption2'] . "&action=start";
 		$data = file_get_contents( $url );
 		logModuleCall( "scpanel", "", $url, $data );
 
-		if (( $data != "OK" && $result == "success" )) {
+		if ($data != "OK" && $result == "success") {
 			$result = titleCase( $data );
 		}
 
-		$url = "http://" . $access_url . "/scp/install/api/7.php?user=" . $params["configoption1"] . "&pass=" . $params["configoption2"] . "&action=cleanup";
+		$url = "http://" . $access_url . "/scp/install/api/7.php?user=" . $params['configoption1'] . "&pass=" . $params['configoption2'] . "&action=cleanup";
 		$data = file_get_contents( $url );
 		logModuleCall( "scpanel", "", $url, $data );
 
-		if (( $data != "OK" && $result == "success" )) {
+		if ($data != "OK" && $result == "success") {
 			$result = titleCase( $data );
 		}
 
-		$query = "UPDATE tblproducts SET configoption5=configoption5+2 WHERE id=" . (int)$params["packageid"];
+		$query = "UPDATE tblproducts SET configoption5=configoption5+2 WHERE id=" . (int)$params['packageid'];
 		$result = full_query( $query );
 	}
 
@@ -175,8 +175,8 @@ Authorization: Basic " . $sAuth . "
 
 
 function scpanel_TerminateAccount($params) {
-	$sAuth = base64_encode( $params["serverusername"] . ":" . $params["serverpassword"] );
-	$ch = curl_init( "http://" . $params["serverip"] . ":2086/xml-api/removeacct?user=" . urlencode( $params["username"] ) );
+	$sAuth = base64_encode( $params['serverusername'] . ":" . $params['serverpassword'] );
+	$ch = curl_init( "http://" . $params['serverip'] . ":2086/xml-api/removeacct?user=" . urlencode( $params['username'] ) );
 	$header = array( "Authorization: Basic " . $sAuth );
 	curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 );
 	curl_setopt( $ch, CURLOPT_HTTPHEADER, $header );
@@ -196,7 +196,7 @@ function scpanel_TerminateAccount($params) {
 
 
 function scpanel_SuspendAccount($params) {
-	$url = "http://" . $params["domain"] . "/scp/admin/api/action.php?user=" . $params["configoption1"] . "&pass=" . $params["configoption2"] . "&action=suspend";
+	$url = "http://" . $params['domain'] . "/scp/admin/api/action.php?user=" . $params['configoption1'] . "&pass=" . $params['configoption2'] . "&action=suspend";
 	$data = file_get_contents( $url );
 	logModuleCall( "scpanel", "", $url, $data );
 	$result = "success";
@@ -205,7 +205,7 @@ function scpanel_SuspendAccount($params) {
 
 
 function scpanel_UnsuspendAccount($params) {
-	$url = "http://" . $params["domain"] . "/scp/admin/api/action.php?user=" . $params["configoption1"] . "&pass=" . $params["configoption2"] . "&action=unsuspend";
+	$url = "http://" . $params['domain'] . "/scp/admin/api/action.php?user=" . $params['configoption1'] . "&pass=" . $params['configoption2'] . "&action=unsuspend";
 	$data = file_get_contents( $url );
 	logModuleCall( "scpanel", "", $url, $data );
 	$result = "success";
@@ -220,7 +220,7 @@ function scpanel_AdminCustomButtonArray() {
 
 
 function scpanel_start($params) {
-	$url = "http://" . $params["domain"] . "/scp/admin/api/action.php?user=" . $params["configoption1"] . "&pass=" . $params["configoption2"] . "&action=start";
+	$url = "http://" . $params['domain'] . "/scp/admin/api/action.php?user=" . $params['configoption1'] . "&pass=" . $params['configoption2'] . "&action=start";
 	$data = file_get_contents( $url );
 	logModuleCall( "scpanel", "", $url, $data );
 	$result = "success";
@@ -229,7 +229,7 @@ function scpanel_start($params) {
 
 
 function scpanel_stop($params) {
-	$url = "http://" . $params["domain"] . "/scp/admin/api/action.php?user=" . $params["configoption1"] . "&pass=" . $params["configoption2"] . "&action=stop";
+	$url = "http://" . $params['domain'] . "/scp/admin/api/action.php?user=" . $params['configoption1'] . "&pass=" . $params['configoption2'] . "&action=stop";
 	$data = file_get_contents( $url );
 	logModuleCall( "scpanel", "", $url, $data );
 	$result = "success";

@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -17,27 +17,27 @@ function websitepanel_ConfigOptions() {
 
 
 function websitepanel_CreateAccount($params) {
-	$serverip = $params["serverip"];
-	$serverusername = $params["serverusername"];
-	$serverpassword = $params["serverpassword"];
-	$secure = $params["serversecure"];
-	$params["domain"];
-	$packagetype = $params["type"];
-	$username = $params["username"];
-	$password = $params["password"];
-	$accountid = $params["accountid"];
-	$packageid = $params["packageid"];
-	$clientsdetails = $params["clientsdetails"];
-	$planId = $params["configoption4"];
-	$parentPackageId = $params["configoption5"];
-	$esport = $params["configoption6"];
+	$serverip = $params['serverip'];
+	$serverusername = $params['serverusername'];
+	$serverpassword = $params['serverpassword'];
+	$secure = $params['serversecure'];
+	$params['domain'];
+	$packagetype = $params['type'];
+	$username = $params['username'];
+	$password = $params['password'];
+	$accountid = $params['accountid'];
+	$packageid = $params['packageid'];
+	$clientsdetails = $params['clientsdetails'];
+	$planId = $params['configoption4'];
+	$parentPackageId = $params['configoption5'];
+	$esport = $params['configoption6'];
 
 	if (!class_exists( "SoapClient" )) {
 		return "SOAP is missing. Please recompile PHP with the SOAP module included.";
 	}
 
 
-	if ($params["configoption11"] == "on") {
+	if ($params['configoption11'] == "on") {
 		$createMailAccount = true;
 	}
 	else {
@@ -45,7 +45,7 @@ function websitepanel_CreateAccount($params) {
 	}
 
 
-	if ($params["configoption9"] == "on") {
+	if ($params['configoption9'] == "on") {
 		$sendAccountLetter = true;
 	}
 	else {
@@ -53,7 +53,7 @@ function websitepanel_CreateAccount($params) {
 	}
 
 
-	if ($params["configoption10"] == "on") {
+	if ($params['configoption10'] == "on") {
 		$sendPackageLetter = true;
 	}
 	else {
@@ -61,7 +61,7 @@ function websitepanel_CreateAccount($params) {
 	}
 
 
-	if ($params["configoption13"] == "on") {
+	if ($params['configoption13'] == "on") {
 		$tempDomain = true;
 	}
 	else {
@@ -69,7 +69,7 @@ function websitepanel_CreateAccount($params) {
 	}
 
 
-	if ($params["configoption12"] == "on") {
+	if ($params['configoption12'] == "on") {
 		$createFtpAccount = true;
 	}
 	else {
@@ -77,7 +77,7 @@ function websitepanel_CreateAccount($params) {
 	}
 
 
-	if ($params["configoption14"] == "on") {
+	if ($params['configoption14'] == "on") {
 		$htmlMail = true;
 	}
 	else {
@@ -85,7 +85,7 @@ function websitepanel_CreateAccount($params) {
 	}
 
 
-	if ($params["configoption15"] == "on") {
+	if ($params['configoption15'] == "on") {
 		$website = true;
 	}
 	else {
@@ -100,7 +100,7 @@ function websitepanel_CreateAccount($params) {
 		$roleid = 7;
 	}
 
-	$param = array( "parentPackageId" => $parentPackageId, "username" => $username, "password" => $password, "roleId" => $roleid, "firstName" => $clientsdetails["firstname"], "lastName" => $clientsdetails["lastname"], "email" => $clientsdetails["email"], "htmlMail" => $htmlMail, "sendAccountLetter" => $sendAccountLetter, "createPackage" => true, "planId" => $planId, "sendPackageLetter" => $sendPackageLetter, "domainName" => $domain, "tempDomain" => $tempDomain, "createWebSite" => $website, "createFtpAccount" => $createFtpAccount, "ftpAccountName" => $username, "createMailAccount" => $createMailAccount );
+	$param = array( "parentPackageId" => $parentPackageId, "username" => $username, "password" => $password, "roleId" => $roleid, "firstName" => $clientsdetails['firstname'], "lastName" => $clientsdetails['lastname'], "email" => $clientsdetails['email'], "htmlMail" => $htmlMail, "sendAccountLetter" => $sendAccountLetter, "createPackage" => true, "planId" => $planId, "sendPackageLetter" => $sendPackageLetter, "domainName" => $domain, "tempDomain" => $tempDomain, "createWebSite" => $website, "createFtpAccount" => $createFtpAccount, "ftpAccountName" => $username, "createMailAccount" => $createMailAccount );
 	$result = $domain = websitepanel_call( $params, "CreateUserWizard", $param );
 	return $result;
 }
@@ -109,15 +109,15 @@ function websitepanel_CreateAccount($params) {
 function websitepanel_call($params, $func, $param, $retdata = "") {
 	$wsdlfile = "esusers";
 
-	if (( ( ( ( $func == "CreateUserWizard" || $func == "GetMyPackages" ) || $func == "UpdatePackageLiteral" ) || $func == "GetPackageBandwidth" ) || $func == "GetPackageDiskspace" )) {
+	if (( ( ( $func == "CreateUserWizard" || $func == "GetMyPackages" ) || $func == "UpdatePackageLiteral" ) || $func == "GetPackageBandwidth" ) || $func == "GetPackageDiskspace") {
 		$wsdlfile = "espackages";
 	}
 
-	$http = ($params["serversecure"] ? "https" : "http");
-	$serverip = $params["serverip"];
-	$serverusername = $params["serverusername"];
-	$serverpassword = $params["serverpassword"];
-	$esport = $params["configoption6"];
+	$http = ($params['serversecure'] ? "https" : "http");
+	$serverip = $params['serverip'];
+	$serverusername = $params['serverusername'];
+	$serverpassword = $params['serverpassword'];
+	$esport = $params['configoption6'];
 	$soapaddress = $http . "://" . $serverip . ":" . $esport . "/" . $wsdlfile . ".asmx?WSDL";
 	$client = new SoapClient( $soapaddress, array( "login" => $serverusername, "password" => $serverpassword ) );
 	$result = (array)$client->$func( $param );
@@ -175,7 +175,7 @@ function websitepanel_TerminateAccount($params) {
 	$wspuserid = websitepanel_getuserid( $params );
 
 	if (!$wspuserid) {
-		return "Username '" . $params["username"] . "' not found in WebsitePanel";
+		return "Username '" . $params['username'] . "' not found in WebsitePanel";
 	}
 
 	$param = array( "userId" => $wspuserid );
@@ -188,7 +188,7 @@ function websitepanel_SuspendAccount($params) {
 	$wspuserid = websitepanel_getuserid( $params );
 
 	if (!$wspuserid) {
-		return "Username '" . $params["username"] . "' not found in WebsitePanel";
+		return "Username '" . $params['username'] . "' not found in WebsitePanel";
 	}
 
 	$param = array( "userId" => $wspuserid, "status" => "Suspended" );
@@ -201,7 +201,7 @@ function websitepanel_UnsuspendAccount($params) {
 	$wspuserid = websitepanel_getuserid( $params );
 
 	if (!$wspuserid) {
-		return "Username '" . $params["username"] . "' not found in WebsitePanel";
+		return "Username '" . $params['username'] . "' not found in WebsitePanel";
 	}
 
 	$param = array( "userId" => $wspuserid, "status" => "Active" );
@@ -214,10 +214,10 @@ function websitepanel_ChangePassword($params) {
 	$wspuserid = websitepanel_getuserid( $params );
 
 	if (!$wspuserid) {
-		return "Username '" . $params["username"] . "' not found in WebsitePanel";
+		return "Username '" . $params['username'] . "' not found in WebsitePanel";
 	}
 
-	$param = array( "userId" => $wspuserid, "password" => $params["password"] );
+	$param = array( "userId" => $wspuserid, "password" => $params['password'] );
 	$result = websitepanel_call( $params, "ChangeUserPassword", $param );
 	return $result;
 }
@@ -227,10 +227,10 @@ function websitepanel_ChangePackage($params) {
 	$wspuserid = websitepanel_getuserid( $params );
 
 	if (!$wspuserid) {
-		return "Username '" . $params["username"] . "' not found in WebsitePanel";
+		return "Username '" . $params['username'] . "' not found in WebsitePanel";
 	}
 
-	$param = array( "packageId" => websitepanel_getpackageid( $params, $wspuserid ), "statusId" => 1, "planId" => $params["configoption4"], "purchaseDate" => date( "c" ), "packageName" => $params["configoption1"], "packageComments" => "" );
+	$param = array( "packageId" => websitepanel_getpackageid( $params, $wspuserid ), "statusId" => 1, "planId" => $params['configoption4'], "purchaseDate" => date( "c" ), "packageName" => $params['configoption1'], "packageComments" => "" );
 	$result = websitepanel_call( $params, "UpdatePackageLiteral", $param );
 	return $result;
 }
@@ -239,26 +239,26 @@ function websitepanel_ChangePackage($params) {
 function websitepanel_ClientArea($params) {
 	global $_LANG;
 
-	$username = $params["username"];
-	$url = $params["configoption7"];
-	$urladdress = $params["configoption8"];
+	$username = $params['username'];
+	$url = $params['configoption7'];
+	$urladdress = $params['configoption8'];
 
 	if ($url == "on") {
 		$code = "<form method=\"post\" action=\"" . $urladdress . "/Default.aspx\" target=\"_blank\">
         <input type=\"hidden\" name=\"pid\" value=\"Login\" />
-        <input type=\"hidden\" name=\"user\" value=\"" . $params["username"] . "\" />
-        <input type=\"hidden\" name=\"password\" value=\"" . $params["password"] . "\" />
-        <input type=\"submit\" value=\"" . $_LANG["websitepanellogin"] . "\" />
+        <input type=\"hidden\" name=\"user\" value=\"" . $params['username'] . "\" />
+        <input type=\"hidden\" name=\"password\" value=\"" . $params['password'] . "\" />
+        <input type=\"submit\" value=\"" . $_LANG['websitepanellogin'] . "\" />
         </form>";
 	}
 	else {
-		$http = ($params["serversecure"] ? "https" : "http");
-		$domain = ($params["serverhostname"] ? $params["serverhostname"] : $params["serverip"]);
+		$http = ($params['serversecure'] ? "https" : "http");
+		$domain = ($params['serverhostname'] ? $params['serverhostname'] : $params['serverip']);
 		$code = "<form method=\"post\" action=\"" . $http . "://" . $domain . "/Default.aspx\" target=\"_blank\">
         <input type=\"hidden\" name=\"pid\" value=\"Login\" />
-        <input type=\"hidden\" name=\"user\" value=\"" . $params["username"] . "\" />
-        <input type=\"hidden\" name=\"password\" value=\"" . $params["password"] . "\" />
-        <input type=\"submit\" value=\"" . $_LANG["websitepanellogin"] . "\" />
+        <input type=\"hidden\" name=\"user\" value=\"" . $params['username'] . "\" />
+        <input type=\"hidden\" name=\"password\" value=\"" . $params['password'] . "\" />
+        <input type=\"submit\" value=\"" . $_LANG['websitepanellogin'] . "\" />
         </form>";
 	}
 
@@ -267,29 +267,29 @@ function websitepanel_ClientArea($params) {
 
 
 function websitepanel_AdminLink($params) {
-	$serverip = $params["serverip"];
+	$serverip = $params['serverip'];
 	$serveridquery = full_query( "SELECT id FROM tblservers where ipaddress = '" . db_escape_string( $serverip ) . "'" );
 	$serveridqueryresult = mysql_fetch_array( $serveridquery );
-	$serverid = $serveridqueryresult["id"];
+	$serverid = $serveridqueryresult['id'];
 	$query = full_query( "SELECT configoption7,configoption8 FROM tblproducts WHERE id = (SELECT packageid FROM tblhosting where server = " . (int)$serverid . " limit 1) AND servertype = 'websitepanel'" );
 	$queryresult = mysql_fetch_array( $query );
-	$url = $queryresult["configoption7"];
+	$url = $queryresult['configoption7'];
 
 	if ($url == "on") {
-		$code = "<form method=\"post\" action=\"" . $queryresult["configoption8"] . "/Default.aspx\" target=\"_blank\">
+		$code = "<form method=\"post\" action=\"" . $queryresult['configoption8'] . "/Default.aspx\" target=\"_blank\">
         <input type=\"hidden\" name=\"pid\" value=\"Login\" />
-        <input type=\"hidden\" name=\"user\" value=\"" . $params["serverusername"] . "\" />
-        <input type=\"hidden\" name=\"password\" value=\"" . $params["serverpassword"] . "\" />
+        <input type=\"hidden\" name=\"user\" value=\"" . $params['serverusername'] . "\" />
+        <input type=\"hidden\" name=\"password\" value=\"" . $params['serverpassword'] . "\" />
         <input type=\"submit\" value=\"Login to Control Panel\" />
         </form>";
 	}
 	else {
-		$http = ($params["serversecure"] ? "https" : "http");
-		$domain = ($params["serverhostname"] ? $params["serverhostname"] : $params["serverip"]);
+		$http = ($params['serversecure'] ? "https" : "http");
+		$domain = ($params['serverhostname'] ? $params['serverhostname'] : $params['serverip']);
 		$code = "<form method=\"post\" action=\"" . $http . "://" . $domain . "/Default.aspx\" target=\"_blank\">
         <input type=\"hidden\" name=\"pid\" value=\"Login\" />
-        <input type=\"hidden\" name=\"user\" value=\"" . $params["serverusername"] . "\" />
-        <input type=\"hidden\" name=\"password\" value=\"" . $params["serverpassword"] . "\" />
+        <input type=\"hidden\" name=\"user\" value=\"" . $params['serverusername'] . "\" />
+        <input type=\"hidden\" name=\"password\" value=\"" . $params['serverpassword'] . "\" />
         <input type=\"submit\" value=\"Login to Control Panel\" />
         </form>";
 	}
@@ -299,18 +299,18 @@ function websitepanel_AdminLink($params) {
 
 
 function websitepanel_LoginLink($params) {
-	$pid = $params["pid"];
-	$username = $params["username"];
-	$url = $params["configoption7"];
-	$urladdress = $params["configoption8"];
+	$pid = $params['pid'];
+	$username = $params['username'];
+	$url = $params['configoption7'];
+	$urladdress = $params['configoption8'];
 
 	if ($url == "on") {
-		$code = "<a href=\"" . $urladdress . "/Default.aspx?pid=Login&user=" . $params["username"] . "&password=" . $params["password"] . "\" target=\"_blank\" class=\"moduleloginlink\">login to control panel</a>";
+		$code = "<a href=\"" . $urladdress . "/Default.aspx?pid=Login&user=" . $params['username'] . "&password=" . $params['password'] . "\" target=\"_blank\" class=\"moduleloginlink\">login to control panel</a>";
 	}
 	else {
-		$http = ($params["serversecure"] ? "https" : "http");
-		$domain = ($params["serverhostname"] ? $params["serverhostname"] : $params["serverip"]);
-		$code = "<a href=\"" . $http . "://" . $domain . "/Default.aspx?pid=Login&user=" . $params["username"] . "&password=" . $params["password"] . "\" target=\"_blank\" class=\"moduleloginlink\">login to control panel</a>";
+		$http = ($params['serversecure'] ? "https" : "http");
+		$domain = ($params['serverhostname'] ? $params['serverhostname'] : $params['serverip']);
+		$code = "<a href=\"" . $http . "://" . $domain . "/Default.aspx?pid=Login&user=" . $params['username'] . "&password=" . $params['password'] . "\" target=\"_blank\" class=\"moduleloginlink\">login to control panel</a>";
 	}
 
 	return $code;
@@ -319,7 +319,7 @@ function websitepanel_LoginLink($params) {
 
 function websitepanel_getuserid($params) {
 	websitepanel_call( $params, "GetUserByUsername", $param, true );
-	$result = $param = array( "username" => $params["username"] );
+	$result = $param = array( "username" => $params['username'] );
 	return $result->UserId;
 }
 
@@ -332,30 +332,30 @@ function websitepanel_getpackageid($params, $user) {
 
 
 function websitepanel_UsageUpdate($params) {
-	$serverid = $params["serverid"];
-	$serverip = $params["serverip"];
-	$serverusername = $params["serverusername"];
-	$serverpassword = $params["serverpassword"];
+	$serverid = $params['serverid'];
+	$serverip = $params['serverip'];
+	$serverusername = $params['serverusername'];
+	$serverpassword = $params['serverpassword'];
 	$query = full_query( "SELECT username,packageid,regdate FROM tblhosting WHERE server=" . (int)$serverid . " AND domainstatus IN ('Active','Suspended')" );
 
 	while ($row = mysql_fetch_array( $query )) {
-		$username = $row["username"];
-		$whmcspackageID = $row["packageid"];
+		$username = $row['username'];
+		$whmcspackageID = $row['packageid'];
 		$packagequery = full_query( "SELECT configoption2,configoption3,configoption6,configoption16 FROM tblproducts where id = " . (int)$whmcspackageID );
 		$packagequeryresult = mysql_fetch_array( $packagequery );
 
-		if ($packagequeryresult["configoption16"] == "on") {
-			$esport = $packagequeryresult["configoption6"];
-			$dslimit = $packagequeryresult["configoption2"];
-			$bwlimit = $packagequeryresult["configoption3"];
-			$params["configoption6"] = $esport;
-			$params["username"] = $username;
+		if ($packagequeryresult['configoption16'] == "on") {
+			$esport = $packagequeryresult['configoption6'];
+			$dslimit = $packagequeryresult['configoption2'];
+			$bwlimit = $packagequeryresult['configoption3'];
+			$params['configoption6'] = $esport;
+			$params['username'] = $username;
 			$userID = websitepanel_getuserid( $params );
 			$packageID = websitepanel_getpackageid( $params, $userID );
-			$startDate = websitepanel_calculateDate( $row["regdate"] );
+			$startDate = websitepanel_calculateDate( $row['regdate'] );
 			$bandwidth = websitepanel_getBandwidth( $params, $packageID, $startDate );
 			$diskspace = websitepanel_getDiskspace( $params, $packageID );
-			update_query( "tblhosting", array( "diskusage" => $diskspace, "disklimit" => $dslimit, "bwusage" => $bandwidth, "bwlimit" => $bwlimit, "lastupdate" => "now()" ), array( "server" => $params["serverid"], "username" => $username ) );
+			update_query( "tblhosting", array( "diskusage" => $diskspace, "disklimit" => $dslimit, "bwusage" => $bandwidth, "bwlimit" => $bwlimit, "lastupdate" => "now()" ), array( "server" => $params['serverid'], "username" => $username ) );
 		}
 
 		Exception {

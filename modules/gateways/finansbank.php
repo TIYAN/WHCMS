@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -20,25 +20,25 @@ function finansbank_activate() {
 
 
 function finansbank_capture($params) {
-	if ($params["testmode"] == "on") {
+	if ($params['testmode'] == "on") {
 		$gateway_url = "https://testserver.fbwebpos.com/servlet/cc5ApiServer";
 	}
 	else {
 		$gateway_url = "https://www.fbwebpos.com/servlet/cc5ApiServer";
 	}
 
-	$name = $params["merchantid"];
-	$password = $params["merchantpw"];
-	$clientid = $params["merchantnumber"];
+	$name = $params['merchantid'];
+	$password = $params['merchantpw'];
+	$clientid = $params['merchantnumber'];
 	$lip = gethostbyname( $REMOTE_ADDR );
-	$email = $params["clientdetails"]["email"];
-	$oid = $params["invoiceid"];
+	$email = $params['clientdetails']['email'];
+	$oid = $params['invoiceid'];
 	$type = "Auth";
-	$ccno = $params["cardnum"];
-	$ccay = substr( $params["cardexp"], 0, 2 );
-	$ccyil = substr( $params["cardexp"], 2, 2 );
-	$tutar = $params["amount"];
-	$cv2 = $params["cccvv"];
+	$ccno = $params['cardnum'];
+	$ccay = substr( $params['cardexp'], 0, 2 );
+	$ccyil = substr( $params['cardexp'], 2, 2 );
+	$tutar = $params['amount'];
+	$cv2 = $params['cccvv'];
 	$taksit = "";
 	$request = "DATA=<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n<CC5Request>
 <Name>{NAME}</Name>
@@ -105,7 +105,7 @@ function finansbank_capture($params) {
 	if (curl_errno( $ch )) {
 		$error = curl_error( $ch );
 		logTransaction( "Turkey National Banks", "Error => " . $error, "Error" );
-		sendMessage( "Credit Card Payment Failed", $params["invoiceid"] );
+		sendMessage( "Credit Card Payment Failed", $params['invoiceid'] );
 		$result = "error";
 		return $result;
 	}
@@ -143,7 +143,7 @@ function finansbank_capture($params) {
 	$posf = $posf + strlen( $response_tag ) + 2;
 	$ErrMsg = substr( $result, $posf, $posl - $posf );
 	$debugdata = "Action => Auth
-Client => " . $params["clientdetails"]["firstname"] . " " . $params["clientdetails"]["lastname"] . ( "
+Client => " . $params['clientdetails']['firstname'] . " " . $params['clientdetails']['lastname'] . ( "
 Response => " . $Response . "
 OrderId => " . $OrderId . "
 AuthCode => " . $AuthCode . "
@@ -162,7 +162,7 @@ if (!defined( "WHMCS" )) {
 	exit( "This file cannot be accessed directly" );
 }
 
-$GATEWAYMODULE["finansbankname"] = "finansbank";
-$GATEWAYMODULE["finansbankvisiblename"] = "Turkish Finansbank";
-$GATEWAYMODULE["finansbanktype"] = "CC";
+$GATEWAYMODULE['finansbankname'] = "finansbank";
+$GATEWAYMODULE['finansbankvisiblename'] = "Turkish Finansbank";
+$GATEWAYMODULE['finansbanktype'] = "CC";
 ?>

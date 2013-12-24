@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -72,7 +72,7 @@ class WHMCS_Nominet {
 			else {
 				$hdr = @fread( $this->socket, 4 );
 
-				if (( empty( $hdr ) && feof( $this->socket ) )) {
+				if (empty( $hdr ) && feof( $this->socket )) {
 					$this->setError( "Connection closed by remote server" );
 				}
 				else {
@@ -105,9 +105,9 @@ class WHMCS_Nominet {
 		$this->response = $response;
 		$this->responsearray = XMLtoArray( $response );
 
-		if (preg_match( "%<domain:ns>(.+)</domain:ns>%s", $response, $matches )) {
+		if (preg_match( '%<domain:ns>(.+)</domain:ns>%s', $response, $matches )) {
 			$ns = trim( $matches[1] );
-			$ns = preg_replace( "%</?domain:hostObj>%", " ", $ns );
+			$ns = preg_replace( '%</?domain:hostObj>%', ' ', $ns );
 			
 			$ns = preg_split( "/\s+|
 /", $ns, NULL, PREG_SPLIT_NO_EMPTY );
@@ -117,7 +117,7 @@ class WHMCS_Nominet {
 
 
 			if (0 < count( $ns )) {
-				$this->responsearray["EPP"]["RESPONSE"]["RESDATA"]["DOMAIN:INFDATA"]["DOMAIN:NS"]["DOMAIN:HOSTOBJ"] = $ns;
+				$this->responsearray['EPP']['RESPONSE']['RESDATA']["DOMAIN:INFDATA"]["DOMAIN:NS"]["DOMAIN:HOSTOBJ"] = $ns;
 			}
 		}
 
@@ -152,15 +152,15 @@ class WHMCS_Nominet {
 
 	function getErrorDesc() {
 		$results = $this->getResponseArray();
-		$results = $results["EPP"]["RESPONSE"];
+		$results = $results['EPP']['RESPONSE'];
 
-		if (isset( $results["RESULT"]["EXTVALUE"]["REASON"] )) {
-			return $results["RESULT"]["EXTVALUE"]["REASON"];
+		if (isset( $results['RESULT']['EXTVALUE']['REASON'] )) {
+			return $results['RESULT']['EXTVALUE']['REASON'];
 		}
 
 
-		if (isset( $results["RESULT"]["MSG"] )) {
-			return $results["RESULT"]["MSG"];
+		if (isset( $results['RESULT']['MSG'] )) {
+			return $results['RESULT']['MSG'];
 		}
 
 	}
@@ -168,7 +168,7 @@ class WHMCS_Nominet {
 
 	function call($xml) {
 		$command = XMLtoArray( $xml );
-		$command = array_keys( $command["COMMAND"] );
+		$command = array_keys( $command['COMMAND'] );
 		$command = $command[0];
 		$xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><epp xmlns=\"urn:ietf:params:xml:ns:epp-1.0\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"urn:ietf:params:xml:ns:epp-1.0 epp-1.0.xsd\">" . $xml;
 		fwrite( $this->socket, pack( "N", strlen( $xml ) + 4 ) . $xml );
@@ -179,7 +179,7 @@ class WHMCS_Nominet {
 		else {
 			$hdr = @fread( $this->socket, 4 );
 
-			if (( empty( $hdr ) && feof( $this->socket ) )) {
+			if (empty( $hdr ) && feof( $this->socket )) {
 				$this->setError( "Connection closed by remote server" );
 			}
 			else {

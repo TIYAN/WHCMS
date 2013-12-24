@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -17,28 +17,28 @@ function netbilling_activate() {
 
 
 function netbilling_capture($params) {
-	$payment["account_id"] = $params["accountid"];
-	$payment["site_tag"] = $params["sitetag"];
-	$payment["tran_type"] = "S";
-	$payment["amount"] = $params["amount"];
-	$payment["description"] = "Invoice ID " . $params["invoiceid"];
-	$payment["bill_name1"] = $params["clientdetails"]["firstname"];
-	$payment["bill_name2"] = $params["clientdetails"]["lastname"];
-	$payment["bill_street"] = $params["clientdetails"]["address1"];
-	$payment["bill_city"] = $params["clientdetails"]["city"];
-	$payment["bill_state"] = $params["clientdetails"]["state"];
-	$payment["bill_zip"] = $params["clientdetails"]["postcode"];
-	$payment["bill_country"] = $params["clientdetails"]["country"];
-	$payment["cust_email"] = $params["email"];
-	$payment["pay_type"] = "C";
-	$payment["card_number"] = $params["cardnum"];
-	$payment["card_expire"] = $params["cardexp"];
+	$payment['account_id'] = $params['accountid'];
+	$payment['site_tag'] = $params['sitetag'];
+	$payment['tran_type'] = "S";
+	$payment['amount'] = $params['amount'];
+	$payment['description'] = "Invoice ID " . $params['invoiceid'];
+	$payment['bill_name1'] = $params['clientdetails']['firstname'];
+	$payment['bill_name2'] = $params['clientdetails']['lastname'];
+	$payment['bill_street'] = $params['clientdetails']['address1'];
+	$payment['bill_city'] = $params['clientdetails']['city'];
+	$payment['bill_state'] = $params['clientdetails']['state'];
+	$payment['bill_zip'] = $params['clientdetails']['postcode'];
+	$payment['bill_country'] = $params['clientdetails']['country'];
+	$payment['cust_email'] = $params['email'];
+	$payment['pay_type'] = "C";
+	$payment['card_number'] = $params['cardnum'];
+	$payment['card_expire'] = $params['cardexp'];
 
-	if ($params["cccvv"]) {
-		$payment["card_cvv2"] = $params["cccvv"];
+	if ($params['cccvv']) {
+		$payment['card_cvv2'] = $params['cccvv'];
 	}
 	else {
-		$payment["disable_cvv2"] = 1;
+		$payment['disable_cvv2'] = 1;
 	}
 
 	$post_str = "";
@@ -82,7 +82,7 @@ function netbilling_capture($params) {
 	$failed = 5;
 	$response_msg = "";
 	$desc = "Action => Auth_Capture
-Client => " . $params["clientdetails"]["firstname"] . " " . $params["clientdetails"]["lastname"] . ( ( "
+Client => " . $params['clientdetails']['firstname'] . " " . $params['clientdetails']['lastname'] . ( ( "
 " ) . $res );
 
 	if ($curlerror) {
@@ -92,9 +92,9 @@ CURL Error => " . $curlerror;
 
 
 	if ($http_code == "200") {
-		$status_code = $result["status_code"];
+		$status_code = $result['status_code'];
 
-		if (( $status_code == "0" || $status_code == "F" )) {
+		if ($status_code == "0" || $status_code == "F") {
 			return array( "status" => "error", "rawdata" => $desc );
 		}
 
@@ -103,7 +103,7 @@ CURL Error => " . $curlerror;
 			return array( "status" => "declined", "rawdata" => $desc );
 		}
 
-		return array( "status" => "success", "transid" => $result["auth_code"], "rawdata" => $desc );
+		return array( "status" => "success", "transid" => $result['auth_code'], "rawdata" => $desc );
 	}
 
 	logTransaction( "NetBilling", $desc, "Connection Failed" );
@@ -114,7 +114,7 @@ if (!defined( "WHMCS" )) {
 	exit( "This file cannot be accessed directly" );
 }
 
-$GATEWAYMODULE["netbillingname"] = "netbilling";
-$GATEWAYMODULE["netbillingvisiblename"] = "NETbilling";
-$GATEWAYMODULE["netbillingtype"] = "CC";
+$GATEWAYMODULE['netbillingname'] = "netbilling";
+$GATEWAYMODULE['netbillingvisiblename'] = "NETbilling";
+$GATEWAYMODULE['netbillingtype'] = "CC";
 ?>

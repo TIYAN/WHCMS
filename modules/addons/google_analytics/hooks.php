@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -17,50 +17,50 @@ function google_analytics_hook_checkout_tracker($vars) {
 	$result = select_query( "tbladdonmodules", "", array( "module" => "google_analytics" ) );
 
 	while ($data = mysql_fetch_array( $result )) {
-		$value = $data["value"];
+		$value = $data['value'];
 		$value = explode( "|", $value );
 		$value = trim( $value[0] );
-		$modulevars[$data["setting"]] = $value;
+		$modulevars[$data['setting']] = $value;
 	}
 
 
-	if (!$modulevars["code"]) {
+	if (!$modulevars['code']) {
 		return false;
 	}
 
-	$orderid = $vars["orderid"];
-	$ordernumber = $vars["ordernumber"];
-	$invoiceid = $vars["invoiceid"];
-	$ispaid = $vars["ispaid"];
-	$amount = $subtotal = $vars["amount"];
-	$paymentmethod = $vars["paymentmethod"];
-	$clientdetails = $vars["clientdetails"];
+	$orderid = $vars['orderid'];
+	$ordernumber = $vars['ordernumber'];
+	$invoiceid = $vars['invoiceid'];
+	$ispaid = $vars['ispaid'];
+	$amount = $subtotal = $vars['amount'];
+	$paymentmethod = $vars['paymentmethod'];
+	$clientdetails = $vars['clientdetails'];
 	$result = select_query( "tblorders", "renewals", array( "id" => $orderid ) );
 	$data = mysql_fetch_array( $result );
-	$renewals = $data["renewals"];
+	$renewals = $data['renewals'];
 
 	if ($invoiceid) {
 		$result = select_query( "tblinvoices", "subtotal,tax,tax2,total", array( "id" => $invoiceid ) );
 		$data = mysql_fetch_array( $result );
-		$subtotal = $data["subtotal"];
-		$tax = $data["tax"] + $data["tax2"];
-		$total = $data["total"];
+		$subtotal = $data['subtotal'];
+		$tax = $data['tax'] + $data['tax2'];
+		$total = $data['total'];
 	}
 
 
-	if (isset( $_SESSION["gatracking"][$orderid] )) {
+	if (isset( $_SESSION['gatracking'][$orderid] )) {
 		return false;
 	}
 
-	$_SESSION["gatracking"][$orderid] = 1;
+	$_SESSION['gatracking'][$orderid] = 1;
 	$code = "<script type=\"text/javascript\">
 
   var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', '" . $modulevars["code"] . "']);";
+  _gaq.push(['_setAccount', '" . $modulevars['code'] . "']);";
 
-	if ($modulevars["domain"]) {
+	if ($modulevars['domain']) {
 		$code .= "
-  _gaq.push(['_setDomainName', '." . $modulevars["domain"] . "']);";
+  _gaq.push(['_setDomainName', '." . $modulevars['domain'] . "']);";
 	}
 
 	$code .= "
@@ -71,19 +71,19 @@ function google_analytics_hook_checkout_tracker($vars) {
     '" . $subtotal . "',
     '" . $tax . "',
     '0',
-    '" . $clientdetails["city"] . "',
-    '" . $clientdetails["state"] . "',
-    '" . $clientdetails["country"] . "'
+    '" . $clientdetails['city'] . "',
+    '" . $clientdetails['state'] . "',
+    '" . $clientdetails['country'] . "'
   ]);
 ";
 	$result = select_query( "tblhosting", "tblhosting.id,tblproducts.id AS pid,tblproducts.name,tblproductgroups.name AS groupname,tblhosting.firstpaymentamount", array( "orderid" => $orderid ), "", "", "", "tblproducts ON tblproducts.id=tblhosting.packageid INNER JOIN tblproductgroups ON tblproductgroups.id=tblproducts.gid" );
 
 	while ($data = mysql_fetch_array( $result )) {
-		$serviceid = $data["id"];
-		$itempid = $data["pid"];
-		$name = $data["name"];
-		$groupname = $data["groupname"];
-		$itemamount = $data["firstpaymentamount"];
+		$serviceid = $data['id'];
+		$itempid = $data['pid'];
+		$name = $data['name'];
+		$groupname = $data['groupname'];
+		$itemamount = $data['firstpaymentamount'];
 		$code .= "
   _gaq.push(['_addItem',
     '" . $orderid . "',
@@ -99,11 +99,11 @@ function google_analytics_hook_checkout_tracker($vars) {
 	$result = select_query( "tblhostingaddons", "tblhostingaddons.id,tblhostingaddons.addonid,tbladdons.name,tblhostingaddons.setupfee,tblhostingaddons.recurring", array( "orderid" => $orderid ), "", "", "", "tbladdons ON tbladdons.id=tblhostingaddons.addonid" );
 
 	while ($data = mysql_fetch_array( $result )) {
-		$aid = $data["id"];
-		$addonid = $data["addonid"];
-		$name = $data["name"];
-		$groupname = $data["groupname"];
-		$itemamount = $data["setupfee"] + $data["recurring"];
+		$aid = $data['id'];
+		$addonid = $data['addonid'];
+		$name = $data['name'];
+		$groupname = $data['groupname'];
+		$itemamount = $data['setupfee'] + $data['recurring'];
 		$code .= "
   _gaq.push(['_addItem',
     '" . $orderid . "',
@@ -119,10 +119,10 @@ function google_analytics_hook_checkout_tracker($vars) {
 	$result = select_query( "tbldomains", "tbldomains.id,tbldomains.type,tbldomains.domain,tbldomains.firstpaymentamount", array( "orderid" => $orderid ) );
 
 	while ($data = mysql_fetch_array( $result )) {
-		$did = $data["id"];
-		$regtype = $data["type"];
-		$domain = $data["domain"];
-		$itemamount = $data["firstpaymentamount"];
+		$did = $data['id'];
+		$regtype = $data['type'];
+		$domain = $data['domain'];
+		$itemamount = $data['firstpaymentamount'];
 		$domainparts = explode( ".", $domain, 2 );
 		$code .= "
   _gaq.push(['_addItem',
@@ -145,9 +145,9 @@ function google_analytics_hook_checkout_tracker($vars) {
 			$registrationperiod = $renewal[1];
 			$result = select_query( "tbldomains", "id,domain,recurringamount", array( "id" => $domainid ) );
 			$data = mysql_fetch_array( $result );
-			$did = $data["id"];
-			$domain = $data["domain"];
-			$itemamount = $data["recurringamount"];
+			$did = $data['id'];
+			$domain = $data['domain'];
+			$itemamount = $data['recurringamount'];
 			$domainparts = explode( ".", $domain, 2 );
 			$code .= "
   _gaq.push(['_addItem',
@@ -183,25 +183,25 @@ function google_analytics_hook_page_tracking($vars) {
 	$result = select_query( "tbladdonmodules", "", array( "module" => "google_analytics" ) );
 
 	while ($data = mysql_fetch_array( $result )) {
-		$value = $data["value"];
+		$value = $data['value'];
 		$value = explode( "|", $value );
 		$value = trim( $value[0] );
-		$modulevars[$data["setting"]] = $value;
+		$modulevars[$data['setting']] = $value;
 	}
 
 
-	if (!$modulevars["code"]) {
+	if (!$modulevars['code']) {
 		return false;
 	}
 
 	$jscode = "<script type=\"text/javascript\">
 
   var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', '" . $modulevars["code"] . "']);";
+  _gaq.push(['_setAccount', '" . $modulevars['code'] . "']);";
 
-	if ($modulevars["domain"]) {
+	if ($modulevars['domain']) {
 		$jscode .= "
-  _gaq.push(['_setDomainName', '." . $modulevars["domain"] . "']);";
+  _gaq.push(['_setDomainName', '." . $modulevars['domain'] . "']);";
 	}
 
 	$jscode .= "

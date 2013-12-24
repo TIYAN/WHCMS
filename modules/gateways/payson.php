@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -19,20 +19,20 @@ function payson_activate() {
 
 
 function payson_link($params) {
-	$AgentID = $params["agentid"];
-	$Key = $params["key"];
-	$Description = $params["description"];
-	$SellerEmail = $params["email"];
-	$BuyerEmail = $params["clientdetails"]["email"];
-	$BuyerFirstName = $params["clientdetails"]["firstname"];
-	$BuyerLastName = $params["clientdetails"]["lastname"];
-	$Cost = str_replace( ".", ",", $params["amount"] );
-	$CurrencyCode = $params["currency"];
+	$AgentID = $params['agentid'];
+	$Key = $params['key'];
+	$Description = $params['description'];
+	$SellerEmail = $params['email'];
+	$BuyerEmail = $params['clientdetails']['email'];
+	$BuyerFirstName = $params['clientdetails']['firstname'];
+	$BuyerLastName = $params['clientdetails']['lastname'];
+	$Cost = str_replace( ".", ",", $params['amount'] );
+	$CurrencyCode = $params['currency'];
 	$ExtraCost = "0";
-	$OkUrl = $params["systemurl"] . "/modules/gateways/callback/payson.php";
-	$CancelUrl = $params["returnurl"];
-	$RefNr = $params["invoiceid"];
-	$GuaranteeOffered = ($params["guaranteeoffered"] ? "2" : "1");
+	$OkUrl = $params['systemurl'] . "/modules/gateways/callback/payson.php";
+	$CancelUrl = $params['returnurl'];
+	$RefNr = $params['invoiceid'];
+	$GuaranteeOffered = ($params['guaranteeoffered'] ? "2" : "1");
 	$MD5string = $SellerEmail . ":" . $Cost . ":" . $ExtraCost . ":" . $OkUrl . ":" . $GuaranteeOffered . $Key;
 	
 	$MD5Hash = md5( $MD5string );
@@ -52,7 +52,7 @@ function payson_link($params) {
 <input type=\"hidden\" name=\"RefNr\" value=\"" . $RefNr . "\">
 <input type=\"hidden\" name=\"MD5\" value=\"" . $MD5Hash . "\">
 <input type=\"hidden\" name=\"GuaranteeOffered\" value=\"" . $GuaranteeOffered . "\">
-<input type=\"submit\" value=\"" . $params["langpaynow"] . "\">
+<input type=\"submit\" value=\"" . $params['langpaynow'] . "\">
 </form>
 ";
 	return $code;
@@ -63,7 +63,7 @@ if (!defined( "WHMCS" )) {
 	exit( "This file cannot be accessed directly" );
 }
 
-$GATEWAYMODULE["paysonname"] = "payson";
-$GATEWAYMODULE["paysonvisiblename"] = "Payson";
-$GATEWAYMODULE["paysontype"] = "Invoices";
+$GATEWAYMODULE['paysonname'] = "payson";
+$GATEWAYMODULE['paysonvisiblename'] = "Payson";
+$GATEWAYMODULE['paysontype'] = "Invoices";
 ?>

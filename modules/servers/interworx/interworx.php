@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -19,21 +19,21 @@ function interworx_ConfigOptions() {
 function interworx_ClientArea($params) {
 	global $_LANG;
 
-	$domain = ($params["serverhostname"] ? $params["serverhostname"] : $params["serverip"]);
+	$domain = ($params['serverhostname'] ? $params['serverhostname'] : $params['serverip']);
 
-	if ($params["type"] == "reselleraccount") {
+	if ($params['type'] == "reselleraccount") {
 		$code = "<form action=\"https://" . $domain . ":2443/nodeworx/index.php?action=login\" method=\"post\" target=\"_blank\">
-        <input type=\"hidden\" name=\"email\" value=\"" . $params["username"] . "\" />
-		<input type=\"hidden\" name=\"password\" value=\"" . $params["password"] . "\" />
-		<input type=\"submit\" value=\"" . $_LANG["nodeworxlogin"] . "\" class=\"button\" />
+        <input type=\"hidden\" name=\"email\" value=\"" . $params['username'] . "\" />
+		<input type=\"hidden\" name=\"password\" value=\"" . $params['password'] . "\" />
+		<input type=\"submit\" value=\"" . $_LANG['nodeworxlogin'] . "\" class=\"button\" />
         </form>";
 	}
 	else {
 		$code = "<form action=\"https://" . $domain . ":2443/siteworx/index.php?action=login\" method=\"post\" target=\"_blank\">
-		<input type=\"hidden\" name=\"email\" value=\"" . $params["clientsdetails"]["email"] . "\" />
-		<input type=\"hidden\" name=\"password\" value=\"" . $params["password"] . "\" />
-        <input type=\"hidden\" name=\"domain\" value=\"" . $params["domain"] . "\" />
-		<input type=\"submit\"  value=\"" . $_LANG["siteworxlogin"] . "\" class=\"button\" />
+		<input type=\"hidden\" name=\"email\" value=\"" . $params['clientsdetails']['email'] . "\" />
+		<input type=\"hidden\" name=\"password\" value=\"" . $params['password'] . "\" />
+        <input type=\"hidden\" name=\"domain\" value=\"" . $params['domain'] . "\" />
+		<input type=\"submit\"  value=\"" . $_LANG['siteworxlogin'] . "\" class=\"button\" />
         </form>";
 	}
 
@@ -42,7 +42,7 @@ function interworx_ClientArea($params) {
 
 
 function interworx_AdminLink($params) {
-	$domain = ($params["serverhostname"] ? $params["serverhostname"] : $params["serverip"]);
+	$domain = ($params['serverhostname'] ? $params['serverhostname'] : $params['serverip']);
 	$code = "<form action=\"https://" . $domain . ":2443/nodeworx/\" method=\"post\" target=\"_blank\"><input type=\"submit\" value=\"InterWorx Panel\" /></form>";
 	return $code;
 }
@@ -51,48 +51,48 @@ function interworx_AdminLink($params) {
 $key = function interworx_CreateAccount($params) {;
 	$api_controller = "/nodeworx/siteworx";
 
-	if ($params["configoptions"]["Dedicated IP"]) {
+	if ($params['configoptions']["Dedicated IP"]) {
 		$action = "listDedicatedFreeIps";
-		$client = new soapclient( "https://" . $params["serverip"] . ":2443/nodeworx/soap?wsdl" );
+		$client = new soapclient( "https://" . $params['serverip'] . ":2443/nodeworx/soap?wsdl" );
 		$result = $client->route( $key, $api_controller, $action, $input );
 		logModuleCall( "interworx", $action, $input, $result );
 
-		if ($result["status"]) {
-			return $result["status"] . " - " . $result["payload"];
+		if ($result['status']) {
+			return $result['status'] . " - " . $result['payload'];
 		}
 	}
 	else {
 		$action = "listFreeIps";
-		$client = new soapclient( "https://" . $params["serverip"] . ":2443/nodeworx/soap?wsdl" );
+		$client = new soapclient( "https://" . $params['serverip'] . ":2443/nodeworx/soap?wsdl" );
 		$result = $client->route( $key, $api_controller, $action, $input );
 		logModuleCall( "interworx", $action, $input, $result );
 
-		if ($result["status"]) {
-			return $result["status"] . " - " . $result["payload"];
+		if ($result['status']) {
+			return $result['status'] . " - " . $result['payload'];
 		}
 	}
 
-	$ipaddress = $result["payload"][0][0];
+	$ipaddress = $result['payload'][0][0];
 
-	if ($params["type"] == "reselleraccount") {
-		$overselling = ($params["configoption3"] ? "1" : "0");
+	if ($params['type'] == "reselleraccount") {
+		$overselling = ($params['configoption3'] ? "1" : "0");
 		$api_controller = "/nodeworx/reseller";
 		$action = "add";
-		$input = array( "nickname" => strtolower( $params["clientsdetails"]["firstname"] . $params["clientsdetails"]["lastname"] ), "email" => $params["clientsdetails"]["email"], "password" => $params["password"], "confirm_password" => $params["password"], "language" => "en-us", "theme" => $params["configoption2"], "billing_day" => "1", "status" => "active", "packagetemplate" => $params["configoption1"], "RSL_OPT_OVERSELL_STORAGE" => $overselling, "RSL_OPT_OVERSELL_BANDWIDTH" => $overselling, "ips" => $ipaddress, "database_servers" => "localhost" );
-		update_query( "tblhosting", array( "username" => $params["clientsdetails"]["email"] ), array( "id" => $params["serviceid"] ) );
+		$input = array( "nickname" => strtolower( $params['clientsdetails']['firstname'] . $params['clientsdetails']['lastname'] ), "email" => $params['clientsdetails']['email'], "password" => $params['password'], "confirm_password" => $params['password'], "language" => "en-us", "theme" => $params['configoption2'], "billing_day" => "1", "status" => "active", "packagetemplate" => $params['configoption1'], "RSL_OPT_OVERSELL_STORAGE" => $overselling, "RSL_OPT_OVERSELL_BANDWIDTH" => $overselling, "ips" => $ipaddress, "database_servers" => "localhost" );
+		update_query( "tblhosting", array( "username" => $params['clientsdetails']['email'] ), array( "id" => $params['serviceid'] ) );
 	}
 	else {
 		$action = "add";
-		$input = array( "domainname" => $params["domain"], "ipaddress" => $ipaddress, "uniqname" => $params["username"], "nickname" => strtolower( $params["clientsdetails"]["firstname"] . $params["clientsdetails"]["lastname"] ), "email" => $params["clientsdetails"]["email"], "password" => $params["password"], "confirm_password" => $params["password"], "language" => "en-us", "theme" => $params["configoption2"], "packagetemplate" => $params["configoption1"] );
+		$input = array( "domainname" => $params['domain'], "ipaddress" => $ipaddress, "uniqname" => $params['username'], "nickname" => strtolower( $params['clientsdetails']['firstname'] . $params['clientsdetails']['lastname'] ), "email" => $params['clientsdetails']['email'], "password" => $params['password'], "confirm_password" => $params['password'], "language" => "en-us", "theme" => $params['configoption2'], "packagetemplate" => $params['configoption1'] );
 	}
 
-	$client = new soapclient( "https://" . $params["serverip"] . ":2443/nodeworx/soap?wsdl" );
+	$client = new soapclient( "https://" . $params['serverip'] . ":2443/nodeworx/soap?wsdl" );
 	$client->route( $key, $api_controller, $action, $input );
-	$result = $params["serveraccesshash"];
+	$result = $params['serveraccesshash'];
 	logModuleCall( "interworx", $action, $input, $result );
 
-	if ($result["status"]) {
-		return $result["status"] . " - " . $result["payload"];
+	if ($result['status']) {
+		return $result['status'] . " - " . $result['payload'];
 	}
 
 	return "success";
@@ -101,9 +101,9 @@ $key = function interworx_CreateAccount($params) {;
 
 $key = function interworx_TerminateAccount($params) {;
 
-	if ($params["type"] == "reselleraccount") {
+	if ($params['type'] == "reselleraccount") {
 		$resellers = interworx_GetResellers( $params );
-		$email = $params["clientsdetails"]["email"];
+		$email = $params['clientsdetails']['email'];
 		$resellerid = $resellers[$email];
 
 		if (!$resellerid) {
@@ -117,16 +117,16 @@ $key = function interworx_TerminateAccount($params) {;
 	else {
 		$api_controller = "/nodeworx/siteworx";
 		$action = "delete";
-		$input = array( "domain" => $params["domain"], "confirm_action" => "1" );
+		$input = array( "domain" => $params['domain'], "confirm_action" => "1" );
 	}
 
-	$client = new soapclient( "https://" . $params["serverip"] . ":2443/nodeworx/soap?wsdl" );
+	$client = new soapclient( "https://" . $params['serverip'] . ":2443/nodeworx/soap?wsdl" );
 	$client->route( $key, $api_controller, $action, $input );
-	$result = $params["serveraccesshash"];
+	$result = $params['serveraccesshash'];
 	logModuleCall( "interworx", $action, $input, $result );
 
-	if ($result["status"]) {
-		return $result["status"] . " - " . $result["payload"];
+	if ($result['status']) {
+		return $result['status'] . " - " . $result['payload'];
 	}
 
 	return "success";
@@ -134,21 +134,21 @@ $key = function interworx_TerminateAccount($params) {;
 
 
 function interworx_UsageUpdate($params) {
-	$key = $params["serveraccesshash"];
+	$key = $params['serveraccesshash'];
 	$api_controller = "/nodeworx/siteworx";
 	$action = "listBandwidthAndStorage";
 	$input = array();
-	$client = new soapclient( "https://" . $params["serverip"] . ":2443/nodeworx/soap?wsdl" );
+	$client = new soapclient( "https://" . $params['serverip'] . ":2443/nodeworx/soap?wsdl" );
 	$result = $client->route( $key, $api_controller, $action, $input );
 	logModuleCall( "interworx", $action, $input, $result );
-	$domainsdata = $result["payload"];
+	$domainsdata = $result['payload'];
 	foreach ($domainsdata as $data) {
-		$domain = $data["domain"];
-		$bandwidth_used = $data["bandwidth_used"];
-		$bandwidth = $data["bandwidth"];
-		$storage_used = $data["storage_used"];
-		$storage = $data["storage"];
-		update_query( "tblhosting", array( "diskusage" => $storage_used, "disklimit" => $storage, "bwusage" => $bandwidth_used, "bwlimit" => $bandwidth, "lastupdate" => "now()" ), array( "domain" => $domain, "server" => $params["serverid"] ) );
+		$domain = $data['domain'];
+		$bandwidth_used = $data['bandwidth_used'];
+		$bandwidth = $data['bandwidth'];
+		$storage_used = $data['storage_used'];
+		$storage = $data['storage'];
+		update_query( "tblhosting", array( "diskusage" => $storage_used, "disklimit" => $storage, "bwusage" => $bandwidth_used, "bwlimit" => $bandwidth, "lastupdate" => "now()" ), array( "domain" => $domain, "server" => $params['serverid'] ) );
 	}
 
 }
@@ -156,9 +156,9 @@ function interworx_UsageUpdate($params) {
 
 $key = function interworx_SuspendAccount($params) {;
 
-	if ($params["type"] == "reselleraccount") {
+	if ($params['type'] == "reselleraccount") {
 		$resellers = interworx_GetResellers( $params );
-		$email = $params["clientsdetails"]["email"];
+		$email = $params['clientsdetails']['email'];
 		$resellerid = $resellers[$email];
 
 		if (!$resellerid) {
@@ -172,16 +172,16 @@ $key = function interworx_SuspendAccount($params) {;
 	else {
 		$api_controller = "/nodeworx/siteworx";
 		$action = "edit";
-		$input = array( "domain" => $params["domain"], "status" => "0" );
+		$input = array( "domain" => $params['domain'], "status" => "0" );
 	}
 
-	$client = new soapclient( "https://" . $params["serverip"] . ":2443/nodeworx/soap?wsdl" );
+	$client = new soapclient( "https://" . $params['serverip'] . ":2443/nodeworx/soap?wsdl" );
 	$client->route( $key, $api_controller, $action, $input );
-	$result = $params["serveraccesshash"];
+	$result = $params['serveraccesshash'];
 	logModuleCall( "interworx", $action, $input, $result );
 
-	if ($result["status"]) {
-		return $result["status"] . " - " . $result["payload"];
+	if ($result['status']) {
+		return $result['status'] . " - " . $result['payload'];
 	}
 
 	return "success";
@@ -190,9 +190,9 @@ $key = function interworx_SuspendAccount($params) {;
 
 $key = function interworx_UnsuspendAccount($params) {;
 
-	if ($params["type"] == "reselleraccount") {
+	if ($params['type'] == "reselleraccount") {
 		$resellers = interworx_GetResellers( $params );
-		$email = $params["clientsdetails"]["email"];
+		$email = $params['clientsdetails']['email'];
 		$resellerid = $resellers[$email];
 
 		if (!$resellerid) {
@@ -206,16 +206,16 @@ $key = function interworx_UnsuspendAccount($params) {;
 	else {
 		$api_controller = "/nodeworx/siteworx";
 		$action = "edit";
-		$input = array( "domain" => $params["domain"], "status" => "1" );
+		$input = array( "domain" => $params['domain'], "status" => "1" );
 	}
 
-	$client = new soapclient( "https://" . $params["serverip"] . ":2443/nodeworx/soap?wsdl" );
+	$client = new soapclient( "https://" . $params['serverip'] . ":2443/nodeworx/soap?wsdl" );
 	$client->route( $key, $api_controller, $action, $input );
-	$result = $params["serveraccesshash"];
+	$result = $params['serveraccesshash'];
 	logModuleCall( "interworx", $action, $input, $result );
 
-	if ($result["status"]) {
-		return $result["status"] . " - " . $result["payload"];
+	if ($result['status']) {
+		return $result['status'] . " - " . $result['payload'];
 	}
 
 	return "success";
@@ -224,9 +224,9 @@ $key = function interworx_UnsuspendAccount($params) {;
 
 $key = function interworx_ChangePassword($params) {;
 
-	if ($params["type"] == "reselleraccount") {
+	if ($params['type'] == "reselleraccount") {
 		$resellers = interworx_GetResellers( $params );
-		$email = $params["clientsdetails"]["email"];
+		$email = $params['clientsdetails']['email'];
 		$resellerid = $resellers[$email];
 
 		if (!$resellerid) {
@@ -235,21 +235,21 @@ $key = function interworx_ChangePassword($params) {;
 
 		$api_controller = "/nodeworx/reseller";
 		$action = "edit";
-		$input = array( "reseller_id" => $resellerid, "password" => $params["password"], "confirm_password" => $params["password"] );
+		$input = array( "reseller_id" => $resellerid, "password" => $params['password'], "confirm_password" => $params['password'] );
 	}
 	else {
 		$api_controller = "/nodeworx/siteworx";
 		$action = "edit";
-		$input = array( "domain" => $params["domain"], "password" => $params["password"], "confirm_password" => $params["password"] );
+		$input = array( "domain" => $params['domain'], "password" => $params['password'], "confirm_password" => $params['password'] );
 	}
 
-	$client = new soapclient( "https://" . $params["serverip"] . ":2443/nodeworx/soap?wsdl" );
+	$client = new soapclient( "https://" . $params['serverip'] . ":2443/nodeworx/soap?wsdl" );
 	$client->route( $key, $api_controller, $action, $input );
-	$result = $params["serveraccesshash"];
+	$result = $params['serveraccesshash'];
 	logModuleCall( "interworx", $action, $input, $result );
 
-	if ($result["status"]) {
-		return $result["status"] . " - " . $result["payload"];
+	if ($result['status']) {
+		return $result['status'] . " - " . $result['payload'];
 	}
 
 	return "success";
@@ -258,33 +258,33 @@ $key = function interworx_ChangePassword($params) {;
 
 $key = function interworx_ChangePackage($params) {;
 
-	if ($params["type"] == "reselleraccount") {
+	if ($params['type'] == "reselleraccount") {
 		$resellers = interworx_GetResellers( $params );
-		$email = $params["clientsdetails"]["email"];
+		$email = $params['clientsdetails']['email'];
 		$resellerid = $resellers[$email];
 
 		if (!$resellerid) {
 			return "Reseller ID Not Found";
 		}
 
-		$overselling = ($params["configoption3"] ? "1" : "0");
+		$overselling = ($params['configoption3'] ? "1" : "0");
 		$api_controller = "/nodeworx/reseller";
 		$action = "edit";
-		$input = array( "reseller_id" => $resellerid, "package_template" => $params["configoption1"], "RSL_OPT_OVERSELL_STORAGE" => $overselling, "RSL_OPT_OVERSELL_BANDWIDTH" => $overselling );
+		$input = array( "reseller_id" => $resellerid, "package_template" => $params['configoption1'], "RSL_OPT_OVERSELL_STORAGE" => $overselling, "RSL_OPT_OVERSELL_BANDWIDTH" => $overselling );
 	}
 	else {
 		$api_controller = "/nodeworx/siteworx";
 		$action = "edit";
-		$input = array( "domain" => $params["domain"], "package_template" => $params["configoption1"] );
+		$input = array( "domain" => $params['domain'], "package_template" => $params['configoption1'] );
 	}
 
-	$client = new soapclient( "https://" . $params["serverip"] . ":2443/nodeworx/soap?wsdl" );
+	$client = new soapclient( "https://" . $params['serverip'] . ":2443/nodeworx/soap?wsdl" );
 	$client->route( $key, $api_controller, $action, $input );
-	$result = $params["serveraccesshash"];
+	$result = $params['serveraccesshash'];
 	logModuleCall( "interworx", $action, $input, $result );
 
-	if ($result["status"]) {
-		return $result["status"] . " - " . $result["payload"];
+	if ($result['status']) {
+		return $result['status'] . " - " . $result['payload'];
 	}
 
 	return "success";
@@ -292,15 +292,15 @@ $key = function interworx_ChangePackage($params) {;
 
 
 function interworx_GetResellers($params) {
-	$key = $params["serveraccesshash"];
+	$key = $params['serveraccesshash'];
 	$api_controller = "/nodeworx/reseller";
 	$action = "listIds";
 	$input = array();
-	$client = new soapclient( "https://" . $params["serverip"] . ":2443/nodeworx/soap?wsdl" );
+	$client = new soapclient( "https://" . $params['serverip'] . ":2443/nodeworx/soap?wsdl" );
 	$result = $client->route( $key, $api_controller, $action, $input );
 	logModuleCall( "interworx", $action, $input, $result );
 	$resellers = array();
-	foreach ($result["payload"] as $reseller) {
+	foreach ($result['payload'] as $reseller) {
 		$resellerid = $reseller[0];
 		$reselleremail = $reseller[1];
 		$reselleremail = explode( "(", $reselleremail, 2 );

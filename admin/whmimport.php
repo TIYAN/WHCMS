@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -17,6 +17,7 @@ $aInt->title = "Import Domains from cPanel/WHM";
 $aInt->sidebar = "utilities";
 $aInt->icon = "import";
 $aInt->helplink = "cPanel/WHM Import";
+$server = (int)$whmcs->get_req_var("server");
 ob_start();
 $packagesArr = array();
 $result = select_query("tblproducts", "id,configoption1", array("servertype" => "cpanel"));
@@ -95,7 +96,7 @@ else {
 		$accesshash = html_entity_decode($data['accesshash']);
 		$usessl = $data['secure'];
 		$request = "/xml-api/listaccts";
-		$cleanaccesshash = preg_replace("'(\r\n|\r\n)'", "", $accesshash);
+		$cleanaccesshash = preg_replace("'(\n|\n)'", "", $accesshash);
 
 		if ($cleanaccesshash) {
 			$authstr = "WHM " . $user . ":" . $cleanaccesshash;
@@ -148,19 +149,44 @@ Data: " . $data . "</textarea>";
 			echo "
 <form method=\"post\" action=\"";
 			echo $PHP_SELF;
-			echo "?step=3&server=";
+			echo "?step=2\" id=\"frmMyUserOnly\">
+<input type=\"hidden\" name=\"server\" value=\"";
 			echo $server;
-			echo "\" name=\"importForm\">
-
-<p align=\"center\"><input type=\"button\" value=\"Show Domains for my Username Only\" onClick=\"window.location='whmimport.php?step=2&server=";
-			echo $server;
-			echo "&useronly=true&hide=";
+			echo "\" />
+<input type=\"hidden\" name=\"useronly\" value=\"true\" />
+<input type=\"hidden\" name=\"hide\" value=\"";
 			echo $hide;
-			echo "'\" class=\"button\"> <input type=\"button\" value=\"Hide Domains Already in WHMCS\" onClick=\"window.location='whmimport.php?step=2&server=";
+			echo "\" />
+</form>
+
+<form method=\"post\" action=\"";
+			echo $PHP_SELF;
+			echo "?step=2\" id=\"frmHideExisting\">
+<input type=\"hidden\" name=\"server\" value=\"";
 			echo $server;
-			echo "&hide=true'\" class=\"button\"> <input type=\"button\" value=\"Show only Domains with Status Mismatch\" onClick=\"window.location='whmimport.php?step=2&server=";
+			echo "\" />
+<input type=\"hidden\" name=\"hide\" value=\"true\" />
+</form>
+
+<form method=\"post\" action=\"";
+			echo $PHP_SELF;
+			echo "?step=2\" id=\"frmStatusMismatch\">
+<input type=\"hidden\" name=\"server\" value=\"";
 			echo $server;
-			echo "&showcancelled=true'\" class=\"button\"> <input type=\"submit\" value=\"Import\" class=\"button\"></p>
+			echo "\" />
+<input type=\"hidden\" name=\"showcancelled\" value=\"true\" />
+</form>
+
+<form method=\"post\" action=\"";
+			echo $PHP_SELF;
+			echo "?step=3\" name=\"importForm\">
+
+<input type=\"hidden\" name=\"server\" value=\"";
+			echo $server;
+			echo "\" />
+
+<p align=\"center\"><input type=\"button\" value=\"Show Domains for my Username Only\" onClick=\"$('#frmMyUserOnly').submit()\" class=\"button\"> <input type=\"button\" value=\"Hide Domains Already in WHMCS\" onClick=\"$('#frmHideExisting').submit()\" class=\"button\"> <input type=\"button\" value=\"Show only Domains with Status Mismatch\" onClick=\"$('#frmStatusMismatch').submit()\" class=\"button\"> <input type=\"submi";
+			echo "t\" value=\"Import\" class=\"button\"></p>
 
 <table cellspacing=1 bgcolor=#cccccc width=750 align=center>
 <tr bgcolor=#efefef style=\"font-weight:bold;text-align:center;\"><td width=20><input type=\"checkbox\" id=\"checkall\"></td><td>Domain</td><td>Username</td><td>Owner</td><td>Package</td><td>Created</td></tr>
@@ -263,17 +289,8 @@ Data: " . $data . "</textarea>";
 			echo ">Indicates a Package that doesn't exist in WHMCS so cannot be imported</td></tr>
 </table>
 
-<p align=\"center\"><input type=\"button\" value=\"Show Domains for my Username Only\" onClick=\"window.location='whmimport.php?step=2&server=";
-			echo $server;
-			echo "&useronly=true&hide=";
-			echo $hide;
-			echo "'\" class=\"button\"> <input type=\"button\" value=\"Hide Domains Already in WHMCS\" onClick=\"window.location='whmimport.php?step=2&server=";
-			echo $server;
-			echo "&hide=true'\" class=\"button\"> <input type=\"button\" value=\"Show only Domains with Status Mismatch\" onClick=\"window.location='whmimport.php?step=2&server=";
-			echo $server;
-			echo "&showcancelled=true'\" class=\"button\"> <input type=\"submit\" value=\"Import\" class=\"button\"><br><input type=\"checkbox\" name=\"createdomains\"> Tick this box to create domain entries for imported accounts (this assumes all clients domains are registered through you)</p>
-
-</form>
+<p align=\"center\"><input type=\"button\" value=\"Show Domains for my Username Only\" onClick=\"$('#frmMyUserOnly').submit()\" class=\"button\"> <input type=\"button\" value=\"Hide Domains Already in WHMCS\" onClick=\"$('#frmHideExisting').submit()\" class=\"button\"> <input type=\"button\" value=\"Show only Domains with Status Mis";
+			echo "match\" onClick=\"$('#frmStatusMismatch').submit()\" class=\"button\"> <input type=\"submit\" value=\"Import\" class=\"button\"></p>
 
 ";
 		}
@@ -293,7 +310,7 @@ Data: " . $data . "</textarea>";
 			$accesshash = html_entity_decode($data['accesshash']);
 			$usessl = $data['secure'];
 			$request = "/xml-api/listaccts";
-			$cleanaccesshash = preg_replace("'(\r\n|\r\n)'", "", $accesshash);
+			$cleanaccesshash = preg_replace("'(\n|\n)'", "", $accesshash);
 
 			if ($cleanaccesshash) {
 				$authstr = "WHM " . $user . ":" . $cleanaccesshash;
@@ -327,8 +344,7 @@ Data: " . $data . "</textarea>";
 			curl_close($ch);
 
 			if ($debug_output) {
-				echo ("<textarea rows=10 cols=120>Request: " . $request . "\r\n") . "
-Data: " . $data . "</textarea>";
+				echo ("<textarea rows=10 cols=120>Request: " . $request . "\r\n") . "\r\nData: " . $data . "</textarea>";
 			}
 
 			$xmldata = XMLtoARRAY($data);

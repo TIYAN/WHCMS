@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -51,8 +51,8 @@ if ($action == "send") {
 		$whmcs->load_class("phpmailer");
 		$mail = new PHPMailer();
 		$mail->From = $email;
-		$mail->FromName = $name;
-		$mail->Subject = "Contact Form: " . $subject;
+		$mail->FromName = html_entity_decode($name, ENT_QUOTES);
+		$mail->Subject = html_entity_decode("Contact Form: " . $subject, ENT_QUOTES);
 		$mail->CharSet = $CONFIG['Charset'];
 
 		if ($CONFIG['MailType'] == "mail") {
@@ -77,7 +77,7 @@ if ($action == "send") {
 				}
 
 				$mail->Sender = $CONFIG['Email'];
-				$mail->AddReplyTo($fromemail, $fromname);
+				$mail->AddReplyTo($fromemail, html_entity_decode($fromname, ENT_QUOTES));
 			}
 		}
 
@@ -88,7 +88,7 @@ if ($action == "send") {
 
 		$message_text = strip_tags($message_text);
 		$mail->Body = $sendmessage;
-		$mail->AltBody = $message_text;
+		$mail->AltBody = html_entity_decode($message_text, ENT_QUOTES);
 
 		if (!$CONFIG['ContactFormTo']) {
 			$contactformemail = $CONFIG['Email'];

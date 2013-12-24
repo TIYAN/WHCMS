@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -20,7 +20,7 @@ ob_start();
 phpinfo();
 $info = ob_get_contents();
 ob_end_clean();
-$info = preg_replace("%^.*<body>(.*)</body>.*$%ms", "$1", $info);
+$info = preg_replace('%^.*<body>(.*)</body>.*$%ms', '$1', $info);
 ob_start();
 echo "<s";
 echo "tyle type=\"text/css\">

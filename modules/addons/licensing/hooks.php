@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -23,15 +23,15 @@ function hook_licensing_addon_log_prune($vars) {
 
 
 function hook_licensing_addon_search($vars) {
-	$keyword = $vars["keyword"];
+	$keyword = $vars['keyword'];
 	$matches = array();
 	$result = select_query( "mod_licensing", "", "licensekey LIKE '%" . db_escape_string( $keyword ) . "%' OR validdomain LIKE '%" . db_escape_string( $keyword ) . "%'" );
 
 	while ($data = mysql_fetch_array( $result )) {
-		$serviceid = $data["serviceid"];
-		$licensekey = $data["licensekey"];
-		$validdomain = $data["validdomain"];
-		$status = $data["status"];
+		$serviceid = $data['serviceid'];
+		$licensekey = $data['licensekey'];
+		$validdomain = $data['validdomain'];
+		$status = $data['status'];
 		$validdomain = explode( ",", $validdomain );
 		$validdomain = $validdomain[0];
 

@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -18,11 +18,11 @@ function ccavenue_activate() {
 
 
 function ccavenue_link($params) {
-	$Merchant_Id = $params["merchantid"];
-	$Amount = sprintf( "%.2f", $params["amount"] );
-	$Order_Id = $params["invoiceid"] . "_" . date( "YmdHis" );
-	$Redirect_Url = $params["systemurl"] . "/modules/gateways/callback/ccavenue.php";
-	$WorkingKey = $params["workingkey"];
+	$Merchant_Id = $params['merchantid'];
+	$Amount = sprintf( "%.2f", $params['amount'] );
+	$Order_Id = $params['invoiceid'] . "_" . date( "YmdHis" );
+	$Redirect_Url = $params['systemurl'] . "/modules/gateways/callback/ccavenue.php";
+	$WorkingKey = $params['workingkey'];
 	$Checksum = ccavenue_getCheckSum( $Merchant_Id, $Amount, $Order_Id, $Redirect_Url, $WorkingKey );
 	$strRet = "<form name=ccavenue method=\"post\" action=\"https://www.ccavenue.com/shopzone/cc_details.jsp\">";
 	$strRet .= "<input type=hidden name=Merchant_Id value=\"" . $Merchant_Id . "\">";
@@ -30,18 +30,18 @@ function ccavenue_link($params) {
 	$strRet .= "<input type=hidden name=Order_Id value=\"" . $Order_Id . "\">";
 	$strRet .= "<input type=hidden name=Redirect_Url value=\"" . $Redirect_Url . "\">";
 	$strRet .= "<input type=hidden name=Checksum value=\"" . $Checksum . "\">";
-	$strRet .= "<input type=\"hidden\" name=\"billing_cust_name\" value=\"" . $params["clientdetails"]["firstname"] . " " . $params["clientdetails"]["lastname"] . "\">";
-	$strRet .= "<input type=\"hidden\" name=\"billing_cust_address\" value=\"" . $params["clientdetails"]["address1"] . "\">";
-	$strRet .= "<input type=\"hidden\" name=\"billing_cust_country\" value=\"" . $params["clientdetails"]["country"] . "\">";
-	$strRet .= "<input type=\"hidden\" name=\"billing_cust_tel\" value=\"" . $params["clientdetails"]["phonenumber"] . "\">";
-	$strRet .= "<input type=\"hidden\" name=\"billing_cust_email\" value=\"" . $params["clientdetails"]["email"] . "\">";
-	$strRet .= "<input type=\"hidden\" name=\"delivery_cust_name\" value=\"" . $params["clientdetails"]["firstname"] . " " . $params["clientdetails"]["lastname"] . "\">";
-	$strRet .= "<input type=\"hidden\" name=\"delivery_cust_address\" value=\"" . $params["clientdetails"]["address1"] . "\">";
-	$strRet .= "<input type=\"hidden\" name=\"delivery_cust_tel\" value=\"" . $params["clientdetails"]["phonenumber"] . "\">";
+	$strRet .= "<input type=\"hidden\" name=\"billing_cust_name\" value=\"" . $params['clientdetails']['firstname'] . " " . $params['clientdetails']['lastname'] . "\">";
+	$strRet .= "<input type=\"hidden\" name=\"billing_cust_address\" value=\"" . $params['clientdetails']['address1'] . "\">";
+	$strRet .= "<input type=\"hidden\" name=\"billing_cust_country\" value=\"" . $params['clientdetails']['country'] . "\">";
+	$strRet .= "<input type=\"hidden\" name=\"billing_cust_tel\" value=\"" . $params['clientdetails']['phonenumber'] . "\">";
+	$strRet .= "<input type=\"hidden\" name=\"billing_cust_email\" value=\"" . $params['clientdetails']['email'] . "\">";
+	$strRet .= "<input type=\"hidden\" name=\"delivery_cust_name\" value=\"" . $params['clientdetails']['firstname'] . " " . $params['clientdetails']['lastname'] . "\">";
+	$strRet .= "<input type=\"hidden\" name=\"delivery_cust_address\" value=\"" . $params['clientdetails']['address1'] . "\">";
+	$strRet .= "<input type=\"hidden\" name=\"delivery_cust_tel\" value=\"" . $params['clientdetails']['phonenumber'] . "\">";
 	$strRet .= "<input type=\"hidden\" name=\"delivery_cust_notes\" value=\"Invoice #" . $Order_Id . "\">";
-	$strRet .= "<input type=\"submit\" value=\"" . $params["langpaynow"] . "\">";
+	$strRet .= "<input type=\"submit\" value=\"" . $params['langpaynow'] . "\">";
 	$strRet .= "</form>";
-	$strRet .= "<br />" . $params["infomsg"];
+	$strRet .= "<br />" . $params['infomsg'];
 	return $strRet;
 }
 
@@ -109,7 +109,7 @@ if (!defined( "WHMCS" )) {
 	exit( "This file cannot be accessed directly" );
 }
 
-$GATEWAYMODULE["ccavenuename"] = "ccavenue";
-$GATEWAYMODULE["ccavenuevisiblename"] = "CCAvenue";
-$GATEWAYMODULE["ccavenuetype"] = "Invoices";
+$GATEWAYMODULE['ccavenuename'] = "ccavenue";
+$GATEWAYMODULE['ccavenuevisiblename'] = "CCAvenue";
+$GATEWAYMODULE['ccavenuetype'] = "Invoices";
 ?>

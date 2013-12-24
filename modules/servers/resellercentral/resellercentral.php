@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -17,10 +17,10 @@ function resellercentral_ConfigOptions() {
 
 
 function resellercentral_CreateAccount($params) {
-	$location = $params["configoption3"];
+	$location = $params['configoption3'];
 
-	if ($params["customfields"]["Website Location"]) {
-		$location = $params["customfields"]["Website Location"];
+	if ($params['customfields']["Website Location"]) {
+		$location = $params['customfields']["Website Location"];
 	}
 
 
@@ -96,40 +96,40 @@ function resellercentral_CreateAccount($params) {
 		}
 	}
 
-	$fields = array( "action" => "create_account", "api_key" => $params["configoption1"], "domain" => $params["domain"], "username" => $params["username"], "password" => $params["password"], "email" => $params["clientsdetails"]["email"], "location" => $location, "package" => $params["configoption2"] );
+	$fields = array( "action" => "create_account", "api_key" => $params['configoption1'], "domain" => $params['domain'], "username" => $params['username'], "password" => $params['password'], "email" => $params['clientsdetails']['email'], "location" => $location, "package" => $params['configoption2'] );
 
-	if ($params["configoption4"] == "Windows") {
-		$fields["platform"] = "2";
+	if ($params['configoption4'] == "Windows") {
+		$fields['platform'] = "2";
 	}
 
-	$result = resellercentral_req( $fields, $params["packageid"], $params["accountid"] );
+	$result = resellercentral_req( $fields, $params['packageid'], $params['accountid'] );
 	return $result;
 }
 
 
 function resellercentral_SuspendAccount($params) {
-	$fields = array( "action" => "suspend_account", "api_key" => $params["configoption1"], "domain" => $params["domain"] );
+	$fields = array( "action" => "suspend_account", "api_key" => $params['configoption1'], "domain" => $params['domain'] );
 	$result = resellercentral_req( $fields );
 	return $result;
 }
 
 
 function resellercentral_UnsuspendAccount($params) {
-	$fields = array( "action" => "unsuspend_account", "api_key" => $params["configoption1"], "domain" => $params["domain"] );
+	$fields = array( "action" => "unsuspend_account", "api_key" => $params['configoption1'], "domain" => $params['domain'] );
 	$result = resellercentral_req( $fields );
 	return $result;
 }
 
 
 function resellercentral_req($fields, $packageid = "", $accountid = "") {
-	$action = $fields["action"];
+	$action = $fields['action'];
 
 	if ($action == "create_account") {
 		$creatingaccount = true;
 	}
 
 	$url = "http://cp.hostnine.com/api/" . $action . ".php?";
-	unset( $fields["action"] );
+	unset( $fields['action'] );
 	$fieldstring = "";
 	foreach ($fields as $key => $value) {
 		$url .= "" . $key . "=" . urlencode( $value ) . "&";
@@ -155,12 +155,12 @@ function resellercentral_req($fields, $packageid = "", $accountid = "") {
 
 	logModuleCall( "resellercentral", $action, $fields, $data );
 
-	if (( ( strpos( $data, "SUCCESS" ) == true || strpos( $data, "account has been suspended" ) == true ) || strpos( $data, "account is now active" ) == true )) {
+	if (( strpos( $data, "SUCCESS" ) == true || strpos( $data, "account has been suspended" ) == true ) || strpos( $data, "account is now active" ) == true) {
 		if ($creatingaccount) {
 			$query = "SELECT id FROM tblcustomfields WHERE type='product' AND relid=" . (int)$packageid . " AND fieldname='IP Address'";
 			$result = full_query( $query );
 			$data2 = mysql_fetch_array( $result );
-			$customfieldid = $data2["id"];
+			$customfieldid = $data2['id'];
 			$tempdata = explode( "&", $data );
 			$tempdata = explode( "=", $tempdata[1] );
 			$tempdata = explode( "<", $tempdata[1] );

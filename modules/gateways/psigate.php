@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -468,29 +468,29 @@ class PsiGatePayment {
 			xml_parse( $this->parser, $xmlResponse, TRUE );
 
 			if (xml_get_error_code( $this->parser ) == XML_ERROR_NONE) {
-				$this->myResultTrxnTransTime = $this->xmlData["TransTime"];
-				$this->myResultTrxnOrderID = $this->xmlData["OrderID"];
-				$this->myResultTrxnApproved = $this->xmlData["Approved"];
-				$this->myResultTrxnReturnCode = $this->xmlData["ReturnCode"];
-				$this->myResultTrxnErrMsg = $this->xmlData["ErrMsg"];
-				$this->myResultTrxnTaxTotal = $this->xmlData["TaxTotal"];
-				$this->myResultTrxnShipTotal = $this->xmlData["ShipTotal"];
-				$this->myResultTrxnSubTotal = $this->xmlData["SubTotal"];
-				$this->myResultTrxnFullTotal = $this->xmlData["FullTotal"];
-				$this->myResultTrxnPaymentType = $this->xmlData["PaymentType"];
-				$this->myResultTrxnCardNumber = $this->xmlData["CardNumber"];
-				$this->myResultTrxnCardExpMonth = $this->xmlData["CardExpMonth"];
-				$this->myResultTrxnCardExpYear = $this->xmlData["CardExpYear"];
-				$this->myResultTrxnTransRefNumber = $this->xmlData["TransRefNumber"];
-				$this->myResultTrxnCardIDResult = $this->xmlData["CardIDResult"];
-				$this->myResultTrxnAVSResult = $this->xmlData["AVSResult"];
-				$this->myResultTrxnCardAuthNumber = $this->xmlData["CardAuthNumber"];
-				$this->myResultTrxnCardRefNumber = $this->xmlData["CardRefNumber"];
-				$this->myResultTrxnCardType = $this->xmlData["CardType"];
-				$this->myResultTrxnIPResult = $this->xmlData["IPResult"];
-				$this->myResultTrxnIPCountry = $this->xmlData["IPCountry"];
-				$this->myResultTrxnIPRegion = $this->xmlData["IPRegion"];
-				$this->myResultTrxnIPCity = $this->xmlData["IPCity"];
+				$this->myResultTrxnTransTime = $this->xmlData['TransTime'];
+				$this->myResultTrxnOrderID = $this->xmlData['OrderID'];
+				$this->myResultTrxnApproved = $this->xmlData['Approved'];
+				$this->myResultTrxnReturnCode = $this->xmlData['ReturnCode'];
+				$this->myResultTrxnErrMsg = $this->xmlData['ErrMsg'];
+				$this->myResultTrxnTaxTotal = $this->xmlData['TaxTotal'];
+				$this->myResultTrxnShipTotal = $this->xmlData['ShipTotal'];
+				$this->myResultTrxnSubTotal = $this->xmlData['SubTotal'];
+				$this->myResultTrxnFullTotal = $this->xmlData['FullTotal'];
+				$this->myResultTrxnPaymentType = $this->xmlData['PaymentType'];
+				$this->myResultTrxnCardNumber = $this->xmlData['CardNumber'];
+				$this->myResultTrxnCardExpMonth = $this->xmlData['CardExpMonth'];
+				$this->myResultTrxnCardExpYear = $this->xmlData['CardExpYear'];
+				$this->myResultTrxnTransRefNumber = $this->xmlData['TransRefNumber'];
+				$this->myResultTrxnCardIDResult = $this->xmlData['CardIDResult'];
+				$this->myResultTrxnAVSResult = $this->xmlData['AVSResult'];
+				$this->myResultTrxnCardAuthNumber = $this->xmlData['CardAuthNumber'];
+				$this->myResultTrxnCardRefNumber = $this->xmlData['CardRefNumber'];
+				$this->myResultTrxnCardType = $this->xmlData['CardType'];
+				$this->myResultTrxnIPResult = $this->xmlData['IPResult'];
+				$this->myResultTrxnIPCountry = $this->xmlData['IPCountry'];
+				$this->myResultTrxnIPRegion = $this->xmlData['IPRegion'];
+				$this->myResultTrxnIPCity = $this->xmlData['IPCity'];
 				$this->myError = 0;
 				$this->myErrorMessage = "";
 			}
@@ -526,52 +526,52 @@ function psigate_capture($params) {
 
 	$psi = new PsiGatePayment();
 
-	if ($params["testmode"] == "on") {
+	if ($params['testmode'] == "on") {
 		$psi->setGatewayURL( "https://dev.psigate.com:7989/Messenger/XMLMessenger" );
 	}
 	else {
 		$psi->setGatewayURL( "https://secure.psigate.com:7934/Messenger/XMLMessenger" );
 	}
 
-	$psi->setStoreID( $params["storeid"] );
-	$psi->setPassPhrase( $params["passphrase"] );
-	$psi->setOrderID( $params["invoiceid"] );
+	$psi->setStoreID( $params['storeid'] );
+	$psi->setPassPhrase( $params['passphrase'] );
+	$psi->setOrderID( $params['invoiceid'] );
 	$psi->setPaymentType( "CC" );
 	$psi->setCardAction( "0" );
-	$psi->setSubTotal( $params["amount"] );
-	$psi->setCardNumber( $params["cardnum"] );
-	$psi->setCardExpMonth( substr( $params["cardexp"], 0, 2 ) );
-	$psi->setCardExpYear( substr( $params["cardexp"], 2, 2 ) );
-	$psi->setUserID( $params[""] );
-	$psi->setBname( $params["clientdetails"]["firstname"] . " " . $params["clientdetails"]["lastname"] );
-	$psi->setBcompany( $params["clientdetails"]["companyname"] );
-	$psi->setBaddress1( $params["clientdetails"]["address1"] );
-	$psi->setBaddress2( $params["clientdetails"]["address2"] );
-	$psi->setBcity( $params["clientdetails"]["city"] );
-	$psi->setBprovince( $params["clientdetails"]["state"] );
-	$psi->setBpostalCode( $params["clientdetails"]["postcode"] );
-	$psi->setBcountry( $params["clientdetails"]["country"] );
-	$psi->setSname( $params["clientdetails"]["firstname"] . " " . $params["clientdetails"]["lastname"] );
-	$psi->setScompany( $params["clientdetails"]["companyname"] );
-	$psi->setSaddress1( $params["clientdetails"]["address1"] );
-	$psi->setSaddress2( $params["clientdetails"]["address2"] );
-	$psi->setScity( $params["clientdetails"]["city"] );
-	$psi->setSprovince( $params["clientdetails"]["state"] );
-	$psi->setSpostalCode( $params["clientdetails"]["postcode"] );
-	$psi->setScountry( $params["clientdetails"]["country"] );
-	$psi->setPhone( $params["clientdetails"]["phonenumber"] );
-	$psi->setEmail( $params["clientdetails"]["email"] );
+	$psi->setSubTotal( $params['amount'] );
+	$psi->setCardNumber( $params['cardnum'] );
+	$psi->setCardExpMonth( substr( $params['cardexp'], 0, 2 ) );
+	$psi->setCardExpYear( substr( $params['cardexp'], 2, 2 ) );
+	$psi->setUserID( $params[] );
+	$psi->setBname( $params['clientdetails']['firstname'] . " " . $params['clientdetails']['lastname'] );
+	$psi->setBcompany( $params['clientdetails']['companyname'] );
+	$psi->setBaddress1( $params['clientdetails']['address1'] );
+	$psi->setBaddress2( $params['clientdetails']['address2'] );
+	$psi->setBcity( $params['clientdetails']['city'] );
+	$psi->setBprovince( $params['clientdetails']['state'] );
+	$psi->setBpostalCode( $params['clientdetails']['postcode'] );
+	$psi->setBcountry( $params['clientdetails']['country'] );
+	$psi->setSname( $params['clientdetails']['firstname'] . " " . $params['clientdetails']['lastname'] );
+	$psi->setScompany( $params['clientdetails']['companyname'] );
+	$psi->setSaddress1( $params['clientdetails']['address1'] );
+	$psi->setSaddress2( $params['clientdetails']['address2'] );
+	$psi->setScity( $params['clientdetails']['city'] );
+	$psi->setSprovince( $params['clientdetails']['state'] );
+	$psi->setSpostalCode( $params['clientdetails']['postcode'] );
+	$psi->setScountry( $params['clientdetails']['country'] );
+	$psi->setPhone( $params['clientdetails']['phonenumber'] );
+	$psi->setEmail( $params['clientdetails']['email'] );
 	$psi->setComments( "" );
 	$psi->setCustomerIP( $remote_ip );
 
-	if ($params["cccvv"]) {
+	if ($params['cccvv']) {
 		$psi->setCardIDCode( "1" );
-		$psi->setCardIDNumber( $params["cccvv"] );
+		$psi->setCardIDNumber( $params['cccvv'] );
 	}
 
 	$psi_xml_error = !( $psi->doPayment() == PSIGATE_TRANSACTION_OK );
 	$desc = "Action => Capture
-Client => " . $params["clientdetails"]["firstname"] . " " . $params["clientdetails"]["lastname"] . "
+Client => " . $params['clientdetails']['firstname'] . " " . $params['clientdetails']['lastname'] . "
 ";
 	$desc .= "Transaction Time => " . $psi->myResultTrxnTransTime . "
 ";
@@ -636,22 +636,22 @@ function psigate_refund($params) {
 
 	$psi = new PsiGatePayment();
 
-	if ($params["testmode"] == "on") {
+	if ($params['testmode'] == "on") {
 		$psi->setGatewayURL( "https://dev.psigate.com:7989/Messenger/XMLMessenger" );
 	}
 	else {
 		$psi->setGatewayURL( "https://secure.psigate.com:7934/Messenger/XMLMessenger" );
 	}
 
-	$psi->setStoreID( $params["storeid"] );
-	$psi->setPassPhrase( $params["passphrase"] );
-	$psi->setOrderID( $params["invoiceid"] );
+	$psi->setStoreID( $params['storeid'] );
+	$psi->setPassPhrase( $params['passphrase'] );
+	$psi->setOrderID( $params['invoiceid'] );
 	$psi->setPaymentType( "CC" );
 	$psi->setCardAction( "3" );
-	$psi->setSubTotal( $params["amount"] );
+	$psi->setSubTotal( $params['amount'] );
 	$psi_xml_error = !( $psi->doPayment() == PSIGATE_TRANSACTION_OK );
 	$desc = "Action => Refund
-Client => " . $params["clientdetails"]["firstname"] . " " . $params["clientdetails"]["lastname"] . "
+Client => " . $params['clientdetails']['firstname'] . " " . $params['clientdetails']['lastname'] . "
 ";
 	$desc .= "Transaction Time => " . $psi->myResultTrxnTransTime . "
 ";
@@ -705,9 +705,9 @@ if (!defined( "WHMCS" )) {
 	exit( "This file cannot be accessed directly" );
 }
 
-$GATEWAYMODULE["psigatename"] = "psigate";
-$GATEWAYMODULE["psigatevisiblename"] = "PSIGate";
-$GATEWAYMODULE["psigatetype"] = "CC";
+$GATEWAYMODULE['psigatename'] = "psigate";
+$GATEWAYMODULE['psigatevisiblename'] = "PSIGate";
+$GATEWAYMODULE['psigatetype'] = "CC";
 define( "PSIGATE_CURL_ERROR_OFFSET", 1000 );
 define( "PSIGATE_XML_ERROR_OFFSET", 2000 );
 define( "PSIGATE_TRANSACTION_OK", APPROVED );

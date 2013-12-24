@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -22,7 +22,7 @@ Account Number:", "Description" => "The instructions you want displaying to cust
 function mailin_link($params) {
 	global $_LANG;
 
-	$code = "<p>" . nl2br( $params["instructions"] ) . "<br />" . $_LANG["invoicerefnum"] . ": " . $params["invoiceid"] . "</p>";
+	$code = "<p>" . nl2br( $params['instructions'] ) . "<br />" . $_LANG['invoicerefnum'] . ": " . $params['invoiceid'] . "</p>";
 	return $code;
 }
 

@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -24,72 +24,72 @@ function worldpayinvisiblexml_activate() {
 
 
 function worldpayinvisiblexml_link($params) {
-	$code = "<form method=\"post\" action=\"" . $params["systemurl"] . "/creditcard.php\" name=\"paymentfrm\">
-<input type=\"hidden\" name=\"invoiceid\" value=\"" . $params["invoiceid"] . "\">
-<input type=\"submit\" value=\"" . $params["langpaynow"] . "\"></input>
+	$code = "<form method=\"post\" action=\"" . $params['systemurl'] . "/creditcard.php\" name=\"paymentfrm\">
+<input type=\"hidden\" name=\"invoiceid\" value=\"" . $params['invoiceid'] . "\">
+<input type=\"submit\" value=\"" . $params['langpaynow'] . "\"></input>
 </form>";
 	return $code;
 }
 
 
 function worldpayinvisiblexml_3dsecure($params) {
-	if ($params["cardtype"] == "American Express") {
-		$merchantCode = $params["merchantcodeamex"];
+	if ($params['cardtype'] == "American Express") {
+		$merchantCode = $params['merchantcodeamex'];
 	}
 	else {
-		$merchantCode = $params["merchantcode1"];
+		$merchantCode = $params['merchantcode1'];
 	}
 
-	$password = $params["merchantpw"];
-	$instId = $params["instid"];
-	$cookiestore = $params["cookiestore"];
+	$password = $params['merchantpw'];
+	$instId = $params['instid'];
+	$cookiestore = $params['cookiestore'];
 
-	if ($params["cardtype"] == "American Express") {
-		$orderCode = "A-" . date( "YmdHis" ) . "-" . $params["invoiceid"];
+	if ($params['cardtype'] == "American Express") {
+		$orderCode = "A-" . date( "YmdHis" ) . "-" . $params['invoiceid'];
 	}
 	else {
-		$orderCode = "E-" . date( "YmdHis" ) . "-" . $params["invoiceid"];
+		$orderCode = "E-" . date( "YmdHis" ) . "-" . $params['invoiceid'];
 	}
 
-	$orderDescription = "Invoice #" . $params["invoiceid"];
-	$orderAmount = $params["amount"] * 100;
-	$raworderAmount = $params["amount"];
-	$invoiceID = $params["invoiceid"];
-	$orderShopperEmail = $params["clientdetails"]["email"];
-	$orderShopperID = $params["clientdetails"]["userid"];
-	$orderShopperFirstName = $params["clientdetails"]["firstname"];
-	$orderShopperSurname = $params["clientdetails"]["lastname"];
-	$orderShopperStreet = $params["clientdetails"]["address1"];
-	$orderShopperPostcode = $params["clientdetails"]["postcode"];
-	$orderShopperCity = $params["clientdetails"]["city"];
-	$orderShopperCountryCode = $params["clientdetails"]["country"];
-	$orderShopperTel = $params["clientdetails"]["phonenumber"];
-	$cvv = $params["cccvv"];
-	$acceptHeader = $_SERVER["HTTP_ACCEPT"];
-	$userAgentHeader = $_SERVER["HTTP_USER_AGENT"];
-	$shopperIPAddress = (is_null( $_SERVER["REMOTE_ADDR"] ) ? "127.0.0.1" : $_SERVER["REMOTE_ADDR"]);
+	$orderDescription = "Invoice #" . $params['invoiceid'];
+	$orderAmount = $params['amount'] * 100;
+	$raworderAmount = $params['amount'];
+	$invoiceID = $params['invoiceid'];
+	$orderShopperEmail = $params['clientdetails']['email'];
+	$orderShopperID = $params['clientdetails']['userid'];
+	$orderShopperFirstName = $params['clientdetails']['firstname'];
+	$orderShopperSurname = $params['clientdetails']['lastname'];
+	$orderShopperStreet = $params['clientdetails']['address1'];
+	$orderShopperPostcode = $params['clientdetails']['postcode'];
+	$orderShopperCity = $params['clientdetails']['city'];
+	$orderShopperCountryCode = $params['clientdetails']['country'];
+	$orderShopperTel = $params['clientdetails']['phonenumber'];
+	$cvv = $params['cccvv'];
+	$acceptHeader = $_SERVER['HTTP_ACCEPT'];
+	$userAgentHeader = $_SERVER['HTTP_USER_AGENT'];
+	$shopperIPAddress = (is_null( $_SERVER['REMOTE_ADDR'] ) ? "127.0.0.1" : $_SERVER['REMOTE_ADDR']);
 
-	if ($params["cardtype"] == "American Express") {
+	if ($params['cardtype'] == "American Express") {
 		$cardType = "AMEX-SSL";
 	}
 	else {
-		if ($params["cardtype"] == "Diners Club") {
+		if ($params['cardtype'] == "Diners Club") {
 			$cardType = "DINERS-SSL";
 		}
 		else {
-			if ($params["cardtype"] == "JCB") {
+			if ($params['cardtype'] == "JCB") {
 				$cardType = "JCB-SSL";
 			}
 			else {
-				if ($params["cardtype"] == "MasterCard") {
+				if ($params['cardtype'] == "MasterCard") {
 					$cardType = "ECMC-SSL";
 				}
 				else {
-					if ($params["cardtype"] == "Solo") {
+					if ($params['cardtype'] == "Solo") {
 						$cardType = "SOLO_GB-SSL";
 					}
 					else {
-						if ($params["cardtype"] == "Maestro") {
+						if ($params['cardtype'] == "Maestro") {
 							$cardType = "MAESTRO-SSL";
 						}
 						else {
@@ -107,22 +107,22 @@ function worldpayinvisiblexml_3dsecure($params) {
 	$xml .= "<submit>";
 	$xml .= "<order orderCode='" . $orderCode . "' installationId='" . $instId . "'>";
 	$xml .= "<description>" . $orderDescription . "</description>";
-	$xml .= "<amount value='" . $orderAmount . "' currencyCode='" . $params["currency"] . "' exponent='2'/>";
+	$xml .= "<amount value='" . $orderAmount . "' currencyCode='" . $params['currency'] . "' exponent='2'/>";
 	$xml .= "<orderContent><![CDATA[]]></orderContent>";
 	$xml .= "<paymentDetails>";
 	$xml .= "<" . $cardType . ">";
-	$xml .= "<cardNumber>" . $params["cardnum"] . "</cardNumber>";
-	$xml .= "<expiryDate><date month='" . substr( $params["cardexp"], 0, 2 ) . "' year='20" . substr( $params["cardexp"], 2, 2 ) . "'/></expiryDate>";
+	$xml .= "<cardNumber>" . $params['cardnum'] . "</cardNumber>";
+	$xml .= "<expiryDate><date month='" . substr( $params['cardexp'], 0, 2 ) . "' year='20" . substr( $params['cardexp'], 2, 2 ) . "'/></expiryDate>";
 	$xml .= "<cardHolderName>" . $orderShopperFirstName . " " . $orderShopperSurname . "</cardHolderName>";
 
-	if (( $params["cardtype"] == "Maestro" || $params["cardtype"] == "Solo" )) {
-		if ($params["cardstart"]) {
-			$xml .= "<startDate><date month='" . substr( $params["cardstart"], 0, 2 ) . "' year='20" . substr( $params["cardstart"], 2, 2 ) . "'/></startDate>";
+	if ($params['cardtype'] == "Maestro" || $params['cardtype'] == "Solo") {
+		if ($params['cardstart']) {
+			$xml .= "<startDate><date month='" . substr( $params['cardstart'], 0, 2 ) . "' year='20" . substr( $params['cardstart'], 2, 2 ) . "'/></startDate>";
 		}
 
 
-		if ($params["cardissuenum"]) {
-			$xml .= "<issueNumber>" . $params["cardissuenum"] . "</issueNumber>";
+		if ($params['cardissuenum']) {
+			$xml .= "<issueNumber>" . $params['cardissuenum'] . "</issueNumber>";
 		}
 	}
 
@@ -150,7 +150,7 @@ function worldpayinvisiblexml_3dsecure($params) {
 	$xml .= "</shopper>";
 	$xml .= "</order></submit></paymentService>";
 
-	if ($params["testmode"]) {
+	if ($params['testmode']) {
 		$url = "https://secure-test.wp3.rbsworldpay.com/jsp/merchant/xml/paymentService.jsp";
 	}
 	else {
@@ -178,21 +178,21 @@ function worldpayinvisiblexml_3dsecure($params) {
 	curl_close( $ch );
 	logTransaction( "WorldPay Invisible XML", $result_tmp, "Received" );
 	$result_arr = XMLtoArray( $result_tmp );
-	$PostUrl = $result_arr["PAYMENTSERVICE"]["REPLY"]["ORDERSTATUS"]["REQUESTINFO"]["REQUEST3DSECURE"]["ISSUERURL"];
-	$PaReq = $result_arr["PAYMENTSERVICE"]["REPLY"]["ORDERSTATUS"]["REQUESTINFO"]["REQUEST3DSECURE"]["PAREQUEST"];
-	$echoData = $result_arr["PAYMENTSERVICE"]["REPLY"]["ORDERSTATUS"]["ECHODATA"];
-	$lastevent = $result_arr["PAYMENTSERVICE"]["REPLY"]["ORDERSTATUS"]["PAYMENT"]["LASTEVENT"];
+	$PostUrl = $result_arr['PAYMENTSERVICE']['REPLY']['ORDERSTATUS']['REQUESTINFO']['REQUEST3DSECURE']['ISSUERURL'];
+	$PaReq = $result_arr['PAYMENTSERVICE']['REPLY']['ORDERSTATUS']['REQUESTINFO']['REQUEST3DSECURE']['PAREQUEST'];
+	$echoData = $result_arr['PAYMENTSERVICE']['REPLY']['ORDERSTATUS']['ECHODATA'];
+	$lastevent = $result_arr['PAYMENTSERVICE']['REPLY']['ORDERSTATUS']['PAYMENT']['LASTEVENT'];
 
 	if (!$PaReq) {
 		if ($lastevent == "AUTHORISED") {
 			addInvoicePayment( $invoiceID, $orderCode, $raworderAmount, "", "worldpayinvisiblexml", "on" );
 			logTransaction( "WorldPay Invisible XML Callback", $result_tmp, "Successful" );
-			sendMessage( "Credit Card Payment Confirmation", $params["invoiceid"] );
+			sendMessage( "Credit Card Payment Confirmation", $params['invoiceid'] );
 			$result = "success";
 		}
 		else {
 			logTransaction( "WorldPay Invisible XML Callback", $result_tmp, "Declined" );
-			sendMessage( "Credit Card Payment Failed", $params["invoiceid"] );
+			sendMessage( "Credit Card Payment Failed", $params['invoiceid'] );
 			$result = "declined";
 		}
 
@@ -201,20 +201,20 @@ function worldpayinvisiblexml_3dsecure($params) {
 
 	delete_query( "tblgatewaylog", array( "gateway" => "WorldPay Invisible XML Callback", "result" => "echoData Not Found" ) );
 	delete_query( "tblgatewaylog", "gateway LIKE '%WPI%' AND date<='" . date( "Y-m-d H:i:s", strtotime( "-10 minutes" ) . "'" ) );
-	delete_query( "tblgatewaylog", array( "gateway" => "WPIORDERCODE" . $params["invoiceid"] ) );
-	delete_query( "tblgatewaylog", array( "gateway" => "WPIECHODATA" . $params["invoiceid"] ) );
-	delete_query( "tblgatewaylog", array( "gateway" => "WPICPDATA" . $params["invoiceid"] ) );
-	insert_query( "tblgatewaylog", array( "date" => "now()", "gateway" => "WPIORDERCODE" . $params["invoiceid"], "data" => $orderCode ) );
-	insert_query( "tblgatewaylog", array( "date" => "now()", "gateway" => "WPIECHODATA" . $params["invoiceid"], "data" => $echoData ) );
+	delete_query( "tblgatewaylog", array( "gateway" => "WPIORDERCODE" . $params['invoiceid'] ) );
+	delete_query( "tblgatewaylog", array( "gateway" => "WPIECHODATA" . $params['invoiceid'] ) );
+	delete_query( "tblgatewaylog", array( "gateway" => "WPICPDATA" . $params['invoiceid'] ) );
+	insert_query( "tblgatewaylog", array( "date" => "now()", "gateway" => "WPIORDERCODE" . $params['invoiceid'], "data" => $orderCode ) );
+	insert_query( "tblgatewaylog", array( "date" => "now()", "gateway" => "WPIECHODATA" . $params['invoiceid'], "data" => $echoData ) );
 
-	if ($params["cvvpass"]) {
-		insert_query( "tblgatewaylog", array( "date" => "now()", "gateway" => "WPICPDATA" . $params["invoiceid"], "data" => $cvv ) );
+	if ($params['cvvpass']) {
+		insert_query( "tblgatewaylog", array( "date" => "now()", "gateway" => "WPICPDATA" . $params['invoiceid'], "data" => $cvv ) );
 	}
 
 	$code = "<form action=\"" . $PostUrl . "\" method=\"post\">
 <input type=\"hidden\" name=\"PaReq\" value=\"" . $PaReq . "\" />
-<input type=\"hidden\" name=\"TermUrl\" value=\"" . $params["systemurl"] . "/modules/gateways/callback/worldpayinvisiblexml.php\" />
-<input type=\"hidden\" name=\"MD\" value=\"" . $params["invoiceid"] . "\" />
+<input type=\"hidden\" name=\"TermUrl\" value=\"" . $params['systemurl'] . "/modules/gateways/callback/worldpayinvisiblexml.php\" />
+<input type=\"hidden\" name=\"MD\" value=\"" . $params['invoiceid'] . "\" />
 <!-- <input type=\"submit\" name=\"Click to Authenticate Card\"> -->
 </form>";
 	return $code;
@@ -222,73 +222,73 @@ function worldpayinvisiblexml_3dsecure($params) {
 
 
 function worldpayinvisiblexml_capture($params) {
-	if (( $params["cardtype"] == "Maestro" || $params["cardtype"] == "Solo" )) {
-		$merchantCode = $params["merchantcode2"];
+	if ($params['cardtype'] == "Maestro" || $params['cardtype'] == "Solo") {
+		$merchantCode = $params['merchantcode2'];
 	}
 	else {
-		if ($params["cardtype"] == "American Express") {
-			$merchantCode = $params["merchantcodeamex"];
+		if ($params['cardtype'] == "American Express") {
+			$merchantCode = $params['merchantcodeamex'];
 		}
 		else {
-			$merchantCode = $params["merchantcode3"];
+			$merchantCode = $params['merchantcode3'];
 		}
 	}
 
-	$password = $params["merchantpw"];
-	$instId = $params["instid"];
-	$cookiestore = $params["cookiestore"];
+	$password = $params['merchantpw'];
+	$instId = $params['instid'];
+	$cookiestore = $params['cookiestore'];
 
-	if (( $params["cardtype"] == "Maestro" || $params["cardtype"] == "Solo" )) {
-		$orderCode = "M-" . date( "YmdHis" ) . "-" . $params["invoiceid"];
+	if ($params['cardtype'] == "Maestro" || $params['cardtype'] == "Solo") {
+		$orderCode = "M-" . date( "YmdHis" ) . "-" . $params['invoiceid'];
 	}
 	else {
-		if ($params["cardtype"] == "American Express") {
-			$orderCode = "A-" . date( "YmdHis" ) . "-" . $params["invoiceid"];
+		if ($params['cardtype'] == "American Express") {
+			$orderCode = "A-" . date( "YmdHis" ) . "-" . $params['invoiceid'];
 		}
 		else {
-			$orderCode = "R-" . date( "YmdHis" ) . "-" . $params["invoiceid"];
+			$orderCode = "R-" . date( "YmdHis" ) . "-" . $params['invoiceid'];
 		}
 	}
 
-	$orderDescription = "Invoice #" . $params["invoiceid"];
-	$orderAmount = $params["amount"] * 100;
-	$raworderAmount = $params["amount"];
-	$invoiceID = $params["invoiceid"];
-	$orderShopperEmail = $params["clientdetails"]["email"];
-	$orderShopperID = $params["clientdetails"]["userid"];
-	$orderShopperFirstName = $params["clientdetails"]["firstname"];
-	$orderShopperSurname = $params["clientdetails"]["lastname"];
-	$orderShopperStreet = $params["clientdetails"]["address1"];
-	$orderShopperPostcode = $params["clientdetails"]["postcode"];
-	$orderShopperCity = $params["clientdetails"]["city"];
-	$orderShopperCountryCode = $params["clientdetails"]["country"];
-	$orderShopperTel = $params["clientdetails"]["phonenumber"];
-	$cvv = $params["cccvv"];
-	$acceptHeader = $_SERVER["HTTP_ACCEPT"];
-	$userAgentHeader = $_SERVER["HTTP_USER_AGENT"];
-	$shopperIPAddress = (is_null( $_SERVER["REMOTE_ADDR"] ) ? "127.0.0.1" : $_SERVER["REMOTE_ADDR"]);
+	$orderDescription = "Invoice #" . $params['invoiceid'];
+	$orderAmount = $params['amount'] * 100;
+	$raworderAmount = $params['amount'];
+	$invoiceID = $params['invoiceid'];
+	$orderShopperEmail = $params['clientdetails']['email'];
+	$orderShopperID = $params['clientdetails']['userid'];
+	$orderShopperFirstName = $params['clientdetails']['firstname'];
+	$orderShopperSurname = $params['clientdetails']['lastname'];
+	$orderShopperStreet = $params['clientdetails']['address1'];
+	$orderShopperPostcode = $params['clientdetails']['postcode'];
+	$orderShopperCity = $params['clientdetails']['city'];
+	$orderShopperCountryCode = $params['clientdetails']['country'];
+	$orderShopperTel = $params['clientdetails']['phonenumber'];
+	$cvv = $params['cccvv'];
+	$acceptHeader = $_SERVER['HTTP_ACCEPT'];
+	$userAgentHeader = $_SERVER['HTTP_USER_AGENT'];
+	$shopperIPAddress = (is_null( $_SERVER['REMOTE_ADDR'] ) ? "127.0.0.1" : $_SERVER['REMOTE_ADDR']);
 
-	if ($params["cardtype"] == "American Express") {
+	if ($params['cardtype'] == "American Express") {
 		$cardType = "AMEX-SSL";
 	}
 	else {
-		if ($params["cardtype"] == "Diners Club") {
+		if ($params['cardtype'] == "Diners Club") {
 			$cardType = "DINERS-SSL";
 		}
 		else {
-			if ($params["cardtype"] == "JCB") {
+			if ($params['cardtype'] == "JCB") {
 				$cardType = "JCB-SSL";
 			}
 			else {
-				if ($params["cardtype"] == "MasterCard") {
+				if ($params['cardtype'] == "MasterCard") {
 					$cardType = "ECMC-SSL";
 				}
 				else {
-					if ($params["cardtype"] == "Solo") {
+					if ($params['cardtype'] == "Solo") {
 						$cardType = "SOLO_GB-SSL";
 					}
 					else {
-						if ($params["cardtype"] == "Maestro") {
+						if ($params['cardtype'] == "Maestro") {
 							$cardType = "MAESTRO-SSL";
 						}
 						else {
@@ -306,22 +306,22 @@ function worldpayinvisiblexml_capture($params) {
 	$xml .= "<submit>";
 	$xml .= "<order orderCode='" . $orderCode . "' installationId='" . $instId . "'>";
 	$xml .= "<description>" . $orderDescription . "</description>";
-	$xml .= "<amount value='" . $orderAmount . "' currencyCode='" . $params["currency"] . "' exponent='2'/>";
+	$xml .= "<amount value='" . $orderAmount . "' currencyCode='" . $params['currency'] . "' exponent='2'/>";
 	$xml .= "<orderContent><![CDATA[]]></orderContent>";
 	$xml .= "<paymentDetails>";
 	$xml .= "<" . $cardType . ">";
-	$xml .= "<cardNumber>" . $params["cardnum"] . "</cardNumber>";
-	$xml .= "<expiryDate><date month='" . substr( $params["cardexp"], 0, 2 ) . "' year='20" . substr( $params["cardexp"], 2, 2 ) . "'/></expiryDate>";
+	$xml .= "<cardNumber>" . $params['cardnum'] . "</cardNumber>";
+	$xml .= "<expiryDate><date month='" . substr( $params['cardexp'], 0, 2 ) . "' year='20" . substr( $params['cardexp'], 2, 2 ) . "'/></expiryDate>";
 	$xml .= "<cardHolderName>" . $orderShopperFirstName . " " . $orderShopperSurname . "</cardHolderName>";
 
-	if (( $params["cardtype"] == "Maestro" || $params["cardtype"] == "Solo" )) {
-		if ($params["cardstart"]) {
-			$xml .= "<startDate><date month='" . substr( $params["cardstart"], 0, 2 ) . "' year='20" . substr( $params["cardstart"], 2, 2 ) . "'/></startDate>";
+	if ($params['cardtype'] == "Maestro" || $params['cardtype'] == "Solo") {
+		if ($params['cardstart']) {
+			$xml .= "<startDate><date month='" . substr( $params['cardstart'], 0, 2 ) . "' year='20" . substr( $params['cardstart'], 2, 2 ) . "'/></startDate>";
 		}
 
 
-		if ($params["cardissuenum"]) {
-			$xml .= "<issueNumber>" . $params["cardissuenum"] . "</issueNumber>";
+		if ($params['cardissuenum']) {
+			$xml .= "<issueNumber>" . $params['cardissuenum'] . "</issueNumber>";
 		}
 	}
 
@@ -348,7 +348,7 @@ function worldpayinvisiblexml_capture($params) {
 	$xml .= "</shopper>";
 	$xml .= "</order></submit></paymentService>";
 
-	if ($params["testmode"]) {
+	if ($params['testmode']) {
 		$url = "https://secure-test.wp3.rbsworldpay.com/jsp/merchant/xml/paymentService.jsp";
 	}
 	else {
@@ -375,7 +375,7 @@ function worldpayinvisiblexml_capture($params) {
 
 	curl_close( $ch );
 	$result_arr = XMLtoArray( $result_tmp );
-	$lastevent = $result_arr["PAYMENTSERVICE"]["REPLY"]["ORDERSTATUS"]["PAYMENT"]["LASTEVENT"];
+	$lastevent = $result_arr['PAYMENTSERVICE']['REPLY']['ORDERSTATUS']['PAYMENT']['LASTEVENT'];
 
 	if ($lastevent == "AUTHORISED") {
 		return array( "status" => "success", "transid" => $orderCode, "rawdata" => $result_tmp );
@@ -389,7 +389,7 @@ if (!defined( "WHMCS" )) {
 	exit( "This file cannot be accessed directly" );
 }
 
-$GATEWAYMODULE["worldpayinvisiblexmlname"] = "worldpayinvisiblexml";
-$GATEWAYMODULE["worldpayinvisiblexmlvisiblename"] = "WorldPay Invisible XML";
-$GATEWAYMODULE["worldpayinvisiblexmltype"] = "CC";
+$GATEWAYMODULE['worldpayinvisiblexmlname'] = "worldpayinvisiblexml";
+$GATEWAYMODULE['worldpayinvisiblexmlvisiblename'] = "WorldPay Invisible XML";
+$GATEWAYMODULE['worldpayinvisiblexmltype'] = "CC";
 ?>

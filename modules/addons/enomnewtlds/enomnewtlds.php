@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -22,22 +22,22 @@ function enomnewtlds_activate($vars) {
 	global $enomnewtlds_DefaultEnvironment;
 	global $enomnewtlds_DBName;
 
-	$LANG = $vars["_lang"];
+	$LANG = $vars['_lang'];
 	$sql = enomnewtlds_DB_GetCreateTable();
 	$retval = full_query( $sql );
 
 	if (!$retval) {
-		return array( "status" => "error", "description" => $LANG["activate_failed1"] . $enomnewtlds_DBName . " : " . mysql_error() );
+		return array( "status" => "error", "description" => $LANG['activate_failed1'] . $enomnewtlds_DBName . " : " . mysql_error() );
 	}
 
 	$companyname = "";
 	$domain = "";
 	$date = enomnewtlds_Helper_GetDateTime();
 	$data = enomnewtlds_DB_GetDefaults();
-	$domain = enomnewtlds_Helper_GetWatchlistUrl( $data["companyurl"] );
-	insert_query( $enomnewtlds_DBName, array( "enabled" => "1", "configured" => "0", "environment" => $enomnewtlds_DefaultEnvironment, "companyname" => $data["companyname"], "companyurl" => $domain, "supportemail" => $data["supportemail"], "enableddate" => $date ) );
+	$domain = enomnewtlds_Helper_GetWatchlistUrl( $data['companyurl'] );
+	insert_query( $enomnewtlds_DBName, array( "enabled" => "1", "configured" => "0", "environment" => $enomnewtlds_DefaultEnvironment, "companyname" => $data['companyname'], "companyurl" => $domain, "supportemail" => $data['supportemail'], "enableddate" => $date ) );
 	enomnewtlds_DB_GetCreateHookTable();
-	return array( "status" => "success", "description" => $LANG["activate_success1"] );
+	return array( "status" => "success", "description" => $LANG['activate_success1'] );
 }
 
 
@@ -47,14 +47,14 @@ function enomnewtlds_deactivate($vars) {
 	global $enomnewtlds_CronDBName;
 
 	$fields = array();
-	$fields["statusid"] = "0";
-	$LANG = $vars["_lang"];
+	$fields['statusid'] = "0";
+	$LANG = $vars['_lang'];
 	$data = enomnewtlds_DB_GetWatchlistSettingsLocal();
-	$wlenabled = $data["enabled"];
-	$wlconfigured = $data["configured"];
-	$portalid = $data["portalid"];
+	$wlenabled = $data['enabled'];
+	$wlconfigured = $data['configured'];
+	$portalid = $data['portalid'];
 
-	if (( ( $wlenabled && $wlconfigured ) || 0 < (int)$portalid )) {
+	if ( ( $wlenabled && $wlconfigured ) || 0 < (int)$portalid ) {
 		$success = enomnewtlds_API_UpdatePortalAccount( $vars, $portalid, $fields );
 
 		if (!$success) {
@@ -72,7 +72,7 @@ function enomnewtlds_deactivate($vars) {
 
 
 	if (!$retval) {
-		return array( "status" => "error", "description" => $LANG["deactivate_failed2"] . ":  " . mysql_error() );
+		return array( "status" => "error", "description" => $LANG['deactivate_failed2'] . ":  " . mysql_error() );
 	}
 
 
@@ -81,12 +81,12 @@ function enomnewtlds_deactivate($vars) {
 		$retval = full_query( $sql );
 	}
 
-	return array( "status" => "success", "description" => $LANG["deactivate_success1"] );
+	return array( "status" => "success", "description" => $LANG['deactivate_success1'] );
 }
 
 
 function enomnewtlds_upgrade($vars) {
-	$version = $vars["version"];
+	$version = $vars['version'];
 	global $enomnewtlds_CurrentVersion;
 
 	if ($version < 1.10000000000000008881784) {
@@ -105,11 +105,11 @@ function enomnewtlds_clientarea($vars) {
 	global $enomnewtlds_isbundled;
 
 	$token = "";
-	$modulelink = $vars["modulelink"];
-	$version = $vars["version"];
-	$LANG = $vars["_lang"];
+	$modulelink = $vars['modulelink'];
+	$version = $vars['version'];
+	$LANG = $vars['_lang'];
 	$pversion = ($enomnewtlds_isbundled ? "bundled" : "nonbundled") . " version " . $version;
-	$userid = $_SESSION["uid"];
+	$userid = $_SESSION['uid'];
 
 	if ($userid) {
 
@@ -122,11 +122,11 @@ function enomnewtlds_clientarea($vars) {
 		$email = $data[0];
 
 		if (!$email) {
-			enomnewtlds_AddError( $LANG["noemail"] );
+			enomnewtlds_AddError( $LANG['noemail'] );
 		}
 		else {
 			if (!$enomnewtlds_mysalt) {
-				enomnewtlds_AddError( $LANG["nosalt"] );
+				enomnewtlds_AddError( $LANG['nosalt'] );
 			}
 			else {
 				$code = hash( "sha512", $email . $enomnewtlds_mysalt );
@@ -135,13 +135,13 @@ function enomnewtlds_clientarea($vars) {
 		}
 	}
 	else {
-		enomnewtlds_AddError( $LANG["notloggedin"] );
+		enomnewtlds_AddError( $LANG['notloggedin'] );
 	}
 
 	$data = enomnewtlds_DB_GetWatchlistSettingsLocal();
-	$wlenabled = $data["enabled"];
-	$portalid = $data["portalid"];
-	$environment = $data["environment"];
+	$wlenabled = $data['enabled'];
+	$portalid = $data['portalid'];
+	$environment = $data['environment'];
 
 	if (enomnewtlds_Helper_IsNullOrEmptyString( $portalid )) {
 		$portalid = "0";
@@ -150,19 +150,19 @@ function enomnewtlds_clientarea($vars) {
 	$hasportalaccount = 0 < (int)$portalid;
 	$success = true;
 
-	if (( $wlenabled && !$hasportalaccount )) {
-		enomnewtlds_AddError( $LANG["noportalacct"] );
+	if ( $wlenabled && !$hasportalaccount ) {
+		enomnewtlds_AddError( $LANG['noportalacct'] );
 		$success = false;
 	}
 
 
-	if (( $success && $portalid != "0" )) {
-		$linkarray = array( "sitesource" => "whmcs", "embeded" => "1", "ruid" => $data["enomlogin"], "rpw" => $data["enompassword"], "pw" => $password, "portaluserid" => $userid, "email" => $email, "portalid" => $portalid );
+	if ( $success && $portalid != "0" ) {
+		$linkarray = array( "sitesource" => "whmcs", "embeded" => "1", "ruid" => $data['enomlogin'], "rpw" => $data['enompassword'], "pw" => $password, "portaluserid" => $userid, "email" => $email, "portalid" => $portalid );
 		$success = enomnewtlds_API_GetPortalToken( $vars, $token, $linkarray );
 	}
 	else {
 		if ($portalid == "0") {
-			enomnewtlds_AddError( $LANG["noportalaccount"] );
+			enomnewtlds_AddError( $LANG['noportalaccount'] );
 		}
 		else {
 			if (!$success) {
@@ -170,18 +170,18 @@ function enomnewtlds_clientarea($vars) {
 		}
 	}
 
-	$varsArray = array( "NEWTLDS_HASH" => $code, "WHMCS__EMAIL" => $email, "NEWTLDS_PASSWORD" => $password, "RESELLER_UID" => $data["enomlogin"], "RESELLER_PW" => $data["enompassword"], "NEWTLDS_ENABLED" => $wlenabled, "NEWTLDS_PORTALACCOUNT" => $hasportalaccount, "NEWTLDS_LINK" => $token, "WHMCS_CUSTOMERID" => $userid, "PORTAL_ID" => $portalid, "NEWTLDS_ERRORS" => $enomnewtlds_errormessage, "NEWTLDS_NOPORTALACCT" => $LANG["noportalaccount"], "NEWTLDS_NOTENABLED" => $LANG["headertext"], "NEWTLDS_NOTCONFIGURED" => $LANG["notconfigured"], "NEWTLDS_NOTLOGGEDIN" => $LANG["notloggedin"], "NEWTLDS_URLHOST" => enomnewtlds_Helper_GetWatchlistHost( $environment ), "NEWTLDS_PLUGINVERSION" => $pversion );
-	return array( "pagetitle" => $LANG["pagetitle"], "breadcrumb" => array( $modulelink => $LANG["pagetitle"] ), "templatefile" => "enomnewtlds", "requirelogin" => true, "requiressl" => true, "vars" => $varsArray );
+	$varsArray = array( "NEWTLDS_HASH" => $code, "WHMCS__EMAIL" => $email, "NEWTLDS_PASSWORD" => $password, "RESELLER_UID" => $data['enomlogin'], "RESELLER_PW" => $data['enompassword'], "NEWTLDS_ENABLED" => $wlenabled, "NEWTLDS_PORTALACCOUNT" => $hasportalaccount, "NEWTLDS_LINK" => $token, "WHMCS_CUSTOMERID" => $userid, "PORTAL_ID" => $portalid, "NEWTLDS_ERRORS" => $enomnewtlds_errormessage, "NEWTLDS_NOPORTALACCT" => $LANG['noportalaccount'], "NEWTLDS_NOTENABLED" => $LANG['headertext'], "NEWTLDS_NOTCONFIGURED" => $LANG['notconfigured'], "NEWTLDS_NOTLOGGEDIN" => $LANG['notloggedin'], "NEWTLDS_URLHOST" => enomnewtlds_Helper_GetWatchlistHost( $environment ), "NEWTLDS_PLUGINVERSION" => $pversion );
+	return array( "pagetitle" => $LANG['pagetitle'], "breadcrumb" => array( $modulelink => $LANG['pagetitle'] ), "templatefile" => "enomnewtlds", "requirelogin" => true, "requiressl" => true, "vars" => $varsArray );
 }
 
 
 function enomnewtlds_NEWTLDS_sidebar($vars) {
-	$modulelink = $vars["modulelink"];
-	$LANG = $vars["_lang"];
-	$sidebar = "<span class=\"header\"><img src=\"images/icons/addonmodules.png\" class=\"absmiddle\" width=\"16\" height=\"16\" />" . $LANG["intro"] . "</span>
+	$modulelink = $vars['modulelink'];
+	$LANG = $vars['_lang'];
+	$sidebar = "<span class=\"header\"><img src=\"images/icons/addonmodules.png\" class=\"absmiddle\" width=\"16\" height=\"16\" />" . $LANG['intro'] . "</span>
     <ul class=\"menu\">
-        <li><a href=\"#\">" . $LANG["intro"] . "</a></li>
-        <li><a href=\"#\">Version: " . $vars["version"] . "</a></li>
+        <li><a href=\"#\">" . $LANG['intro'] . "</a></li>
+        <li><a href=\"#\">Version: " . $vars['version'] . "</a></li>
     </ul>";
 	return $sidebar;
 }
@@ -242,9 +242,9 @@ function enomnewtlds_DB_GetCreateHookTable() {
 
 function enomnewtlds_DB_GetDefaults() {
 	$data = array();
-	$data["companyname"] = enomnewtlds_DB_GetDefaultcompanyname();
-	$data["companyurl"] = enomnewtlds_DB_GetDefaultDomainName();
-	$data["supportemail"] = enomnewtlds_DB_GetDefaultSupportEmail();
+	$data['companyname'] = enomnewtlds_DB_GetDefaultcompanyname();
+	$data['companyurl'] = enomnewtlds_DB_GetDefaultDomainName();
+	$data['supportemail'] = enomnewtlds_DB_GetDefaultSupportEmail();
 	return $data;
 }
 
@@ -256,44 +256,44 @@ function enomnewtlds_DB_GetWatchlistSettingsLocal() {
 	$result = select_query( $enomnewtlds_DBName, "enabled,configured,portalid,environment,enomlogin,enompassword,supportemail,companyname,companyurl", array() );
 	$data = mysql_fetch_array( $result );
 
-	if (enomnewtlds_Helper_IsNullOrEmptyString( $data["portalid"] )) {
-		$data["portalid"] = "0";
+	if (enomnewtlds_Helper_IsNullOrEmptyString( $data['portalid'] )) {
+		$data['portalid'] = "0";
 	}
 
 
-	if (enomnewtlds_Helper_IsNullOrEmptyString( $data["enompassword"] )) {
-		$data["enompassword"] = "";
-	}
-	else {
-		$data["enompassword"] = decrypt( $data["enompassword"] );
-	}
-
-
-	if (enomnewtlds_Helper_IsNullOrEmptyString( $data["enomlogin"] )) {
-		$data["enomlogin"] = "";
+	if (enomnewtlds_Helper_IsNullOrEmptyString( $data['enompassword'] )) {
+		$data['enompassword'] = "";
 	}
 	else {
-		$data["enomlogin"] = decrypt( $data["enomlogin"] );
+		$data['enompassword'] = decrypt( $data['enompassword'] );
 	}
 
 
-	if (enomnewtlds_Helper_IsNullOrEmptyString( $data["companyname"] )) {
-		$data["companyname"] = "";
+	if (enomnewtlds_Helper_IsNullOrEmptyString( $data['enomlogin'] )) {
+		$data['enomlogin'] = "";
+	}
+	else {
+		$data['enomlogin'] = decrypt( $data['enomlogin'] );
 	}
 
 
-	if (enomnewtlds_Helper_IsNullOrEmptyString( $data["companyurl"] )) {
-		$data["companyurl"] = "";
+	if (enomnewtlds_Helper_IsNullOrEmptyString( $data['companyname'] )) {
+		$data['companyname'] = "";
 	}
 
 
-	if (enomnewtlds_Helper_IsNullOrEmptyString( $data["environment"] )) {
-		$data["environment"] = $enomnewtlds_DefaultEnvironment;
+	if (enomnewtlds_Helper_IsNullOrEmptyString( $data['companyurl'] )) {
+		$data['companyurl'] = "";
 	}
 
 
-	if (enomnewtlds_Helper_IsNullOrEmptyString( $data["supportemail"] )) {
-		$data["supportemail"] = "";
+	if (enomnewtlds_Helper_IsNullOrEmptyString( $data['environment'] )) {
+		$data['environment'] = $enomnewtlds_DefaultEnvironment;
+	}
+
+
+	if (enomnewtlds_Helper_IsNullOrEmptyString( $data['supportemail'] )) {
+		$data['supportemail'] = "";
 	}
 
 	return $data;
@@ -311,7 +311,7 @@ function enomnewtlds_DB_GetWatchlistPortalExists() {
 		return false;
 	}
 
-	return $data["configured"] == 1;
+	return $data['configured'] == 1;
 }
 
 
@@ -346,17 +346,17 @@ function enomnewtlds_DB_GetWatchlistIsEnabled() {
 		return false;
 	}
 
-	return $data["enabled"] == 1;
+	return $data['enabled'] == 1;
 }
 
 
 function enomnewtlds_DB_UpdateDB($vars, $portalid = "0") {
 	global $enomnewtlds_DBName;
 
-	$LANG = $vars["_lang"];
-	$companyname = $vars["companyname"];
-	$companyurl = $vars["companyurl"];
-	$supportemail = $vars["supportemail"];
+	$LANG = $vars['_lang'];
+	$companyname = $vars['companyname'];
+	$companyurl = $vars['companyurl'];
+	$supportemail = $vars['supportemail'];
 	$datetime = enomnewtlds_Helper_GetDateTime();
 
 	if (0 < (int)$portalid) {
@@ -412,7 +412,7 @@ function enomnewtlds_Helper_IsNullOrEmptyString($str) {
 
 
 function enomnewtlds_Helper_FormatDomain($domainname) {
-	$website = preg_replace( "/^(htt|ht|tt)p\:?\/\//i", "", $domainname );
+	$website = preg_replace( '/^(htt|ht|tt)p\:?\/\//i', '', $domainname );
 
 	if (enomnewtlds_Helper_endsWith( $website, "/" )) {
 		$length = strlen( $needle );
@@ -563,7 +563,7 @@ function enomnewtlds_Helper_Getenvironment($environment) {
 
 	if (enomnewtlds_Helper_IsNullOrEmptyString( $environment )) {
 		$data = enomnewtlds_DB_GetWatchlistSettingsLocal();
-		$environment = $data["environment"];
+		$environment = $data['environment'];
 	}
 
 	return $environment;
@@ -575,7 +575,7 @@ function enomnewtlds_Helper_GetWatchlistUrl($domain = "") {
 
 	if (enomnewtlds_Helper_IsNullOrEmptyString( $domain )) {
 		$data = enomnewtlds_DB_GetDefaults();
-		$domain = $data["companyurl"];
+		$domain = $data['companyurl'];
 	}
 
 	$domain .= (enomnewtlds_Helper_endsWith( $domain, "/" ) ? "index.php?m=" . $enomnewtlds_ModuleName : "/index.php?" . $enomnewtlds_ModuleName);
@@ -584,9 +584,9 @@ function enomnewtlds_Helper_GetWatchlistUrl($domain = "") {
 
 
 function enomnewtlds_API_GetPortalToken(&$vars, $token, $fields) {
-	$LANG = $vars["_lang"];
+	$LANG = $vars['_lang'];
 	$postfields = array();
-	$postfields["command"] = "PORTAL_GETTOKEN";
+	$postfields['command'] = "PORTAL_GETTOKEN";
 
 	if (is_array( $fields )) {
 		foreach ($fields as $x => $y) {
@@ -606,7 +606,7 @@ function enomnewtlds_API_GetPortalToken(&$vars, $token, $fields) {
 	$result = enomnewtlds_API_HandleErrors( $xmldata );
 
 	if (!$result) {
-		$result = $LANG["api_unknownerror"];
+		$result = $LANG['api_unknownerror'];
 	}
 
 	enomnewtlds_AddError( $result );
@@ -622,7 +622,7 @@ function enomnewtlds_API_HandleErrors($xmldata) {
 	while ($i <= $errcnt) {
 		$result = $xmldata->errors=="Err" . $i;
 
-		if (( $i < $errcnt && 1 < $errcnt )) {
+		if ( $i < $errcnt && 1 < $errcnt ) {
 			$result .= "<br />";
 		}
 
@@ -634,9 +634,9 @@ function enomnewtlds_API_HandleErrors($xmldata) {
 
 
 function enomnewtlds_API_CreatePortalAccount(&$vars, $portalid, $fields) {
-	$LANG = $vars["_lang"];
+	$LANG = $vars['_lang'];
 	$postfields = array();
-	$postfields["command"] = "PORTAL_CREATEPORTAL";
+	$postfields['command'] = "PORTAL_CREATEPORTAL";
 
 	if (is_array( $fields )) {
 		foreach ($fields as $x => $y) {
@@ -662,7 +662,7 @@ function enomnewtlds_API_CreatePortalAccount(&$vars, $portalid, $fields) {
 	$result = $xmldata = enomnewtlds_API_HandleErrors( $xmldata );
 
 	if (!$result) {
-		$result = $LANG["api_unknownerror"];
+		$result = $LANG['api_unknownerror'];
 	}
 
 	enomnewtlds_AddError( $result );
@@ -672,10 +672,10 @@ function enomnewtlds_API_CreatePortalAccount(&$vars, $portalid, $fields) {
 
 
 function enomnewtlds_API_UpdatePortalAccount($vars, $portalid, $fields) {
-	$LANG = $vars["_lang"];
+	$LANG = $vars['_lang'];
 	$postfields = array();
-	$postfields["command"] = "PORTAL_UPDATEDETAILS";
-	$postfields["PortalAccountID"] = $portalid;
+	$postfields['command'] = "PORTAL_UPDATEDETAILS";
+	$postfields['PortalAccountID'] = $portalid;
 
 	if (is_array( $fields )) {
 		foreach ($fields as $x => $y) {
@@ -693,7 +693,7 @@ function enomnewtlds_API_UpdatePortalAccount($vars, $portalid, $fields) {
 	$result = enomnewtlds_API_HandleErrors( $xmldata );
 
 	if (!$result) {
-		$result = $LANG["api_unknownerror"];
+		$result = $LANG['api_unknownerror'];
 	}
 
 	enomnewtlds_AddError( $result );
@@ -702,9 +702,9 @@ function enomnewtlds_API_UpdatePortalAccount($vars, $portalid, $fields) {
 
 
 function enomnewtlds_API_GetPortalAccount(&$vars, $portalid) {
-	$LANG = $vars["_lang"];
+	$LANG = $vars['_lang'];
 	$postfields = array();
-	$postfields["command"] = "PORTAL_GETDETAILS";
+	$postfields['command'] = "PORTAL_GETDETAILS";
 
 	if (is_array( $fields )) {
 		foreach ($fields as $x => $y) {
@@ -729,7 +729,7 @@ function enomnewtlds_API_GetPortalAccount(&$vars, $portalid) {
 	$result = $xmldata = enomnewtlds_API_HandleErrors( $xmldata );
 
 	if (!$result) {
-		$result = $LANG["api_unknownerror"];
+		$result = $LANG['api_unknownerror'];
 	}
 
 	enomnewtlds_AddError( $result );
@@ -742,38 +742,38 @@ function enomnewtlds_API_CallEnom($vars, $postfields) {
 	global $enomnewtlds_ModuleName;
 	global $enomnewtlds_CurrentVersion;
 
-	$LANG = $vars["_lang"];
+	$LANG = $vars['_lang'];
 	$data = enomnewtlds_DB_GetWatchlistSettingsLocal();
-	$environment = enomnewtlds_Helper_Getenvironment( $data["environment"] );
-	$portalid = $data["portalid"];
+	$environment = enomnewtlds_Helper_Getenvironment( $data['environment'] );
+	$portalid = $data['portalid'];
 
 	if (!in_array( "uid", $postfields )) {
-		$enomuid = $data["enomlogin"];
-		$postfields["uid"] = $enomuid;
+		$enomuid = $data['enomlogin'];
+		$postfields['uid'] = $enomuid;
 	}
 
 
 	if (!in_array( "pw", $postfields )) {
-		$enompw = $data["enompassword"];
-		$postfields["pw"] = $enompw;
+		$enompw = $data['enompassword'];
+		$postfields['pw'] = $enompw;
 	}
 
 
 	if (!in_array( "portalid", $postfields )) {
-		if (( !enomnewtlds_Helper_IsNullOrEmptyString( $portalid ) && 0 < (int)$portalid )) {
-			$postfields["portalid"] = $portalid;
+		if ( !enomnewtlds_Helper_IsNullOrEmptyString( $portalid ) && 0 < (int)$portalid ) {
+			$postfields['portalid'] = $portalid;
 		}
 	}
 
-	$postfields["ResponseType"] = "XML";
-	$postfields["Source"] = "WHMCS";
-	$postfields["sourceid"] = "37";
-	$postfields["bundled"] = ($enomnewtlds_isbundled ? 1 : 0);
-	$postfields["pluginversion"] = $enomnewtlds_CurrentVersion;
+	$postfields['ResponseType'] = "XML";
+	$postfields['Source'] = "WHMCS";
+	$postfields['sourceid'] = "37";
+	$postfields['bundled'] = ($enomnewtlds_isbundled ? 1 : 0);
+	$postfields['pluginversion'] = $enomnewtlds_CurrentVersion;
 	$url = "https://" . enomnewtlds_Helper_GetAPIHost( $environment ) . "/interface.asp";
 	$data = curlCall( $url, $postfields );
 	$xmldata = simplexml_load_string( $data );
-	logModuleCall( $enomnewtlds_ModuleName, $postfields["command"], $postfields, $data, $xmldata );
+	logModuleCall( $enomnewtlds_ModuleName, $postfields['command'], $postfields, $data, $xmldata );
 	return $xmldata;
 }
 
@@ -786,21 +786,21 @@ function enomnewtlds_output($vars) {
 	global $enomnewtlds_CurrentVersion;
 
 	$success_message = "";
-	$modulelink = $vars["modulelink"];
-	$LANG = $vars["_lang"];
+	$modulelink = $vars['modulelink'];
+	$LANG = $vars['_lang'];
 	$data = enomnewtlds_DB_GetWatchlistSettingsLocal();
-	$companyname = $data["companyname"];
-	$companyurl = $data["companyurl"];
-	$enomuid = $data["enomlogin"];
-	$enompw = $data["enompassword"];
-	$portalid = $data["portalid"];
-	$supportemail = $data["supportemail"];
-	$environment = enomnewtlds_Helper_Getenvironment( $data["environment"] );
+	$companyname = $data['companyname'];
+	$companyurl = $data['companyurl'];
+	$enomuid = $data['enomlogin'];
+	$enompw = $data['enompassword'];
+	$portalid = $data['portalid'];
+	$supportemail = $data['supportemail'];
+	$environment = enomnewtlds_Helper_Getenvironment( $data['environment'] );
 	$configured = enomnewtlds_DB_GetWatchlistPortalExists();
 	$form_iframe_tab = ($configured ? 2 : 1);
-	$form_button_text = ($configured ? $LANG["form_update"] : $LANG["form_activate"]);
-	$form_terms_text = ($configured ? $LANG["form_terms2"] : $LANG["form_terms1"]);
-	$documentation_link = $LANG["documentation"];
+	$form_button_text = ($configured ? $LANG['form_update'] : $LANG['form_activate']);
+	$form_terms_text = ($configured ? $LANG['form_terms2'] : $LANG['form_terms1']);
+	$documentation_link = $LANG['documentation'];
 	$url = enomnewtlds_Helper_GetDocumentationHost( $environment );
 
 	if ($environment != "0") {
@@ -811,46 +811,46 @@ function enomnewtlds_output($vars) {
 	$create = false;
 	$update = false;
 
-	if (( ( enomnewtlds_Helper_IsNullOrEmptyString( $companyname ) || enomnewtlds_Helper_IsNullOrEmptyString( $companyurl ) ) || enomnewtlds_Helper_IsNullOrEmptyString( $supportemail ) )) {
+	if ( ( enomnewtlds_Helper_IsNullOrEmptyString( $companyname ) || enomnewtlds_Helper_IsNullOrEmptyString( $companyurl ) ) || enomnewtlds_Helper_IsNullOrEmptyString( $supportemail ) ) {
 		$data = enomnewtlds_DB_GetDefaults();
 
 		if (enomnewtlds_Helper_IsNullOrEmptyString( $companyname )) {
-			$companyname = $data["companyname"];
+			$companyname = $data['companyname'];
 		}
 
 
 		if (enomnewtlds_Helper_IsNullOrEmptyString( $companyurl )) {
-			$companyurl = enomnewtlds_Helper_GetWatchlistUrl( $data["companyurl"] );
+			$companyurl = enomnewtlds_Helper_GetWatchlistUrl( $data['companyurl'] );
 		}
 
 
 		if (enomnewtlds_Helper_IsNullOrEmptyString( $supportemail )) {
-			$supportemail = $data["supportemail"];
+			$supportemail = $data['supportemail'];
 		}
 	}
 
 
-	if (isset( $_POST["enomuid"] )) {
-		$enomuid = $_POST["enomuid"];
-		$enompw = $_POST["enompw"];
+	if (isset( $_POST['enomuid'] )) {
+		$enomuid = $_POST['enomuid'];
+		$enompw = $_POST['enompw'];
 
 		if ($enompw === "************") {
-			$enompw = $data["enompassword"];
+			$enompw = $data['enompassword'];
 		}
 
-		$companyname = $_POST["companyname"];
-		$companyurl = $_POST["companyurl"];
-		$supportemail = $_POST["supportemail"];
+		$companyname = $_POST['companyname'];
+		$companyurl = $_POST['companyurl'];
+		$supportemail = $_POST['supportemail'];
 		$success = true;
 
 		if (enomnewtlds_Helper_IsNullOrEmptyString( $enomuid )) {
-			enomnewtlds_AddError( $LANG["enomuidrequired"] );
+			enomnewtlds_AddError( $LANG['enomuidrequired'] );
 			$success = false;
 		}
 
 
 		if (enomnewtlds_Helper_IsNullOrEmptyString( $enompw )) {
-			enomnewtlds_AddError( $LANG["enompwdrequired"] );
+			enomnewtlds_AddError( $LANG['enompwdrequired'] );
 			$success = false;
 		}
 
@@ -873,20 +873,20 @@ function enomnewtlds_output($vars) {
 		if ($success) {
 			enomnewtlds_DB_BootstrapUidPw( encrypt( $enomuid ), encrypt( $enompw ) );
 			$fields = array();
-			$fields["companyurl"] = $companyurl;
-			$fields["companyname"] = $companyname;
-			$fields["supportemailaddress"] = $supportemail;
-			$fields["portalType"] = "2";
-			$fields["statusid"] = "1";
+			$fields['companyurl'] = $companyurl;
+			$fields['companyname'] = $companyname;
+			$fields['supportemailaddress'] = $supportemail;
+			$fields['portalType'] = "2";
+			$fields['statusid'] = "1";
 
-			if (( enomnewtlds_Helper_IsNullOrEmptyString( $portalid ) || (int)$portalid <= 0 )) {
+			if ( enomnewtlds_Helper_IsNullOrEmptyString( $portalid ) || (int)$portalid <= 0 ) {
 				$nofields = array();
 				$success = enomnewtlds_API_GetPortalAccount( $vars, &$portalid, $nofields );
 			}
 
 
 			if ($success) {
-				if (( enomnewtlds_Helper_IsNullOrEmptyString( $portalid ) || (int)$portalid <= 0 )) {
+				if ( enomnewtlds_Helper_IsNullOrEmptyString( $portalid ) || (int)$portalid <= 0 ) {
 					$create = true;
 					$success = enomnewtlds_API_CreatePortalAccount( $vars, &$portalid, $fields );
 				}
@@ -896,30 +896,30 @@ function enomnewtlds_output($vars) {
 				}
 			}
 			else {
-				enomnewtlds_AddError( $LANG["api_failedtoget"] );
+				enomnewtlds_AddError( $LANG['api_failedtoget'] );
 				$success = false;
 			}
 
 
-			if (( $success && ( $update || $create ) )) {
+			if ( $success && ( $update || $create ) ) {
 				$mydata = array();
-				$mydata["enomLogin"] = encrypt( $enomuid );
-				$mydata["enomPassword"] = encrypt( $enompw );
-				$mydata["companyname"] = $companyname;
-				$mydata["companyurl"] = $companyurl;
-				$mydata["supportemail"] = $supportemail;
+				$mydata['enomLogin'] = encrypt( $enomuid );
+				$mydata['enomPassword'] = encrypt( $enompw );
+				$mydata['companyname'] = $companyname;
+				$mydata['companyurl'] = $companyurl;
+				$mydata['supportemail'] = $supportemail;
 				$result = enomnewtlds_DB_UpdateDB( $mydata, $portalid );
 
 				if ($result == 1) {
-					$success_message = $LANG["api_setupsuccess"];
+					$success_message = $LANG['api_setupsuccess'];
 				}
 				else {
-					$success_message = $LANG["api_setupsuccess2"];
+					$success_message = $LANG['api_setupsuccess2'];
 				}
 			}
 			else {
-				if (( $create || $update )) {
-					enomnewtlds_AddError( ($create ? $LANG["api_failedtocreate"] : $LANG["api_failedtoupdate"]) );
+				if ( $create || $update ) {
+					enomnewtlds_AddError( ($create ? $LANG['api_failedtocreate'] : $LANG['api_failedtoupdate']) );
 				}
 			}
 		}
@@ -984,14 +984,14 @@ echo "
 								";
 echo "<s";
 echo "trong>";
-echo $LANG["form_enomloginid"];
+echo $LANG['form_enomloginid'];
 echo "</strong> ";
 echo "<s";
 echo "pan style=\"color:red\">*</span>
 							</td>
 							<td width=\"50%\"style=\"text-align:right\">
 								<a href=\"https://www.whmcs.com/members/freeenomaccount.php\" target=\"_blank\"\">";
-echo $LANG["form_getenomaccount"];
+echo $LANG['form_getenomaccount'];
 echo "</a>
 							</td>
 						</tr>
@@ -1007,7 +1007,7 @@ echo "\" onfocus=\"RevertForm(this.id);\" />
 								";
 echo "<s";
 echo "trong>";
-echo $LANG["form_enompassword"];
+echo $LANG['form_enompassword'];
 echo "</strong> ";
 echo "<s";
 echo "pan style=\"color:red\">*</span><br />
@@ -1025,7 +1025,7 @@ echo "\" onfocus=\"RevertForm(this.id);\" />
 								";
 echo "<s";
 echo "trong>";
-echo $LANG["form_companyname"];
+echo $LANG['form_companyname'];
 echo "</strong> ";
 echo "<s";
 echo "pan style=\"color:red\">*</span><br />
@@ -1039,7 +1039,7 @@ echo "\" onfocus=\"RevertForm(this.id);\" />
 								";
 echo "<s";
 echo "trong>";
-echo $LANG["form_supportemail"];
+echo $LANG['form_supportemail'];
 echo "</strong> ";
 echo "<s";
 echo "pan style=\"color:red\">*</span><br />
@@ -1047,7 +1047,7 @@ echo "pan style=\"color:red\">*</span><br />
 echo $supportemail;
 echo "\" onfocus=\"RevertForm(this.id);\" />
 								<div style=\"margin-top:0;font-size:12px;line-height:16px;color:#666\">";
-echo $LANG["form_support_email_desc"];
+echo $LANG['form_support_email_desc'];
 echo "</div>
 							</td>
 						</tr>
@@ -1056,7 +1056,7 @@ echo "</div>
 								";
 echo "<s";
 echo "trong>";
-echo $LANG["form_companyurl"];
+echo $LANG['form_companyurl'];
 echo "</strong> ";
 echo "<s";
 echo "pan style=\"color:red\">*</span><br />
@@ -1065,9 +1065,9 @@ echo $companyurl;
 echo "\" onfocus=\"RevertForm(this.id);\" />
 								<div style=\"margin-top:0;font-size:12px;line-height:16px;color:#666;padding-bottom:10px\">
 									";
-echo $LANG["form_companyurl_text"];
+echo $LANG['form_companyurl_text'];
 echo " <a href=\"javascript:void(0)\" onclick=\"ResetDefault();\">";
-echo $LANG["form_resetdefault"];
+echo $LANG['form_resetdefault'];
 echo "</a>
 								</div>
 								<div>";

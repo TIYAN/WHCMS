@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.13
+ * @ Version  : 5.2.14
  * @ Author   : MTIMER
- * @ Release on : 2013-11-25
+ * @ Release on : 2013-11-28
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -85,7 +85,7 @@ class HeartInternetReg_API {
 	 * @param array   $extensions the extension namespaces to load.
 	 */
 	function logIn($userid, $password, $objects, $extensions) {
-		if (!preg_match( "/^[a-f0-9]+$/", $userid )) {
+		if (!preg_match( '/^[a-f0-9]+$/', $userid )) {
 			throw new Exception( "Invalid username, should look like '9cf2cdbcce5e00c0'" );
 		}
 
@@ -130,13 +130,13 @@ class HeartInternetReg_API {
 		$result = $this->sendMessage( $xml );
 		foreach ($result as $tag) {
 
-			if ( ( $tag["tag"] == "result" && $tag["type"] != "close" ) && $tag["attributes"]["code"] != 1000 ) {
-				throw new Exception( "Failed to log in!: " . $tag["attributes"]["code"] );
+			if ( ( $tag['tag'] == "result" && $tag['type'] != "close" ) && $tag['attributes']['code'] != 1000 ) {
+				throw new Exception( "Failed to log in!: " . $tag['attributes']['code'] );
 			}
 
 
-			if ($tag["tag"] == "session-id") {
-				return $tag["value"];
+			if ($tag['tag'] == "session-id") {
+				return $tag['value'];
 			}
 		}
 
