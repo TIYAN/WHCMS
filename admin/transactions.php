@@ -405,6 +405,7 @@ if (!$action) {
 		$query .= " WHERE " . implode(" AND ", $where);
 	}
 
+	$totals = array();
 	$fullquery = "SELECT tblclients.currency,SUM(amountin),SUM(fees),SUM(amountout),SUM(amountin-fees-amountout) FROM tblaccounts,tblclients " . ($query ? $query . " AND" : "WHERE") . " tblclients.id=tblaccounts.userid GROUP BY tblclients.currency";
 	$result = full_query($fullquery);
 
@@ -435,8 +436,7 @@ if (!$action) {
 	$gatewaysarray = getGatewaysArray();
 	$query .= " ORDER BY tblaccounts.date DESC,tblaccounts.id DESC";
 	$result = full_query("SELECT COUNT(*) FROM tblaccounts" . $query);
-	mysql_fetch_array($result);
-	$data = $totals = array();
+	$data = mysql_fetch_array($result);
 	$numrows = $data[0];
 	$query = "SELECT tblaccounts.*,tblclients.firstname,tblclients.lastname,tblclients.companyname,tblclients.groupid,tblclients.currency AS currencyid FROM tblaccounts LEFT JOIN tblclients ON tblclients.id=tblaccounts.userid" . $query . " LIMIT " . (int)$page * $limit . "," . (int)$limit;
 	$result = full_query($query);
