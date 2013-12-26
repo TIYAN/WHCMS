@@ -229,7 +229,7 @@ if (!function_exists("emailtpl_template")) {
 					$date = fromMySQLDate($date, 0, 1);
 
 					if ($func_messagename != "Support Ticket Feedback Request") {
-						$subject = "[Ticket ID: {$ticket_id}] {$ticket_subject}";
+						$subject = "[Ticket ID: {\$ticket_id}] {\$ticket_subject}";
 					}
 
 					$tmessage = strip_tags($tmessage);
