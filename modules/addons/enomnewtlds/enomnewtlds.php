@@ -464,30 +464,25 @@ function enomnewtlds_Helper_FormatAPICallForEmail($fields, $environment) {
 
 function enomnewtlds_Helper_GetAPIHost($environment) {
 	switch ($environment) {
-	case "1": {
+	case "1":
 			$url = "resellertest.enom.com";
 			break;
-		}
 
-	case "2": {
+	case "2":
 			$url = "api.staging.local";
 			break;
-		}
 
-	case "3": {
+	case "3":
 			$url = "api.build.local";
 			break;
-		}
 
-	case "4": {
+	case "4":
 			$url = "reseller-sb.enom.com";
 			break;
-		}
 
-	default: {
+	default:
 			$url = "reseller.enom.com";
 			break;
-		}
 	}
 
 	return $url;
@@ -496,30 +491,25 @@ function enomnewtlds_Helper_GetAPIHost($environment) {
 
 function enomnewtlds_Helper_GetDocumentationHost($environment) {
 	switch ($environment) {
-	case "1": {
+	case "1":
 			$url = "resellertest.enom.com";
 			break;
-		}
 
-	case "2": {
+	case "2":
 			$url = "enom.staging.local";
 			break;
-		}
 
-	case "3": {
+	case "3":
 			$url = "enom.build.local";
 			break;
-		}
 
-	case "4": {
+	case "4":
 			$url = "enom5.enom.com";
 			break;
-		}
 
-	default: {
+	default:
 			$url = "www.enom.com";
 			break;
-		}
 	}
 
 	return $url;
@@ -528,30 +518,25 @@ function enomnewtlds_Helper_GetDocumentationHost($environment) {
 
 function enomnewtlds_Helper_GetWatchlistHost($environment) {
 	switch ($environment) {
-	case "1": {
+	case "1":
 			$url = "resellertest.tldportal.com";
 			break;
-		}
 
-	case "2": {
+	case "2":
 			$url = "tldportal.staging.local";
 			break;
-		}
 
-	case "3": {
+	case "3":
 			$url = "tldportal.build.local";
 			break;
-		}
 
-	case "4": {
+	case "4":
 			$url = "preprod.tldportal.com";
 			break;
-		}
 
-	default: {
+	default:
 			$url = "tldportal.com";
 			break;
-		}
 	}
 
 	return $url;
@@ -633,7 +618,7 @@ function enomnewtlds_API_HandleErrors($xmldata) {
 }
 
 
-function enomnewtlds_API_CreatePortalAccount(&$vars, $portalid, $fields) {
+function enomnewtlds_API_CreatePortalAccount(&$vars, &$portalid, $fields) {
 	$LANG = $vars['_lang'];
 	$postfields = array();
 	$postfields['command'] = "PORTAL_CREATEPORTAL";
@@ -701,7 +686,7 @@ function enomnewtlds_API_UpdatePortalAccount($vars, $portalid, $fields) {
 }
 
 
-function enomnewtlds_API_GetPortalAccount(&$vars, $portalid) {
+function enomnewtlds_API_GetPortalAccount(&$vars, &$portalid) {
 	$LANG = $vars['_lang'];
 	$postfields = array();
 	$postfields['command'] = "PORTAL_GETDETAILS";
@@ -881,14 +866,14 @@ function enomnewtlds_output($vars) {
 
 			if ( enomnewtlds_Helper_IsNullOrEmptyString( $portalid ) || (int)$portalid <= 0 ) {
 				$nofields = array();
-				$success = enomnewtlds_API_GetPortalAccount( $vars, &$portalid, $nofields );
+				$success = enomnewtlds_API_GetPortalAccount( $vars, $portalid, $nofields );
 			}
 
 
 			if ($success) {
 				if ( enomnewtlds_Helper_IsNullOrEmptyString( $portalid ) || (int)$portalid <= 0 ) {
 					$create = true;
-					$success = enomnewtlds_API_CreatePortalAccount( $vars, &$portalid, $fields );
+					$success = enomnewtlds_API_CreatePortalAccount( $vars, $portalid, $fields );
 				}
 				else {
 					$update = true;

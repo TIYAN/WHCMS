@@ -2300,31 +2300,31 @@ if (!function_exists("emailtpl_template")) {
 	}
 
 	function get_token() {
-		$token_manager = &getTokenManager();
+		$token_manager = getTokenManager();
 
 		return $token_manager->getToken();
 	}
 
 	function set_token($token) {
-		$token_manager = &getTokenManager();
+		$token_manager = getTokenManager();
 
 		return $token_manager->setToken($token);
 	}
 
 	function conditionally_set_token() {
-		$token_manager = &getTokenManager();
+		$token_manager = getTokenManager();
 
 		return $token_manager->conditionallySetToken();
 	}
 
 	function generate_token($type = "form") {
-		$token_manager = &getTokenManager();
+		$token_manager = getTokenManager();
 
 		return $token_manager->generateToken($type);
 	}
 
 	function check_token($namespace = "WHMCS.default") {
-		$token_manager = &getTokenManager();
+		$token_manager = getTokenManager();
 
 		return $token_manager->checkToken($namespace);
 	}

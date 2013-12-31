@@ -110,7 +110,7 @@ class WHMCS_Init {
 		$session = new WHMCS_Session();
 		$this->sanitize_db_vars();
 		$session->create($instanceid);
-		$token_manager = &getTokenManager($this);
+		$token_manager = getTokenManager($this);
 
 		$token_manager->conditionallySetToken();
 

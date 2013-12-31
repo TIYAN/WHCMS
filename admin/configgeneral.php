@@ -317,7 +317,7 @@ if ($action == "save") {
 		}
 
 		global $whmcs;
-		$token_manager = &getTokenManager();
+		$token_manager = getTokenManager();
 
 		$token_manager->processAdminHTMLSave($whmcs);
 		redir("success=true&tab=" . $tab);
