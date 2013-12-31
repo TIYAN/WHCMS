@@ -2102,7 +2102,7 @@ echo "</a> <a href=\"#\" id=\"removeapiip\"><img src=\"images/icons/delete.png\"
 echo $aInt->lang("general", "removeselected");
 echo "</a></td></tr>
 ";
-$token_manager = &getTokenManager();
+$token_manager = getTokenManager();
 
 echo $token_manager->generateAdminConfigurationHTMLRows($aInt);
 echo "
