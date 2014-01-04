@@ -1824,8 +1824,7 @@ if (!function_exists("emailtpl_template")) {
 				$cleandata = hook_transliterate($arr);
 			}
 			else {
-				foreignChrReplace2($arr);
-				$cleandata = "";
+				$cleandata = foreignChrReplace2($arr);
 			}
 		}
 
