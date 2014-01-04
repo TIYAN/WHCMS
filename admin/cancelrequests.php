@@ -16,6 +16,7 @@ $aInt = new WHMCS_Admin("View Cancellation Requests");
 $aInt->title = $aInt->lang("clients", "cancelrequests");
 $aInt->sidebar = "clients";
 $aInt->icon = "cancelrequests";
+$aInt->helplink = "Cancellation Requests";
 
 if ($action == "delete") {
 	check_token("WHMCS.admin.default");
@@ -182,8 +183,7 @@ while ($data = mysql_fetch_array($result)) {
 }
 
 echo $aInt->sortableTable(array($aInt->lang("fields", "date"), $aInt->lang("fields", "product"), $aInt->lang("fields", "reason"), $aInt->lang("fields", "type"), ""), $tabledata);
-ob_get_contents();
-$content = $aInt->helplink = "Cancellation Requests";
+$content = ob_get_contents();
 ob_end_clean();
 $aInt->content = $content;
 $aInt->jquerycode = $jquerycode;
