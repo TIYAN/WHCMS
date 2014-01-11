@@ -443,8 +443,8 @@ else {
 			echo "<s";
 			echo "elect name=\"appliesto[]\" size=\"8\" style=\"width:90%\" multiple>
 ";
-			select_query("tblproducts", "tblproducts.id,tblproducts.gid,tblproducts.name,tblproductgroups.name AS groupname", "", "tblproductgroups`.`order` ASC,`tblproducts`.`order` ASC,`name", "ASC", "", "tblproductgroups ON tblproducts.gid=tblproductgroups.id");
-			$result = $jscode = "function autoGenPromo() {
+			$result = select_query("tblproducts", "tblproducts.id,tblproducts.gid,tblproducts.name,tblproductgroups.name AS groupname", "", "tblproductgroups`.`order` ASC,`tblproducts`.`order` ASC,`name", "ASC", "", "tblproductgroups ON tblproducts.gid=tblproductgroups.id");
+			$jscode = "function autoGenPromo() {
     $.post(\"configpromotions.php\", \"action=genpromo\", function(data) {
         $(\"#promocode\").val(data);
     });

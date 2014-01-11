@@ -311,7 +311,7 @@ function ccProcessing() {
 
 
 	if (count($qrygateways)) {
-		$y = 0;
+		$z = $y = 0;
 		$query = "SELECT tblinvoices.* FROM tblinvoices INNER JOIN tblclients ON tblclients.id=tblinvoices.userid WHERE (tblinvoices.status='Unpaid') AND (" . implode(" OR ", $qrygateways) . ") AND tblclients.disableautocc='' AND (tblinvoices.duedate='" . $chargedate . "'";
 
 		if (!$whmcs->get_config("CCAttemptOnlyOnce")) {
@@ -324,7 +324,7 @@ function ccProcessing() {
 		}
 
 		$query .= ")";
-		$result = $z = full_query($query);
+		$result = full_query($query);
 
 		while ($data = mysql_fetch_array($result)) {
 			if (is_object($cron)) {

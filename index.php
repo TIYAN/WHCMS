@@ -38,7 +38,8 @@ if ($m = $whmcs->get_req_var("m")) {
 		exit("Invalid Addon Module Name");
 	}
 
-	$result = $modulevars = array();
+	$modulevars = array();
+	$result = select_query("tbladdonmodules", "", array("module" => $module));
 
 	while ($data = mysql_fetch_array($result)) {
 		$modulevars[$data['setting']] = $data['value'];
@@ -51,8 +52,7 @@ if ($m = $whmcs->get_req_var("m")) {
 
 	$modulevars['modulelink'] = "index.php?m=" . $module;
 	$_ADDONLANG = array();
-	$whmcs->get_client_language();
-	$calanguage = select_query("tbladdonmodules", "", array("module" => $module));
+	$calanguage = $whmcs->get_client_language();
 
 	if (!isValidforPath($calanguage)) {
 		exit("Invalid Client Area Language Name");

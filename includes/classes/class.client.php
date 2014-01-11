@@ -197,8 +197,8 @@ class WHMCS_Client {
 
 	public function getEmailTemplates() {
 		$query = "SELECT * FROM tblemailtemplates WHERE type='general' AND language='' AND name!='Password Reset Validation' ORDER BY name ASC";
-		full_query($query);
-		$result = $emailtpls = array();
+		$result = full_query($query);
+		$emailtpls = array();
 
 		while ($data = mysql_fetch_array($result)) {
 			$messagename = $data['name'];
