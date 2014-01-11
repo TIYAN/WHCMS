@@ -58,7 +58,7 @@ SAE特别版下载：http://www.mtimer.cn/release/25-whmcs-5215-full-decoded-nul
 
 此破解版由 时光人社区 www.mtimer.cn 维护
 
-捐助 支付宝：http://www.mtimer.cn/release/25-whmcs-5215-full-decoded-nulled-by-mtimer.html
+捐助 支付宝：http://t.cn/8FwJr5Z
 
 <strong>捐助后将通过邮件获得今后更新</strong>
 
@@ -69,9 +69,9 @@ SAE特别版下载：http://www.mtimer.cn/release/25-whmcs-5215-full-decoded-nul
 http://www.mtimer.cn
 
 
-Donate to get v5.2.15 & updates *lifetime* via email.
+Donate $10 to get v5.2.15 & updates *lifetime* via email.
 
-Donate paypal: mtimercms@hotmail.com 
+Donate paypal: mtimercms@hotmail.com
 
 Donate Webmoney: Z369907552397  R374005435218
 
