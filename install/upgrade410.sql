@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS `tblservergroupsrel` (
 ALTER TABLE `tblproducts` DROP `defaultserver` ;
 ALTER TABLE `tblproducts` ADD `servergroup` INT( 10 ) NOT NULL AFTER `servertype` ;
 
-INSERT INTO `tblconfiguration` (`setting`, `value`) VALUES ('DisableSessionIPCheck', '');
+INSERT INTO `tblconfiguration` (`setting`, `value`) VALUES ('DisableSessionIPCheck', 'on');
 
 ALTER TABLE `tblclients` ADD `cardlastfour` TEXT NOT NULL AFTER `cardtype` ;
 
