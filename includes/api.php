@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.14
+ * @ Version  : 5.2.15
  * @ Author   : MTIMER
- * @ Release on : 2013-11-28
+ * @ Release on : 2013-12-24
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -74,7 +74,11 @@ else {
 	$apiallowedips = unserialize($apiallowedips);
 	$allowedips = array();
 	foreach ($apiallowedips as $ip) {
-		$allowedips[] = $ip['ip'];
+
+		if (0 < strlen(trim($ip['ip']))) {
+			$allowedips[] = $ip['ip'];
+			continue;
+		}
 	}
 
 
@@ -171,7 +175,7 @@ if (count($apiresults)) {
 		}
 		else {
 			if ($responsetype) {
-				exit("result=error;message=This API This API function can only return XML response format;");
+				exit("result=error;message=This API function can only return XML response format;");
 			}
 
 			foreach ($apiresults as $k => $v) {

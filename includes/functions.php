@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.14
+ * @ Version  : 5.2.15
  * @ Author   : MTIMER
- * @ Release on : 2013-11-28
+ * @ Release on : 2013-12-24
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -459,7 +459,8 @@ if (!function_exists("emailtpl_template")) {
 							}
 
 							$configoptions[] = array("id" => $data4['id'], "option" => $confoption, "type" => $conftype, "value" => $optionname, "qty" => $optionqty, "setup" => $CONFIG['CurrencySymbol'] . $data4['setup'], "recurring" => $CONFIG['CurrencySymbol'] . $data4['recurring']);
-							$configoptionshtml .= "" . $confoption . ": " . $optionname . " " . $CONFIG['CurrencySymbol'] . $data4['recurring'] . "<br>\r\n";
+							$configoptionshtml .= "" . $confoption . ": " . $optionname . " " . $CONFIG['CurrencySymbol'] . $data4['recurring'] . "<br>
+";
 						}
 
 						$email_merge_fields['service_order_id'] = $orderid;
@@ -893,7 +894,7 @@ if (!function_exists("emailtpl_template")) {
 
 		$mail->XMailer = $whmcs->get_config("CompanyName");
 		$mail->CharSet = $CONFIG['Charset'];
-		$mail->AddAddress(trim($email), $firstname . " " . $lastname);
+		$mail->AddAddress(trim($email), html_entity_decode($firstname . " " . $lastname, ENT_QUOTES));
 
 		if ($CONFIG['BCCMessages']) {
 			$bcc = $CONFIG['BCCMessages'] . ",";
@@ -929,7 +930,7 @@ if (!function_exists("emailtpl_template")) {
 
 			while ($data = mysql_fetch_array($result)) {
 				$ccaddress = trim($data['email']);
-				$mail->AddAddress($ccaddress, $data['firstname'] . " " . $data['lastname']);
+				$mail->AddAddress($ccaddress, html_entity_decode($data['firstname'] . " " . $data['lastname'], ENT_QUOTES));
 				$additionalccs .= $ccaddress . ",";
 			}
 		}
@@ -972,7 +973,9 @@ if (!function_exists("emailtpl_template")) {
 			$message_text = str_replace("<p>", "", $message);
 			$message_text = str_replace("</p>", "\r\n\r\n", $message_text);
 			$message_text = str_replace("<br>", "\r\n", $message_text);
+
 			$message_text = str_replace("<br />", "\r\n", $message_text);
+
 			$message_text = strip_tags($message_text);
 			$cssdata = "";
 
@@ -982,7 +985,7 @@ if (!function_exists("emailtpl_template")) {
 
 			$message = $cssdata . "\r\n" . $message;
 			$mail->Body = $message;
-			$mail->AltBody = $message_text;
+			$mail->AltBody = html_entity_decode($message_text, ENT_QUOTES);
 		}
 
 
@@ -1610,8 +1613,7 @@ if (!function_exists("emailtpl_template")) {
 				insert_query("tblaffiliatespending", array("affaccid" => $affaccid, "amount" => $commission, "clearingdate" => $clearingdate));
 			}
 			else {
-				$query = "UPDATE tblaffiliates SET balance=balance+" . db_escape_string($commission) . " WHERE id=" . (int)$affid;
-				$result = full_query($query);
+				update_query("tblaffiliates", array("balance" => "+=" . $commission), array("id" => (int)$affid));
 				insert_query("tblaffiliateshistory", array("affiliateid" => $affid, "date" => "now()", "affaccid" => $affaccid, "amount" => $commission));
 			}
 
@@ -1664,8 +1666,6 @@ if (!function_exists("emailtpl_template")) {
 		$paytype = $data['paytype'];
 		$payamount = $data['payamount'];
 		$affcurrency = $data['currency'];
-		
-		
 
 		if ($paytype) {
 			$percentage = $fixedamount = "";
@@ -1719,6 +1719,7 @@ if (!function_exists("emailtpl_template")) {
 			$userid = $_SESSION['uid'];
 		}
 
+		$description = html_entity_decode($description, ENT_QUOTES);
 		insert_query("tblactivitylog", array("date" => "now()", "description" => $description, "user" => $username, "userid" => $userid, "ipaddr" => $remote_ip));
 		run_hook("LogActivity", array("description" => $description, "user" => $username, "userid" => $userid, "ipaddress" => $remote_ip));
 	}
@@ -1823,7 +1824,7 @@ if (!function_exists("emailtpl_template")) {
 			if (function_exists("hook_transliterate")) {
 				$cleandata = hook_transliterate($arr);
 			}
-			else {
+			else {	
 				$cleandata = foreignChrReplace2($arr);
 			}
 		}
@@ -2043,7 +2044,7 @@ if (!function_exists("emailtpl_template")) {
 	}
 
 	function _hash($string) {
-		if (function_exists("sha1")) {		
+		if (function_exists("sha1")) {
 			$hash = sha1($string);
 		}
 		else {
@@ -2299,36 +2300,36 @@ if (!function_exists("emailtpl_template")) {
 	}
 
 	function get_token() {
-		$token_manager = getTokenManager();
+		$token_manager = &getTokenManager();
 
 		return $token_manager->getToken();
 	}
 
 	function set_token($token) {
-		$token_manager = getTokenManager();
+		$token_manager = &getTokenManager();
 
 		return $token_manager->setToken($token);
 	}
 
 	function conditionally_set_token() {
-		$token_manager = getTokenManager();
+		$token_manager = &getTokenManager();
 
 		return $token_manager->conditionallySetToken();
 	}
 
 	function generate_token($type = "form") {
-		$token_manager = getTokenManager();
+		$token_manager = &getTokenManager();
 
 		return $token_manager->generateToken($type);
 	}
 
 	function check_token($namespace = "WHMCS.default") {
-		$token_manager = getTokenManager();
+		$token_manager = &getTokenManager();
 
 		return $token_manager->checkToken($namespace);
 	}
 
-	function getTokenManager($instance = null) {
+	function &getTokenManager($instance = null) {
 		global $whmcs;
 		static $token_manager = null;
 
@@ -2472,7 +2473,7 @@ if (!function_exists("emailtpl_template")) {
 			$file = $_SERVER['SCRIPT_NAME'];
 		}
 
-		$filenamePattern = '/^[a-zA-Z0-9~\._\/\:\-]*$/';
+		$filenamePattern = "/^[a-zA-Z0-9~\._\/\:\-]*$/";
 
 		if (preg_match($filenamePattern, $file) !== 1) {
 			exit(sprintf("Invalid filename for redirect: %s", htmlspecialchars($file, ENT_QUOTES)));
@@ -2485,7 +2486,7 @@ if (!function_exists("emailtpl_template")) {
 			$file = $whmcs->get_config("SystemURL") . "/" . $file;
 		}
 
-		$AnyMultipleSlashNotPrecededByColonPattern = '/([^:]|^)\/\/+/';
+		$AnyMultipleSlashNotPrecededByColonPattern = "/([^:]|^)\/\/+/";
 		$precedingCharacterIfAnyWithOneSlash = '$1/';
 		$file = preg_replace($AnyMultipleSlashNotPrecededByColonPattern, $precedingCharacterIfAnyWithOneSlash, $file);
 
@@ -2766,4 +2767,5 @@ if (!function_exists("emailtpl_template")) {
 		return $string;
 	}
 }
+
 ?>

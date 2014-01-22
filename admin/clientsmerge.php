@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.14
+ * @ Version  : 5.2.15
  * @ Author   : MTIMER
- * @ Release on : 2013-11-28
+ * @ Release on : 2013-12-24
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -127,7 +127,7 @@ else {
 	$result = select_query("tblclients", "credit", array("id" => $deleteuser));
 	$data = mysql_fetch_array($result);
 	$credit = $data[0];
-	full_query("UPDATE tblclients SET credit=credit+" . db_escape_string($credit) . " WHERE id=" . (int)$resultinguserid);
+	update_query("tblclients", array("credit" => "+=" . $credit), array("id" => (int)$resultinguserid));
 	$result = select_query("tblaffiliates", "", array("clientid" => $deleteuser));
 	$data = mysql_fetch_array($result);
 	$affid = $data['id'];
@@ -144,7 +144,7 @@ else {
 			$newaffid = insert_query("tblaffiliates", array("date" => "now()", "clientid" => $resultinguserid));
 		}
 
-		full_query("UPDATE tblaffiliates SET visitors=visitors+" . db_escape_string($visitors) . ",balance=balance+" . db_escape_string($balance) . ",withdrawn=withdrawn+" . db_escape_string($withdrawn) . " WHERE id=" . (int)$newaffid);
+		update_query("tblaffiliates", array("visitors" => "+=" . (int)$visitors, "balance" => "+=" . $balance, "withdrawn" => "+=" . $withdrawn), array("id" => (int)$newaffid));
 		update_query("tblaffiliatesaccounts", array("affiliateid" => $newaffid), array("affiliateid" => $affid));
 		update_query("tblaffiliateshistory", array("affiliateid" => $newaffid), array("affiliateid" => $affid));
 		update_query("tblaffiliateswithdrawals", array("affiliateid" => $newaffid), array("affiliateid" => $affid));

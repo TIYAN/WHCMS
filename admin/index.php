@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.14
+ * @ Version  : 5.2.15
  * @ Author   : MTIMER
- * @ Release on : 2013-11-28
+ * @ Release on : 2013-12-24
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -304,7 +304,7 @@ $hooksdir = ROOTDIR . "/modules/widgets/";
 if (is_dir($hooksdir)) {
 	$dh = opendir($hooksdir);
 
-	while (false !== $hookfile = readdir($dh)) {
+	while (false !== ($hookfile = readdir($dh))) {
 		if (is_file($hooksdir . $hookfile) && $hookfile != "index.php") {
 			$extension = explode(".", $hookfile);
 			$extension = end($extension);
@@ -341,7 +341,7 @@ if (get_query_val("tbladmins", "roleid", array("id" => (int)$_SESSION['adminid']
 
 	$showdialog = true;
 
-	if ($infotoggle[$_SESSION['adminid']]) {
+	if (isset($infotoggle[$_SESSION['adminid']])) {
 		$dismissdate = $infotoggle[$_SESSION['adminid']];
 		$lastupdate = curlCall("http://api.mtimer.cn/whmcs/popup/popup.php", "lastupdate=1", array("CURLOPT_TIMEOUT" => "5"));
 

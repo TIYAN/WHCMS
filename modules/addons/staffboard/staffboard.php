@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.14
+ * @ Version  : 5.2.15
  * @ Author   : MTIMER
- * @ Release on : 2013-11-28
+ * @ Release on : 2013-12-24
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -25,8 +25,7 @@ function staffboard_config() {
 }
 
 function staffboard_activate() {
-	full_query($query);
-	$result = $query = "CREATE TABLE `mod_staffboard` (
+	$query = "CREATE TABLE `mod_staffboard` (
         `id` INT(10) NOT NULL AUTO_INCREMENT PRIMARY KEY,
         `note` TEXT NOT NULL,
         `date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -36,11 +35,12 @@ function staffboard_activate() {
         `y` INT(4) NOT NULL,
         `z` INT(4) NOT NULL
        ) ; ";
+	$result = full_query($query);
 }
 
 function staffboard_deactivate() {
-	full_query($query);
-	$result = $query = "DROP TABLE `mod_staffboard`";
+	$query = "DROP TABLE `mod_staffboard`";
+	$result = full_query($query);
 }
 
 function staffboard_menubar($vars) {

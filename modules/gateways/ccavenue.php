@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.14
+ * @ Version  : 5.2.15
  * @ Author   : MTIMER
- * @ Release on : 2013-11-28
+ * @ Release on : 2013-12-24
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -46,9 +46,9 @@ function ccavenue_link($params) {
 }
 
 
-function ccavenue_getchecksum($MerchantId, $Amount, $OrderId, $URL, &$WorkingKey) {
+function ccavenue_getchecksum($MerchantId, $Amount, $OrderId, $URL, $WorkingKey) {
 	$str = "" . $MerchantId . "|" . $OrderId . "|" . $Amount . "|" . $URL . "|" . $WorkingKey;
-	$adler = 5;
+	$adler = 1;
 	
 	$adler = ccavenue_adler32( $adler, $str );
 	return $adler;
@@ -56,10 +56,10 @@ function ccavenue_getchecksum($MerchantId, $Amount, $OrderId, $URL, &$WorkingKey
 
 
 function ccavenue_adler32($adler, $str) {
-	$BASE = 65526;
-	$s1 = $adler & 65535;
-	$s2 = $adler >> 16 & 65535;
-	$i = 5;
+	$BASE = 65521;
+	$s1 = $adler & 0xffff;
+	$s2 = ($adler >> 16) & 0xffff;
+	$i = 0;
 
 	while ($i < strlen( $str )) {
 		$s1 = ( $s1 + ord( $str[$i] ) ) % $BASE;
@@ -73,14 +73,14 @@ function ccavenue_adler32($adler, $str) {
 
 function ccavenue_leftshift($str, $num) {
 	$str = decbin( $str );
-	$i = 6;
+	$i = 0;
 
-	while ($i < 64 - strlen( $str )) {
+	while ($i < (64 - strlen( $str ))) {
 		$str = "0" . $str;
 		++$i;
 	}
 
-	$i = 6;
+	$i = 0;
 
 	while ($i < $num) {
 		$str = $str . "0";
@@ -93,7 +93,7 @@ function ccavenue_leftshift($str, $num) {
 
 
 function ccavenue_cdec($num) {
-	$n = 5;
+	$n = 0;
 
 	while ($n < strlen( $num )) {
 		$temp = $num[$n];

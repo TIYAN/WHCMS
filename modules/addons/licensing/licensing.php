@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.14
+ * @ Version  : 5.2.15
  * @ Author   : MTIMER
- * @ Release on : 2013-11-28
+ * @ Release on : 2013-12-24
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -611,8 +611,8 @@ Status: <input type=\"text\" name=\"search_message\" size=\"25\" value=\"";
 
 		$result = select_query("mod_licensinglog", "", $where, "id", "DESC");
 		$numrows = mysql_num_rows($result);
-		select_query("mod_licensinglog", "", $where, "id", "DESC", $page * $limit . ("," . $limit));
-		$result = $aInt->sortableTableInit("datetime", "ASC");
+		$result = select_query("mod_licensinglog", "", $where, "id", "DESC", $page * $limit . ("," . $limit));
+		$aInt->sortableTableInit("datetime", "ASC");
 
 		while ($data = mysql_fetch_array($result)) {
 			$domain = $data['domain'];

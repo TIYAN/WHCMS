@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.14
+ * @ Version  : 5.2.15
  * @ Author   : MTIMER
- * @ Release on : 2013-11-28
+ * @ Release on : 2013-12-24
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -110,42 +110,42 @@ switch ($txn_type) {
 		if ($payment_status != "Completed") {
 			logTransaction("PayPal", $orgipn, "Incomplete");
 			exit();
+		}
+		
+		$query = "SELECT tblinvoices.id,tblinvoices.userid FROM tblinvoiceitems INNER JOIN tblinvoices ON tblinvoices.id=tblinvoiceitems.invoiceid WHERE tblinvoiceitems.relid='" . (int)$idnumber . "' AND tblinvoiceitems.type='Hosting' AND tblinvoices.status='Unpaid' ORDER BY tblinvoices.id ASC";
+		$result = full_query($query);
+		$data = mysql_fetch_array($result);
+		$invoiceid = $data['id'];
+		$userid = $data['userid'];
+		
+		if ($invoiceid) {
+			$orgipn.= ("Invoice Found from Product ID Match => " . $invoiceid . "\r\n");
+		} else {
+			$query = "SELECT tblinvoiceitems.invoiceid,tblinvoices.userid FROM tblhosting INNER JOIN tblinvoiceitems ON tblhosting.id=tblinvoiceitems.relid INNER JOIN tblinvoices ON tblinvoices.id=tblinvoiceitems.invoiceid WHERE tblinvoices.status='Unpaid' AND tblhosting.subscriptionid='" . db_escape_string($subscr_id) . "' AND tblinvoiceitems.type='Hosting' ORDER BY tblinvoiceitems.invoiceid ASC";
+			$result = full_query($query);
+			$data = mysql_fetch_array($result);
+			$invoiceid = $data['invoiceid'];
+			$userid = $data['userid'];
 			
-			$query = "SELECT tblinvoices.id,tblinvoices.userid FROM tblinvoiceitems INNER JOIN tblinvoices ON tblinvoices.id=tblinvoiceitems.invoiceid WHERE tblinvoiceitems.relid='" . (int)$idnumber . "' AND tblinvoiceitems.type='Hosting' AND tblinvoices.status='Unpaid' ORDER BY tblinvoices.id ASC";
+			if ($invoiceid) {
+				$orgipn.= ("Invoice Found from Subscription ID Match => " . $invoiceid . "\r\n");
+			}
+		}
+		
+		if (!$invoiceid) {
+			$query = "SELECT tblinvoices.id,tblinvoices.userid FROM tblinvoiceitems INNER JOIN tblinvoices ON tblinvoices.id=tblinvoiceitems.invoiceid WHERE tblinvoiceitems.relid='" . (int)$idnumber . "' AND tblinvoiceitems.type='Hosting' AND tblinvoices.status='Paid' ORDER BY tblinvoices.id DESC";
 			$result = full_query($query);
 			$data = mysql_fetch_array($result);
 			$invoiceid = $data['id'];
 			$userid = $data['userid'];
 			
 			if ($invoiceid) {
-				$orgipn.= ("Invoice Found from Product ID Match => " . $invoiceid . "\r\n");
-			} else {
-				$query = "SELECT tblinvoiceitems.invoiceid,tblinvoices.userid FROM tblhosting INNER JOIN tblinvoiceitems ON tblhosting.id=tblinvoiceitems.relid INNER JOIN tblinvoices ON tblinvoices.id=tblinvoiceitems.invoiceid WHERE tblinvoices.status='Unpaid' AND tblhosting.subscriptionid='" . db_escape_string($subscr_id) . "' AND tblinvoiceitems.type='Hosting' ORDER BY tblinvoiceitems.invoiceid ASC";
-				$result = full_query($query);
-				$data = mysql_fetch_array($result);
-				$invoiceid = $data['invoiceid'];
-				$userid = $data['userid'];
-				
-				if ($invoiceid) {
-					$orgipn.= ("Invoice Found from Subscription ID Match => " . $invoiceid . "\r\n");
-				}
+				$orgipn.= ("Paid Invoice Found from Product ID Match => " . $invoiceid . "\r\n");
 			}
-			
-			if (!$invoiceid) {
-				$query = "SELECT tblinvoices.id,tblinvoices.userid FROM tblinvoiceitems INNER JOIN tblinvoices ON tblinvoices.id=tblinvoiceitems.invoiceid WHERE tblinvoiceitems.relid='" . (int)$idnumber . "' AND tblinvoiceitems.type='Hosting' AND tblinvoices.status='Paid' ORDER BY tblinvoices.id DESC";
-				$result = full_query($query);
-				$data = mysql_fetch_array($result);
-				$invoiceid = $data['id'];
-				$userid = $data['userid'];
-				
-				if ($invoiceid) {
-					$orgipn.= ("Paid Invoice Found from Product ID Match => " . $invoiceid . "\r\n");
-				}
-			}
-			
-			
-			break;
 		}
+		
+		break;
+
 	case "web_accept":
 		if ($payment_status != "Completed") {
 			logTransaction("PayPal", $orgipn, "Incomplete");
@@ -191,8 +191,7 @@ if ($txn_type == "subscr_payment") {
 		$orgipn.= ("User ID Found from Subscription ID Match: User ID => " . $userid . "\r\n");
 		insert_query("tblaccounts", array("userid" => $userid, "currency" => $paypalcurrencyid, "gateway" => "paypal", "date" => "now()", "description" => "PayPal Subscription Payment", "amountin" => $mc_gross, "fees" => $mc_fee, "rate" => $currencyconvrate, "transid" => $txn_id));
 		insert_query("tblcredit", array("clientid" => $userid, "date" => "now()", "description" => "PayPal Subscription Transaction ID " . $txn_id, "amount" => $mc_gross));
-		$query = "UPDATE tblclients SET credit=credit+" . db_escape_string($mc_gross) . " WHERE id=" . (int)$userid;
-		$result = full_query($query);
+		update_query("tblclients", array("credit" => "+=" . $mc_gross), array("id" => (int)$userid));
 		logTransaction("PayPal", $orgipn, "Credit Added");
 		
 		return 1;

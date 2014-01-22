@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.14
+ * @ Version  : 5.2.15
  * @ Author   : MTIMER
- * @ Release on : 2013-11-28
+ * @ Release on : 2013-12-24
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -17,9 +17,9 @@ function base64EncodeX($plain) {
 }
 
 function base64DecodeX($scrambled) {
-	$scrambled = $output = "";
-	base64_decode($scrambled);
-	$output = str_replace(" ", "+", $scrambled);
+	$output = "";
+	$scrambled = str_replace(" ", "+", $scrambled);
+	$output = base64_decode($scrambled);
 	return $output;
 }
 

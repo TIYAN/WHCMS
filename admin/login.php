@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.14
+ * @ Version  : 5.2.15
  * @ Author   : MTIMER
- * @ Release on : 2013-11-28
+ * @ Release on : 2013-12-24
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -21,12 +21,12 @@ if (!function_exists("curl_init")) {
 
 
 if ($whmcs->get_req_var("conntest")) {
-	$whmcsurl = "http://www.mtimer.cn/";
+/*	$whmcsurl = "http://www.mtimer.cn/";
 	$postfields = array("curltest" => "1");
 	$ip = gethostbyname("api.mtimer.cn");
 	echo "<font style=\"font-size:18px;\">Testing Connection to whmcs.com...<br />URL resolves to " . $ip . "<br /><br />";
 
-	if ($ip != "112.124.18.103" && $ip != "54.213.123.208") {
+	if ($ip != "xxx.xxx.xxx.xxx" && $ip != "xxx.xxx.xxx.xxx") {
 		echo "<font style=\"color:#cc0000;\">Error: The IP whmcs.com is resolving to the wrong IP. Someone on your server is trying to bypass licensing. You'll need your host to investigate and fix.</font><br /><br />";
 	}
 
@@ -52,7 +52,7 @@ if ($whmcs->get_req_var("conntest")) {
 
 	curl_close($ch);
 	echo "Connection Response:<br /><br /><textarea rows=\"20\" cols=\"100\">" . $data . "</textarea>";
-	exit();
+*/	exit();
 }
 
 $result = select_query("tblconfiguration", "COUNT(*)", array("setting" => "License"));

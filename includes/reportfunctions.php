@@ -3,17 +3,19 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.14
+ * @ Version  : 5.2.15
  * @ Author   : MTIMER
- * @ Release on : 2013-11-28
+ * @ Release on : 2013-12-24
  * @ Website  : http://www.mtimer.cn
  *
  **/
 
 class WHMCSChart {
-	var $chartcount = 0;
+	public $chartcount = 0;
 
 	public function WHMCSChart() {
+
+		return;
 	}
 
 	public function drawChart($type, $data, $args = array(), $height = "300px", $width = "100%") {

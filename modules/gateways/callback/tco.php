@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.14
+ * @ Version  : 5.2.15
  * @ Author   : MTIMER
- * @ Release on : 2013-11-28
+ * @ Release on : 2013-12-24
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -77,10 +77,10 @@ if ($message_type == "FRAUD_STATUS_CHANGED" && !$GATEWAY['skipfraudcheck']) {
 
 	if ($fraud_status == "pass") {
 		if ($recurstatus && $serviceid) {
-			$result = $query = "SELECT tblinvoices.id FROM tblinvoiceitems INNER JOIN tblinvoices ON tblinvoices.id=tblinvoiceitems.invoiceid WHERE tblinvoiceitems.relid=" . (int)$serviceid . " AND tblinvoiceitems.type='Hosting' AND tblinvoices.status='Unpaid' ORDER BY tblinvoices.id ASC";
+			$query = "SELECT tblinvoices.id FROM tblinvoiceitems INNER JOIN tblinvoices ON tblinvoices.id=tblinvoiceitems.invoiceid WHERE tblinvoiceitems.relid=" . (int)$serviceid . " AND tblinvoiceitems.type='Hosting' AND tblinvoices.status='Unpaid' ORDER BY tblinvoices.id ASC";
+			$result = full_query($query);
 			$data = mysql_fetch_array($result);
 			$invoiceid = $data[0];
-			full_query($query);
 		}
 
 		$invoiceid = checkCbInvoiceID($invoiceid, $GATEWAY['name']);
@@ -98,10 +98,10 @@ if ($message_type == "FRAUD_STATUS_CHANGED" && !$GATEWAY['skipfraudcheck']) {
 
 if ($message_type == "ORDER_CREATED" && $GATEWAY['skipfraudcheck']) {
 	if ($recurstatus && $serviceid) {
-		$result = $query = "SELECT tblinvoices.id FROM tblinvoiceitems INNER JOIN tblinvoices ON tblinvoices.id=tblinvoiceitems.invoiceid WHERE tblinvoiceitems.relid=" . (int)$serviceid . " AND tblinvoiceitems.type='Hosting' AND tblinvoices.status='Unpaid' ORDER BY tblinvoices.id ASC";
+		$query = "SELECT tblinvoices.id FROM tblinvoiceitems INNER JOIN tblinvoices ON tblinvoices.id=tblinvoiceitems.invoiceid WHERE tblinvoiceitems.relid=" . (int)$serviceid . " AND tblinvoiceitems.type='Hosting' AND tblinvoices.status='Unpaid' ORDER BY tblinvoices.id ASC";
+		$result = full_query($query);
 		$data = mysql_fetch_array($result);
 		$invoiceid = $data[0];
-		full_query($query);
 	}
 
 	$invoiceid = checkCbInvoiceID($invoiceid, $GATEWAY['name']);
@@ -114,35 +114,35 @@ if ($message_type == "ORDER_CREATED" && $GATEWAY['skipfraudcheck']) {
 
 
 if ($message_type == "RECURRING_INSTALLMENT_SUCCESS") {
-	$result = $query = "SELECT tblinvoices.id FROM tblinvoiceitems INNER JOIN tblinvoices ON tblinvoices.id=tblinvoiceitems.invoiceid WHERE tblinvoiceitems.relid=" . (int)$serviceid . " AND tblinvoiceitems.type='Hosting' AND tblinvoices.status='Unpaid' ORDER BY tblinvoices.id ASC";
+	$query = "SELECT tblinvoices.id FROM tblinvoiceitems INNER JOIN tblinvoices ON tblinvoices.id=tblinvoiceitems.invoiceid WHERE tblinvoiceitems.relid=" . (int)$serviceid . " AND tblinvoiceitems.type='Hosting' AND tblinvoices.status='Unpaid' ORDER BY tblinvoices.id ASC";
+	$result = full_query($query);
 	$data = mysql_fetch_array($result);
 	$invoiceid = $data[0];
-	full_query($query);
 
 	if (!$invoiceid) {
-		$result = $query = "SELECT tblinvoices.id,tblinvoices.userid FROM tblinvoiceitems INNER JOIN tblinvoices ON tblinvoices.id=tblinvoiceitems.invoiceid WHERE tblinvoiceitems.relid=" . (int)$serviceid . " AND tblinvoiceitems.type='Hosting' AND tblinvoices.status='Paid' ORDER BY tblinvoices.id DESC";
+		$query = "SELECT tblinvoices.id,tblinvoices.userid FROM tblinvoiceitems INNER JOIN tblinvoices ON tblinvoices.id=tblinvoiceitems.invoiceid WHERE tblinvoiceitems.relid=" . (int)$serviceid . " AND tblinvoiceitems.type='Hosting' AND tblinvoices.status='Paid' ORDER BY tblinvoices.id DESC";
+		$result = full_query($query);
 		$data = mysql_fetch_array($result);
 		$invoiceid = $data[0];
 		$userid = $data[1];
-		full_query($query);
 	}
 
 
 	if (!$invoiceid) {
-		$result = $query = "SELECT tblinvoices.id,tblinvoices.userid FROM tblinvoiceitems INNER JOIN tblinvoices ON tblinvoices.id=tblinvoiceitems.invoiceid INNER JOIN tblhosting ON tblhosting.id=tblinvoiceitems.relid WHERE tblhosting.subscriptionid='" . db_escape_string($transid) . "' AND tblinvoiceitems.type='Hosting' AND tblinvoices.status='Unpaid' ORDER BY tblinvoices.id ASC";
+		$query = "SELECT tblinvoices.id,tblinvoices.userid FROM tblinvoiceitems INNER JOIN tblinvoices ON tblinvoices.id=tblinvoiceitems.invoiceid INNER JOIN tblhosting ON tblhosting.id=tblinvoiceitems.relid WHERE tblhosting.subscriptionid='" . db_escape_string($transid) . "' AND tblinvoiceitems.type='Hosting' AND tblinvoices.status='Unpaid' ORDER BY tblinvoices.id ASC";
+		$result = full_query($query);
 		$data = mysql_fetch_array($result);	
 		$invoiceid = $data[0];
 		$userid = $data[1];
-		full_query($query);
 	}
 
 
 	if (!$invoiceid) {
-		$result = $query = "SELECT tblinvoices.id,tblinvoices.userid FROM tblinvoiceitems INNER JOIN tblinvoices ON tblinvoices.id=tblinvoiceitems.invoiceid INNER JOIN tblhosting ON tblhosting.id=tblinvoiceitems.relid WHERE tblhosting.subscriptionid='" . db_escape_string($transid) . "' AND tblinvoiceitems.type='Hosting' AND tblinvoices.status='Paid' ORDER BY tblinvoices.id DESC";
+		$query = "SELECT tblinvoices.id,tblinvoices.userid FROM tblinvoiceitems INNER JOIN tblinvoices ON tblinvoices.id=tblinvoiceitems.invoiceid INNER JOIN tblhosting ON tblhosting.id=tblinvoiceitems.relid WHERE tblhosting.subscriptionid='" . db_escape_string($transid) . "' AND tblinvoiceitems.type='Hosting' AND tblinvoices.status='Paid' ORDER BY tblinvoices.id DESC";
+		$result = full_query($query);
 		$data = mysql_fetch_array($result);
 		$invoiceid = $data[0];
 		$userid = $data[1];
-		full_query($query);
 	}
 
 	checkCbTransID($recurringtransid);

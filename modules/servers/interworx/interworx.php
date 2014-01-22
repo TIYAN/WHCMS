@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.14
+ * @ Version  : 5.2.15
  * @ Author   : MTIMER
- * @ Release on : 2013-11-28
+ * @ Release on : 2013-12-24
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -48,7 +48,8 @@ function interworx_AdminLink($params) {
 }
 
 
-$key = function interworx_CreateAccount($params) {;
+function interworx_CreateAccount($params) {
+	$key = $params['serveraccesshash'];
 	$api_controller = "/nodeworx/siteworx";
 
 	if ($params['configoptions']["Dedicated IP"]) {
@@ -87,8 +88,7 @@ $key = function interworx_CreateAccount($params) {;
 	}
 
 	$client = new soapclient( "https://" . $params['serverip'] . ":2443/nodeworx/soap?wsdl" );
-	$client->route( $key, $api_controller, $action, $input );
-	$result = $params['serveraccesshash'];
+	$result = $client->route( $key, $api_controller, $action, $input );
 	logModuleCall( "interworx", $action, $input, $result );
 
 	if ($result['status']) {
@@ -99,7 +99,8 @@ $key = function interworx_CreateAccount($params) {;
 }
 
 
-$key = function interworx_TerminateAccount($params) {;
+function interworx_TerminateAccount($params) {
+	$key = $params['serveraccesshash'];
 
 	if ($params['type'] == "reselleraccount") {
 		$resellers = interworx_GetResellers( $params );
@@ -121,8 +122,7 @@ $key = function interworx_TerminateAccount($params) {;
 	}
 
 	$client = new soapclient( "https://" . $params['serverip'] . ":2443/nodeworx/soap?wsdl" );
-	$client->route( $key, $api_controller, $action, $input );
-	$result = $params['serveraccesshash'];
+	$result = $client->route( $key, $api_controller, $action, $input );
 	logModuleCall( "interworx", $action, $input, $result );
 
 	if ($result['status']) {
@@ -154,7 +154,8 @@ function interworx_UsageUpdate($params) {
 }
 
 
-$key = function interworx_SuspendAccount($params) {;
+function interworx_SuspendAccount($params) {
+	$key = $params['serveraccesshash'];
 
 	if ($params['type'] == "reselleraccount") {
 		$resellers = interworx_GetResellers( $params );
@@ -176,8 +177,7 @@ $key = function interworx_SuspendAccount($params) {;
 	}
 
 	$client = new soapclient( "https://" . $params['serverip'] . ":2443/nodeworx/soap?wsdl" );
-	$client->route( $key, $api_controller, $action, $input );
-	$result = $params['serveraccesshash'];
+	$result = $client->route( $key, $api_controller, $action, $input );
 	logModuleCall( "interworx", $action, $input, $result );
 
 	if ($result['status']) {
@@ -188,7 +188,8 @@ $key = function interworx_SuspendAccount($params) {;
 }
 
 
-$key = function interworx_UnsuspendAccount($params) {;
+function interworx_UnsuspendAccount($params) {
+	$key = $params['serveraccesshash'];
 
 	if ($params['type'] == "reselleraccount") {
 		$resellers = interworx_GetResellers( $params );
@@ -210,8 +211,7 @@ $key = function interworx_UnsuspendAccount($params) {;
 	}
 
 	$client = new soapclient( "https://" . $params['serverip'] . ":2443/nodeworx/soap?wsdl" );
-	$client->route( $key, $api_controller, $action, $input );
-	$result = $params['serveraccesshash'];
+	$result = $client->route( $key, $api_controller, $action, $input );
 	logModuleCall( "interworx", $action, $input, $result );
 
 	if ($result['status']) {
@@ -222,7 +222,8 @@ $key = function interworx_UnsuspendAccount($params) {;
 }
 
 
-$key = function interworx_ChangePassword($params) {;
+function interworx_ChangePassword($params) {
+	$key = $params['serveraccesshash'];
 
 	if ($params['type'] == "reselleraccount") {
 		$resellers = interworx_GetResellers( $params );
@@ -244,8 +245,7 @@ $key = function interworx_ChangePassword($params) {;
 	}
 
 	$client = new soapclient( "https://" . $params['serverip'] . ":2443/nodeworx/soap?wsdl" );
-	$client->route( $key, $api_controller, $action, $input );
-	$result = $params['serveraccesshash'];
+	$result = $client->route( $key, $api_controller, $action, $input );
 	logModuleCall( "interworx", $action, $input, $result );
 
 	if ($result['status']) {
@@ -256,7 +256,8 @@ $key = function interworx_ChangePassword($params) {;
 }
 
 
-$key = function interworx_ChangePackage($params) {;
+function interworx_ChangePackage($params) {
+	$key = $params['serveraccesshash'];
 
 	if ($params['type'] == "reselleraccount") {
 		$resellers = interworx_GetResellers( $params );
@@ -279,8 +280,7 @@ $key = function interworx_ChangePackage($params) {;
 	}
 
 	$client = new soapclient( "https://" . $params['serverip'] . ":2443/nodeworx/soap?wsdl" );
-	$client->route( $key, $api_controller, $action, $input );
-	$result = $params['serveraccesshash'];
+	$result = $client->route( $key, $api_controller, $action, $input );
 	logModuleCall( "interworx", $action, $input, $result );
 
 	if ($result['status']) {

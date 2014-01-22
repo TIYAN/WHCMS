@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.14
+ * @ Version  : 5.2.15
  * @ Author   : MTIMER
- * @ Release on : 2013-11-28
+ * @ Release on : 2013-12-24
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -26,8 +26,7 @@ if ($action == "") {
 		checkPermission("Manage Credits");
 		check_token("WHMCS.admin.default");
 		insert_query("tblcredit", array("clientid" => $userid, "date" => toMySQLDate($date), "description" => $description, "amount" => $amount));
-		$query = "UPDATE tblclients SET credit=credit+" . db_escape_string($amount) . " WHERE id='" . db_escape_string($userid) . "'";
-		full_query($query);
+		update_query("tblclients", array("credit" => "+=" . $amount), array("id" => (int)$userid));
 		logActivity("Added Credit - User ID: " . $userid . " - Amount: " . formatCurrency($amount), $userid);
 		redir("userid=" . $userid);
 		exit();
@@ -38,8 +37,7 @@ if ($action == "") {
 		checkPermission("Manage Credits");
 		check_token("WHMCS.admin.default");
 		insert_query("tblcredit", array("clientid" => $userid, "date" => toMySQLDate($date), "description" => $description, "amount" => 0 - $amount));
-		$query = "UPDATE tblclients SET credit=credit-" . db_escape_string($amount) . " WHERE id='" . db_escape_string($userid) . "'";
-		full_query($query);
+		update_query("tblclients", array("credit" => "-=" . $amount), array("id" => (int)$userid));
 		logActivity("Removed Credit - User ID: " . $userid . " - Amount: " . formatCurrency($amount), $userid);
 		redir("userid=" . $userid);
 		exit();
@@ -68,7 +66,7 @@ if ($action == "") {
 			$creditbalance = 0;
 		}
 
-		update_query("tblclients", array("credit" => $creditbalance), array("id" => $userid));
+		update_query("tblclients", array("credit" => $creditbalance), array("id" => (int)$userid));
 		delete_query("tblcredit", array("id" => $ide));
 		logActivity("Deleted Credit - Credit ID: " . $ide . " - User ID: " . $userid, $userid);
 		redir("userid=" . $userid);

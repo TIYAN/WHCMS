@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.14
+ * @ Version  : 5.2.15
  * @ Author   : MTIMER
- * @ Release on : 2013-11-28
+ * @ Release on : 2013-12-24
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -956,7 +956,7 @@ function resellerclub_RequestDelete($params) {
 	$postfields['api-key'] = $params['APIKey'];
 	$testmode = $params['TestMode'];
 	$tld = $params['tld'];
-	$params['sld'];
+	$sld = $params['sld'];
 	$postfields['domain-name'] = $params['sld'] . "." . $params['tld'];
 	$orderid = resellerclub_getOrderID( $postfields, $params );
 
@@ -968,7 +968,7 @@ function resellerclub_RequestDelete($params) {
 	$postfields['auth-userid'] = $params['ResellerID'];
 	$postfields['api-key'] = $params['APIKey'];
 	$postfields['order-id'] = $orderid;
-	$result = $sld = resellerclub_SendCommand( "delete", "domains", $postfields, $params, "POST" );
+	$result = resellerclub_SendCommand( "delete", "domains", $postfields, $params, "POST" );
 
 	if (strtoupper( $result['status'] ) == "ERROR") {
 		if (!$result['message']) {
@@ -2428,7 +2428,7 @@ function resellerclub_UpdateXXX($params) {
 function resellerclub_validateABN($abn) {
 	$abnarray = str_split( $abn );
 	$weights = array( 10, 1, 3, 5, 7, 9, 11, 13, 15, 17, 19 );
-	$abnarray -= 1;
+	$abnarray[0]--;
 	foreach ($abnarray as $id => $num) {
 		$abnarray[$id] = $abnarray[$id] * $weights[$id];
 		$abnsum += $abnarray[$id];

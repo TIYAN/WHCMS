@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.14
+ * @ Version  : 5.2.15
  * @ Author   : MTIMER
- * @ Release on : 2013-11-28
+ * @ Release on : 2013-12-24
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -603,10 +603,8 @@ if ($CONFIG['AffiliatesDelayCommission'] && $cron->isScheduled("affcommissions")
 		$domainstatus = $data['domainstatus'];
 
 		if ($affaccid && $domainstatus == "Active") {
-			$query2 = "UPDATE tblaffiliates SET balance=balance+" . db_escape_string($amount) . " WHERE id=" . (int)$affid;
-			$result2 = full_query($query2);
-			$query2 = "UPDATE tblaffiliatesaccounts SET lastpaid=now() WHERE id=" . (int)$affaccid;
-			$result2 = full_query($query2);
+			update_query("tblaffiliates", array("balance" => "+=" . $amount), array("id" => (int)$affid));
+			update_query("tblaffiliatesaccounts", array("lastpaid" => "now()"), array("id" => (int)$affaccid));
 			insert_query("tblaffiliateshistory", array("affiliateid" => $affid, "date" => "now()", "affaccid" => $affaccid, "amount" => $amount));
 			++$affiliatepaymentscleared;
 		}
@@ -1116,7 +1114,7 @@ if ($cron->isScheduled("backups")) {
 		}
 
 		$ftp_server = str_replace("ftp://", "", $ftp_server);
-		$ftpconnection = ftp_connect($ftp_server, $ftp_port) || $error = "Couldn't connect to " . $ftp_server;
+		($ftpconnection = ftp_connect($ftp_server, $ftp_port) || $error = "Couldn't connect to " . $ftp_server);
 
 		if (!ftp_login($ftpconnection, $ftp_user, $ftp_pass)) {
 			$cron->logActivity("FTP Backup - Login Failed");

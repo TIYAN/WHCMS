@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.14
+ * @ Version  : 5.2.15
  * @ Author   : MTIMER
- * @ Release on : 2013-11-28
+ * @ Release on : 2013-12-24
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -23,7 +23,7 @@ if (!$data['id']) {
 }
 
 insert_query("tblcredit", array("clientid" => $clientid, "date" => "now()", "description" => $description, "amount" => $amount));
-full_query("UPDATE tblclients SET credit=credit+" . db_escape_string($amount) . " WHERE id='" . db_escape_string($clientid) . "'");
+update_query("tblclients", array("credit" => "+=" . $amount), array("id" => (int)$clientid));
 $currency = getCurrency($clientid);
 logActivity("Added Credit - User ID: " . $clientid . " - Amount: " . formatCurrency($amount), $clientid);
 $result = select_query("tblclients", "", array("id" => $clientid));

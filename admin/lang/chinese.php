@@ -4,9 +4,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.14
+ * @ Version  : 5.2.15
  * @ Author   : MTIMER
- * @ Release on : 2013-11-28
+ * @ Release on : 2013-12-24
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -2395,7 +2395,7 @@ $_ADMINLANG['general']['afflinksinfo'] = "输入会员的自定义链接代码�
 $_ADMINLANG['general']['afflinksinfo2'] = "使用<b> <（</ B>开放的括号和<b>）> </ B>为HTML或其他的HTML密切括号将在页面上执行";
 $_ADMINLANG['general']['captcha'] = "验证码开启";
 $_ADMINLANG['general']['captchaalwayson'] = "始终开启（5位数的验证码）";
-$_ADMINLANG['general']['captchaoffloggedin'] = "关闭时记录";
+$_ADMINLANG['general']['captchaoffloggedin'] = "登录时关闭";
 $_ADMINLANG['general']['captchaoff'] = "始终关闭";
 $_ADMINLANG['general']['captchatype'] = "验证码类型";
 $_ADMINLANG['general']['captchadefault'] = "默认(5个字符)";

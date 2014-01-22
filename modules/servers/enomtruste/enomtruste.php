@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.14
+ * @ Version  : 5.2.15
  * @ Author   : MTIMER
- * @ Release on : 2013-11-28
+ * @ Release on : 2013-12-24
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -123,7 +123,7 @@ function enomtruste_TerminateAccount($params) {
 function enomtruste_ClientArea($params) {
 	global $_LANG;
 
-	$domain = ;
+	$domain = $params['domain'];
 
 	if (!$domain) {
 		$domain = $params['customfields']["Domain Name"];
@@ -139,8 +139,7 @@ function enomtruste_ClientArea($params) {
 		return $code;
 	}
 
-	$xmldata['INTERFACE-RESPONSE']['ERRORS']['ERR1'];
-	$result = $params['domain'];
+	$result = $xmldata['INTERFACE-RESPONSE']['ERRORS']['ERR1'];
 
 	if (!$result) {
 		$result = "An Unknown Error Occurred";

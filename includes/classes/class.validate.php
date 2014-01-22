@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.14
+ * @ Version  : 5.2.15
  * @ Author   : MTIMER
- * @ Release on : 2013-11-28
+ * @ Release on : 2013-12-24
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -160,84 +160,94 @@ class WHMCS_Validate {
 		}
 
 		switch ($rule) {
-		case "required":
-			return (!trim($val) ? false : true);
-		case "numeric":
-			return is_numeric($val);
-		case "match_value":
-            if (is_array($field2))
-            {
-                return ($field2[0] === $field2[1]) ? true:false;
-            }
-            return ($val === $val2) ? true:false;
-		case "matchpattern":
-			return preg_match($field2[0], $val);
-        case "email" :
-            if (function_exists("filter_var"))
-            {
-                return filter_var($val, FILTER_VALIDATE_EMAIL);
-            }
-            return preg_match("/^([a-zA-Z0-9&'.])+([\\.a-zA-Z0-9+_-])*@([a-zA-Z0-9_-])+(\\.[a-zA-Z0-9_-]+)*\\.([a-zA-Z]{2,6})$/", $val);
-        case "postcode" :
-            return !preg_replace("/[a-zA-Z0-9 \\-]/", "", $val);
-        case "phone" :
-            return !preg_replace("/[0-9 .\\-()]/", "", $val);
-        case "country" :
-            if (preg_replace("/[A-Z]/", "", $val))
-            {
-                return false;
-            }
-            if (strlen($val) != 2)
-            {
-                return false;
-            }
-            return true;
-        case "url" :
-            return preg_match("|^http(s)?://[a-z0-9-]+(.[a-z0-9-]+)*(:[0-9]+)?(/.*)?$|i", $val);
-        case "inarray" :
-            return in_array($val, $field2);
-        case "banneddomain" :
-            if (!strpos($val, "@"))
-            {
-            	return false;
-            }
-            return get_query_val("tblbannedemails", "COUNT(id)", array("domain" => $val)) ? false : true;
-        case "uniqueemail" :
-            $where = array("email" => $val);
-            if (is_array($field2) && 0 < $field2[0])
-            {
-                $where['id'] = array("sqltype" => "NEQ", "value" => $field2[0]);
-            }
-            if ($clientexists)
-            {
-                return false;
-            }
-            $where = array("subaccount" => "1", "email" => $val);
-            if (is_array($field2) && 0 < $field2[1])
-            {
-                $where['id'] = array("sqltype" => "NEQ", "value" => $field2[1]);
-            }
-            if ($subaccexists)
-            {
-                return false;
-            }
-            return true;
-        case "pwstrength" :
-            $reqpwstrength = $whmcs->get_config('RequiredPWStrength');
-            if (!$reqpwstrength)
-            {
-                return true;
-            }
-            $pwstrength = $this->calcPasswordStrength($val);
-            if ($pwstrength <= $reqpwstrength)
-            {
-                return false;
-            }
-            return true;
-		case "captcha":
-			return ($this->checkCaptchaInput($val) ? true : false);
-		case "uploaded":
-			return ($this->checkUploadExtensions($field) ? true : false);
+			case "required":
+				return (!trim($val) ? false : true);
+			case "numeric":
+				return is_numeric($val);
+			case "match_value":
+            	if (is_array($field2))
+            	{
+                	return ($field2[0] === $field2[1]) ? true:false;
+            	}
+            	return ($val === $val2) ? true:false;
+			case "matchpattern":
+				return preg_match($field2[0], $val);
+        	case "email" :
+            	if (function_exists("filter_var"))
+            	{
+                	return filter_var($val, FILTER_VALIDATE_EMAIL);
+            	}
+            	return preg_match("/^([a-zA-Z0-9&'.])+([\\.a-zA-Z0-9+_-])*@([a-zA-Z0-9_-])+(\\.[a-zA-Z0-9_-]+)*\\.([a-zA-Z]{2,6})$/", $val);
+        	case "postcode" :
+            	return !preg_replace("/[a-zA-Z0-9 \\-]/", "", $val);
+        	case "phone" :
+            	return !preg_replace("/[0-9 .\\-()]/", "", $val);
+        	case "country" :
+            	if (preg_replace("/[A-Z]/", "", $val))
+            	{
+                	return false;
+            	}
+            	if (strlen($val) != 2)
+            	{
+                	return false;
+            	}
+            	return true;
+        	case "url" :
+            	return preg_match("|^http(s)?://[a-z0-9-]+(.[a-z0-9-]+)*(:[0-9]+)?(/.*)?$|i", $val);
+        	case "inarray" :
+            	return in_array($val, $field2);
+        	case "banneddomain" :
+            	if (!strpos($val, "@"))
+            	{
+            		return false;
+            	}
+            	return get_query_val("tblbannedemails", "COUNT(id)", array("domain" => $val)) ? false : true;
+        	case "uniqueemail" :
+            	$where = array("email" => $val);
+            	if (is_array($field2) && 0 < $field2[0])
+            	{
+                	$where['id'] = array("sqltype" => "NEQ", "value" => $field2[0]);
+            	}
+            	if ($clientexists)
+            	{
+                	return false;
+            	}
+            	$where = array("subaccount" => "1", "email" => $val);
+            	if (is_array($field2) && 0 < $field2[1])
+            	{
+                	$where['id'] = array("sqltype" => "NEQ", "value" => $field2[1]);
+            	}
+            	if ($subaccexists)
+            	{
+                	return false;
+            	}
+            	return true;
+        	case "pwstrength" :
+            	$reqpwstrength = $whmcs->get_config('RequiredPWStrength');
+            	if (!$reqpwstrength)
+            	{
+                	return true;
+            	}
+            	$pwstrength = $this->calcPasswordStrength($val);
+            	if ($pwstrength <= $reqpwstrength)
+            	{
+                	return false;
+            	}
+            	return true;
+			case "captcha":
+                $captcha = $whmcs->get_config('CaptchaSetting');
+                if ( !$captcha )
+                {
+                    return true;
+                }
+                if ( $captcha == "offloggedin" && isset( $_SESSION['uid'] ) )
+                {
+                    return true;
+                }
+                $captcha = $val;
+				return ($this->checkCaptchaInput($val) ? true : false);
+			case "fileuploads":
+				return ($this->checkUploadExtensions($field) ? true : false);
 		}
 
 		return true;

@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.14
+ * @ Version  : 5.2.15
  * @ Author   : MTIMER
- * @ Release on : 2013-11-28
+ * @ Release on : 2013-12-24
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -134,7 +134,7 @@ function genQuotePDF($id) {
 	$companyname = html_entity_decode($CONFIG['CompanyName']);
 	$companyurl = $CONFIG['Domain'];
 	$companyaddress = html_entity_decode($CONFIG['InvoicePayTo']);
-	$companyaddress = explode("\n", $companyaddress);
+	$companyaddress = explode("\r\n", $companyaddress);
 
 	$quotenumber = $id;
 	$result = select_query("tblquotes", "", array("id" => $id));
@@ -189,7 +189,7 @@ function genQuotePDF($id) {
 		$line_discount = $data['discount'];
 		$line_taxable = $data['taxable'];
 		$line_total = format_as_currency($line_qty * $line_unitprice * (1 - $line_discount / 100));
-		$lineitems[] = array("id" => $line_id, "description" => html_entity_decode($line_desc), "qty" => $line_qty, "unitprice" => $line_unitprice, "discount" => $line_discount, "taxable" => $line_taxable, "total" => formatCurrency($line_total));
+		$lineitems[] = array("id" => $line_id, "description" => htmlspecialchars(html_entity_decode($line_desc, ENT_QUOTES)), "qty" => $line_qty, "unitprice" => $line_unitprice, "discount" => $line_discount, "taxable" => $line_taxable, "total" => formatCurrency($line_total));
 	}
 
 	$tplvars = array();
@@ -212,6 +212,10 @@ function genQuotePDF($id) {
 	$tplvars['tax1'] = $tax1;
 	$tplvars['tax2'] = $tax2;
 	$tplvars['total'] = $total;
+	foreach ($tplvars as $k => $v) {
+		$tplvars[$k] = html_entity_decode($v, ENT_QUOTES);
+	}
+
 	$tplvars['lineitems'] = $lineitems;
 	$invoice = new WHMCS_Invoice();
 	$invoice->pdfCreate($_LANG['quotenumber'] . $id);

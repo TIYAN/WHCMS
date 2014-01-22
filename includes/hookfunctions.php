@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.14
+ * @ Version  : 5.2.15
  * @ Author   : MTIMER
- * @ Release on : 2013-11-28
+ * @ Release on : 2013-12-24
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -76,7 +76,7 @@ function clear_hooks($hook_name) {
 
 }
 
-function run_validate_hook($validate, $hook_name, $args) {
+function run_validate_hook(&$validate, $hook_name, $args) {
 	$hookerrors = run_hook($hook_name, $args);
 	$errormessage = "";
 

@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.14
+ * @ Version  : 5.2.15
  * @ Author   : MTIMER
- * @ Release on : 2013-11-28
+ * @ Release on : 2013-12-24
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -22,7 +22,7 @@ class DOTDNS {
 	}
 
 
-	function AddParam($Name, &$Value) {
+	function AddParam($Name, $Value) {
 		$this->PostString .= $Name . "=" . urlencode( $Value ) . "&";
 	}
 
@@ -51,12 +51,7 @@ class DOTDNS {
 			return null;
 		}
 
-		$in = "GET /api/api.php?" . $this->PostString . ( ( " HTTP/1.1
-Host: " . $host . "
-" ) . "
-Connection: Close
-
-" );
+		$in = "GET /api/api.php?" . $this->PostString . ( ( " HTTP/1.1\nHost: " . $host . "\n" ) . "\nConnection: Close\n\n" );
 		$out = "";
 		fputs( $socket, $in );
 
@@ -102,7 +97,7 @@ Connection: Close
 			}
 		}
 
-		$i = 8;
+		$i = 0;
 		foreach ($n as $k => $v) {
 
 			if ($v['type'] == "open") {

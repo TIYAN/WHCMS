@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.14
+ * @ Version  : 5.2.15
  * @ Author   : MTIMER
- * @ Release on : 2013-11-28
+ * @ Release on : 2013-12-24
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -317,7 +317,7 @@ if ($action == "save") {
 		}
 
 		global $whmcs;
-		$token_manager = getTokenManager();
+		$token_manager = &getTokenManager();
 
 		$token_manager->processAdminHTMLSave($whmcs);
 		redir("success=true&tab=" . $tab);
@@ -2102,7 +2102,7 @@ echo "</a> <a href=\"#\" id=\"removeapiip\"><img src=\"images/icons/delete.png\"
 echo $aInt->lang("general", "removeselected");
 echo "</a></td></tr>
 ";
-$token_manager = getTokenManager();
+$token_manager = &getTokenManager();
 
 echo $token_manager->generateAdminConfigurationHTMLRows($aInt);
 echo "

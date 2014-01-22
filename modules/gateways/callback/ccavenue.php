@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.14
+ * @ Version  : 5.2.15
  * @ Author   : MTIMER
- * @ Release on : 2013-11-28
+ * @ Release on : 2013-12-24
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -24,8 +24,8 @@ function ccavenue_verifychecksum($MerchantId, $OrderId, $Amount, $AuthDesc, $Che
 
 function ccavenuecb_adler32($adler, $str) {
 	$BASE = 65521;
-	$s1 = $adler & 65535;
-	$s2 = $adler >> 16 & 65535;
+	$s1 = $adler & 0xffff;
+	$s2 = ($adler >> 16) & 0xffff;
 	$i = 0;
 
 	while ($i < strlen($str)) {

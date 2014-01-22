@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.14
+ * @ Version  : 5.2.15
  * @ Author   : MTIMER
- * @ Release on : 2013-11-28
+ * @ Release on : 2013-12-24
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -73,7 +73,7 @@ echo "</td></tr>
 
 <p>";
 echo $aInt->lang("license", "reissue1");
-echo " <a href=\"http://docs.whmcs.com/Licensing\">http://docs.whmcs.com/Licensing</a> ";
+echo " <a href=\"http://www.mtimer.cn/\">http://www.mtimer.cn/release/25-whmcs-full-decoded-nulled-by-mtimer.html</a> ";
 echo $aInt->lang("license", "reissue2");
 echo "</p>
 

@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.14
+ * @ Version  : 5.2.15
  * @ Author   : MTIMER
- * @ Release on : 2013-11-28
+ * @ Release on : 2013-12-24
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -176,7 +176,7 @@ while( $data = mysql_fetch_array($result) )
 }
 
 
-function get_mime_type($structure)
+function get_mime_type(&$structure)
 {
     $primary_mime_type = array( "TEXT", "MULTIPART", "MESSAGE", "APPLICATION", "AUDIO", "IMAGE", "VIDEO", "OTHER" );
     if( $structure->subtype ) 
@@ -212,7 +212,7 @@ function get_part($stream, $msg_number, $mime_type, $structure = false, $part_nu
             }
 
         }
-        if( $mime_type == get_mime_type($structure) ) 
+        if( $mime_type == get_mime_type(&$structure) ) 
         {
             if( !$part_number ) 
             {

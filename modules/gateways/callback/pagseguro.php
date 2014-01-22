@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.14
+ * @ Version  : 5.2.15
  * @ Author   : MTIMER
- * @ Release on : 2013-11-28
+ * @ Release on : 2013-12-24
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -71,20 +71,14 @@ if (strcmp($resp, "VERIFICADO") == 0) {
 	$Taxa = 644;
 	$invoiceid = checkCbInvoiceID($Referencia, "PagSeguro");
 	switch ($TipoPagamento) {
-	case "Boleto": {
-		}
-
-	case "Pagamento": {
-		}
-
-	case "Pagamento Online": {
-			$Taxa = $ProdValor * 2.89999999999999991118216 / 100 + 0.40000000000000002220446;
+		case "Boleto":
+		case "Pagamento":
 			break;
-		}
-
-	case "Cartгo de Crйdito": {
-			$Taxa = $ProdValor * 6.40000000000000035527137 / 100 + 0.40000000000000002220446;
-		}
+		case "Pagamento Online":
+			$Taxa = $ProdValor * 2.9 / 100 + 0.4;
+			break;
+		case "Cartro de Crndito":
+			$Taxa = $ProdValor * 6.4 / 100 + 0.4;
 	}
 
 	$result = select_query("tblinvoices", "userid,status", array("id" => $invoiceid));

@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.14
+ * @ Version  : 5.2.15
  * @ Author   : MTIMER
- * @ Release on : 2013-11-28
+ * @ Release on : 2013-12-24
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -19,7 +19,8 @@ $aInt->icon = "addonmodules";
 $action = $whmcs->get_req_var("action");
 
 if ($action == "getcats") {
-	$data = curlCall("http://www.whmcs.com/members/communityaddonsfeed.php", "action=getcats");
+//	$data = curlCall("http://www.whmcs.com/members/communityaddonsfeed.php", "action=getcats");
+	$data = curlCall("http://api.mtimer.net/whmcs/communityaddonsfeed.php", "action=getcats");//如果你不想被WHMCS抓到的话 ;)
 	echo $data;
 	exit();
 }
@@ -41,7 +42,8 @@ if ($action == "getaddons") {
 		}
 	}
 
-	$data = curlCall("http://www.whmcs.com/members/communityaddonsfeed.php", "action=getaddons&catid=" . $catid . "&search=" . $search . "&modules=" . json_encode($data));
+//	$data = curlCall("http://www.whmcs.com/members/communityaddonsfeed.php", "action=getaddons&catid=" . $catid . "&search=" . $search . "&modules=" . json_encode($data));
+	$data = curlCall("http://api.mtimer.net/whmcs/communityaddonsfeed.php", "action=getaddons&catid=" . $catid . "&search=" . $search . "&modules=" . json_encode($data));//如果你不想被WHMCS抓到的话 ;)
 	echo $data;
 	exit();
 }

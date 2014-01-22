@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.14
+ * @ Version  : 5.2.15
  * @ Author   : MTIMER
- * @ Release on : 2013-11-28
+ * @ Release on : 2013-12-24
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -29,18 +29,18 @@ function project_management_config() {
 }
 
 function project_management_activate() {
-	$result = full_query($query);
-	$result = full_query($query);
 	$query = "CREATE TABLE IF NOT EXISTS `mod_projecttasks` (`id` int(10) NOT NULL AUTO_INCREMENT, `projectid` int(10) NOT NULL, `task` text NOT NULL, `notes` TEXT NOT NULL, `adminid` int(11) NOT NULL, `created` DATETIME NOT NULL, `duedate` date NOT NULL, `completed` int(1) NOT NULL, `billed` INT(1) NOT NULL, `order` INT(3) NOT NULL, PRIMARY KEY (`id`))";
 	$result = full_query($query);
 	$query = "CREATE TABLE IF NOT EXISTS `mod_projecttimes` (`id` int(10) NOT NULL AUTO_INCREMENT, `projectid` int(10) NOT NULL, `taskid` int(10) NOT NULL, `adminid` VARCHAR(255) NOT NULL, `start` VARCHAR(255) NOT NULL, `end` VARCHAR(255) NOT NULL, `donotbill` INT(1) NOT NULL, PRIMARY KEY (`id`))";
 	$result = full_query($query);
 	$query = "CREATE TABLE IF NOT EXISTS `mod_projecttasktpls` (`id` int(10) NOT NULL AUTO_INCREMENT, `name` text NOT NULL, `tasks` text NOT NULL, PRIMARY KEY (`id`))";
-	full_query($query);
-	$result = $query = "CREATE TABLE IF NOT EXISTS `mod_project` (`id` int(10) NOT NULL AUTO_INCREMENT,`userid` int(10) NOT NULL,`title` text NOT NULL,`attachments` text NOT NULL,`ticketids` text NOT NULL,`invoiceids` text NOT NULL,`notes` text NOT NULL,`adminid` int(10) NOT NULL,`status` VARCHAR(255) NOT NULL, `created` date NOT NULL,`duedate` date NOT NULL,`completed` int(1) NOT NULL,`lastmodified` datetime NOT NULL, PRIMARY KEY (`id`))";
+	$result = full_query($query);
+	$query = "CREATE TABLE IF NOT EXISTS `mod_project` (`id` int(10) NOT NULL AUTO_INCREMENT,`userid` int(10) NOT NULL,`title` text NOT NULL,`attachments` text NOT NULL,`ticketids` text NOT NULL,`invoiceids` text NOT NULL,`notes` text NOT NULL,`adminid` int(10) NOT NULL,`status` VARCHAR(255) NOT NULL, `created` date NOT NULL,`duedate` date NOT NULL,`completed` int(1) NOT NULL,`lastmodified` datetime NOT NULL, PRIMARY KEY (`id`))";
+	$result = full_query($query);
 	$query = "CREATE TABLE IF NOT EXISTS `mod_projectlog` (`id` INT(255) NOT NULL AUTO_INCREMENT PRIMARY KEY, `projectid` INT(11) NOT NULL, `date` DATETIME NOT NULL, `msg` VARCHAR(255) NOT NULL, `adminid` INT(11) NOT NULL)";
-	full_query($query);
-	$result = $query = "CREATE TABLE IF NOT EXISTS `mod_projectmessages` (`id` int(10) NOT NULL AUTO_INCREMENT, `projectid` int(10) NOT NULL, `date` datetime NOT NULL, `message` text NOT NULL, `attachments` text NOT NULL, `adminid` int(10) NOT NULL, PRIMARY KEY (`id`))";
+	$result = full_query($query);
+	$query = "CREATE TABLE IF NOT EXISTS `mod_projectmessages` (`id` int(10) NOT NULL AUTO_INCREMENT, `projectid` int(10) NOT NULL, `date` datetime NOT NULL, `message` text NOT NULL, `attachments` text NOT NULL, `adminid` int(10) NOT NULL, PRIMARY KEY (`id`))";
+	$result = full_query($query);
 	full_query("INSERT INTO `tbladdonmodules` (`module`, `setting`, `value`) VALUES('project_management', 'hourlyrate', '100.00')");
 	full_query("INSERT INTO `tbladdonmodules` (`module`, `setting`, `value`) VALUES('project_management', 'statusvalues', 'Pending,In Progress,Awaiting,Abandoned,Completed')");
 	full_query("INSERT INTO `tbladdonmodules` (`module`, `setting`, `value`) VALUES('project_management', 'completedstatuses', 'Abandoned,Completed')");

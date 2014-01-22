@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.14
+ * @ Version  : 5.2.15
  * @ Author   : MTIMER
- * @ Release on : 2013-11-28
+ * @ Release on : 2013-12-24
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -234,7 +234,7 @@ function SumUpPackageUpgradeOrder($id, $newproductid, $newproductbillingcycle, $
 			if ($CONFIG['CreditOnDowngrade']) {
 				$creditamount = $amountdue * (0 - 1);
 				insert_query("tblcredit", array("clientid" => $_SESSION['uid'], "date" => "now()", "description" => "Upgrade/Downgrade Credit", "amount" => $creditamount));
-				full_query("UPDATE tblclients SET credit=credit+" . db_escape_string($creditamount) . " WHERE id='" . mysql_real_escape_string($_SESSION['uid']) . "'");
+				update_query("tblclients", array("credit" => "+=" . $creditamount), array("id" => (int)$_SESSION['uid']));
 			}
 
 			update_query("tblupgrades", array("paid" => "Y"), array("id" => $upgradeid));
@@ -453,7 +453,7 @@ function SumUpConfigOptionsOrder($id, $configoptions, $promocode, $paymentmethod
 				if ($CONFIG['CreditOnDowngrade']) {
 					$creditamount = $amountdue * (0 - 1);
 					insert_query("tblcredit", array("clientid" => $_SESSION['uid'], "date" => "now()", "description" => "Upgrade/Downgrade Credit", "amount" => $creditamount));
-					full_query("UPDATE tblclients SET credit=credit+" . db_escape_string($creditamount) . " WHERE id='" . mysql_real_escape_string($_SESSION['uid']) . "'");
+					update_query("tblclients", array("credit" => "+=" . $creditamount), array("id" => (int)$_SESSION['uid']));
 				}
 
 				doUpgrade($upgradeid);

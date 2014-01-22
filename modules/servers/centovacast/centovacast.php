@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.14
+ * @ Version  : 5.2.15
  * @ Author   : MTIMER
- * @ Release on : 2013-11-28
+ * @ Release on : 2013-12-24
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -251,7 +251,7 @@ function centovacast_UniqueUsername($client, $minlength = 4, $maxlength = 8) {
  *
  * @return string the URL to Centova Cast.
  */
-function centovacast_GetCCURL(&$params, $error) {
+function centovacast_GetCCURL($params, &$error) {
 	$error = false;
 	$ccurl = $params['serverhostname'];
 
@@ -296,7 +296,7 @@ function centovacast_GetServerCredentials($params, $serverapi = false) {
  *
  * @return bool|string true on success, an error string on failure
  */
-function centovacast_GetAPIArgs(&$params, $arguments) {
+function centovacast_GetAPIArgs($params, &$arguments) {
 	$packageid = $params['packageid'];
 	$templatename = $params['configoption1'];
 	$maxlisteners = $params['configoption2'];

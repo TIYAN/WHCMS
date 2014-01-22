@@ -4,9 +4,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.14
+ * @ Version  : 5.2.15
  * @ Author   : MTIMER
- * @ Release on : 2013-11-28
+ * @ Release on : 2013-12-24
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -368,7 +368,7 @@ class Mail_mimeDecode
         return $return;
     }
 
-    public function getMimeNumbers($structure, $no_refs = false, $mime_number = "", $prepend = "")
+    public function &getMimeNumbers(&$structure, $no_refs = false, $mime_number = "", $prepend = "")
     {
         $return = array(  );
         if( !empty($structure->parts) ) 
@@ -560,7 +560,7 @@ class Mail_mimeDecode
         return $input;
     }
 
-    public function uudecode($input)
+    public function &uudecode($input)
     {
         preg_match_all("/begin ([0-7]{3}) (.+)\r?\n(.+)\r?\nend/Us", $input, $matches);
         for( $j = 0; $j < count($matches[3]); $j++ ) 

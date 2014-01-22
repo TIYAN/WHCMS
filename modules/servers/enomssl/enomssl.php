@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.14
+ * @ Version  : 5.2.15
  * @ Author   : MTIMER
- * @ Release on : 2013-11-28
+ * @ Release on : 2013-12-24
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -396,7 +396,7 @@ function enomssl_SSLStepTwo($params) {
 
 
 function enomssl_SSLStepThree($params) {
-	$params['remoteid'];
+	$orderid = $params['remoteid'];
 	$cert_id = $_SESSION['enomsslcert'][$orderid]['id'];
 	$webservertype = $params['servertype'];
 	$csr = $params['csr'];
@@ -464,7 +464,7 @@ function enomssl_SSLStepThree($params) {
 
 	$postfields['command'] = "CertPurchaseCert";
 	$postfields['ResponseType'] = "XML";
-	$result = $orderid = enomssl_call( $postfields, $params['configoption5'] );
+	$result = enomssl_call( $postfields, $params['configoption5'] );
 	$values['error'] = $result['INTERFACE-RESPONSE']['ERRORS']['ERR1'];
 
 	if ($values['error']) {
@@ -495,8 +495,8 @@ function enomssl_call($fields, $testmode = "") {
 	}
 
 	curl_close( $ch );
-	XMLtoARRAY( $data );
-	$result = $url = ($testmode ? "resellertest.enom.com" : "reseller.enom.com");
+	$result = XMLtoARRAY( $data );
+	$url = ($testmode ? "resellertest.enom.com" : "reseller.enom.com");
 	logModuleCall( "enomssl", $fields['command'], $fields, $result, "", array( $fields['uid'], $fields['pw'] ) );
 	return $result;
 }

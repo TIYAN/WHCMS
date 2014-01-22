@@ -4,9 +4,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.14
+ * @ Version  : 5.2.15
  * @ Author   : MTIMER
- * @ Release on : 2013-11-28
+ * @ Release on : 2013-12-24
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -401,7 +401,7 @@ $_LANG['invoiceaddcreditdesc1'] = "您的账户余额是";
 $_LANG['invoiceaddcreditdesc2'] = "账户余额可以用来支付本账单.";
 $_LANG['invoiceaddcreditoverbalance'] = "您使用的余额不能超过账单欠费额度";
 $_LANG['invoiceaddcreditovercredit'] = "您使用的余额不能超过账户余额";
-$_LANG['invoicenumber'] = "账单编号";
+$_LANG['invoicenumber'] = "账单编号 #";
 $_LANG['invoiceofflinepaid'] = "离线信用卡支付被手工处理。<br />一旦您的支付被处理完毕您将会收到一封确认电子邮件。";
 $_LANG['invoicerefnum'] = "参考号码";
 $_LANG['invoices'] = "我的账单";

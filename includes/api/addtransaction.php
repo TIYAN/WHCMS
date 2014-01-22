@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.14
+ * @ Version  : 5.2.15
  * @ Author   : MTIMER
- * @ Release on : 2013-11-28
+ * @ Release on : 2013-12-24
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -56,8 +56,7 @@ if ($userid && $credit) {
 	}
 
 	insert_query("tblcredit", array("clientid" => $userid, "date" => toMySQLDate($date), "description" => $description, "amount" => $amountin));
-	$query = "UPDATE tblclients SET credit=credit+" . mysql_real_escape_string($amountin) . " WHERE id='" . mysql_real_escape_string($userid) . "'";
-	full_query($query);
+	update_query("tblclients", array("credit" => "+=" . $amountin), array("id" => (int)$userid));
 }
 
 $apiresults = array("result" => "success");

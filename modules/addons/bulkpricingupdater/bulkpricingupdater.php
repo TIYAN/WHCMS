@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.14
+ * @ Version  : 5.2.15
  * @ Author   : MTIMER
- * @ Release on : 2013-11-28
+ * @ Release on : 2013-12-24
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -83,7 +83,7 @@ function bulkpricingupdater_output($vars) {
 <option>Biennially</option>
 <option>Triennially</option>
 ";
-		$domainyears = 0;
+		$domainyears = 1;
 
 		while ($domainyears <= 10) {
 			echo "<option value=\"" . $domainyears . "\">Domain: " . $domainyears . " Year</option>";

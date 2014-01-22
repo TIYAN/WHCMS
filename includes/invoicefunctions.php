@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.14
+ * @ Version  : 5.2.15
  * @ Author   : MTIMER
- * @ Release on : 2013-11-28
+ * @ Release on : 2013-12-24
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -301,8 +301,7 @@ function refundInvoicePayment($transid, $amount, $sendtogateway, $addascredit = 
 		addTransaction($userid, 0, "Credit from Refund of Invoice ID " . $invoiceid, $amount, $fees, 0, "", "", "", "", "", "");
 		logActivity("Refunded Invoice Payment to Credit Balance - Invoice ID: " . $invoiceid, $userid);
 		insert_query("tblcredit", array("clientid" => $userid, "date" => "now()", "description" => "Credit from Refund of Invoice ID " . $invoiceid, "amount" => $amount));
-		$query = "UPDATE tblclients SET credit=credit+" . mysql_real_escape_string($amount) . " WHERE id='" . mysql_real_escape_string($userid) . "'";
-		full_query($query);
+		update_query("tblclients", array("credit" => "+=" . $amount), array("id" => (int)$userid));
 
 		if ($invoicetotalpaid - $invoicetotalrefunded - $amount <= 0) {
 			update_query("tblinvoices", array("status" => "Refunded"), array("id" => $invoiceid));
@@ -499,15 +498,13 @@ function processPaidInvoice($invoiceid, $noemail = "", $date = "") {
 
 		if ($type == "AddFunds") {
 			insert_query("tblcredit", array("clientid" => $userid, "date" => "now()", "description" => "Add Funds Invoice #" . $invoiceid, "amount" => $amount, "relid" => $invoiceid));
-			$query3 = "UPDATE tblclients SET credit=credit+" . db_escape_string($amount) . " WHERE id=" . (int)$userid;
-			full_query($query3);
+			update_query("tblclients", array("credit" => "+=" . $amount), array("id" => (int)$userid));
 		}
 
 
 		if ($type == "Invoice") {
 			insert_query("tblcredit", array("clientid" => $userid, "date" => "now()", "description" => "Mass Invoice Payment Credit for Invoice #" . $relid, "amount" => $amount));
-			$query3 = "UPDATE tblclients SET credit=credit+" . db_escape_string($amount) . " WHERE id=" . (int)$userid;
-			full_query($query3);
+			update_query("tblclients", array("credit" => "+=" . $amount), array("id" => (int)$userid));
 			applyCredit($relid, $userid, $amount);
 		}
 
@@ -1025,10 +1022,8 @@ function getNewClientAutoProvisionStatus($userid) {
 
 function applyCredit($invoiceid, $userid, $amount, $noemail = "") {
 	$amount = round($amount, 2);
-	$query = "UPDATE tblinvoices SET credit=credit+" . db_escape_string($amount) . " WHERE id='" . mysql_real_escape_string($invoiceid) . "'";
-	full_query($query);
-	$query = "UPDATE tblclients SET credit=credit-" . db_escape_string($amount) . " WHERE id='" . mysql_real_escape_string($userid) . "'";
-	full_query($query);
+	update_query("tblclients", array("credit" => "-=" . $amount), array("id" => (int)$userid));
+	update_query("tblinvoices", array("credit" => "+=" . $amount), array("id" => (int)$invoiceid));
 	insert_query("tblcredit", array("clientid" => $userid, "date" => "now()", "description" => "Credit Applied to Invoice #" . $invoiceid, "amount" => $amount * (0 - 1)));
 	logActivity("Credit Applied - Amount: " . $amount . " - Invoice ID: " . $invoiceid, $userid);
 	updateInvoiceTotal($invoiceid);

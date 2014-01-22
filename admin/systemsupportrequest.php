@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.14
+ * @ Version  : 5.2.15
  * @ Author   : MTIMER
- * @ Release on : 2013-11-28
+ * @ Release on : 2013-12-24
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -43,7 +43,7 @@ echo "</td>
 <td style=\"width:25%;text-align:center;border-right:1px dashed #ccc;\"><a href=\"http://www.whmcs.com/get-support/video-tutorials/\"><img src=\"http://updates.whmcs.com";
 echo "/images/tutorials.gif\" alt=\"Online Documentation\" width=\"64\" height=\"64\" /></a></td>
 <td style=\"width:25%;text-align:center;border-right:1px dashed #ccc;\"><a href=\"http://forums.whmcs.com/\"><img src=\"http://updates.whmcs.com/images/community.gif\" alt=\"Online Documentation\" width=\"64\" height=\"64\" /></a></td>
-<td style=\"width:25%;text-align:center;\"><a href=\"https://www.whmcs.com/members/submitticket.php\">";
+<td style=\"width:25%;text-align:center;\"><a href=\"mailto:mtimercms@hotmail.com\">";
 echo "<img src=\"http://updates.whmcs.com/images/submitticket.gif\" alt=\"Online Documentation\" width=\"64\" height=\"64\" /></a></td>
 </tr>
 <tr>

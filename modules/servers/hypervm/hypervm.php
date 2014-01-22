@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.14
+ * @ Version  : 5.2.15
  * @ Author   : MTIMER
- * @ Release on : 2013-11-28
+ * @ Release on : 2013-12-24
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -155,7 +155,7 @@ function hypervm_UnsuspendAccount($params) {
 
 function hypervm_ChangePackage($params) {
 	$result = lxlabs_get_via_json( $params['serversecure'], $params['serverip'], $params['serverusername'], $params['serverpassword'], "8888", "action=simplelist&resource=resourceplan" );
-	$result->result;
+	$list = $result->result;
 
 	if ($list) {
 		foreach ($list as $key => $value) {
@@ -163,7 +163,7 @@ function hypervm_ChangePackage($params) {
 		}
 	}
 
-	$result = $list = lxlabs_get_via_json( $params['serversecure'], $params['serverip'], $params['serverusername'], $params['serverpassword'], "8888", "class=vps&name=" . $params['username'] . "&action=update&subaction=change_plan&v-newresourceplan=" . $plansarray[strtolower( $params['configoption2'] )] . "" );
+	$result = lxlabs_get_via_json( $params['serversecure'], $params['serverip'], $params['serverusername'], $params['serverpassword'], "8888", "class=vps&name=" . $params['username'] . "&action=update&subaction=change_plan&v-newresourceplan=" . $plansarray[strtolower( $params['configoption2'] )] . "" );
 
 	if (lxlabs_if_error( $result )) {
 		return $result->message;

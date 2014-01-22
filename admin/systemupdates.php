@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.14
+ * @ Version  : 5.2.15
  * @ Author   : MTIMER
- * @ Release on : 2013-11-28
+ * @ Release on : 2013-12-24
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -144,7 +144,8 @@ else {
 ";
 }
 
-$feed = curlCall("http://www.whmcs.com/feeds/news.php", "");
+//$feed = curlCall("http://www.whmcs.com/feeds/news.php", "");
+$feed = curlCall("http://api.mtimer.cn/whmcs/news.php", "");
 $feed = json_decode($feed, 1);
 $count = 10;
 foreach ($feed as $news) {

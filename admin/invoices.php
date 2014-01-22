@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.14
+ * @ Version  : 5.2.15
  * @ Author   : MTIMER
- * @ Release on : 2013-11-28
+ * @ Release on : 2013-12-24
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -597,11 +597,9 @@ else {
 				infoBox("An Error Occurred", "You cannot remove more credit than the invoice has applied");
 			}
 			else {
-				$query = "UPDATE tblinvoices SET credit=credit-" . db_escape_string($removecredit) . " WHERE id='" . db_escape_string($id) . "'";
-				full_query($query);
+				update_query("tblinvoices", array("credit" => "-=" . $removecredit), array("id" => (int)$id));
 				updateInvoiceTotal($id);
-				$query = "UPDATE tblclients SET credit=credit+" . db_escape_string($removecredit) . " WHERE id='" . db_escape_string($userid) . "'";
-				full_query($query);
+				update_query("tblclients", array("credit" => "+=" . $removecredit), array("id" => (int)$userid));
 				insert_query("tblcredit", array("clientid" => $userid, "date" => "now()", "description" => "Credit Removed from Invoice #" . $id, "amount" => $removecredit));
 				logActivity("Credit Removed - Amount: " . $removecredit . " - Invoice ID: " . $id, $userid);
 				$currency = getCurrency($userid);
@@ -746,7 +744,7 @@ else {
 		$lastname = $data['lastname'];
 		$companyname = $data['companyname'];
 		$groupid = $data['groupid'];
-		$data['state'];
+		$clientstate = $data['state'];
 		$clientcountry = $data['country'];
 		$date = fromMySQLDate($date);
 		$duedate = fromMySQLDate($duedate);
@@ -999,7 +997,7 @@ else {
 		echo "'\" />
 
 ";
-		$addons_html = $clientstate = run_hook("AdminInvoicesControlsOutput", array("invoiceid" => $id, "userid" => $userid, "subtotal" => $subtotal, "tax" => $tax, "tax2" => $tax2, "credit" => $credit, "total" => $total, "balance" => $balance, "taxrate" => $taxrate, "taxrate2" => $taxrate2, "paymentmethod" => $paymentmethod));
+		$addons_html = run_hook("AdminInvoicesControlsOutput", array("invoiceid" => $id, "userid" => $userid, "subtotal" => $subtotal, "tax" => $tax, "tax2" => $tax2, "credit" => $credit, "total" => $total, "balance" => $balance, "taxrate" => $taxrate, "taxrate2" => $taxrate2, "paymentmethod" => $paymentmethod));
 		foreach ($addons_html as $output) {
 			echo $output;
 		}

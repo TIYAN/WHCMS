@@ -56,7 +56,7 @@ else
         $api = new NamecheapRegistrarApi($username, $password, $testmode);
         $response = $api->request("namecheap.domains.transfer.getList", $request_params);
         $result = $api->parseResponse($response);
-        $transfers = parseResult($result['TransferGetListResult']['Transfer']);
+        $transfers = namecheap_parseResult($result['TransferGetListResult']['Transfer']);
     } catch (Exception $e) {
         $report .= $e->getMessage() . "\n";
     }
@@ -129,7 +129,7 @@ if ($sync_next_due_date)
                 $api = new NamecheapRegistrarApi($username, $password, $testmode);
                 $response = $api->request("namecheap.domains.getList", $request_params);
                 $result = $api->parseResponse($response);
-                $domains += parseResult($result['DomainGetListResult']['Domain'], "Name");
+                $domains += namecheap_parseResult($result['DomainGetListResult']['Domain'], "Name");
 
                 $totalItems = $result['Paging']['TotalItems'];
                 $pageSize = $result['Paging']['PageSize'];
@@ -189,7 +189,7 @@ $report .= "\n------------------------------------------------------------------
 logactivity("Namecheap Domain Sync Run");
 sendadminnotification("system", "WHMCS Namecheap Domain Synchronization Report", nl2br($report));
 
-function parseResult($transfers, $domainNameKey = "DomainName")
+function namecheap_parseResult($transfers, $domainNameKey = "DomainName")
 {
     $result = array();
     foreach ($transfers as $t)

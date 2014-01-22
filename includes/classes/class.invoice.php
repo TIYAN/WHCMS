@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.14
+ * @ Version  : 5.2.15
  * @ Author   : MTIMER
- * @ Release on : 2013-11-28
+ * @ Release on : 2013-12-24
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -201,7 +201,7 @@ class WHMCS_Invoice {
 
 
 			if ($entitydecode) {
-				$description = html_entity_decode($description);
+				$description = htmlspecialchars(html_entity_decode($description, ENT_QUOTES));
 			}
 			else {
 				$description = nl2br($description);
@@ -283,7 +283,7 @@ class WHMCS_Invoice {
 				continue;
 			}
 
-			$vars[$k] = html_entity_decode($v);
+			$vars[$k] = html_entity_decode($v, ENT_QUOTES);
 		}
 
 		return $vars;

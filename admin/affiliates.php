@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.14
+ * @ Version  : 5.2.15
  * @ Author   : MTIMER
- * @ Release on : 2013-11-28
+ * @ Release on : 2013-12-24
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -64,7 +64,7 @@ if ($action == "addcomm") {
 	check_token("WHMCS.admin.default");
 	$amount = format_as_currency($amount);
 	insert_query("tblaffiliateshistory", array("affiliateid" => $id, "date" => toMySQLDate($date), "affaccid" => $refid, "description" => $description, "amount" => $amount));
-	full_query("UPDATE tblaffiliates SET balance=balance+" . db_escape_string($amount) . " WHERE id='" . db_escape_string($id) . "'");
+	update_query("tblaffiliates", array("balance" => "+=" . $amount), array("id" => (int)$id));
 	redir("action=edit&id=" . $id);
 	exit();
 }
@@ -73,24 +73,23 @@ if ($action == "addcomm") {
 if ($action == "withdraw") {
 	check_token("WHMCS.admin.default");
 	insert_query("tblaffiliateswithdrawals", array("affiliateid" => $id, "date" => "now()", "amount" => $amount));
-	full_query("UPDATE tblaffiliates SET balance=balance-" . db_escape_string($amount) . ",withdrawn=withdrawn+" . db_escape_string($amount) . " WHERE id='" . db_escape_string($id) . "'");
+	update_query("tblaffiliates", array("balance" => "-=" . $amount, "withdrawn" => "+=" . $amount), array("id" => (int)$id));
 
 	if ($payouttype == "1") {
-		$result = select_query("tblaffiliates", "", array("id" => $id));
+		$result = select_query("tblaffiliates", "", array("id" => (int)$id));
 		$data = mysql_fetch_array($result);
-		$id = $data['id'];
-		$clientid = $data['clientid'];
+		$id = (int)$data['id'];
+		$clientid = (int)$data['clientid'];
 		addTransaction($clientid, "", "Affiliate Commissions Withdrawal Payout", "0", "0", $amount, $paymentmethod, $transid);
 	}
 	else {
 		if ($payouttype == "2") {
-			$result = select_query("tblaffiliates", "", array("id" => $id));
+			$result = select_query("tblaffiliates", "", array("id" => (int)$id));
 			$data = mysql_fetch_array($result);
-			$id = $data['id'];
-			$clientid = $data['clientid'];
+			$id = (int)$data['id'];
+			$clientid = (int)$data['clientid'];
 			insert_query("tblcredit", array("clientid" => $clientid, "date" => "now()", "description" => "Affiliate Commissions Withdrawal", "amount" => $amount));
-			$query = "UPDATE tblclients SET credit=credit+" . db_escape_string($amount) . " WHERE id='" . db_escape_string($clientid) . "'";
-			full_query($query);
+			update_query("tblclients", array("credit" => "+=" . $amount), array("id" => $clientid));
 			logActivity("Processed Affiliate Commissions Withdrawal to Credit Balance - User ID: " . $clientid . " - Amount: " . $amount);
 		}
 	}

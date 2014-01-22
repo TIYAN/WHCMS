@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.14
+ * @ Version  : 5.2.15
  * @ Author   : MTIMER
- * @ Release on : 2013-11-28
+ * @ Release on : 2013-12-24
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -81,7 +81,7 @@ class WHMCS_Init {
 		$this->register_globals();
 
 		if (!$this->load_config_file()) {
-			exit( "<head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" /><title>WHMCS 5.2.14 时光人破解版安装</title><meta name=\"description\" content=\"WHMCS 5.2.14 完全解码破解 \" /><meta name=\"keywords\" content=\"whmcs,破解,解码,解密,时光人,系统,免费,安装,下载,5.2.14,中文版\" /><meta name=\"generator\" content=\"Mtimer CMS (http://www.mtimer.cn)\" /></head><div style=\"border: 1px dashed #cc0000;font-family:Tahoma;background-color:#FBEEEB;width:100%;padding:10px;color:#cc0000;\"><strong>欢迎来到 WHMCS 5.2.14 时光人破解版!</strong> <a href=\"https://me.alipay.com/whmcs5\" target=\"_blank\">捐助</a> 并通过邮件获得今后更新。<br>安装后才能使用。 <a href=\"" . (file_exists( "install/install.php" ) ? "" : "../") . "install/install.php\" style=\"color:#000;\">点此开始安装 ...</a></div>" );
+			exit( "<head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" /><title>WHMCS 5.2.15 时光人破解版安装</title><meta name=\"description\" content=\"WHMCS 5.2.15 完全解码破解 \" /><meta name=\"keywords\" content=\"whmcs,破解,解码,解密,时光人,系统,免费,安装,下载,5.2.15,中文版\" /><meta name=\"generator\" content=\"Mtimer CMS (http://www.mtimer.cn)\" /></head><div style=\"border: 1px dashed #cc0000;font-family:Tahoma;background-color:#FBEEEB;width:100%;padding:10px;color:#cc0000;\"><strong>欢迎来到 WHMCS 5.2.15 时光人破解版!</strong> <a href=\"http://www.mtimer.cn/?donate\" target=\"_blank\">捐助</a> 并通过邮件获得今后更新。<br>安装后才能使用。 <a href=\"" . (file_exists( "install/install.php" ) ? "" : "../") . "install/install.php\" style=\"color:#000;\">点此开始安装 ...</a></div>" );
 		}
 
 
@@ -89,6 +89,7 @@ class WHMCS_Init {
 			exit("<div style=\"border: 1px dashed #cc0000;font-family:Tahoma;background-color:#FBEEEB;width:100%;padding:10px;color:#cc0000;\"><strong>发生错误</strong><br>无法连接数据库</div>");
 		}
 
+		$this->sanitize_db_vars();
 		global $CONFIG;
 		global $PHP_SELF;
 		global $remote_ip;
@@ -108,9 +109,8 @@ class WHMCS_Init {
 		}
 
 		$session = new WHMCS_Session();
-		$this->sanitize_db_vars();
 		$session->create($instanceid);
-		$token_manager = getTokenManager($this);
+		$token_manager = &getTokenManager($this);
 
 		$token_manager->conditionallySetToken();
 
@@ -518,8 +518,17 @@ class WHMCS_Init {
 							$ip_result = $_SERVER['HTTP_FORWARDED'];
 						}
 						else {
-							if ((isset($_SERVER['REMOTE_ADDR']) && ip2long($_SERVER['REMOTE_ADDR']) != 0 - 1) && ip2long($_SERVER['REMOTE_ADDR']) != false) {
-								$ip_result = $_SERVER['REMOTE_ADDR'];
+							if (isset($_SERVER['REMOTE_ADDR'])) {
+								$ip = $_SERVER['REMOTE_ADDR'];
+
+								if (ip2long($ip) != false && ip2long($ip) != 0 - 1) {
+									$ip_result = $ip;
+								}
+								else {
+									if ($this->isIPv6($ip)) {
+										$ip_result = $ip;
+									}
+								}
 							}
 						}
 					}
@@ -528,6 +537,59 @@ class WHMCS_Init {
 		}
 
 		return $ip_result;
+	}
+
+	public function isIPv6($ip) {
+		$ip = trim($ip);
+
+		if (0 <= version_compare(phpversion(), "5.2.0")) {
+			if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6) !== false) {
+				return true;
+			}
+		}
+		else {
+			$hexadecPattern = "[0-9a-fA-F]{1,4}";
+			$dotDecAddressPattern = '\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}';
+
+			if (strpos($ip, "::") !== false) {
+				$regex = '%^::(' . $hexadecPattern . ':)?' . $dotDecAddressPattern . '/\d+$%';
+
+				if (preg_match($regex, $ip)) {
+					return true;
+				}
+
+				$dbColonCount = 0;
+				$regex = '/^' . $hexadecPattern . '$/';
+				$ipArr = explode(":", $ip);
+				foreach ($ipArr as $value) {
+					$value = trim($value);
+
+					if (strlen($value) < 1) {
+						++$dbColonCount;
+						continue;
+					}
+
+
+					if (!preg_match($regex, $value)) {
+						return false;
+					}
+				}
+
+
+				if ($dbColonCount < 2) {
+					return true;
+				}
+			}
+			else {
+				$regex = '%^(' . $hexadecPattern . ':){6}((' . $hexadecPattern . ':' . $hexadecPattern . ')|(' . $dotDecAddressPattern . '))$%';
+
+				if (preg_match($regex, $ip)) {
+					return true;
+				}
+			}
+		}
+
+		return false;
 	}
 
 	private function load_config_vars() {
@@ -799,8 +861,8 @@ class WHMCS_Init {
 		$validlangs = $this->getValidLanguages($admin);
 
 		if (!in_array($lang, $validlangs)) {
-			if (in_array("chinese", $validlangs)) {
-				$lang = "chinese";
+			if (in_array("english", $validlangs)) {
+				$lang = "english";
 			}
 			else {
 				$lang = $validlangs[0];

@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.14
+ * @ Version  : 5.2.15
  * @ Author   : MTIMER
- * @ Release on : 2013-11-28
+ * @ Release on : 2013-12-24
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -123,7 +123,7 @@ if ($a == "view") {
 	$ticketids = $data['ticketids'];
 	$invoiceids = $data['invoiceids'];
 	$attachments = $data['attachments'];
-	$tickets = $invoices = $attachmentsarray = array();
+	$ticketinvoicelinks = $tickets = $invoices = $attachmentsarray = array();
 	$ticketids = explode(",", $ticketids);
 	foreach ($ticketids as $ticketnum) {
 
@@ -159,7 +159,7 @@ if ($a == "view") {
 
 	$gateways = getGatewaysArray();
 	$ticketinvoicesquery = (!empty($ticketinvoicelinks) ? "(" . implode(" OR ", $ticketinvoicelinks) . ") OR " : "");
-	$result = $ticketinvoicelinks = select_query("tblinvoices", "", "id IN (SELECT invoiceid FROM tblinvoiceitems WHERE description LIKE '%Project #" . $projectid . "%' OR " . $ticketinvoicesquery . " (type='Project' AND relid='" . $projectid . "')) OR id IN (" . db_build_in_array(db_escape_numarray($invoiceids)) . ")", "id", "ASC");
+	$result = select_query("tblinvoices", "", "id IN (SELECT invoiceid FROM tblinvoiceitems WHERE description LIKE '%Project #" . $projectid . "%' OR " . $ticketinvoicesquery . " (type='Project' AND relid='" . $projectid . "')) OR id IN (" . db_build_in_array(db_escape_numarray($invoiceids)) . ")", "id", "ASC");
 
 	while ($data = mysql_fetch_array($result)) {
 		$invoices[] = array("id" => $data['id'], "date" => fromMySQLDate($data['date'], 0, 1), "duedate" => fromMySQLDate($data['duedate'], 0, 1), "datepaid" => fromMySQLDate($data['datepaid'], 0, 1), "total" => formatCurrency($data['total']), "paymentmethod" => $gateways[$data['paymentmethod']], "status" => $data['status'], "rawstatus" => strtolower($data['status']));

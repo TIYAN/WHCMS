@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.14
+ * @ Version  : 5.2.15
  * @ Author   : MTIMER
- * @ Release on : 2013-11-28
+ * @ Release on : 2013-12-24
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -21,7 +21,7 @@ function websitepanel_CreateAccount($params) {
 	$serverusername = $params['serverusername'];
 	$serverpassword = $params['serverpassword'];
 	$secure = $params['serversecure'];
-	$params['domain'];
+	$domain = $params['domain'];
 	$packagetype = $params['type'];
 	$username = $params['username'];
 	$password = $params['password'];
@@ -94,14 +94,14 @@ function websitepanel_CreateAccount($params) {
 
 
 	if ($packagetype == "reselleraccount") {
-		$roleid = 6;
+		$roleid = 0;
 	}
 	else {
-		$roleid = 7;
+		$roleid = 1;
 	}
 
 	$param = array( "parentPackageId" => $parentPackageId, "username" => $username, "password" => $password, "roleId" => $roleid, "firstName" => $clientsdetails['firstname'], "lastName" => $clientsdetails['lastname'], "email" => $clientsdetails['email'], "htmlMail" => $htmlMail, "sendAccountLetter" => $sendAccountLetter, "createPackage" => true, "planId" => $planId, "sendPackageLetter" => $sendPackageLetter, "domainName" => $domain, "tempDomain" => $tempDomain, "createWebSite" => $website, "createFtpAccount" => $createFtpAccount, "ftpAccountName" => $username, "createMailAccount" => $createMailAccount );
-	$result = $domain = websitepanel_call( $params, "CreateUserWizard", $param );
+	$result = websitepanel_call( $params, "CreateUserWizard", $param );
 	return $result;
 }
 
@@ -120,54 +120,58 @@ function websitepanel_call($params, $func, $param, $retdata = "") {
 	$esport = $params['configoption6'];
 	$soapaddress = $http . "://" . $serverip . ":" . $esport . "/" . $wsdlfile . ".asmx?WSDL";
 	$client = new SoapClient( $soapaddress, array( "login" => $serverusername, "password" => $serverpassword ) );
-	$result = (array)$client->$func( $param );
-	Exception {
+    try
+    {
+		$result = (array)$client->$func( $param );
+	}
+    catch ( Exception $e )
+    {
 		logModuleCall( "websitepanel", $func, $param, $e->getMessage() );
 		return "Caught exception: " . $e->getMessage();
-		logModuleCall( "websitepanel", $func, $param, $result );
-
-		if ($retdata) {
-			return $result[$func . "Result"];
-		}
-
-
-		if (is_soap_fault( $result )) {
-			return "SOAP Fault Code: " . $result->faultcode . " - Error: " . $result->faultstring;
-		}
-
-		$returnCode = $result[$func . "Result"];
-
-		if (0 <= $returnCode) {
-			return "success";
-		}
-
-
-		if ($returnCode == "-1100") {
-			return "User account with the specified username already exists on the server";
-		}
-
-
-		if ($returnCode == "-700") {
-			return "Specified mail domain already exists on the service";
-		}
-
-
-		if ($returnCode == "-701") {
-			return "Mail resource is unavailable for the selected hosting space";
-		}
-
-
-		if ($returnCode == "-502") {
-			return "Specified domain already exists";
-		}
-
-
-		if ($returnCode == "-301") {
-			return "The hosting space could not be deleted because it has child spaces";
-		}
-
-		return "WebsitePanel API Error Code: " . $returnCode;
 	}
+	logModuleCall( "websitepanel", $func, $param, $result );
+
+	if ($retdata) {
+		return $result[$func . "Result"];
+	}
+
+
+	if (is_soap_fault( $result )) {
+		return "SOAP Fault Code: " . $result->faultcode . " - Error: " . $result->faultstring;
+	}
+
+	$returnCode = $result[$func . "Result"];
+
+	if (0 <= $returnCode) {
+		return "success";
+	}
+
+
+	if ($returnCode == "-1100") {
+		return "User account with the specified username already exists on the server";
+	}
+
+
+	if ($returnCode == "-700") {
+		return "Specified mail domain already exists on the service";
+	}
+
+
+	if ($returnCode == "-701") {
+		return "Mail resource is unavailable for the selected hosting space";
+	}
+
+
+	if ($returnCode == "-502") {
+		return "Specified domain already exists";
+	}
+
+
+	if ($returnCode == "-301") {
+		return "The hosting space could not be deleted because it has child spaces";
+	}
+
+	return "WebsitePanel API Error Code: " . $returnCode;
 }
 
 
@@ -336,6 +340,8 @@ function websitepanel_UsageUpdate($params) {
 	$serverip = $params['serverip'];
 	$serverusername = $params['serverusername'];
 	$serverpassword = $params['serverpassword'];
+    try
+    {
 	$query = full_query( "SELECT username,packageid,regdate FROM tblhosting WHERE server=" . (int)$serverid . " AND domainstatus IN ('Active','Suspended')" );
 
 	while ($row = mysql_fetch_array( $query )) {
@@ -357,9 +363,9 @@ function websitepanel_UsageUpdate($params) {
 			$diskspace = websitepanel_getDiskspace( $params, $packageID );
 			update_query( "tblhosting", array( "diskusage" => $diskspace, "disklimit" => $dslimit, "bwusage" => $bandwidth, "bwlimit" => $bwlimit, "lastupdate" => "now()" ), array( "server" => $params['serverid'], "username" => $username ) );
 		}
-
-		Exception {
-		}
+	}
+    catch ( Exception $e )
+    {
 	}
 
 }
@@ -369,7 +375,7 @@ function websitepanel_getBandwidth($params, $packageID, $startDate) {
 	$param = array( "packageId" => $packageID, "startDate" => $startDate, "endDate" => date( "Y-m-d", time() ) );
 	$result = websitepanel_call( $params, "GetPackageBandwidth", $param, true );
 	$xml = simplexml_load_string( $result->any );
-	$total = 5;
+	$total = 0;
 	foreach ($xml->NewDataSet->Table as $Table) {
 		$total = $total + $Table->MegaBytesTotal;
 	}
@@ -380,9 +386,9 @@ function websitepanel_getBandwidth($params, $packageID, $startDate) {
 
 function websitepanel_getDiskspace($params, $packageID) {
 	$result = websitepanel_call( $params, "GetPackageDiskspace", $param, true );
-	simplexml_load_string( $result->any );
-	$xml = $param = array( "packageId" => $packageID );
-	$total = 5;
+	$xml = simplexml_load_string( $result->any );
+	$param = array( "packageId" => $packageID );
+	$total = 0;
 	foreach ($xml->NewDataSet->Table as $Table) {
 		$total = $total + $Table->Diskspace;
 	}

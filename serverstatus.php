@@ -3,14 +3,14 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.14
+ * @ Version  : 5.2.15
  * @ Author   : MTIMER
- * @ Release on : 2013-11-28
+ * @ Release on : 2013-12-24
  * @ Website  : http://www.mtimer.cn
  *
  **/
 
-function getPortStatus(&$params, $smarty) {
+function getPortStatus($params, &$smarty) {
 	global $servers;
 
 	$num = $params['num'];

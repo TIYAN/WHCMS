@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.14
+ * @ Version  : 5.2.15
  * @ Author   : MTIMER
- * @ Release on : 2013-11-28
+ * @ Release on : 2013-12-24
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -19,41 +19,35 @@ function paymentsgateway_activate() {
 
 function tep_achd_card_type($card_type) {
 	switch ($card_type) {
-	case "Visa": {
+		case "Visa":
 			$card_type_val = "VISA";
 			break;
-		}
 
-	case "MasterCard": {
+		case "MasterCard":
 			$card_type_val = "MAST";
 			break;
-		}
 
-	case "American Express": {
+		case "American Express":
 			$card_type_val = "AMER";
 			break;
-		}
 
-	case "Diners Club": {
+		case "Diners Club":
 			$card_type_val = "DINE";
 			break;
-		}
 
-	case "Discover": {
+		case "Discover":
 			$card_type_val = "DISC";
 			break;
-		}
 
-	case "JCB": {
+		case "JCB":
 			$card_type_val = "JCB";
-		}
 	}
 
 	return $card_type_val;
 }
 
 
-function paymentsgateway_capture(&$params) {
+function paymentsgateway_capture($params) {
 	$output_transaction = "pg_merchant_id=" . $params['merchantid'] . "&pg_password=" . $params['password'] . "&pg_transaction_type=10&pg_total_amount=" . $params['amount'] . "&ecom_consumerorderid=" . $params['invoiceid'] . "&pg_billto_postal_name_company=" . $params['clientdetails']['companyname'] . "&ecom_billto_postal_name_first=" . $params['clientdetails']['firstname'] . "&ecom_billto_postal_name_last=" . $params['clientdetails']['lastname'] . "&ecom_billto_postal_street_line1=" . $params['clientdetails']['address1'] . "&ecom_billto_postal_city=" . $params['clientdetails']['city'] . "&ecom_billto_postal_stateprov=" . $params['clientdetails']['state'] . "&ecom_billto_postal_postalcode=" . $params['clientdetails']['postcode'] . "&ecom_billto_postal_countrycode=" . $params['clientdetails']['country'] . "&ecom_billto_telecom_phone_number=" . $params['clientdetails']['phonenumber'] . "&ecom_billto_online_email=" . $params['clientdetails']['email'] . "&ecom_payment_card_type=" . tep_achd_card_type( $params['cardtype'] ) . "&ecom_payment_card_name=" . $params['clientdetails']['firstname'] . " " . $params['clientdetails']['lastname'] . "&ecom_payment_card_number=" . $params['cardnum'] . "&ecom_payment_card_expdate_month=" . substr( $params['cardexp'], 0, 2 ) . "&ecom_payment_card_expdate_year=" . substr( $params['cardexp'], 2, 2 ) . "&endofdata&";
 
 	if ($params['testmode'] == "on") {
@@ -72,8 +66,7 @@ function paymentsgateway_capture(&$params) {
 	curl_setopt( $ch, CURLOPT_POSTFIELDS, $output_transaction );
 	$response = curl_exec( $ch );
 	curl_close( $ch );
-	$response = explode( "
-", $response );
+	$response = explode( "\n", $response );
 
 	foreach ($response as $resp) {
 		$resp2 = explode( "=", $resp );

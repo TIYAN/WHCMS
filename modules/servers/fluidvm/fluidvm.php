@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.14
+ * @ Version  : 5.2.15
  * @ Author   : MTIMER
- * @ Release on : 2013-11-28
+ * @ Release on : 2013-12-24
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -156,7 +156,7 @@ function fluidvm_UnsuspendAccount($params) {
 
 
 function fluidvm_ChangePackage($params) {
-	$list = $result = fluidvm_get_via_json( $params['serversecure'], $params['serverip'], $params['serverusername'], $params['serverpassword'], "8888", "action=simplelist&resource=resourceplan" );
+	$list = fluidvm_get_via_json( $params['serversecure'], $params['serverip'], $params['serverusername'], $params['serverpassword'], "8888", "action=simplelist&resource=resourceplan" );
 
 	if ($list) {
 		foreach ($list as $key => $value) {
@@ -164,7 +164,7 @@ function fluidvm_ChangePackage($params) {
 		}
 	}
 
-	fluidvm_get_via_json( $params['serversecure'], $params['serverip'], $params['serverusername'], $params['serverpassword'], "8888", "class=vps&name=" . $params['username'] . "&action=update&subaction=change_plan&v-newresourceplan=" . $plansarray[strtolower( $params['configoption2'] )] . "" );
+	$result = fluidvm_get_via_json( $params['serversecure'], $params['serverip'], $params['serverusername'], $params['serverpassword'], "8888", "class=vps&name=" . $params['username'] . "&action=update&subaction=change_plan&v-newresourceplan=" . $plansarray[strtolower( $params['configoption2'] )] . "" );
 	$result = $result->result;
 
 	if (fluidvm_if_error( $result )) {

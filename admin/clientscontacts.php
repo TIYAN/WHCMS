@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.14
+ * @ Version  : 5.2.15
  * @ Author   : MTIMER
- * @ Release on : 2013-11-28
+ * @ Release on : 2013-12-24
  * @ Website  : http://www.mtimer.cn
  *
  **/
@@ -284,7 +284,7 @@ echo $state;
 echo "\"></font></td></tr>
 <tr><td class=\"fieldlabel\">";
 echo $aInt->lang("clients", "activatesubaccount");
-echo "</td><td class=\"fieldarea\"><input type=\"checkbox\" tabindex=\"5\" name=\"subaccount\" id=\"subaccount\"";
+echo "</td><td class=\"fieldarea\"><input type=\"checkbox\" tabindex=\"5\" name=\"subaccount\" id=\"subaccount\" ";
 
 if ($subaccount) {
 	echo "checked";
@@ -301,9 +301,9 @@ echo "\"></td></tr>
 echo $aInt->lang("fields", "password");
 echo "</td><td class=\"fieldarea\"><input type=\"text\" size=\"20\" name=\"password\" tabindex=\"6\" value=\"";
 echo $password;
-echo "\" onfocus=\"if(this.value==";
+echo "\" onfocus=\"if(this.value == '";
 echo $aInt->lang("fields", "entertochange");
-echo ")this.value=''\" />";
+echo "') {this.value=''}\" />";
 
 if ($contactid != "addnew") {
 	echo " <a href=\"clientscontacts.php?userid=";
@@ -326,42 +326,42 @@ echo "</td></tr>
 <tr><td class=\"fieldlabel\">";
 echo $aInt->lang("fields", "emailnotifications");
 echo "</td><td class=\"fieldarea\">
-<label><input type=\"checkbox\" name=\"generalemails\" tabindex=\"14\"";
+<label><input type=\"checkbox\" name=\"generalemails\" tabindex=\"14\" ";
 
 if ($generalemails) {
 	echo "checked";
 }
 
 echo "> General</label>
-<label><input type=\"checkbox\" name=\"invoiceemails\" tabindex=\"15\"";
+<label><input type=\"checkbox\" name=\"invoiceemails\" tabindex=\"15\" ";
 
 if ($invoiceemails) {
 	echo "checked";
 }
 
 echo "> Invoice</label>
-<label><input type=\"checkbox\" name=\"supportemails\" tabindex=\"16\"";
+<label><input type=\"checkbox\" name=\"supportemails\" tabindex=\"16\" ";
 
 if ($supportemails) {
 	echo "checked";
 }
 
 echo "> Support</label><br />
-<label><input type=\"checkbox\" name=\"productemails\" tabindex=\"17\"";
+<label><input type=\"checkbox\" name=\"productemails\" tabindex=\"17\" ";
 
 if ($productemails) {
 	echo "checked";
 }
 
 echo "> Product</label>
-<label><input type=\"checkbox\" name=\"domainemails\" tabindex=\"18\"";
+<label><input type=\"checkbox\" name=\"domainemails\" tabindex=\"18\" ";
 
 if ($domainemails) {
 	echo "checked";
 }
 
 echo "> Domain</label>
-<label><input type=\"checkbox\" name=\"affiliateemails\" tabindex=\"19\"";
+<label><input type=\"checkbox\" name=\"affiliateemails\" tabindex=\"19\" ";
 
 if ($affiliateemails) {
 	echo "checked";
