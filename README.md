@@ -3,9 +3,8 @@
 <h2>这里是免费的 v5.2.15 , 当前最新开心版是 v5.2.16, 只提供捐助者。</h2>
 
 
-捐助后即可查看隐藏文件地址：http://www.mtimer.cn/release/25-whmcs-nulled.html 
+捐助及最新版 v5.2.16 下载地址：http://www.mtimer.cn/release/25-whmcs-nulled.html 
 
-无需登录，捐助后直接下载 v5.2.16 {联系邮箱：admin[at]mtimer.cn}
 
 
 <h2>更新记录</h2>
