@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.15
+ * @ Version  : 5.2.16
  * @ Author   : MTIMER
- * @ Release on : 2013-12-24
+ * @ Release on : 2014-01-22
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -51,8 +51,7 @@ function sendRequest($curl, $packet) {
 		$errmsg = curl_error( $curl );
 		$errcode = curl_errno( $curl );
 		curl_close( $curl );
-		ApiRequestException;
-		throw new ( $errmsg, $errcode );
+		throw new ApiRequestException( $errmsg, $errcode );
 	}
 
 	curl_close( $curl );
@@ -70,8 +69,7 @@ function parseResponse($response_string) {
 	$xml = new SimpleXMLElement( $response_string );
 
 	if (!is_a( $xml, "SimpleXMLElement" )) {
-		ApiRequestException;
-		throw new ( "Cannot parse server response: " . $response_string );
+		throw new ApiRequestException( "Cannot parse server response: " . $response_string );
 	}
 
 	return $xml;
@@ -97,20 +95,22 @@ function xpanel_ConfigOptions() {
 			if ($row) {
 				$curl = curlInit( $row->ipaddress, $row->hostname, $row->username, decrypt( $row->password ), $row->secure );
 				$data = "action=getpackagelist";
-				$response = sendRequest( $curl, $data );
-				$responseXml = parseResponse( $response );
-				foreach ($responseXml->xpath( "/system/get/result" ) as $resultNode) {
+				try
+				{
+					$response = sendRequest( $curl, $data );
+					$responseXml = parseResponse( $response );
+					foreach ($responseXml->xpath( "/system/get/result" ) as $resultNode) {
 
-					if ("error" == (bool)$resultNode->status) {
-						ApiRequestException;
-						throw new ( "XPanel API returned error: " . (bool)$resultNode->result->errtext );
-						continue;
+						if ("error" == (bool)$resultNode->status) {
+							throw new ApiRequestException( "XPanel API returned error: " . (bool)$resultNode->result->errtext );
+							continue;
+						}
+
+						$configarray = array( "Get from server" => array( "Type" => "yesno", "Description" => "Get the available choices from the server" ), "Hosting Plan ID: " => array( "Type" => "dropdown", "Options" => "" . (bool)$resultNode->packagelist . "" ) );
 					}
-
-					$configarray = array( "Get from server" => array( "Type" => "yesno", "Description" => "Get the available choices from the server" ), "Hosting Plan ID: " => array( "Type" => "dropdown", "Options" => "" . (bool)$resultNode->packagelist . "" ) );
 				}
-
-				ApiRequestException {
+				catch ( ApiRequestException $e ) 
+				{
 					return $e;
 				}
 			}
@@ -173,7 +173,7 @@ function xpanel_CreateAccount($params) {
 						$billing_cycle = "24";
 					}
 					else {
-						$billing_cycle = 7;
+						$billing_cycle = 1;
 					}
 				}
 			}
@@ -199,22 +199,24 @@ function xpanel_CreateAccount($params) {
 	}
 
 	$data = "action=createacct" . "&customer_id=" . $clientsdetails['userid'] . "&login_name=" . $clientsdetails['email'] . "&password=" . $password . "&first_name=" . $clientsdetails['firstname'] . "&last_name=" . $clientsdetails['lastname'] . $organization . "&address1=" . $clientsdetails['address1'] . "&address2=" . $clientsdetails['address2'] . "&city=" . $clientsdetails['city'] . "&state=" . $clientsdetails['state'] . "&postal_code=" . $clientsdetails['postcode'] . "&country=" . $clientsdetails['country'] . "&work_phone=" . $clientsdetails['phonenumber'] . "&email=" . $clientsdetails['email'] . "&account_type=" . $account_type . "&domain_name=" . $domain . "&package_id=" . $package_id . "&billing_cycle=" . $billing_cycle . "&paymentmethod=" . $payment_method . "&nextduedate=" . $nextduedate . "&account_id=" . $serviceid . "&order_id=" . $orderid . "&account_login_name=" . $username . "&account_password=" . $password;
-	$response = sendRequest( $curl, $data );
-	$responseXml = parseResponse( $response );
-	foreach ($responseXml->xpath( "/account/add/result" ) as $resultNode) {
+	try
+	{
+		$response = sendRequest( $curl, $data );
+		$responseXml = parseResponse( $response );
+		foreach ($responseXml->xpath( "/account/add/result" ) as $resultNode) {
 
-		if ("error" == (bool)$resultNode->status) {
-			return "" . (bool)$resultNode->errtext . "
-";
+			if ("error" == (bool)$resultNode->status) {
+				return "" . (bool)$resultNode->errtext . "\n";
+			}
+
+			return "success";
 		}
-
-		return "success";
 	}
-
-	ApiRequestException {
+	catch ( ApiRequestException $e ) 
+	{
 		return $e;
-		return null;
 	}
+	return null;
 }
 
 
@@ -227,22 +229,24 @@ function xpanel_TerminateAccount($params) {
 	$serversecure = $params['serversecure'];
 	$curl = curlInit( $serverip, $serverhostname, $serverusername, $serverpassword, $serversecure );
 	$data = "action=removeacct" . "&account_id=" . $serviceid;
-	$response = sendRequest( $curl, $data );
-	$responseXml = parseResponse( $response );
-	foreach ($responseXml->xpath( "/account/del/result" ) as $resultNode) {
+	try 
+	{
+		$response = sendRequest( $curl, $data );
+		$responseXml = parseResponse( $response );
+		foreach ($responseXml->xpath( "/account/del/result" ) as $resultNode) {
 
-		if ("error" == (bool)$resultNode->status) {
-			return "" . (bool)$resultNode->errtext . "
-";
+			if ("error" == (bool)$resultNode->status) {
+				return "" . (bool)$resultNode->errtext . "\n";
+			}
+
+			return "success";
 		}
-
-		return "success";
 	}
-
-	ApiRequestException {
+	catch ( ApiRequestException $e )
+	{
 		return $e;
-		return null;
 	}
+	return null;
 }
 
 
@@ -255,22 +259,25 @@ function xpanel_SuspendAccount($params) {
 	$serversecure = $params['serversecure'];
 	$curl = curlInit( $serverip, $serverhostname, $serverusername, $serverpassword, $serversecure );
 	$data = "action=suspendacct" . "&account_id=" . $serviceid;
-	$response = sendRequest( $curl, $data );
-	$responseXml = parseResponse( $response );
-	foreach ($responseXml->xpath( "/account/suspend/result" ) as $resultNode) {
+	try
+	{
+		$response = sendRequest( $curl, $data );
+		$responseXml = parseResponse( $response );
+		foreach ($responseXml->xpath( "/account/suspend/result" ) as $resultNode) {
 
-		if ("error" == (bool)$resultNode->status) {
-			return "" . (bool)$resultNode->errtext . "
-";
+			if ("error" == (bool)$resultNode->status) {
+				return "" . (bool)$resultNode->errtext . "\n";
+			}
+
+			return "success";
+			break;
 		}
-
-		return "success";
 	}
-
-	ApiRequestException {
+    catch ( ApiRequestException $e )
+    {
 		return $e;
-		return null;
 	}
+	return null;
 }
 
 
@@ -283,22 +290,24 @@ function xpanel_UnsuspendAccount($params) {
 	$serversecure = $params['serversecure'];
 	$curl = curlInit( $serverip, $serverhostname, $serverusername, $serverpassword, $serversecure );
 	$data = "action=unsuspendacct" . "&account_id=" . $serviceid;
-	$response = sendRequest( $curl, $data );
-	$responseXml = parseResponse( $response );
-	foreach ($responseXml->xpath( "/account/unsuspend/result" ) as $resultNode) {
+	try
+	{
+		$response = sendRequest( $curl, $data );
+		$responseXml = parseResponse( $response );
+		foreach ($responseXml->xpath( "/account/unsuspend/result" ) as $resultNode) {
 
-		if ("error" == (bool)$resultNode->status) {
-			return "" . (bool)$resultNode->errtext . "
-";
+			if ("error" == (bool)$resultNode->status) {
+				return "" . (bool)$resultNode->errtext . "\n";
+			}
+
+			return "success";
 		}
-
-		return "success";
 	}
-
-	ApiRequestException {
+    catch ( ApiRequestException $e )
+    {
 		return $e;
-		return null;
 	}
+	return null;
 }
 
 
@@ -313,22 +322,24 @@ function xpanel_ChangePassword($params) {
 	$password = $params['password'];
 	$curl = curlInit( $serverip, $serverhostname, $serverusername, $serverpassword, $serversecure );
 	$data = "action=passwd" . "&account_id=" . $serviceid . "&account_login_name=" . $username . "&account_password=" . $password;
-	$response = sendRequest( $curl, $data );
-	$responseXml = parseResponse( $response );
-	foreach ($responseXml->xpath( "/account/passwd/result" ) as $resultNode) {
+	try
+	{
+		$response = sendRequest( $curl, $data );
+		$responseXml = parseResponse( $response );
+		foreach ($responseXml->xpath( "/account/passwd/result" ) as $resultNode) {
 
-		if ("error" == (bool)$resultNode->status) {
-			return "" . (bool)$resultNode->errtext . "
-";
+			if ("error" == (bool)$resultNode->status) {
+				return "" . (bool)$resultNode->errtext . "\n";
+			}
+
+			return "success";
 		}
-
-		return "success";
 	}
-
-	ApiRequestException {
+    catch ( ApiRequestException $e )
+    {
 		return $e;
-		return null;
 	}
+	return null;
 }
 
 
@@ -342,22 +353,24 @@ function xpanel_ChangePackage($params) {
 	$package_id = $params['configoption2'];
 	$curl = curlInit( $serverip, $serverhostname, $serverusername, $serverpassword, $serversecure );
 	$data = "action=changepackage" . "&account_id=" . $serviceid . "&package_id=" . $package_id;
-	$response = sendRequest( $curl, $data );
-	$responseXml = parseResponse( $response );
-	foreach ($responseXml->xpath( "/account/changepackage/result" ) as $resultNode) {
+	try
+	{
+		$response = sendRequest( $curl, $data );
+		$responseXml = parseResponse( $response );
+		foreach ($responseXml->xpath( "/account/changepackage/result" ) as $resultNode) {
 
-		if ("error" == (bool)$resultNode->status) {
-			return "" . (bool)$resultNode->errtext . "
-";
+			if ("error" == (bool)$resultNode->status) {
+				return "" . (bool)$resultNode->errtext . "\n";
+			}
+
+			return "success";
 		}
-
-		return "success";
 	}
-
-	ApiRequestException {
+    catch ( ApiRequestException $e )
+    {
 		return $e;
-		return null;
 	}
+	return null;
 }
 
 
@@ -407,6 +420,4 @@ function xpanel_LoginLink($params) {
 	return $code;
 }
 
-
-Exception;
 ?>

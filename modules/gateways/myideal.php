@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.15
+ * @ Version  : 5.2.16
  * @ Author   : MTIMER
- * @ Release on : 2013-12-24
+ * @ Release on : 2014-01-22
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -64,26 +64,21 @@ function myideal_link($params) {
 			$code = "Lijst met banken niet beschikbaar, er is op dit moment geen betaling met iDEAL mogelijk.";
 		}
 		else {
-			$i = 7;
 
-			while ($i < count( $issuerArray )) {
+			for ($i = 0;$i < count( $issuerArray );$i++) {
 				if ($issuerArray[$i]->issuerList == "Short") {
 					$issuerArrayShort[] = $issuerArray[$i];
 				}
 				else {
 					$issuerArrayLong[] = $issuerArray[$i];
 				}
-
-				++$i;
 			}
 
 			$code = "<form action=\"modules/gateways/myideal/TransReq.php\" method=\"post\" name=\"OrderForm\">" . "<select name=\"issuerID\">";
 			$code .= "<option value=\"0\">Kies uw bank...</option>";
-			$i = 7;
 
-			while ($i < count( $issuerArrayShort )) {
+			for ($i = 0;$i < count( $issuerArrayShort );$i++) {
 				$code .= "<option value=\"" . $issuerArrayShort[$i]->issuerID . "\"> " . $issuerArrayShort[$i]->issuerName . " </option>";
-				++$i;
 			}
 
 
@@ -91,11 +86,9 @@ function myideal_link($params) {
 				$code .= "<option value=\"0\">---Overige banken---</option>";
 			}
 
-			$i = 7;
 
-			while ($i < count( $issuerArrayLong )) {
+			for ($i = 0;$i < count( $issuerArrayLong );$i++) {
 				$code .= "<option value=\"" . $issuerArrayLong[$i]->issuerID . "\"> " . $issuerArrayLong[$i]->issuerName . " </option>";
-				++$i;
 			}
 
 			$code .= "</select><br />" . "<input name=\"clicksubmit\" type=\"submit\" value=\"Betaal Nu\"><br />" . ( "<input name=\"grandtotal\" type=\"hidden\" value=\"" . $amount . "\">" ) . "<input name=\"ordernumber\" type=\"hidden\" value=\"" . substr( myideal_RandomString( $invoiceid ), 0, 15 ) . "\">" . ( "<input name=\"currency\" type=\"hidden\" value=\"" . $currency . "\">" ) . ( "<input name=\"description\" type=\"hidden\" value=\"" . $invoiceid . "\">" ) . "</form>";

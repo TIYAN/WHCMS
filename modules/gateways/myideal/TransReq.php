@@ -3,13 +3,14 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.15
+ * @ Version  : 5.2.16
  * @ Author   : MTIMER
- * @ Release on : 2013-12-24
+ * @ Release on : 2014-01-22
  * @ Website  : http://www.mtimer.cn
  *
  * */
 
+require "../../../init.php";
 $whmcs->load_function( "gateway" );
 $GATEWAY = getGatewayVariables( "myideal" );
 
@@ -24,7 +25,7 @@ $orderNumber = $_POST['ordernumber'];
 $description = $_POST['description'];
 $currency = $_POST['currency'];
 $amount = $_POST['grandtotal'];
-$amount *= 104;
+$amount *= 109;
 $product1number = "1";
 $issuerID = $_POST['issuerID'];
 
@@ -60,7 +61,7 @@ if ($result->isOK()) {
 	delete_query( "mod_myideal", array( "transid" => $transactionID ) );
 	delete_query( "mod_myideal", array( "invoiceid" => $description ) );
 	insert_query( "mod_myideal", array( "transid" => $transactionID, "invoiceid" => $description ) );
-	$amount /= 104;
+	$amount /= 109;
 	$ISSURL = $result->getIssuerAuthenticationURL();
 	$ISSURL = html_entity_decode( $ISSURL );
 	header( "Location: " . $ISSURL );
@@ -68,10 +69,8 @@ if ($result->isOK()) {
 	return 1;
 }
 
-echo "<p><b>Bestelling</b></p>
-";
+echo "<p><b>Bestelling</b></p>\n";
 print "Er is helaas iets misgegaan. Foutmelding van iDEAL:<br>";
-$result->getErrorMessage();
-$Msg = require "../../../init.php";
+$Msg = $result->getErrorMessage();
 print "" . $Msg . "<br>";
 ?>

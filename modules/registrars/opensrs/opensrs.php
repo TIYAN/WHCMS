@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.15
+ * @ Version  : 5.2.16
  * @ Author   : MTIMER
- * @ Release on : 2013-12-24
+ * @ Release on : 2014-01-22
  * @ Website  : http://www.mtimer.cn
  *
  * */

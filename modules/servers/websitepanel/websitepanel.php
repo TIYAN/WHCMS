@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.15
+ * @ Version  : 5.2.16
  * @ Author   : MTIMER
- * @ Release on : 2013-12-24
+ * @ Release on : 2014-01-22
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -340,34 +340,37 @@ function websitepanel_UsageUpdate($params) {
 	$serverip = $params['serverip'];
 	$serverusername = $params['serverusername'];
 	$serverpassword = $params['serverpassword'];
-    try
-    {
+
 	$query = full_query( "SELECT username,packageid,regdate FROM tblhosting WHERE server=" . (int)$serverid . " AND domainstatus IN ('Active','Suspended')" );
 
 	while ($row = mysql_fetch_array( $query )) {
-		$username = $row['username'];
-		$whmcspackageID = $row['packageid'];
-		$packagequery = full_query( "SELECT configoption2,configoption3,configoption6,configoption16 FROM tblproducts where id = " . (int)$whmcspackageID );
-		$packagequeryresult = mysql_fetch_array( $packagequery );
+		try
+    	{
+			$username = $row['username'];
+			$whmcspackageID = $row['packageid'];
+			$packagequery = full_query( "SELECT configoption2,configoption3,configoption6,configoption16 FROM tblproducts where id = " . (int)$whmcspackageID );
+			$packagequeryresult = mysql_fetch_array( $packagequery );
 
-		if ($packagequeryresult['configoption16'] == "on") {
-			$esport = $packagequeryresult['configoption6'];
-			$dslimit = $packagequeryresult['configoption2'];
-			$bwlimit = $packagequeryresult['configoption3'];
-			$params['configoption6'] = $esport;
-			$params['username'] = $username;
-			$userID = websitepanel_getuserid( $params );
-			$packageID = websitepanel_getpackageid( $params, $userID );
-			$startDate = websitepanel_calculateDate( $row['regdate'] );
-			$bandwidth = websitepanel_getBandwidth( $params, $packageID, $startDate );
-			$diskspace = websitepanel_getDiskspace( $params, $packageID );
-			update_query( "tblhosting", array( "diskusage" => $diskspace, "disklimit" => $dslimit, "bwusage" => $bandwidth, "bwlimit" => $bwlimit, "lastupdate" => "now()" ), array( "server" => $params['serverid'], "username" => $username ) );
+			if ($packagequeryresult['configoption16'] == "on") {
+				$esport = $packagequeryresult['configoption6'];
+				$dslimit = $packagequeryresult['configoption2'];
+				$bwlimit = $packagequeryresult['configoption3'];
+				$params['configoption6'] = $esport;
+				$params['username'] = $username;
+				$userID = websitepanel_getuserid( $params );
+				$packageID = websitepanel_getpackageid( $params, $userID );
+				$startDate = websitepanel_calculateDate( $row['regdate'] );
+				$bandwidth = websitepanel_getBandwidth( $params, $packageID, $startDate );
+				$diskspace = websitepanel_getDiskspace( $params, $packageID );
+				update_query( "tblhosting", array( "diskusage" => $diskspace, "disklimit" => $dslimit, "bwusage" => $bandwidth, "bwlimit" => $bwlimit, "lastupdate" => "now()" ), array( "server" => $params['serverid'], "username" => $username ) );
+			}
 		}
-	}
-    catch ( Exception $e )
-    {
-	}
+    	catch ( Exception $e )
+    	{
+    		// Nothing
+		}
 
+	}
 }
 
 

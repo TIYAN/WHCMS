@@ -3,10 +3,10 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.15
+ * @ Version  : 5.2.16
  * @ Author   : MTIMER
- * @ Release on : 2013-12-24
- * @ Website  : http://www.mtimer.cn
+ * @ Release on : 2014-01-22
+ * @ Website  : http://www.mtimer.net
  *
  * */
 
@@ -48,21 +48,20 @@ class resellone_base extends PEAR {
 	var $connect_timeout = 20;
 	var $read_timeout = 20;
 	var $log = array();
-	var $_socket = var $CRLF = "
-";
-
-	var $_socket_error_num = ;
-	var $_socket_error_msg = ;
-	var $_session_key = ;
-	var $_authenticated = ;
+	var $CRLF = "\r\n";
+	var $_socket = false;
+	var $_socket_error_num = false;
+	var $_socket_error_msg = false;
+	var $_session_key = false;
+	var $_authenticated = false;
 	var $_OPS = null;
 	var $_CBC = null;
-	var $lookup_all_tlds = ;
+	var $lookup_all_tlds = false;
 	var $_CRYPT = null;
 	var $_iv = null;
 	var $crypt_type = "Blowfish";
 	var $crypt_mode = "CBC";
-	var $crypt_rand_source = ;
+	var $crypt_rand_source = false;
 	var $affiliate_id = null;
 	var $PERMISSIONS = array( "f_modify_owner" => 1, "f_modify_admin" => 2, "f_modify_billing" => 4, "f_modify_tech" => 8, "f_modify_nameservers" => 16 );
 	var $REG_PERIODS = array( 1 => "1 Year", 2 => "2 Years", 3 => "3 Years", 4 => "4 Years", 5 => "5 Years", 6 => "6 Years", 7 => "7 Years", 8 => "8 Years", 9 => "9 Years", 10 => "10 Years" );
@@ -108,8 +107,7 @@ class resellone_base extends PEAR {
 
 		$this->_log( "i", "OpenSRS Log:" );
 		$this->_log( "i", "Initialized: " . date( "r" ) );
-		OPS;
-		$this->_OPS = new ();
+		$this->_OPS = new OPS();
 
 		if ($environment) {
 			$this->environment = strtoupper( $environment );
@@ -131,17 +129,14 @@ class resellone_base extends PEAR {
 	function setProtocol($proto) {
 		$proto = trim( strtoupper( $proto ) );
 		switch ($proto) {
-		case "XCP": {
-			}
-
-		case "TPP": {
+			case "XCP":
+			case "TPP":
 				$this->protocol = $proto;
 				$this->_log( "i", "Set protocol: " . $this->protocol );
-				true;
-			}
+				return true;
+			default :
+				return array( "is_success" => false, "error" => "Invalid protocol: ".$proto );
 		}
-
-		return ;
 	}
 
 
@@ -286,8 +281,7 @@ class resellone_base extends PEAR {
 
 			if (( ( ( $field == "first_name" || $field == "last_name" ) || $field == "org_name" ) || $field == "city" ) || $field == "state") {
 				if (!preg_match( "/[a-zA-Z]/", $value )) {
-					$error_msg .= "Field " . $field . " must contain at least 1 alpha character.<br>
-";
+					$error_msg .= "Field " . $field . " must contain at least 1 alpha character.<br>\n";
 					continue;
 				}
 
@@ -296,8 +290,7 @@ class resellone_base extends PEAR {
 		}
 
 		foreach ($missing_fields as $field) {
-			$error_msg .= "Missing field: " . $field . ".<br>
-";
+			$error_msg .= "Missing field: " . $field . ".<br>\n";
 		}
 
 		$domains = explode( "", $data['domain'] );
@@ -315,8 +308,7 @@ class resellone_base extends PEAR {
 			foreach ($problem_fields as $field => $problem) {
 
 				if ($problem != "") {
-					$error_msg .= "The field \"" . $field . "\" contained invalid characters: <i>" . $problem . "</i><br>
-";
+					$error_msg .= "The field \"" . $field . "\" contained invalid characters: <i>" . $problem . "</i><br>\n";
 					continue;
 				}
 			}
@@ -403,8 +395,7 @@ class resellone_base extends PEAR {
 		$cmd = array( "action" => "authenticate", "object" => "user", "attributes" => array( "crypt_type" => strtolower( $this->crypt_type ), "username" => $username, "password" => $username ) );
 		$this->send_data( $cmd );
 		$challenge = $this->read_data( array( "no_xml" => true, "binary" => true ) );
-		Crypt_CBC;
-		$this->_CBC = new ( "H*", $private_key )( , $this->crypt_type );
+		$this->_CBC = new Crypt_CBC( pack("H*", $private_key ), $this->crypt_type );
 		$response = pack( "H*", md5( $challenge ) );
 		$this->send_data( $response, array( "no_xml" => true, "binary" => true ) );
 		$answer = $this->read_data();
@@ -430,18 +421,18 @@ class resellone_base extends PEAR {
 		$syntaxError = $this->check_domain_syntax( $domain );
 
 		if ($syntaxError) {
-			$code = 506;
+			$code = 499;
 
 			if (strstr( $syntaxError, "Top level domain in" )) {
-				$code = 498;
+				$code = 491;
 			}
 			else {
 				if (strstr( $syntaxError, "Domain name exceeds maximum length" )) {
-					$code = 499;
+					$code = 492;
 				}
 				else {
 					if (strstr( $syntaxError, "Invalid domain format" )) {
-						$code = 500;
+						$code = 493;
 					}
 				}
 			}
@@ -514,7 +505,7 @@ class resellone_base extends PEAR {
 			$this->_log( "i", $data );
 		}
 		else {
-			$data = ($this->_CBC ? $this->_CBC->decrypt( $buf ) : $buf);
+			$data = $this->_CBC ? $this->_CBC->decrypt( $buf ) : $buf;
 
 			if (!$args['no_xml']) {
 				$data = $this->_OPS->decode( $data );
@@ -574,8 +565,8 @@ class resellone_base extends PEAR {
 
 	function check_domain_syntax($domain) {
 		$domain = strtolower( $domain );
-		$MAX_UK_LENGTH = 66;
-		$MAX_NSI_LENGTH = 72;
+		$MAX_UK_LENGTH = 61;
+		$MAX_NSI_LENGTH = 67;
 
 		if (substr( $domain, 0 - 3 ) == ".uk") {
 			$maxLengthForThisCase = $MAX_UK_LENGTH;
@@ -645,8 +636,7 @@ class resellone_base extends PEAR {
 			$temp = ", strtoupper( $types[$type] ), (( $type != "i" && $this->_CBC ) ? " - " . $this->crypt_type . " ENCRYPTED" : "") );
 		ob_start();
 		print_r( $data );
-		$temp .= ob_get_contents() . "
-";
+		$temp .= ob_get_contents() . "\n";
 		ob_end_clean();
 		$this->log[] = $temp;
 	}
@@ -655,8 +645,7 @@ class resellone_base extends PEAR {
 	function showlog() {
 		echo "<PRE>";
 		foreach ($this->log as $line) {
-			echo htmlentities( $line ) . "
-";
+			echo htmlentities( $line ) . "\n";
 		}
 
 		echo "</PRE>";
@@ -671,12 +660,11 @@ class resellone_base extends PEAR {
 	 * @param string  message to write
 	 *
 	 */
-	function writeData($fh, $msg) {
+	function writeData(&$fh, $msg) {
 		$header = "";
 		$len = strlen( $msg );
 		switch ($this->crypt_type) {
-		case "SSL": {
-				
+			case "SSL":
 				$signature = md5( md5( $msg . $this->PRIVATE_KEY ) . $this->PRIVATE_KEY );
 				$header .= "POST / HTTP/1.0" . $this->CRLF;
 				$header .= "Content-Type: text/xml" . $this->CRLF;
@@ -684,20 +672,13 @@ class resellone_base extends PEAR {
 				$header .= "X-Signature: " . $signature . $this->CRLF;
 				$header .= "Content-Length: " . $len . $this->CRLF . $this->CRLF;
 				break;
-			}
-
-		case "BLOWFISH": {
-			}
-
-		case "DES": {
-			}
-
-		default: {
-			}
+			case "BLOWFISH":
+			case "DES":
+			default:
+                $header .= "Content-Length: ".$len.$this->CRLF.$this->CRLF;
+                break;
 		}
 
-		$header .= "Content-Length: " . $len . $this->CRLF . $this->CRLF;
-		break;
 		fputs( $fh, $header );
 		fputs( $fh, $msg, $len );
 
@@ -722,7 +703,7 @@ class resellone_base extends PEAR {
 	function readHeader($fh, $timeout = 5) {
 		$header = array();
 		switch ($this->crypt_type) {
-		case "SSL": {
+			case "SSL":
 				$http_log = "";
 				$line = fgets( $fh, 4000 );
 				$http_log .= $line;
@@ -756,48 +737,41 @@ class resellone_base extends PEAR {
 
 				$header['full_header'] = $http_log;
 				break;
+			case "BLOWFISH":
+			case "DES":
+			default:
+				$line = fgets( $fh, 4000 );
+
+				if ($this->_OPS->socketStatus( $fh )) {
+					return false;
+				}
+
+
+				if (preg_match( '/^\s*Content-Length:\s+(\d+)\s*\r\n/i', $line, $matches )) {
+					$header['content-length'] = (int)$matches[1];
+				}
+				else {
+					$this->_OPS->_log( "raw", "e", "UNEXPECTED READ: No Content-Length" );
+					$this->_OPS->_log( "raw", "r", $line );
+					return false;
+				}
+
+				$line = fread( $fh, 2 );
+
+				if ($this->_OPS->socketStatus( $fh )) {
+					return false;
+				}
+
+
+			if ($line != $this->CRLF) {
+				$this->_OPS->_log( "raw", "e", "UNEXPECTED READ: No CRLF" );
+				$this->_OPS->_log( "raw", "r", $line );
+				return false;
 			}
 
-		case "BLOWFISH": {
-			}
-
-		case "DES": {
-			}
-
-		default: {
-			}
+			break;
 		}
 
-		$line = fgets( $fh, 4000 );
-
-		if ($this->_OPS->socketStatus( $fh )) {
-			return false;
-		}
-
-
-		if (preg_match( '/^\s*Content-Length:\s+(\d+)\s*\r\n/i', $line, $matches )) {
-			$header['content-length'] = (int)$matches[1];
-		}
-		else {
-			$this->_OPS->_log( "raw", "e", "UNEXPECTED READ: No Content-Length" );
-			$this->_OPS->_log( "raw", "r", $line );
-			return false;
-		}
-
-		$line = fread( $fh, 2 );
-
-		if ($this->_OPS->socketStatus( $fh )) {
-			return false;
-		}
-
-
-		if ($line != $this->CRLF) {
-			$this->_OPS->_log( "raw", "e", "UNEXPECTED READ: No CRLF" );
-			$this->_OPS->_log( "raw", "r", $line );
-			return false;
-		}
-
-		break;
 		return $header;
 	}
 
@@ -812,8 +786,8 @@ class resellone_base extends PEAR {
 	 * @return mixed buffer with data, or an error for a short read
 	 *
 	 */
-	function readData($fh, $timeout = 5) {
-		$len = 178;
+	function readData(&$fh, $timeout = 5) {
+		$len = 0;
 		socket_set_timeout( $fh, $timeout );
 		$header = $this->readHeader( $fh, $timeout );
 

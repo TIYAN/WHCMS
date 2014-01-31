@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.15
+ * @ Version  : 5.2.16
  * @ Author   : MTIMER
- * @ Release on : 2013-12-24
+ * @ Release on : 2014-01-22
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -27,19 +27,19 @@ function veportal_ConfigOptions() {
 }
 
 
-$get = function veportal_getAdminUsername($id) {;
-	mysql_fetch_array( $get );
-	$r = full_query( "SELECT * FROM tbladmins WHERE id = " . (int)$id );
+function veportal_getAdminUsername($id) {
+	$get = full_query( "SELECT * FROM tbladmins WHERE id = " . (int)$id );
+	$r = mysql_fetch_array( $get );
 	return $r['username'];
 }
 
 
-$get = function veportal_updatePackageNotes($id, $cmd, $newnotes) {;
+function veportal_updatePackageNotes($id, $cmd, $newnotes) {
+	$get = full_query( "SELECT * FROM tblhosting WHERE id = " . (int)$id );
 	$r = mysql_fetch_array( $get );
-	$previous = full_query( "SELECT * FROM tblhosting WHERE id = " . (int)$id );
+	$previous = $r['notes'];
 	$date = date( "d/m/y @ H:i:s" );
-	veportal_getAdminUsername( $_SESSION['adminid'] );
-	$username = $r['notes'];
+	$username = veportal_getAdminUsername( $_SESSION['adminid'] );
 	$new = "" . $previous . ( "
 -----------------------------------------------
 Date: " . $date . " User: " . $username . "
@@ -47,9 +47,8 @@ Date: " . $date . " User: " . $username . "
 Module Command: " . $cmd . "
 " . $newnotes );
 
-	if (!( full_query( "UPDATE tblhosting SET notes='" . db_escape_string( $new ) . "' WHERE id=" . (int)$id ))) {
+	if (!full_query( "UPDATE tblhosting SET notes='" . db_escape_string( $new ) . "' WHERE id=" . (int)$id)) {
 		exit( mysql_error() );
-		(bool)true;
 	}
 
 }
@@ -73,21 +72,18 @@ function veportal_getPackageFields($params) {
 function veportal_updateCustomData($params, $veid, $ip, $hostname) {
 	$cfield = veportal_getPackageFields( $params );
 
-	if (!( full_query( "UPDATE tblcustomfieldsvalues SET value='" . db_escape_string( $veid ) . "' WHERE fieldid='" . (int)$cfield['veid'] . "' AND relid = '" . (int)$params['serviceid'] . "'" ))) {
+	if (! full_query( "UPDATE tblcustomfieldsvalues SET value='" . db_escape_string( $veid ) . "' WHERE fieldid='" . (int)$cfield['veid'] . "' AND relid = '" . (int)$params['serviceid'] . "'" )) {
 		exit( mysql_error() );
-		(bool)true;
 	}
 
 
-	if (!( full_query( "UPDATE tblcustomfieldsvalues SET value='" . db_escape_string( $hostname ) . "' WHERE fieldid='" . (int)$cfield['hostname'] . "' AND relid = '" . (int)$params['serviceid'] . "'" ))) {
+	if (! full_query( "UPDATE tblcustomfieldsvalues SET value='" . db_escape_string( $hostname ) . "' WHERE fieldid='" . (int)$cfield['hostname'] . "' AND relid = '" . (int)$params['serviceid'] . "'" )) {
 		exit( mysql_error() );
-		(bool)true;
 	}
 
 
-	if (!( full_query( "UPDATE tblcustomfieldsvalues SET value='" . db_escape_string( $ip ) . "' WHERE fieldid='" . (int)$cfield['ipad'] . "' AND relid = '" . (int)$params['serviceid'] . "'" ))) {
+	if (! full_query( "UPDATE tblcustomfieldsvalues SET value='" . db_escape_string( $ip ) . "' WHERE fieldid='" . (int)$cfield['ipad'] . "' AND relid = '" . (int)$params['serviceid'] . "'" )) {
 		exit( mysql_error() );
-		(bool)true;
 	}
 
 }
@@ -99,9 +95,8 @@ function veportal_updateVPSinfo($veid, $ip, $hostname, $serviceid, $params) {
 	}
 
 
-	if (!( full_query( "UPDATE tblhosting SET domain='" . db_escape_string( $hostname ) . "', dedicatedip='" . db_escape_string( "DO NOT EDIT THESE VALUES;veid=" . $veid . ";ip=" . $ip . ";hostname=" . $hostname ) . "' WHERE id='" . (int)$serviceid . "'" ))) {
+	if (! full_query( "UPDATE tblhosting SET domain='" . db_escape_string( $hostname ) . "', dedicatedip='" . db_escape_string( "DO NOT EDIT THESE VALUES;veid=" . $veid . ";ip=" . $ip . ";hostname=" . $hostname ) . "' WHERE id='" . (int)$serviceid . "'" )) {
 		exit( mysql_error() );
-		(bool)true;
 	}
 
 	veportal_updateCustomData( $params, $veid, $ip, $hostname );
@@ -109,9 +104,8 @@ function veportal_updateVPSinfo($veid, $ip, $hostname, $serviceid, $params) {
 
 
 function veportal_changeServiceStatus($id, $status) {
-	if (!( full_query( "UPDATE tblhosting SET domainstatus='" . db_escape_string( $status ) . "' WHERE id=" . (int)$id ))) {
+	if (! full_query( "UPDATE tblhosting SET domainstatus='" . db_escape_string( $status ) . "' WHERE id=" . (int)$id )) {
 		exit( mysql_error() );
-		(bool)true;
 	}
 
 }
@@ -135,9 +129,8 @@ function veportal_generateUsername($domain, $id) {
 	$hash = veportal_getUniqueCode( "5" );
 	$username = "" . $domain['0'] . "" . $domain['1'] . "" . $domain['2'] . "" . $domain['3'] . "" . $domain['4'] . ( "" . $hash );
 
-	if (!( full_query( "UPDATE tblhosting SET username='" . db_escape_string( $username ) . "' WHERE id=" . (int)$id ))) {
+	if (! full_query( "UPDATE tblhosting SET username='" . db_escape_string( $username ) . "' WHERE id=" . (int)$id )) {
 		exit( mysql_error() );
-		(bool)true;
 	}
 
 	return $username;
@@ -685,9 +678,8 @@ function veportal_updateusage($params) {
 	$hdd = $currenthdd + $hdd;
 	$bw = $currentbw + $bw;
 
-	if (!( full_query( "UPDATE tblhosting SET bwusage='" . $bw . "', diskusage='" . $hdd . "' WHERE id=" . (int)$params['serviceid'] ))) {
+	if (! full_query( "UPDATE tblhosting SET bwusage='" . $bw . "', diskusage='" . $hdd . "' WHERE id=" . (int)$params['serviceid'] )) {
 		exit( mysql_error() );
-		(bool)true;
 	}
 
 

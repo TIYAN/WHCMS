@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.15
+ * @ Version  : 5.2.16
  * @ Author   : MTIMER
- * @ Release on : 2013-12-24
+ * @ Release on : 2014-01-22
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -65,7 +65,7 @@ class OPS extends PEAR {
 	 * @param string  message to write
 	 *
 	 */
-	function writeData($fh, $msg) {
+	function writeData(&$fh, $msg) {
 		$len = strlen( $msg );
 		fputs( $fh, "Content-Length: " . $len . $this->CRLF . $this->CRLF );
 		fputs( $fh, $msg, $len );
@@ -97,7 +97,7 @@ class OPS extends PEAR {
 	 * @return mixed buffer with data, or an error for a short read
 	 *
 	 */
-	function readData($fh, $timeout = 5) {
+	function readData(&$fh, $timeout = 5) {
 		$len = 0;
 		socket_set_timeout( $fh, $timeout );
 		$line = fgets( $fh, 4000 );
@@ -178,7 +178,7 @@ class OPS extends PEAR {
 	 * @return boolean  true if the socket has timed out or is EOF
 	 *
 	 */
-	function socketStatus($fh) {
+	function socketStatus(&$fh) {
 		$return = false;
 
 		if (is_resource( $fh )) {
@@ -259,7 +259,7 @@ class OPS extends PEAR {
 		xml_parser_set_option( $xp, XML_OPTION_TARGET_ENCODING, "ISO-8859-1" );
 
 		if (!xml_parse_into_struct( $xp, $msg, $vals, $index )) {
-			$error = sprintf( "XML error: %s at line %d", xml_error_string( xml_get_error_code( $xp ) ), xml_get_current_line_number( $xp ) );
+			$error = sprintf( 'XML error: %s at line %d', xml_error_string( xml_get_error_code( $xp ) ), xml_get_current_line_number( $xp ) );
 			xml_parser_free( $xp );
 			return $this->raiseError( $error );
 		}
@@ -272,41 +272,46 @@ class OPS extends PEAR {
               case 'header':
               case 'body':
               case 'data_block':
-                break;
-
+                	break;
               case 'version':
               case 'msg_id':
               case 'msg_type':
-                $key = '_OPS_' . $value['tag'];
-                $temp[$key] = $value['value'];
-                break;
-
+                	$key = '_OPS_' . $value['tag'];
+                	$temp[$key] = $value['value'];
+                	break;
               case 'item':
-                $key = $value['attributes']['key'];
+					// Not every Item has attributes
+					if (isSet($value['attributes'])) {
+						$key = $value['attributes']['key'];
+					} else {
+						$key = "";
+					}
 
-                switch ($value['type']) {
-                  case 'open':
-                    array_push($depth, $key);
-                    break;
+					switch ($value['type']) {
+						case 'open':
+							array_push($depth, $key);
+							break;
+						case 'complete':
+							array_push($depth, $key);
+							$p = join('::',$depth);
 
-                  case 'complete':
-                    array_push($depth, $key);
-                    $p = join('::',$depth);
-                    $temp[$p] = $value['value'];
-                    array_pop($depth);
-                    break;
+							// enn_change - make sure that   $value['value']   is defined
+							if (isSet($value['value'])){
+								$temp[$p] = $value['value'];
+							} else {
+								$temp[$p] = "";
+							}
 
-                  case 'close':
-                    array_pop($depth);
-                    break;
-
-                }
-
-                break;
-
-              case 'dt_assoc':
-              case 'dt_array':
-                break;
+							array_pop($depth);
+							break;
+						case 'close':
+							array_pop($depth);
+							break;
+					}
+                	break;
+              	case 'dt_assoc':
+              	case 'dt_array':
+                	break;
 
             }
 		}
@@ -398,7 +403,7 @@ class OPS extends PEAR {
 	 * @return  string  XML string
 	 *
 	 */
-	function _convertData($array, $indent = 0) {
+	function _convertData(&$array, $indent = 0) {
 		$string = "";
 		$IND = str_repeat( $this->_SPACER, $indent );
 
@@ -474,7 +479,7 @@ class OPS extends PEAR {
 	 * @return  boolean  true if the array is associative
 	 *
 	 */
-	function _is_assoc($array) {
+	function _is_assoc(&$array) {
 		if (is_array( $array )) {
 			foreach ($array as $k=>$v) {
 
@@ -522,14 +527,14 @@ class OPS extends PEAR {
 		echo "<PRE>";
 		foreach ($this->log[$log] as $line) {
 			switch ($format) {
-			case "raw":
-				echo $line . "\n";
-				break;
+				case "raw":
+					echo $line . "\n";
+					break;
 
-			case "html":
-			default:
-				echo htmlentities( $line ) . "\n";
-				break;
+				case "html":
+				default:
+					echo htmlentities( $line ) . "\n";
+					break;
 			}
 
 		}

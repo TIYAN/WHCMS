@@ -1,4 +1,6 @@
-Chinese Version:
+This is Chinese Version,for English version
+Donate $10 to mtimercms@hotmail.com & get updates lifetime
+
 
 这是 WHMCS 5.2.15 完全解码破解版 —— 开心版
 
@@ -10,6 +12,8 @@ http://www.mtimer.cn/release/25-whmcs.html
 
 
 更新记录：
+2014-1-31. 修复模块: mediacp,veportal,opensrs,resellone,xpanel,myideal,websitepanel
+2014.1.26 修复 register.php
 2014.1.22 更新至 5.2.16
 2014.1.17 修复 php 的引用
 2014.1.11 修复大量Bug,感谢反馈
@@ -33,7 +37,7 @@ http://www.mtimer.cn/release/25-whmcs.html
 仅供学习参考。
 
 时光人社区维护 www.mtimer.cn
-			—— 2014.1.22
+			—— 2014.1.31
 
 
 WHMCS v5.2.16 Full Decoded & Nulled By Mtimer

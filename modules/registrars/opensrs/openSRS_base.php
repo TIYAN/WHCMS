@@ -3,9 +3,9 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.15
+ * @ Version  : 5.2.16
  * @ Author   : MTIMER
- * @ Release on : 2013-12-24
+ * @ Release on : 2014-01-22
  * @ Website  : http://www.mtimer.cn
  *
  * */
@@ -670,7 +670,7 @@ class openSRS_base extends PEAR {
 	 * @param string  message to write
 	 *
 	 */
-	function writeData($fh, $msg) {
+	function writeData(&$fh, $msg) {
 		$header = "";
 		$len = strlen( $msg );
 		switch ($this->crypt_type) {
@@ -799,7 +799,7 @@ class openSRS_base extends PEAR {
 	 * @return mixed buffer with data, or an error for a short read
 	 *
 	 */
-	function readData($fh, $timeout = 5) {
+	function readData(&$fh, $timeout = 5) {
 		$len = 0;
 		socket_set_timeout( $fh, $timeout );
 		$header = $this->readHeader( $fh, $timeout );
