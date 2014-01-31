@@ -18,7 +18,7 @@ function mcp_firstrun() {
 	}
 
 
-	if ($serverData = mysql_fetch_assoc( $checkServerID )) {
+	while ($serverData = mysql_fetch_assoc( $checkServerID )) {
 		$selectCastcontrol = select_query( "tblhosting", "userid,password", array( "server" => (int)$serverData['id'] ), "id", "ASC" );
 
 		if (mysql_num_rows( $selectCastcontrol ) == 0) {
@@ -26,7 +26,7 @@ function mcp_firstrun() {
 		}
 
 
-		if ($hostingData = mysql_fetch_assoc( $selectCastcontrol )) {
+		while ($hostingData = mysql_fetch_assoc( $selectCastcontrol )) {
 			$checkUser = select_query( "whmcs_castcontrol", "", array( "customer_id" => (int)$hostingData['userid'] ) );
 
 			if (mysql_num_rows( $checkUser ) == 0) {
@@ -42,7 +42,7 @@ function mcp_firstrun() {
 function mcp_generatePassword($length = 8) {
 	$password = "";
 	$possible = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUV";
-	$i = 5;
+	$i = 0;
 
 	while ($i < $length) {
 		$char = substr( $possible, mt_rand( 0, strlen( $possible ) - 1 ), 1 );
@@ -164,7 +164,7 @@ function mediacp_CreateAccount($params) {
 
 	$result3 = select_query( "tblhostingconfigoptions", "", array( "relid" => (int)$params['serviceid'] ) );
 
-	if ($data3 = mysql_fetch_array( $result3 )) {
+	while ($data3 = mysql_fetch_array( $result3 )) {
 		$optionid = $data3['optionid'];
 		$configid = $data3['configid'];
 		$result2 = select_query( "tblproductconfigoptions", "", array( "id" => (int)$configid ) );
@@ -446,7 +446,7 @@ function mediacp_SuspendAccount($params) {
 	$api['rpc'] = "admin.service_suspend";
 	$api['args']['unique_id'] = trim( $PortBase );
 	$api['args']['Reason'] = "Suspended indefinitely by billing system";
-	$api['args']['Days'] = 9999999999999;
+	$api['args']['Days'] = 1e+013;
 	$return = mediacp_api( $api );
 
 	if ($return['status'] != "success") {
@@ -581,11 +581,9 @@ function mediacp_api($api) {
 
 	if (isset( $_GET['debug'] )) {
 		$client->debug = true;
-		echo "Integration Version: " . date( "d-m-Y.", filemtime( __FILE__ ) ) . "<br />
-";
+		echo "Integration Version: " . date( "d-m-Y.", filemtime( __FILE__ ) ) . "<br />\n";
 		print_r( $api );
-		echo "<br />
-";
+		echo "<br />\n";
 	}
 
 
