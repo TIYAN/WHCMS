@@ -1,5 +1,5 @@
 This is Chinese Version,for English version
-Donate $10 to mtimercms@hotmail.com & get updates lifetime
+Donate $10 to mtimercms@hotmail.com.You will receive v5.2.16 & updates lifetime.[Last chance ;)]
 
 
 这是 WHMCS 5.2.15 完全解码破解版 —— 开心版
