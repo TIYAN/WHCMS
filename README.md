@@ -18,11 +18,11 @@ Donate <b>$10</b> to mtimercms@hotmail.com, you will receive v5.2.16 & updates *
 
 2014-1-31. 
 
-    修复文件 domainsync.php,class.upgrade.php
-
-    修复模块: mediacp,veportal,opensrs,resellone,xpanel,websitepanel,vpsnet,totp,enomnewtlds,lxadmin,centovacast,varilogix_fraudcall,maxmind
-
-	修复网关: myideal,inpay,libertyreserve
+<ul>
+<li><strong>修复文件:</strong> domainsync.php,class.upgrade.php</li>
+<li><strong>修复模块:</strong> mediacp,veportal,opensrs,resellone,xpanel,websitepanel,vpsnet,totp,enomnewtlds,lxadmin,centovacast,varilogix_fraudcall,maxmind</li>
+<li><strong>修复网关:</strong> myideal,inpay,libertyreserve</li>
+</ul>
 
 2014.1.26. 修复 register.php
 
