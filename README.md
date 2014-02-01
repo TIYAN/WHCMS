@@ -4,7 +4,7 @@
 
 ## Here is WHMCS v5.2.15 (Last release for free).
 
-## Latest version is v5.2.16, avialable for donors only.
+## Latest version is v5.2.16, available for donors only.
 
 Donate <b>$10</b> to mtimercms@hotmail.com, you will receive v5.2.16 & updates *lifetime* via email.[Last chance]
 
