@@ -24,9 +24,7 @@ function get_invoice_status($pars) {
 		$server = "test-secure.inpay.com";
 	}
 
-	@fsockopen("ssl://" . $server, 443, $errno, $errstr, 30);
-
-	if (4.29999999999999982236432 <= PHP_VERSION && $fp = ) {
+	if (4.300000 <= PHP_VERSION && $fp = @fsockopen("ssl://" . $server, 443, $errno, $errstr, 30)) {
 		$fsocket = true;
 	}
 	else {

@@ -299,8 +299,7 @@ class WHMCS_Upgrade {
 
 		if ($currentnextduedate == "0000-00-00") {
 			$chargefullcyclewhenupgrading = true;
-			$this->getProductInfo("domain");
-			$description = "Credit for Upgrade of " . $this->getProductInfo("productname") . ($domain =  ? " - " . $domain : "");
+			$description = "Credit for Upgrade of " . $this->getProductInfo("productname") . ($domain = $this->getProductInfo("domain") ? " - " . $domain : "");
 			$this->addLineItem($description, $currentamount * (0 - 1));
 		}
 		else {
@@ -322,8 +321,7 @@ class WHMCS_Upgrade {
 			echo "daysuntilnextdue: " . $daysuntilnextdue . "<br />";
 			$daysnotused = $daysuntilnextdue / $currenttotaldays;
 			$refundamount = round($currentamount * $daysnotused, 2);
-			$this->getProductInfo("domain");
-			$description = "Credit for Unused Time of " . $this->getProductInfo("productname") . ($domain =  ? " - " . $domain . "" : "") . "\r\n" . "(" . getTodaysDate() . " - " . fromMySQLDate($currentnextduedate) . ")";
+			$description = "Credit for Unused Time of " . $this->getProductInfo("productname") . ($domain = $this->getProductInfo("domain") ? " - " . $domain . "" : "") . "\r\n" . "(" . getTodaysDate() . " - " . fromMySQLDate($currentnextduedate) . ")";
 			$this->addLineItem($description, $refundamount * (0 - 1));
 		}
 

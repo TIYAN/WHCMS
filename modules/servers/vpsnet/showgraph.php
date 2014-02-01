@@ -40,17 +40,20 @@ if (!in_array( $period, array( "hourly", "daily", "weekly", "monthly" ) )) {
 $postfields = new VirtualMachine();
 $postfields->id = $netid;
 
-if ($graph == "cpu") {
-	$result = $postfields->showCPUGraph( $period );
-}
-else {
-	$result = $postfields->showNetworkGraph( $period );
-}
+try
+{
+	if ($graph == "cpu") {
+		$result = $postfields->showCPUGraph( $period );
+	}
+	else {
+		$result = $postfields->showNetworkGraph( $period );
+	}
 
-$output = $result['response_body'];
-echo $output;
-Exception {
+	$output = $result['response_body'];
+	echo $output;
+}
+catch ( Exception $e ) 
+{
 	return "Caught exception: " . $e->getMessage();
-	return 1;
 }
 ?>

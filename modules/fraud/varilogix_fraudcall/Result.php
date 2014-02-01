@@ -39,8 +39,7 @@ class Varilogix_Call_Result {
 	 * @return string either pass/fail/calling
 	 */
 	function fetch($call_id) {
-		Varilogix_Request;
-		$call = new ( $this->_api );
+		$call = new Varilogix_Request( $this->_api );
 		$call->setParams( array( "call_id" => $call_id ) );
 		$this->_rawResponse = $call->execute();
 		$result = explode( ",", $this->_rawResponse );

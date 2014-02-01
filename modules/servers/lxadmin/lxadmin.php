@@ -42,8 +42,7 @@ class LxHelper {
 		$object = $json->decode( $totalout );
 
 		if (!is_object( $object )) {
-			print ( "Fatal Error. Got a non-object from the server: " . $totalout . "
-" );
+			print ( "Fatal Error. Got a non-object from the server: " . $totalout . "\n" );
 			return null;
 		}
 
@@ -67,7 +66,7 @@ class LxHelper {
 
 
 	function objectToCommaList($object, $addDefault = true) {
-		foreach ($object as $value => ) {
+		foreach ($object as $key => $value ) {
 			$options[] = $value;
 		}
 
@@ -300,11 +299,11 @@ function lxadmin_ChangePackage($params) {
 function lxadmin_LoginLink($params) {
 	if ($params['serversecure']) {
 		$protocol = "https";
-		$port = 7782;
+		$port = 7777;
 	}
 	else {
 		$protocol = "http";
-		$port = 7783;
+		$port = 7778;
 	}
 
 	$code = "<a href=\"" . $protocol . "://" . $params['serverip'] . ":" . $port . "/htmllib/phplib/?frm_clientname=" . $params['username'] . "&amp;frm_password=" . $params['password'] . "\" target=\"_blank\" class=\"moduleloginlink\">login to LxAdmin</a>";

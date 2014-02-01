@@ -35,10 +35,12 @@ class CCBaseAPIClient {
 	 *
 	 * @return void
 	 */
-	function call() {
+	public function call() {
 		$args = func_get_args();
 		$name = array_shift( $args );
 		$this->_call( $name, $args );
+
+		return true;
 	}
 
 
@@ -51,7 +53,7 @@ class CCBaseAPIClient {
 	 *
 	 * @return void
 	 */
-	function __call($name, $args) {
+	public function __call($name, $args) {
 		$this->_call( $name, $args );
 	}
 
@@ -64,7 +66,7 @@ class CCBaseAPIClient {
 	 *
 	 * @return string the complete request packet
 	 */
-	function build_request_packet($methodname, $payload) {
+	protected function build_request_packet($methodname, $payload) {
 		return sprintf( "<?xml version=\"1.0\" encoding=\"" . $this->encoding . "\"?" . ">" . "<centovacast>" . "<request class=\"%s\" method=\"%s\"%s>" . "%s" . "</request>" . "</centovacast>", htmlentities( $this->classname ), htmlentities( $methodname ), (($this->debug ? " debug=\"enabled\"" : "" . $this->debugconsole) ? " debugconsole=\"" . htmlentities( $this->debugconsole ) . "\"" : ""), $payload );
 	}
 
@@ -77,7 +79,7 @@ class CCBaseAPIClient {
 	 *
 	 * @return bool|string the HTTP response string on success, or false on failure
 	 */
-	function http_request($url, $postdata) {
+	protected function http_request($url, $postdata) {
 		if ( function_exists( "stream_context_create" ) && function_exists( "stream_get_meta_data" ) ) {
 			return $this->http_request_php( $url, $postdata );
 		}
@@ -91,7 +93,7 @@ class CCBaseAPIClient {
 	}
 
 
-	function handle_http_error($errno, $errstr, $errfile, $errline) {
+	public function handle_http_error($errno, $errstr, $errfile, $errline) {
 		$this->http_request_error = $errstr;
 		return true;
 	}
@@ -105,7 +107,7 @@ class CCBaseAPIClient {
 	 *
 	 * @return bool|string the HTTP response string on success, or false on failure
 	 */
-	function http_request_php($url, $postdata) {
+	protected function http_request_php($url, $postdata) {
 		stream_context_create( array( "http" => array( "method" => "POST", "user_agent" => "Centova Cast PHP API Client", "header" => "Connection: close
 			$ctx = Content-Length: " . strlen( $postdata ) . "\n", "max_redirects" => "0", "ignore_errors" => "1", "content" => $postdata ) ) );
 
@@ -124,8 +126,8 @@ class CCBaseAPIClient {
 		}
 
 		$metadata = stream_get_meta_data( $fp );
-		stream_get_contents( $fp );
-		$response = $this->http_request_error = "";
+		$response = stream_get_contents( $fp );
+		$this->http_request_error = "";
 		fclose( $fp );
 		$headers = $metadata['wrapper_data'];
 
@@ -133,8 +135,7 @@ class CCBaseAPIClient {
 			$headers = $headers['headers'];
 		}
 
-		$message = explode( " ", array_shift( $headers ), 3 )[2];
-		$code = explode( " ", array_shift( $headers ), 3 )[1];
+		list(,$code,$message) = explode( " ", array_shift( $headers ), 3 );
 
 		if ($code != "200") {
 			return $this->set_error( "Received HTTP response code " . $code . " (" . $message . "); " . print_r( $metadata, true ) . "; " . $response );
@@ -152,7 +153,7 @@ class CCBaseAPIClient {
 	 *
 	 * @return bool|string the HTTP response string on success, or false on failure
 	 */
-	function http_request_httpretriever($url, $postdata) {
+	protected function http_request_httpretriever($url, $postdata) {
 		$http = new HTTPRetriever();
 		$http->headers['User-Agent'] = "Centova Cast PHP API Client";
 
@@ -172,7 +173,7 @@ class CCBaseAPIClient {
 	 *
 	 * @return void
 	 */
-	function cc_initialize($ccurl) {
+	protected function cc_initialize($ccurl) {
 		$this->ccurl = $ccurl;
 	}
 
@@ -184,7 +185,7 @@ class CCBaseAPIClient {
 	 *
 	 * @return string the XML payload string
 	 */
-	function build_argument_payload($functionargs) {
+	protected abstract function build_argument_payload($functionargs) {
 	}
 
 
@@ -195,7 +196,7 @@ class CCBaseAPIClient {
 	 *
 	 * @return string the XML string
 	 */
-	function build_argument_xml($args) {
+	protected function build_argument_xml($args) {
 		$payload = "";
 		foreach ($args as $name => $value) {
 
@@ -220,13 +221,13 @@ class CCBaseAPIClient {
 	 *
 	 * @return array an array representing the XML <data> element
 	 */
-	function parse_data($data) {
+	protected function parse_data($data) {
 		if (!preg_match( '/<data[^\>]*?>([\s\S]+)<\/data>/i', $data, $matches )) {
 			return false;
 		}
 
-		$matches[1];
-		$xml = $rowxml = new CCAPIXML();
+		list(,$rowxml) = $matches;
+		$xml = new CCAPIXML();
 		return $xml->parse( $rowxml );
 	}
 
@@ -238,7 +239,7 @@ class CCBaseAPIClient {
 	 *
 	 * @return bool true on success, false on error
 	 */
-	function parse_response_packet($packet) {
+	protected function parse_response_packet($packet) {
 		$this->raw_response = $packet;
 		if (!preg_match( '/<centovacast([^\>]+)>([\s\S]+)<\/centovacast>/i', $packet, $matches )) {
 			return $this->set_error( "Invalid response packet received from API server" );
@@ -248,793 +249,165 @@ class CCBaseAPIClient {
 
 		if (preg_match( '/version="([^\"]+)"/i', $cctags, $tagmatches )) {
 		$this->remote_version = $tagmatches[1];
-	}
-	else {
-		$this->remote_version = false;
-	}
-
-	$payload = $matches[2];
-
-	if (!preg_match( '/<response.*?type\s*=\s*"([^"]+)"[^\>]*>([\s\S]+)<\/response>/i', $payload, $matches )) {
-		return $this->set_error( "Empty or unrecognized response packet received from API server" );
-	}
-
-	list($type,$data) = $matches;
-
-	if (preg_match( '/<message[^\>]*>([\s\S]+)<\/message>/i', $data, $matches )) {
-		$this->message = CCAPIXML::xml_entity_decode( $matches[1] );
-	}
-	else {
-		$this->message = "(Message not provided by API server)";
-	}
-
-    switch ( strtolower( $type ) )
-    {
-        case "error" :
-            return $this->set_error( $this->message );
-        case "success" :
-            $this->data = $this->parse_data( $data );
-            $this->success = true;
-            return true;
-        default :
-        	return $this->set_error( "Invalid response type received from API server" );
-    }
-
-}
-
-
-/**
- * Performs an API request to a Centova Cast server
- *
- * @param string  $packet the complete XML request packet to submit to the server
- *
- * @return void
- */
-function api_request($packet) {
-	$url = $this->ccurl;
-	$apiscript = "api.php";
-
-	if (substr( $url, 0 - strlen( $apiscript ) - 1 ) != "/" . $apiscript) {
-		if (substr( $url, 0 - 1 ) != "/") {
-			$url .= "/";
-		}
-
-		$url .= $apiscript;
-	}
-
-	$this->success = false;
-	$postdata = $packet;
-
-	if ($this->raw_response = $this->http_request( $url, $postdata ) === false) {
-		return null;
-	}
-	else {
-		$this->parse_response_packet( $this->raw_response );
-		$this->raw_request = $packet;
-	}
-}
-
-
-/**
- * Records an error during the API request
- *
- * @param string  $msg the error message
- *
- * @return bool always returns false
- */
-function set_error($msg) {
-	$this->success = false;
-	$this->error = $msg;
-	return false;
-}
-
-
-/**
- * Dispatch method for API calls.  Used by __call() for
- * overloaded method calls and call() for direct calls.
- *
- * @param string  $name the API method to call
- * @param array   $args an array of arguments to pass to the API method
- *
- * @return void
- */
-function _call($name, $args) {
-	$this->methodname = $name;
-	$payload = $this->build_argument_payload( $args );
-	$packet = $this->build_request_packet( $name, $payload );
-	$this->api_request( $packet );
-}
-
-
-}
-
-
-class CCServerAPIClient extends CCBaseAPIClient {
-private $classname = "server";
-
-
-/** Constructor
- *
- * @param string  $ccurl the URL to Centova Cast
- *
- * @return void
- */
-function __construct($ccurl) {
-	parent::cc_initialize( $ccurl );
-}
-
-
-/** @inherited */
-function build_argument_payload($functionargs) {
-	if (count( $functionargs ) < 3) {
-		trigger_error( sprintf( "Function %s requires a minimum of 3 arguments, %d given", $this->methodname, count( $functionargs ) ), E_USER_WARNING );
-	}
-
-	$username = $functionargs[0];
-	$password = $functionargs[1];
-	$arguments = $functionargs[2];
-
-	if (!is_array( $arguments )) {
-		$arguments = array();
-	}
-
-	$arguments = array_merge( array( "username" => $username, "password" => $password ), $arguments );
-	return $this->build_argument_xml( $arguments );
-}
-
-
-/**
- * API method dispatcher; invokes the specified API method.
- *
- * @param string  $name the name of the API method to call
- * @param mixed   ... any additional parameters that may need to be passed as arguments to the API method
- *
- * @return void
- */
-function call() {
-	$args = func_get_args();
-	$name = array_shift( $args );
-	$this->_call( $name, $args );
-}
-
-
-/**
- * Overloaded method handler; allows calling API methods directly by name on the object; eg:
- * $api->info($pw,$args) instead of $api->call("info",$pw,$args)
- *
- * @param string  $name the name of the API method to call
- * @param array   $args an array of arguments passed as parameters to the method
- *
- * @return void
- */
-function __call($name, $args) {
-	$this->_call( $name, $args );
-}
-
-
-/**
- * Builds an XML request packet.
- *
- * @param string  $methodname the name of the API method to call
- * @param string  $payload    the XML payload for the request
- *
- * @return string the complete request packet
- */
-function build_request_packet($methodname, $payload) {
-	return sprintf( "<?xml version=\"1.0\" encoding=\"" . $this->encoding . "\"?" . ">" . "<centovacast>" . "<request class=\"%s\" method=\"%s\"%s>" . "%s" . "</request>" . "</centovacast>", htmlentities( $this->classname ), htmlentities( $methodname ), (($this->debug ? " debug=\"enabled\"" : "" . $this->debugconsole) ? " debugconsole=\"" . htmlentities( $this->debugconsole ) . "\"" : ""), $payload );
-}
-
-
-/**
- * Performs an HTTP POST request using the most suitable HTTP client interface available.
- *
- * @param string  $url      the URL to which the POST request will be submitted
- * @param string  $postdata the POST data string
- *
- * @return bool|string the HTTP response string on success, or false on failure
- */
-function http_request($url, $postdata) {
-	if ( function_exists( "stream_context_create" ) && function_exists( "stream_get_meta_data" ) ) {
-		return $this->http_request_php( $url, $postdata );
-	}
-
-
-	if (class_exists( "HTTPRetriever" )) {
-		return $this->http_request_httpretriever( $url, $postdata );
-	}
-
-	return $this->set_error( "Neither HTTPRetriever nor PHP streams support is available" );
-}
-
-
-function handle_http_error($errno, $errstr, $errfile, $errline) {
-	$this->http_request_error = $errstr;
-	return true;
-}
-
-
-/**
- * Performs an HTTP POST request using PHP"s fopen wrappers.
- *
- * @param string  $url      the URL to which the POST request will be submitted
- * @param string  $postdata the POST data string
- *
- * @return bool|string the HTTP response string on success, or false on failure
- */
-function http_request_php($url, $postdata) {
-	stream_context_create( array( "http" => array( "method" => "POST", "user_agent" => "Centova Cast PHP API Client", "header" => "Connection: close
-			$ctx = Content-Length: " . strlen( $postdata ) . "\n", "max_redirects" => "0", "ignore_errors" => "1", "content" => $postdata ) ) );
-
-	set_error_handler( array( $this, "handle_http_error" ) );
-	$fp = @fopen( $url, "rb", false, $ctx );
-	restore_error_handler();
-
-	if (!is_resource( $fp )) {
-		$error = "Socket error accessing " . $url;
-
-		if (!empty( $this->http_request_error )) {
-			$error .= ": " . $this->http_request_error;
-		}
-
-		return $this->set_error( $error );
-	}
-
-	$metadata = stream_get_meta_data( $fp );
-	stream_get_contents( $fp );
-	$response = $this->http_request_error = "";
-	fclose( $fp );
-	$headers = $metadata['wrapper_data'];
-
-	if (isset( $headers['headers'] )) {
-		$headers = $headers['headers'];
-	}
-
-	$message = explode( " ", array_shift( $headers ), 3 )[2];
-	$code = explode( " ", array_shift( $headers ), 3 )[1];
-
-	if ($code != "200") {
-		return $this->set_error( "Received HTTP response code " . $code . " (" . $message . "); " . print_r( $metadata, true ) . "; " . $response );
-	}
-
-	return $response;
-}
-
-
-/**
- * Performs an HTTP POST request using the HTTPRetriever class.
- *
- * @param string  $url      the URL to which the POST request will be submitted
- * @param string  $postdata the POST data string
- *
- * @return bool|string the HTTP response string on success, or false on failure
- */
-function http_request_httpretriever($url, $postdata) {
-	$http = new HTTPRetriever();
-	$http->headers['User-Agent'] = "Centova Cast PHP API Client";
-
-	if (!$http->post( $url, $postdata )) {
-		$this->set_error( "Error contacting server: " . $http->get_error() );
-		return false;
-	}
-
-	return $http->raw_response;
-}
-
-
-/**
- * Initializer method
- *
- * @param string  $ccurl the URL to Centova Cast
- *
- * @return void
- */
-function cc_initialize($ccurl) {
-	$this->ccurl = $ccurl;
-}
-
-
-/**
- * Builds an XML string from an array of key=>value pairs
- *
- * @param array   $args the key=>value pairs to form the XML output
- *
- * @return string the XML string
- */
-function build_argument_xml($args) {
-	$payload = "";
-	foreach ($args as $name => $value) {
-
-		if (is_array( $value )) {
-			$value = $this->build_argument_xml( $value );
 		}
 		else {
-			$value = htmlentities( $value );
+			$this->remote_version = false;
 		}
 
-		$payload .= sprintf( "<%s>%s</%s>", $name, $value, $name );
+		$payload = $matches[2];
+
+		if (!preg_match( '/<response.*?type\s*=\s*"([^"]+)"[^\>]*>([\s\S]+)<\/response>/i', $payload, $matches )) {
+			return $this->set_error( "Empty or unrecognized response packet received from API server" );
+		}
+
+		list(,$type,$data) = $matches;
+
+		if (preg_match( '/<message[^\>]*>([\s\S]+)<\/message>/i', $data, $matches )) {
+			$this->message = CCAPIXML::xml_entity_decode( $matches[1] );
+		}
+		else {
+			$this->message = "(Message not provided by API server)";
+		}
+
+    	switch ( strtolower( $type ) )
+    	{
+        	case "error" :
+            	return $this->set_error( $this->message );
+        	case "success" :
+            	$this->data = $this->parse_data( $data );
+            	$this->success = true;
+            	return true;
+        	default :
+        		return $this->set_error( "Invalid response type received from API server" );
+    	}
+
 	}
 
-	return $payload;
-}
+
+	/**
+	 * Performs an API request to a Centova Cast server
+	 *
+	 * @param string  $packet the complete XML request packet to submit to the server
+	 *
+	 * @return void
+	 */
+	protected function api_request($packet) {
+		$url = $this->ccurl;
+		$apiscript = "api.php";
+
+		if (substr( $url, 0 - strlen( $apiscript ) - 1 ) != "/" . $apiscript) {
+			if (substr( $url, 0 - 1 ) != "/") {
+				$url .= "/";
+			}
+
+			$url .= $apiscript;
+		}
+
+		$this->success = false;
+		$postdata = $packet;
+
+		if ($this->raw_response = $this->http_request( $url, $postdata ) === false) {
+			return null;
+		}
+		else {
+			$this->parse_response_packet( $this->raw_response );
+			$this->raw_request = $packet;
+		}
+	}
 
 
-/**
- * Parses the <data> XML element from the Centova Cast API response packet
- *
- * @param string  $data the XML response packet containing the <data> element
- *
- * @return array an array representing the XML <data> element
- */
-function parse_data($data) {
-	if (!preg_match( '/<data[^\>]*?>([\s\S]+)<\/data>/i', $data, $matches )) {
+	/**
+	 * Records an error during the API request
+	 *
+	 * @param string  $msg the error message
+	 *
+	 * @return bool always returns false
+ 	 */
+	protected function set_error($msg) {
+		$this->success = false;
+		$this->error = $msg;
 		return false;
 	}
 
-	$rowxml = $matches[1];
-	$xml = new CCAPIXML();
-	return $xml->parse( $rowxml );
+
+	/**
+	 * Dispatch method for API calls.  Used by __call() for
+	 * overloaded method calls and call() for direct calls.
+	 *
+	 * @param string  $name the API method to call
+	 * @param array   $args an array of arguments to pass to the API method
+	 *
+	 * @return void
+	 */
+	protected function _call($name, $args) {
+		$this->methodname = $name;
+		$payload = $this->build_argument_payload( $args );
+		$packet = $this->build_request_packet( $name, $payload );
+		$this->api_request( $packet );
+	}
+
+
 }
 
 
-/**
- * Parses an XML response packet received from a Centova Cast server
+/* CCServerAPIClient
  *
- * @param string  $packet the XML response packet
- *
- * @return bool true on success, false on error
+ * Provides an interface to the Server class of the CentovaCast XML API.
  */
-function parse_response_packet($packet) {
-	$this->raw_response = $packet;
-	if (!preg_match( '/<centovacast([^\>]+)>([\s\S]+)<\/centovacast>/i', $packet, $matches )) {
-		return $this->set_error( "Invalid response packet received from API server" );
+class CCServerAPIClient extends CCBaseAPIClient {
+	var $classname = 'server';
+	
+	function CCServerAPIClient($ccurl) { 
+		$this->cc_initialize($ccurl);
 	}
 
-	$cctags = $matches[1];
-
-	if (preg_match( '/version="([^\"]+)"/i', $cctags, $tagmatches )) {
-	$this->remote_version = $tagmatches[1];
-}
-else {
-	$this->remote_version = false;
-}
-
-$payload = $matches[2];
-
-if (!preg_match( '/<response.*?type\s*=\s*"([^"]+)"[^\>]*>([\s\S]+)<\/response>/i', $payload, $matches )) {
-	return $this->set_error( "Empty or unrecognized response packet received from API server" );
-}
-
-list($type,$data) = $matches;
-
-if (preg_match( '/<message[^\>]*>([\s\S]+)<\/message>/i', $data, $matches )) {
-	$this->message = CCAPIXML::xml_entity_decode( $matches[1] );
-}
-else {
-	$this->message = "(Message not provided by API server)";
-}
-
-switch ( strtolower( $type ) )
-{
-    case "error" :
-        return $this->set_error( $this->message );
-    case "success" :
-        $this->data = $this->parse_data( $data );
-        $this->success = true;
-        return true;
-    default :
-    	return $this->set_error( "Invalid response type received from API server" );
-}
-
-}
-
-
-/**
- * Performs an API request to a Centova Cast server
- *
- * @param string  $packet the complete XML request packet to submit to the server
- *
- * @return void
- */
-function api_request($packet) {
-	$url = $this->ccurl;
-	$apiscript = "api.php";
-
-	if (substr( $url, 0 - strlen( $apiscript ) - 1 ) != "/" . $apiscript) {
-		if (substr( $url, 0 - 1 ) != "/") {
-			$url .= "/";
-		}
-
-		$url .= $apiscript;
-	}
-
-	$this->success = false;
-	$postdata = $packet;
-
-	if ($this->raw_response = $this->http_request( $url, $postdata ) === false) {
-		return null;
-	}
-	else {
-		$this->parse_response_packet( $this->raw_response );
-		$this->raw_request = $packet;
+	function build_argument_payload($functionargs) {
+		if (count($functionargs)<3) trigger_error(sprintf('Function %s requires a minimum of 3 arguments, %d given',$this->methodname,count($functionargs)),E_USER_WARNING);
+		
+		$username = $functionargs[0];
+		$password = $functionargs[1];
+		$arguments = $functionargs[2];
+		if (!is_array($arguments)) $arguments = array();
+		
+		$arguments = array_merge(
+			array(
+				'username'=>$username,
+				'password'=>$password
+			),
+			$arguments
+		);
+		
+		return $this->build_argument_xml($arguments);
 	}
 }
 
 
-/**
- * Records an error during the API request
+/* CCSystemAPIClient
  *
- * @param string  $msg the error message
- *
- * @return bool always returns false
+ * Provides an interface to the System class of the CentovaCast XML API.
  */
-function set_error($msg) {
-	$this->success = false;
-	$this->error = $msg;
-	return false;
-}
-
-
-/**
- * Dispatch method for API calls.  Used by __call() for
- * overloaded method calls and call() for direct calls.
- *
- * @param string  $name the API method to call
- * @param array   $args an array of arguments to pass to the API method
- *
- * @return void
- */
-function _call($name, $args) {
-	$this->methodname = $name;
-	$payload = $this->build_argument_payload( $args );
-	$packet = $this->build_request_packet( $name, $payload );
-	$this->api_request( $packet );
-}
-
-
-}
-
 
 class CCSystemAPIClient extends CCBaseAPIClient {
-private $classname = "system";
+	var $classname = 'system';
 
-
-/** Constructor
- *
- * @param string  $ccurl the URL to Centova Cast
- *
- * @return void
- */
-function __construct($ccurl) {
-	parent::cc_initialize( $ccurl );
-}
-
-
-/** @inherited */
-function build_argument_payload($functionargs) {
-	if (count( $functionargs ) < 2) {
-		trigger_error( sprintf( "Function %s requires a minimum of 2 arguments, %d given", $this->methodname, count( $functionargs ) ), E_USER_WARNING );
+	function CCSystemAPIClient($ccurl) {
+		$this->cc_initialize($ccurl);
 	}
 
-	$adminpassword = $functionargs[0];
-	$arguments = $functionargs[1];
-
-	if (!is_array( $arguments )) {
-		$arguments = array();
+	function build_argument_payload($functionargs) {
+		if (count($functionargs)<2) trigger_error(sprintf('Function %s requires a minimum of 2 arguments, %d given',$this->methodname,count($functionargs)),E_USER_WARNING);
+		
+		$adminpassword = $functionargs[0];
+		$arguments = $functionargs[1];
+		if (!is_array($arguments)) $arguments = array();
+		
+		$arguments = array_merge(
+			array('password'=>$adminpassword),
+			$arguments
+		);
+		
+		return $this->build_argument_xml($arguments);
 	}
-
-	$arguments = array_merge( array( "password" => $adminpassword ), $arguments );
-	return $this->build_argument_xml( $arguments );
-}
-
-
-/**
- * API method dispatcher; invokes the specified API method.
- *
- * @param string  $name the name of the API method to call
- * @param mixed   ... any additional parameters that may need to be passed as arguments to the API method
- *
- * @return void
- */
-function call() {
-	$args = func_get_args();
-	$name = array_shift( $args );
-	$this->_call( $name, $args );
-}
-
-
-/**
- * Overloaded method handler; allows calling API methods directly by name on the object; eg:
- * $api->info($pw,$args) instead of $api->call("info",$pw,$args)
- *
- * @param string  $name the name of the API method to call
- * @param array   $args an array of arguments passed as parameters to the method
- *
- * @return void
- */
-function __call($name, $args) {
-	$this->_call( $name, $args );
-}
-
-
-/**
- * Builds an XML request packet.
- *
- * @param string  $methodname the name of the API method to call
- * @param string  $payload    the XML payload for the request
- *
- * @return string the complete request packet
- */
-function build_request_packet($methodname, $payload) {
-	return sprintf( "<?xml version=\"1.0\" encoding=\"" . $this->encoding . "\"?" . ">" . "<centovacast>" . "<request class=\"%s\" method=\"%s\"%s>" . "%s" . "</request>" . "</centovacast>", htmlentities( $this->classname ), htmlentities( $methodname ), (($this->debug ? " debug=\"enabled\"" : "" . $this->debugconsole) ? " debugconsole=\"" . htmlentities( $this->debugconsole ) . "\"" : ""), $payload );
-}
-
-
-/**
- * Performs an HTTP POST request using the most suitable HTTP client interface available.
- *
- * @param string  $url      the URL to which the POST request will be submitted
- * @param string  $postdata the POST data string
- *
- * @return bool|string the HTTP response string on success, or false on failure
- */
-function http_request($url, $postdata) {
-	if ( function_exists( "stream_context_create" ) && function_exists( "stream_get_meta_data" ) ) {
-		return $this->http_request_php( $url, $postdata );
-	}
-
-
-	if (class_exists( "HTTPRetriever" )) {
-		return $this->http_request_httpretriever( $url, $postdata );
-	}
-
-	return $this->set_error( "Neither HTTPRetriever nor PHP streams support is available" );
-}
-
-
-function handle_http_error($errno, $errstr, $errfile, $errline) {
-	$this->http_request_error = $errstr;
-	return true;
-}
-
-
-/**
- * Performs an HTTP POST request using PHP"s fopen wrappers.
- *
- * @param string  $url      the URL to which the POST request will be submitted
- * @param string  $postdata the POST data string
- *
- * @return bool|string the HTTP response string on success, or false on failure
- */
-function http_request_php($url, $postdata) {
-	stream_context_create( array( "http" => array( "method" => "POST", "user_agent" => "Centova Cast PHP API Client", "header" => "Connection: close
-				$ctx = Content-Length: " . strlen( $postdata ) . "\n", "max_redirects" => "0", "ignore_errors" => "1", "content" => $postdata ) ) );
-
-	set_error_handler( array( $this, "handle_http_error" ) );
-	$fp = @fopen( $url, "rb", false, $ctx );
-	restore_error_handler();
-
-	if (!is_resource( $fp )) {
-		$error = "Socket error accessing " . $url;
-
-		if (!empty( $this->http_request_error )) {
-			$error .= ": " . $this->http_request_error;
-		}
-
-		return $this->set_error( $error );
-	}
-
-	$metadata = stream_get_meta_data( $fp );
-	stream_get_contents( $fp );
-	$response = $this->http_request_error = "";
-	fclose( $fp );
-	$headers = $metadata['wrapper_data'];
-
-	if (isset( $headers['headers'] )) {
-		$headers = $headers['headers'];
-	}
-
-	$message = explode( " ", array_shift( $headers ), 3 )[2];
-	$code = explode( " ", array_shift( $headers ), 3 )[1]
-
-	if ($code != "200") {
-		return $this->set_error( "Received HTTP response code " . $code . " (" . $message . "); " . print_r( $metadata, true ) . "; " . $response );
-	}
-
-	return $response;
-}
-
-
-/**
- * Performs an HTTP POST request using the HTTPRetriever class.
- *
- * @param string  $url      the URL to which the POST request will be submitted
- * @param string  $postdata the POST data string
- *
- * @return bool|string the HTTP response string on success, or false on failure
- */
-function http_request_httpretriever($url, $postdata) {
-	$http = new HTTPRetriever();
-	$http->headers['User-Agent'] = "Centova Cast PHP API Client";
-
-	if (!$http->post( $url, $postdata )) {
-		$this->set_error( "Error contacting server: " . $http->get_error() );
-		return false;
-	}
-
-	return $http->raw_response;
-}
-
-
-/**
- * Initializer method
- *
- * @param string  $ccurl the URL to Centova Cast
- *
- * @return void
- */
-function cc_initialize($ccurl) {
-	$this->ccurl = $ccurl;
-}
-
-
-/**
- * Builds an XML string from an array of key=>value pairs
- *
- * @param array   $args the key=>value pairs to form the XML output
- *
- * @return string the XML string
- */
-function build_argument_xml($args) {
-	$payload = "";
-	foreach ($args as $name => $value) {
-
-		if (is_array( $value )) {
-			$value = $this->build_argument_xml( $value );
-		}
-		else {
-			$value = htmlentities( $value );
-		}
-
-		$payload .= sprintf( "<%s>%s</%s>", $name, $value, $name );
-	}
-
-	return $payload;
-}
-
-
-/**
- * Parses the <data> XML element from the Centova Cast API response packet
- *
- * @param string  $data the XML response packet containing the <data> element
- *
- * @return array an array representing the XML <data> element
- */
-function parse_data($data) {
-	if (!preg_match( '/<data[^\>]*?>([\s\S]+)<\/data>/i', $data, $matches )) {
-		return false;
-	}
-
-	$rowxml = $matches[1];
-	$xml = new CCAPIXML();
-	return $xml->parse( $rowxml );
-}
-
-
-/**
- * Parses an XML response packet received from a Centova Cast server
- *
- * @param string  $packet the XML response packet
- *
- * @return bool true on success, false on error
- */
-function parse_response_packet($packet) {
-	$this->raw_response = $packet;
-	if (!preg_match( '/<centovacast([^\>]+)>([\s\S]+)<\/centovacast>/i', $packet, $matches )) {
-		return $this->set_error( "Invalid response packet received from API server" );
-	}
-
-	$cctags = $matches[1];
-
-	if (preg_match( '/version="([^\"]+)"/i', $cctags, $tagmatches )) {
-	$this->remote_version = $tagmatches[1];
-}
-else {
-	$this->remote_version = false;
-}
-
-$payload = $matches[2];
-
-if (!preg_match( '/<response.*?type\s*=\s*"([^"]+)"[^\>]*>([\s\S]+)<\/response>/i', $payload, $matches )) {
-	return $this->set_error( "Empty or unrecognized response packet received from API server" );
-}
-
-list($type,$data) = $matches;
-
-if (preg_match( '/<message[^\>]*>([\s\S]+)<\/message>/i', $data, $matches )) {
-	$this->message = CCAPIXML::xml_entity_decode( $matches[1] );
-}
-else {
-	$this->message = "(Message not provided by API server)";
-}
-
-switch ( strtolower( $type ) )
-{
-    case "error" :
-        return $this->set_error( $this->message );
-    case "success" :
-        $this->data = $this->parse_data( $data );
-        $this->success = true;
-        return true;
-    default :
-    	return $this->set_error( "Invalid response type received from API server" );
-}
-
-}
-
-
-/**
- * Performs an API request to a Centova Cast server
- *
- * @param string  $packet the complete XML request packet to submit to the server
- *
- * @return void
- */
-function api_request($packet) {
-	$url = $this->ccurl;
-	$apiscript = "api.php";
-
-	if (substr( $url, 0 - strlen( $apiscript ) - 1 ) != "/" . $apiscript) {
-		if (substr( $url, 0 - 1 ) != "/") {
-			$url .= "/";
-		}
-
-		$url .= $apiscript;
-	}
-
-	$this->success = false;
-	$postdata = $packet;
-
-	if ($this->raw_response = $this->http_request( $url, $postdata ) === false) {
-		return null;
-	}
-	else {
-		$this->parse_response_packet( $this->raw_response );
-		$this->raw_request = $packet;
-	}
-}
-
-
-/**
- * Records an error during the API request
- *
- * @param string  $msg the error message
- *
- * @return bool always returns false
- */
-function set_error(, $msg) {
-	$this->success = false;
-	$this->error = $msg;
-	return false;
-}
-
-
-/**
- * Dispatch method for API calls.  Used by __call() for
- * overloaded method calls and call() for direct calls.
- *
- * @param string  $name the API method to call
- * @param array   $args an array of arguments to pass to the API method
- *
- * @return void
- */
-function _call($name, $args) {
-	$this->methodname = $name;
-	$payload = $this->build_argument_payload( $args );
-	$packet = $this->build_request_packet( $name, $payload );
-	$this->api_request( $packet );
-}
-
-
 }
 
 
@@ -1059,25 +432,20 @@ function parse($xml) {
 
 
 	while ($tag !== false) {
-		$tagnocontent = $tag[4];
-		$tagattr = $tag[3];
-		$tagname = $tag[2];
-		$taglength = $tag[1];
-		$tagoffset = $tag[0];
+		list($tagoffset,$taglength,$tagname,$tagattr,$tagnocontent) = $tag;
 
 		if ($tagnocontent) {
 			$tagcontents = "";
 			$tagend = $tagoffset + $taglength;
 		}
 		else {
-			$xmlcontents = ;
+			$xmlcontents = $this->get_xml_tag_contents( $xml, $tag );
 
 			if ($xmlcontents === false) {
 				return false;
 			}
 
-			$tagcontents = $xmlcontents[1];
-			list($tagend) = $this->get_xml_tag_contents( $xml, $tag );
+			list($tagend,$tagcontents) = $xmlcontents;
 		}
 
 
@@ -1178,14 +546,10 @@ function get_xml_tag_contents($xml, $tag) {
 	}
 
 	$nest = 0;
-	$iterations = 0;
 	$regex = '/<\s*(\/)?\s*' . preg_quote( $tag[2], '/' ) . '(\s+[^\>]*)?>/i';
 
-	if (true) {
-		if (100 < ++$iterations) {
-			return false;
-		}
 
+	while ($iterations = 0;$iterations <= 100;$iterations++) {
 
 		if (preg_match( $regex, $xml, $matches, PREG_OFFSET_CAPTURE, $startoffset )) {
 			$tagoffset = $matches[0][1];
@@ -1193,19 +557,14 @@ function get_xml_tag_contents($xml, $tag) {
 			$startoffset = $tagoffset + $taglength;
 
 			if ($matches[1][0] != "/") {
-				++$nest;
-			}
-
-			--$nest;
+				$nest++;
+			} else $nest--;
 
 			if ($nest < 0) {
 				break;
 			}
 		}
-
-		break;
 	}
-
 
 	if (0 <= $nest) {
 		return false;

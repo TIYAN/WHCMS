@@ -257,8 +257,7 @@ function getResultsArray($results) {
 	foreach ($descarray as $k => $v) {
 
 		if ($k == "riskScore") {
-			$k;
-			$values-> .= "%";
+			$values->$k .= "%";
 		}
 
 		$resultarray[$v] = $values[$k];

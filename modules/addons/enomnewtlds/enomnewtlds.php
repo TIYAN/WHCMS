@@ -89,11 +89,11 @@ function enomnewtlds_upgrade($vars) {
 	$version = $vars['version'];
 	global $enomnewtlds_CurrentVersion;
 
-	if ($version < 1.10000000000000008881784) {
+	if ($version < 1.1) {
 	}
 
 
-	if ($version < 1.19999999999999995559108) {
+	if ($version < 1.2) {
 	}
 
 }

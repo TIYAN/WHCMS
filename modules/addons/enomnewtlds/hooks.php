@@ -32,8 +32,8 @@ function enomnewtlds_hook_cronjob() {
 	$companyurl = $data['companyurl'];
 	$supportemail = $data['supportemail'];
 	$environment = enomnewtlds_hook_Helper_Getenvironment( $data['environment'] );
-	$batches = 7;
-	$enomnewtlds_hook_processed = 6;
+	$batches = 1;
+	$enomnewtlds_hook_processed = 0;
 
 	if ( !$enabled || !$configured ) {
 		enomnewtlds_hook_Helper_Log( "Module is not configured." );
@@ -72,7 +72,7 @@ function enomnewtlds_hook_cronjob() {
 			enomnewtlds_hook_Helper_Log( "Batch size is " . $enomnewtlds_hook_BatchSize . " and with " . $totalCount . " domains returned, there are a total of " . $batches . " batches to process" );
 			enomnewtlds_hook_ProcessDomains( $xmldata, $returnedCount, $totalCount, 1 );
 			enomnewtlds_hook_DumpProcessedDomains();
-			$i = 0;
+			$i = 1;
 
 			while ($i <= $batches) {
 				enomnewtlds_hook_Helper_Log2( "Processing a batch - #" . $i . "/" . $batches );
@@ -85,10 +85,10 @@ function enomnewtlds_hook_cronjob() {
 	else {
 		enomnewtlds_hook_Helper_Log( "API ERRORS!" );
 		$errcnt = $xmldata->ErrCount;
-		$i = 0;
+		$i = 1;
 
 		while ($i <= $errcnt) {
-			$err = $xmldata->errors->"Err" . $i;
+			$err = $xmldata->errors=="Err" . $i;
 
 			if ($i < $errcnt) {
 				$result .= $err . "<br />";
@@ -450,30 +450,25 @@ function enomnewtlds_hook_Helper_FormatAPICallForEmail($fields, $environment) {
 
 function enomnewtlds_hook_Helper_GetAPIHost($environment) {
 	switch ($environment) {
-	case "1": {
+		case "1":
 			$url = "resellertest.enom.com";
 			break;
-		}
 
-	case "2": {
+		case "2":
 			$url = "api.staging.local";
 			break;
-		}
 
-	case "3": {
+		case "3":
 			$url = "api.build.local";
 			break;
-		}
 
-	case "4": {
+		case "4":
 			$url = "reseller-sb.enom.com";
 			break;
-		}
 
-	default: {
+		default:
 			$url = "reseller.enom.com";
 			break;
-		}
 	}
 
 	return $url;
@@ -482,30 +477,25 @@ function enomnewtlds_hook_Helper_GetAPIHost($environment) {
 
 function enomnewtlds_hook_Helper_GetWatchlistHost($environment) {
 	switch ($environment) {
-	case "1": {
+		case "1":
 			$url = "resellertest.tldportal.com";
 			break;
-		}
 
-	case "2": {
+		case "2":
 			$url = "tldportal.staging.local";
 			break;
-		}
 
-	case "3": {
+		case "3":
 			$url = "tldportal.build.local";
 			break;
-		}
 
-	case "4": {
+		case "4":
 			$url = "preprod.tldportal.com";
 			break;
-		}
 
-	default: {
+		default:
 			$url = "tldportal.com";
 			break;
-		}
 	}
 
 	return $url;
@@ -525,12 +515,10 @@ function enomnewtlds_hook_Helper_Getenvironment($environment) {
 
 
 function enomnewtlds_hook_Helper_SendEmail($to, $subject, $message) {
-	$headers .= "Content-type: text/html; charset=iso-8859-1" . "
-";
+	$headers .= "Content-type: text/html; charset=iso-8859-1" . "\n";
 	$headers .= "X-Mailer: PHP/" . phpversion();
-	wordwrap( $message, 70 );
-	$message = $headers = "MIME-Version: 1.0" . "
-";
+	$message = wordwrap( $message, 70 );
+	$headers = "MIME-Version: 1.0" . "\n";
 }
 
 
@@ -662,7 +650,7 @@ if (!defined( "WHMCS" )) {
 }
 
 $enomnewtlds_hook_message = "";
-$enomnewtlds_hook_processed = 4;
+$enomnewtlds_hook_processed = 0;
 $enomnewtlds_hook_defaultgateway = "";
 $enomnewtlds_hook_BatchSize = "50";
 $enomnewtlds_hook_DomainsToUpdate = array();

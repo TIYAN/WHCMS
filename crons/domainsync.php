@@ -39,8 +39,7 @@ while ($data = mysql_fetch_array($result)) {
 	$regperiod = $data['registrationperiod'];
 	$status = $data['status'];
 	$domainparts = explode(".", $domain, 2);
-	$registrarconfigops[$registrar] = getRegistrarConfigOptions($registrar);
-	$params = (is_array($registrarconfigops[$registrar]) ? $registrarconfigops[$registrar] :);
+	$params = is_array($registrarconfigops[$registrar]) ? $registrarconfigops[$registrar] : ($registrarconfigops[$registrar] = getregistrarconfigoptions($registrar));
 	$params['domainid'] = $domainid;
 	$params['domain'] = $domain;
 	$params['sld'] = $domainparts[0];
@@ -149,8 +148,7 @@ while ($data = mysql_fetch_array($result)) {
 	$nextduedate = $data['nextduedate'];
 	$status = $data['status'];
 	$domainparts = explode(".", $domain, 2);
-	$registrarconfigops[$registrar] = getRegistrarConfigOptions($registrar);
-	$params = (is_array($registrarconfigops[$registrar]) ? $registrarconfigops[$registrar] :);
+	$params = is_array($registrarconfigops[$registrar]) ? $registrarconfigops[$registrar] : ($registrarconfigops[$registrar] = getRegistrarConfigOptions($registrar));
 	$params['domainid'] = $domainid;
 	$params['domain'] = $domain;
 	$params['sld'] = $domainparts[0];
