@@ -77,7 +77,7 @@ SAE特别版下载：http://www.mtimer.cn/release/25-whmcs-sae.html
 
 > Email: [mtimercms#hotmail.com](mtimercms#hotmail.com) （推荐）  
 > 社区: [时光人社区](http://www.mtimer.cn/)  
-> Q Q群：[138082163](http://shang.qq.com/wpa/qunwpa?idkey=520e53ac7acc04d489a801aa55a69c9a6e3df06e1fea1b0b0f3ca936627cca52)  
+> Q Q群：[点击加入](http://shang.qq.com/wpa/qunwpa?idkey=520e53ac7acc04d489a801aa55a69c9a6e3df06e1fea1b0b0f3ca936627cca52)  
 > 微博：[@Mtimer_CMS](http://weibo.com/u/3488979130)  
 > 捐助：[Donate](http://t.cn/8FwJr5Z)
 
