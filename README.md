@@ -8,19 +8,25 @@
 
 Donate <b>$10</b> to mtimercms@hotmail.com get v5.2.16 & updates *lifetime* via email.[Last chance]
 
-<h2>更新记录</h2>
+## 一、更新记录
 
-2014.01.22更新至5.2.16，安全版本捐助后下载，公平点，花不了多少;)
+2014-1-31. 修复文件 domainsync.php,class.upgrade.php
+		   修复模块: mediacp,veportal,opensrs,resellone,xpanel,websitepanel,vpsnet,totp,enomnewtlds,lxadmin,centovacast,varilogix_fraudcall,maxmind
+		   修复网关: myideal,inpay,libertyreserve
 
-2013.12.24更新至5.2.15，这是最后一版免费
+2014.1.26. 修复 register.php
 
-2013.11.28更新至5.2.14
+2014.01.22. 更新至5.2.16，安全版本捐助后下载，公平点，花不了多少;)
 
-2013.11.25更新至5.2.13
+2013.12.24. 更新至5.2.15，这是最后一版免费
 
-2013.10.25更新至5.2.12
+2013.11.28. 更新至5.2.14
 
-2013.10.21更新至5.2.10
+2013.11.25. 更新至5.2.13
+
+2013.10.25. 更新至5.2.12
+
+2013.10.21. 更新至5.2.10
 
 5.2.16 官方原版：http://pan.baidu.com/s/1ntwNU3n
 
