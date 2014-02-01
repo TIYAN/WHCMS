@@ -34,21 +34,19 @@ Donate <b>$10</b> to mtimercms@hotmail.com get v5.2.16 & updates *lifetime* via 
 
 
 
-<h2>演示</h2>
+## 二、演示
 
 http://1.whmcs5.sinaapp.com/whmcs_5.2.16_decoded_nulled_mtimer/
 
-微博@ http://weibo.com/u/3488979130
 
 
-<h2>如何下载</h2>
+## 三、如何下载
 
-<code>
-git clone git@gitshell.com:Mtimer_CMS/whmcs52_latest_decoded_nulled_mtimer.git
-</code>
+	git clone git@gitshell.com:Mtimer_CMS/whmcs52_latest_decoded_nulled_mtimer.git
 
 
-<h3>为什么使用此版本?</h3>
+
+## 四、此开心版优势
 
 <ul>
 <li><strong>完全解码:</strong> 所有PHP均已 <em>解码</em> 你可以定制你的 私人WHMCS版。</li>
@@ -58,33 +56,42 @@ git clone git@gitshell.com:Mtimer_CMS/whmcs52_latest_decoded_nulled_mtimer.git
 <li><strong>永久更新:</strong> 完全和官方 <em>同步更新</em> ，当然说的是捐助者。</li>
 </ul>
 
-<h4>新浪SAE特别版[2014.01.26更新]</h4>
+
+## 五、新浪SAE特别版[2014.01.31更新]
 
 教程：http://www.mtimer.cn/lessons/28-whmcs-sae.html
 
 SAE特别版下载：http://www.mtimer.cn/release/25-whmcs-sae.html
 
+## 六、联系方式及捐助
 
-<h6>作者及捐助</h6>
+> Email: [mtimercms#hotmail.com](mtimercms#hotmail.com) （推荐）  
+> 社区: [时光人社区](http://www.mtimer.cn/)  
+> Q Q群：[138082163](http://shang.qq.com/wpa/qunwpa?idkey=520e53ac7acc04d489a801aa55a69c9a6e3df06e1fea1b0b0f3ca936627cca52)  
+> 微博：[@Mtimer_CMS](http://weibo.com/u/3488979130)
+> 捐助：[Donate](http://t.cn/8FwJr5Z)
 
-此破解版由 时光人社区 www.mtimer.cn 维护
 
-捐助 支付宝：http://t.cn/8FwJr5Z
+## 七、关于更新
 
-<strong>捐助后将通过邮件获得今后更新</strong>
+1. WHMCS 5.2.15 是最后一版免费版
 
-时光人社区 - Mtimer CMS
+2. 捐助者将会通过邮件持续收到今后更新，大概在官方更新24小时内就能收到
 
-参考：
 
-http://www.mtimer.cn
+## About WHMCS Full Decoded Nulled English version
 
-WHMCS v5.2.15 is the last release for free.
+1. WHMCS v5.2.15 is the last release for free.
 
-Donate <b>$10</b> to mtimercms@hotmail.com get v5.2.16 & updates *lifetime* via email.[Last chance]
+2. Donate <b>$10</b> to mtimercms@hotmail.com, you will receive v5.2.16 & updates *lifetime* via email.[Last chance]
 
-Donate paypal: mtimercms@hotmail.com
 
-Donate Webmoney: Z369907552397  R374005435218
+## Contact & Donate
 
-Decoded & Nulled By Mtimer
+> Email: [mtimercms#hotmail.com](mtimercms#hotmail.com) (Recommend) 
+> Home page: [Mtimer CMS](http://www.mtimer.net/)  
+> Twitter：[@...](http://#)
+> Donate: paypal: mtimercms#hotmail.com Webmoney: Z369907552397  R374005435218
+
+
+BIG Thanks to All donors. You make this project awesome!
