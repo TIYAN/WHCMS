@@ -6,7 +6,7 @@
 
 捐助及最新版 v5.2.16 下载地址：http://www.mtimer.cn/release/25-whmcs-nulled.html 
 
-Donate <b>$10</b> to mtimercms@hotmail.com get v5.2.16 & updates *lifetime* via email.[Last chance]
+Donate <b>$10</b> to mtimercms@hotmail.com, you will receive v5.2.16 & updates *lifetime* via email.[Last chance]
 
 ## 一、更新记录
 
@@ -68,7 +68,7 @@ SAE特别版下载：http://www.mtimer.cn/release/25-whmcs-sae.html
 > Email: [mtimercms#hotmail.com](mtimercms#hotmail.com) （推荐）  
 > 社区: [时光人社区](http://www.mtimer.cn/)  
 > Q Q群：[138082163](http://shang.qq.com/wpa/qunwpa?idkey=520e53ac7acc04d489a801aa55a69c9a6e3df06e1fea1b0b0f3ca936627cca52)  
-> 微博：[@Mtimer_CMS](http://weibo.com/u/3488979130)
+> 微博：[@Mtimer_CMS](http://weibo.com/u/3488979130)  
 > 捐助：[Donate](http://t.cn/8FwJr5Z)
 
 
@@ -90,7 +90,7 @@ SAE特别版下载：http://www.mtimer.cn/release/25-whmcs-sae.html
 
 > Email: [mtimercms#hotmail.com](mtimercms#hotmail.com) (Recommend)  
 > Home page: [Mtimer CMS](http://www.mtimer.net/)  
-> Twitter：[@...](http://#)
+> Twitter：[@...](http://#)  
 > Donate: paypal: mtimercms#hotmail.com Webmoney: Z369907552397  R374005435218
 
 
