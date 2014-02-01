@@ -88,10 +88,10 @@ SAE特别版下载：http://www.mtimer.cn/release/25-whmcs-sae.html
 
 ## Contact & Donate
 
-> Email: [mtimercms#hotmail.com](mtimercms#hotmail.com) (Recommend) 
+> Email: [mtimercms#hotmail.com](mtimercms#hotmail.com) (Recommend)  
 > Home page: [Mtimer CMS](http://www.mtimer.net/)  
 > Twitter：[@...](http://#)
 > Donate: paypal: mtimercms#hotmail.com Webmoney: Z369907552397  R374005435218
 
 
-BIG Thanks to All donors. You make this project awesome!
+## BIG Thanks to All donors. You make this project awesome!
