@@ -12,7 +12,9 @@ http://www.mtimer.cn/release/25-whmcs.html
 
 
 更新记录：
-2014-1-31. 修复模块: mediacp,veportal,opensrs,resellone,xpanel,myideal,websitepanel
+2014-1-31. 修复文件 domainsync.php,class.upgrade.php
+		   修复模块: mediacp,veportal,opensrs,resellone,xpanel,websitepanel,vpsnet,totp,enomnewtlds,lxadmin,centovacast,varilogix_fraudcall,maxmind
+		   修复网关: myideal,inpay,libertyreserve
 2014.1.26 修复 register.php
 2014.1.22 更新至 5.2.16
 2014.1.17 修复 php 的引用
