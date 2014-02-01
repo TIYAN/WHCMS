@@ -2,11 +2,15 @@
 
 <h2>这里是免费的 v5.2.15 (最后一版免费) , 当前最新开心版是 v5.2.16, 只提供捐助者。</h2>
 
+<h2>Here is WHMCS v5.2.15 (Last release for free) , Latest version is v5.2.16, avialable for donors only.</h2>
+
+Donate <b>$10</b> to mtimercms@hotmail.com, you will receive v5.2.16 & updates *lifetime* via email.[Last chance]
+
+
 <h2>WHMCS Full Decoded & Nulled By Mtimer</h2>
 
 捐助及最新版 v5.2.16 下载地址：http://www.mtimer.cn/release/25-whmcs-nulled.html 
 
-Donate <b>$10</b> to mtimercms@hotmail.com, you will receive v5.2.16 & updates *lifetime* via email.[Last chance]
 
 ## 一、更新记录
 
