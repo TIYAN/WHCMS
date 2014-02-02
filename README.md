@@ -16,7 +16,7 @@ Donate <b>$100</b> to mtimercms@hotmail.com, you will receive v5.2.16 & updates 
 
 ## 一、更新记录
 
-2014-1-31. 
+2014-1-31. 捐助优惠期结束
 
 <ul>
 <li><strong>修复文件:</strong> domainsync.php,class.upgrade.php</li>
