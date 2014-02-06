@@ -62,6 +62,7 @@ http://1.whmcs5.sinaapp.com/whmcs_5.2.16_decoded_nulled_mtimer/
 <li><strong>完全解码:</strong> 所有PHP均已 <em>解码</em> 你可以定制你的 私人WHMCS版。</li>
 <li><strong>去除验证:</strong> 去除所有与 <em>WHMCS官方</em> 服务器的验证，细小到汗毛的地方都去除。</li>
 <li><strong>完全开源:</strong> 服务器无需安装 <em>Ioncube</em> 即可使用。</li>
+<li><strong>任意 PHP:</strong> 可以运行在速度更快的 <em>PHP 5.5、5.6</em> 系列。</li>
 <li><strong>完全免费:</strong> 无需月付几十 <em>美刀</em> 或者单次付300多美刀。</li>
 <li><strong>永久更新:</strong> 完全和官方 <em>同步更新</em> ，当然说的是捐助者。</li>
 </ul>
