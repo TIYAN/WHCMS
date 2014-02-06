@@ -84,7 +84,7 @@ function alipay_link($params) {
 		$msg="订单: $invoiceid 生成支付表单 $html_text";
 		logResult($msg);
 	}
-	$code=$html_text."</form><a href='#' onclick=\"document.forms['alipaysubmit'].submit();\"><img src='$img' alt='点击使用支付宝支付'> </a>";
+	$code=$html_text."</form><input type=\"image\" src=\"$img\" alt=\"点击使用支付宝支付\" onclick=\"document.forms['alipaysubmit'].submit();\">";
 	return $code;
 }
 ?>
