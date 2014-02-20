@@ -468,7 +468,7 @@ echo " value=\"1\" tabindex=\"27\"> ";
 echo $aInt->lang("clients", "2faenabled");
 echo "</label></td></tr>
 <tr>";
-$taxindex = 0;
+$taxindex = 27;
 $customfields = getCustomFields("client", "", $userid, "on", "");
 $x = 0;
 foreach ($customfields as $customfield) {

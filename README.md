@@ -1,22 +1,28 @@
-<h1>WHMCS 5.2系列 完全解码破解版 —— 真正的开心版</h1>
+WHMCS 5.2系列 完全解码破解版 —— 真正的开心版
 
-<h2>这里是免费的 v5.2.15 (最后一版免费) , 当前最新开心版是 v5.2.16, 只提供捐助者。</h2>
+这里是免费的 v5.2.15 (最后一版免费) , 当前最新开心版是 v5.2.16, 只提供捐助者。
+========================
 
-## Here is WHMCS v5.2.15 (Last release for free).
+![whmcs52_latest_decoded_nulled_mtimer](http://api.mtimer.net/whmcs/whmcs5216nulled.png)
+
+## This is WHMCS v5.2.15 (Last release for free).
 
 ## Latest version is v5.2.16, available for donors only.
 
 Donate <b>$100</b> to mtimercms@hotmail.com, you will receive v5.2.16 & updates *lifetime* via email.[Last chance]
 
 
-<h2>WHMCS Full Decoded & Nulled By Mtimer</h2>
+WHMCS Full Decoded & Nulled By Mtimer
+---------------
 
 捐助及最新版 v5.2.16 下载地址：http://www.mtimer.cn/release/25-whmcs-nulled.html 
 
 
 ## 一、更新记录
 
-2014-1-31. 捐助优惠期结束
+2014-02-20. 修复 clientsprofile taxindex
+
+2014-01-31. 捐助优惠期结束
 
 <ul>
 <li><strong>修复文件:</strong> domainsync.php,class.upgrade.php</li>
@@ -24,19 +30,19 @@ Donate <b>$100</b> to mtimercms@hotmail.com, you will receive v5.2.16 & updates 
 <li><strong>修复网关:</strong> myideal,inpay,libertyreserve</li>
 </ul>
 
-2014.1.26. 修复 register.php
+2014-01-26. 修复 register.php
 
-2014.01.22. 更新至5.2.16，安全版本捐助后下载，公平点，花不了多少;)
+2014-01-22. 更新至5.2.16，安全版本捐助后下载，公平点，花不了多少;)
 
-2013.12.24. 更新至5.2.15，这是最后一版免费
+2013-12-24. 更新至5.2.15，这是最后一版免费
 
-2013.11.28. 更新至5.2.14
+2013-11-28. 更新至5.2.14
 
-2013.11.25. 更新至5.2.13
+2013-11-25. 更新至5.2.13
 
-2013.10.25. 更新至5.2.12
+2013-10-25. 更新至5.2.12
 
-2013.10.21. 更新至5.2.10
+2013-10-21. 更新至5.2.10
 
 5.2.16 官方原版：http://pan.baidu.com/s/1ntwNU3n
 

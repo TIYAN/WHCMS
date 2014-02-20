@@ -1,5 +1,5 @@
 This is Chinese Version,for English version
-Donate $10 to mtimercms@hotmail.com.You will receive v5.2.16 & updates lifetime.[Last chance ;)]
+Donate $100 to mtimercms@hotmail.com.You will receive v5.2.16 & updates lifetime.[Last chance ;)]
 
 
 这是 WHMCS 5.2.15 完全解码破解版 —— 开心版
@@ -12,19 +12,20 @@ http://www.mtimer.cn/release/25-whmcs.html
 
 
 更新记录：
-2014-1-31. 修复文件 domainsync.php,class.upgrade.php
+2014-02-20 修复 clientsprofile taxindex
+2014-01-31 修复文件 domainsync.php,class.upgrade.php
 		   修复模块: mediacp,veportal,opensrs,resellone,xpanel,websitepanel,vpsnet,totp,enomnewtlds,lxadmin,centovacast,varilogix_fraudcall,maxmind
 		   修复网关: myideal,inpay,libertyreserve
-2014.1.26 修复 register.php
-2014.1.22 更新至 5.2.16
-2014.1.17 修复 php 的引用
-2014.1.11 修复大量Bug,感谢反馈
-2014.1.4 修复后台 取消请求 不显示的问题
-2013.12.31 修复 PHP >=5.4 安装插件问题
-2013.12.24 更新至5.2.15,并修正几处bug
-2013.12.14 解决 模块bug，修正正则 及一些bug
-2013.12.1 更新 googleapi 图像 api升级的问题
-2013.11.28 解决 PHP >=5.4 域名注册商的问题
+2014-01-26 修复 register.php
+2014-01-22 更新至 5.2.16
+2014-01-17 修复 php 的引用
+2014-01-11 修复大量Bug,感谢反馈
+2014-01-04 修复后台 取消请求 不显示的问题
+2013-12-31 修复 PHP >=5.4 安装插件问题
+2013-12-24 更新至5.2.15,并修正几处bug
+2013-12-14 解决 模块bug，修正正则 及一些bug
+2013-12-01 更新 googleapi 图像 api升级的问题
+2013-11-28 解决 PHP >=5.4 域名注册商的问题
 
 
 常见问题:
@@ -39,7 +40,7 @@ http://www.mtimer.cn/release/25-whmcs.html
 仅供学习参考。
 
 时光人社区维护 www.mtimer.cn
-			—— 2014.1.31
+			—— 2014.02.20
 
 
 WHMCS v5.2.16 Full Decoded & Nulled By Mtimer
