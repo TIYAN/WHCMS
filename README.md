@@ -20,7 +20,7 @@ WHMCS Full Decoded & Nulled By Mtimer
 
 ## 一、更新记录
 
-2014-02-20. 修复 clientsprofile taxindex
+2014-02-20. 修复 clientsprofile taxindex, configadminroles
 
 2014-01-31. 捐助优惠期结束
 

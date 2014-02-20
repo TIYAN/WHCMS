@@ -12,7 +12,7 @@ http://www.mtimer.cn/release/25-whmcs.html
 
 
 更新记录：
-2014-02-20 修复 clientsprofile taxindex
+2014-02-20 修复 clientsprofile taxindex, configadminroles
 2014-01-31 修复文件 domainsync.php,class.upgrade.php
 		   修复模块: mediacp,veportal,opensrs,resellone,xpanel,websitepanel,vpsnet,totp,enomnewtlds,lxadmin,centovacast,varilogix_fraudcall,maxmind
 		   修复网关: myideal,inpay,libertyreserve

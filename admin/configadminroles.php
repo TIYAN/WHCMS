@@ -323,7 +323,7 @@ function zUncheckAll(oForm) {
 				$listwidgets = load_admin_home_widgets();
 				asort($listwidgets);
 				$totalportlets = ceil(count($listwidgets) / 3);
-				$i = 0;
+				$i = 1;
 				foreach ($listwidgets as $k => $v) {
 					echo "<input type=\"checkbox\" name=\"widget[]\" value=\"" . $k . "\" id=\"widget" . $k . "\"";
 
@@ -335,7 +335,7 @@ function zUncheckAll(oForm) {
 
 					if ($totalportlets <= $i) {
 						echo "</td><td width=\"33%\" valign=\"top\">";
-						$i = 0;
+						$i = 1;
 						continue;
 					}
 
