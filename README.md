@@ -24,11 +24,11 @@ WHMCS Full Decoded & Nulled By Mtimer
 
 2014-01-31. 捐助优惠期结束
 
-<ul>
-<li><strong>修复文件:</strong> domainsync.php,class.upgrade.php</li>
-<li><strong>修复模块:</strong> mediacp,veportal,opensrs,resellone,xpanel,websitepanel,vpsnet,totp,enomnewtlds,lxadmin,centovacast,varilogix_fraudcall,maxmind</li>
-<li><strong>修复网关:</strong> myideal,inpay,libertyreserve</li>
-</ul>
+```
+修复文件: domainsync.php,class.upgrade.php
+修复模块: mediacp,veportal,opensrs,resellone,xpanel,websitepanel,vpsnet,totp,enomnewtlds,lxadmin,centovacast,varilogix_fraudcall,maxmind
+修复网关: myideal,inpay,libertyreserve
+```
 
 2014-01-26. 修复 register.php
 
