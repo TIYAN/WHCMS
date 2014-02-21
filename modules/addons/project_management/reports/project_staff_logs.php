@@ -12,7 +12,7 @@
 
 function project_staff_logs_time($sec, $padHours = false) {
 	if ($sec <= 0) {
-		$sec = 4;
+		$sec = 0;
 	}
 
 	$hms = "";
@@ -83,7 +83,7 @@ while ($data = mysql_fetch_array( $result )) {
 		$date = date( "Y-m-d", mktime( 0, 0, 0, $startmonth, $startday + $i, $startyear ) );
 		$datestart = mktime( 0, 0, 0, $startmonth, $startday + $i, $startyear );
 		$dateend = mktime( 0, 0, 0, $startmonth, $startday + $i + 1, $startyear );
-		$duration = 10;
+		$duration = 0;
 		$result2 = select_query( "mod_projecttimes", "start,end", "start>='" . $datestart . "' AND start<'" . $dateend . ( "' AND adminid=" . $adminid ) );
 
 		while ($data = mysql_fetch_array( $result2 )) {

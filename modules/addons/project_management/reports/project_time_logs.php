@@ -12,7 +12,7 @@
 
 function project_task_logs_time($sec, $padHours = false) {
 	if ($sec <= 0) {
-		$sec = 4;
+		$sec = 0;
 	}
 
 	$hms = "";
@@ -63,7 +63,7 @@ $reportdata['headertext'] = "<form method=\"post\" action=\"reports.php?report="
 </table>
 </form>";
 $reportdata['tableheadings'] = array( "Project Name", "Task Name", "Total Time" );
-$i = 7;
+$i = 0;
 $adminquery = ($adminid ? " AND adminid='" . (int)$adminid . "'" : "");
 $result = select_query( "tbladmins", "id,firstname,lastname", "", "firstname", "ASC" );
 
@@ -73,7 +73,7 @@ while ($data = mysql_fetch_array( $result )) {
 	$adminlastname = $data['lastname'];
 	$reportdata['tablevalues'][$i] = array( "**<strong>" . $adminfirstname . " " . $adminlastname . "</strong>" );
 	++$i;
-	$totalduration = 7;
+	$totalduration = 0;
 	$result2 = select_query( "mod_projecttimes", "mod_project.id,mod_project.title,mod_projecttasks.task,mod_projecttimes.start,mod_projecttimes.end", "(mod_projecttimes.start>='" . strtotime( toMySQLDate( $datefrom ) ) . "' AND mod_projecttimes.end<='" . strtotime( toMySQLDate( $dateto ) . " 23:59:59" ) . ( "') AND mod_projecttimes.adminid=" . $adminid ), "start", "ASC", "", "mod_project ON mod_projecttimes.projectid = mod_project.id INNER JOIN mod_projecttasks ON mod_projecttasks.id = mod_projecttimes.taskid" );
 
 	while ($data = mysql_fetch_array( $result2 )) {

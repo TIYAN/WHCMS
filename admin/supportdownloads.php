@@ -265,15 +265,15 @@ if ($action == "") {
 			$idnumbers[] = $id;
 			$result3 = select_query("tbldownloadcats", "id", array("parentid" => $id));
 
-			if ($data3 = mysql_fetch_array($result3)) {
+			while ($data3 = mysql_fetch_array($result3)) {
 				$idnumbers[] = $data3['id'];
 				$result4 = select_query("tbldownloadcats", "id", array("parentid" => $data3['id']));
 
-				if ($data4 = mysql_fetch_array($result4)) {
+				while ($data4 = mysql_fetch_array($result4)) {
 					$idnumbers[] = $data4['id'];
 					$result5 = select_query("tbldownloadcats", "id", array("parentid" => $data4['id']));
 
-					if ($data5 = mysql_fetch_array($result5)) {
+					while ($data5 = mysql_fetch_array($result5)) {
 						$idnumbers[] = $data5['id'];
 					}
 				}

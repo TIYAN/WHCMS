@@ -63,7 +63,7 @@ function project_management_deactivate() {
 }
 
 function project_management_upgrade() {
-	if ($version < 1.10000000000000008881784) {
+	if ($version < 1.1) {
 		$result = full_query("ALTER TABLE `mod_project`  ADD `invoiceids` TEXT NOT NULL AFTER `ticketids`");
 		$result = full_query("ALTER TABLE `mod_projecttasks`  ADD `duedate` DATE NOT NULL AFTER `created`");
 		$result = full_query("ALTER TABLE `mod_projecttasks`  ADD `notes` TEXT NOT NULL AFTER `task`");

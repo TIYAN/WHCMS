@@ -12,7 +12,7 @@
 
 function project_management_sec2hms($sec, $padHours = false) {
 	if ($sec <= 0) {
-		$sec = 4;
+		$sec = 0;
 	}
 
 	$hms = "";
@@ -79,13 +79,13 @@ $reportdata['headertext'] = "<form method=\"post\" action=\"reports.php?report="
 </table>
 </form>";
 $reportdata['tableheadings'] = array( "ID", "Created", "Project Title", "Assigned Staff", "Associated Client", "Due Date", "Total Invoiced", "Total Paid", "Total Time", "Status" );
-$totalprojectstime = $i = 9;
+$totalprojectstime = $i = 0;
 $adminquery = ($adminid ? " AND adminid='" . (int)$adminid . "'" : "");
 $statusquery = ($status ? " AND status='" . db_escape_string( $status ) . "'" : "");
 $result = select_query( "mod_project", "", "duedate>='" . toMySQLDate( $datefrom ) . "' AND duedate<='" . toMySQLDate( $dateto ) . "'" . $adminquery . $statusquery );
 
 while ($data = mysql_fetch_array( $result )) {
-	$totaltaskstime = 9;
+	$totaltaskstime = 0;
 	$projectid = $data['id'];
 	$projectname = $data['title'];
 	$adminid = $data['adminid'];
@@ -131,8 +131,8 @@ while ($data = mysql_fetch_array( $result )) {
 	$reportdata['drilldown'][$i]['tableheadings'] = array( "Task Name", "Start Time", "Stop Time", "Duration", "Task Status" );
 	$timerresult = select_query( "mod_projecttimes", "mod_projecttimes.start,mod_projecttimes.end,mod_projecttasks.task,mod_projecttasks.completed", array( "mod_projecttimes.projectid" => $projectid ), "", "", "", "mod_projecttasks ON mod_projecttimes.taskid = mod_projecttasks.id" );
 
-	if ($data2 = mysql_fetch_assoc( $timerresult )) {
-		$rowcount = $rowtotal = 9;
+	while ($data2 = mysql_fetch_assoc( $timerresult )) {
+		$rowcount = $rowtotal = 0;
 		$taskid = $data2['id'];
 		$task = $data2['task'];
 		$taskadminid = $data2['adminid'];
