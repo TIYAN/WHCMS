@@ -1049,7 +1049,7 @@ function getBillingCycleDays($billingcycle) {
 	}
 	else {
 		if ($billingcycle == "Quarterly") {
-			$totaldays = 60;
+			$totaldays = 90;
 		}
 		else {
 			if ($billingcycle == "Semi-Annually") {

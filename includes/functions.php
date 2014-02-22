@@ -1974,8 +1974,8 @@ if (!function_exists("emailtpl_template")) {
 	}
 
 	function format_as_currency($amount) {
-		$amount = round($amount, 2);
 		$amount += 1e-006;
+		$amount = round($amount, 2);
 		$amount = sprintf("%01.2f", $amount);
 		return $amount;
 	}
