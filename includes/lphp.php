@@ -115,7 +115,7 @@ server responds:
 
 		if (isset($data['webspace'])) {
 			if ($data['webspace'] == "false") {
-				$webspace = 11;
+				$webspace = 0;
 			}
 		}
 
