@@ -16,7 +16,7 @@ function globalsignvouchers_ConfigOptions() {
 	$data = mysql_fetch_array( $result );
 
 	if (!$data[0]) {
-		full_query( "INSERT INTO `tblemailtemplates` (`type` ,`name` ,`subject` ,`message` ,`fromname` ,`fromemail` ,`disabled` ,`custom` ,`language` ,`copyto` ,`plaintext` )VALUES ('product', 'GlobalSign OneClickSSL Welcome Email', 'Your OneClickSSL Voucher Code', '<p>Dear {$client_name},</p><p>Thank you for your order of a GlobalSign OneClickSSL Voucher. The voucher code has now been generated and so you can login to the control panel and redeem the voucher as soon as you're ready.</p><p>Your OneClickSSL Voucher Code is: {$voucher}</p><p>If you have any problems or questions about the process, please get in touch with our support team for assistance.</p><p>{$signature}</p>', '', '', '', '', '', '', '0')" );
+		full_query( "INSERT INTO `tblemailtemplates` (`type` ,`name` ,`subject` ,`message` ,`fromname` ,`fromemail` ,`disabled` ,`custom` ,`language` ,`copyto` ,`plaintext` )VALUES ('product', 'GlobalSign OneClickSSL Welcome Email', 'Your OneClickSSL Voucher Code', '<p>Dear {\$client_name},</p><p>Thank you for your order of a GlobalSign OneClickSSL Voucher. The voucher code has now been generated and so you can login to the control panel and redeem the voucher as soon as you're ready.</p><p>Your OneClickSSL Voucher Code is: {\$voucher}</p><p>If you have any problems or questions about the process, please get in touch with our support team for assistance.</p><p>{\$signature}</p>', '', '', '', '', '', '', '0')" );
 	}
 
 	global $id;

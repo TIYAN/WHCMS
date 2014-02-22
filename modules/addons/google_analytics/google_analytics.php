@@ -20,7 +20,7 @@ function google_analytics_output($vars) {
 	echo "<br /><br />
 <p align=\"center\"><input type=\"button\" value=\"Launch Google Analytics Website\" onclick=\"window.open('https://www.google.com/analytics/','ganalytics');\" style=\"padding:20px 50px;font-size:20px;\" /></p>
 <br /><br />
-<p>Configuration of the Google Analytics Addon is done via <a href=\"configaddonmods.php\"><b>Setup > Addon Modules</b></a>. Please also ensure your active client area footer.tpl template file includes the {$footeroutput} template tag.</p>";
+<p>Configuration of the Google Analytics Addon is done via <a href=\"configaddonmods.php\"><b>Setup > Addon Modules</b></a>. Please also ensure your active client area footer.tpl template file includes the {\$footeroutput} template tag.</p>";
 }
 
 

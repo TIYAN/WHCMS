@@ -20,6 +20,10 @@ WHMCS Full Decoded & Nulled By Mtimer
 
 ## 一、更新记录
 
+2013-02-22. 修复模块 globalsignvouchers, globalsignssl, enomssl, google analytics
+
+2013-02-21. 修复 supportdownloads, project management
+
 2014-02-20. 修复 clientsprofile taxindex, configadminroles
 
 2014-01-31. 捐助优惠期结束
