@@ -7,9 +7,9 @@ WHMCS 5.2系列 完全解码破解版 —— 真正的开心版
 
 ## This is WHMCS v5.2.15 (Last release for free).
 
-## Latest version is v5.2.16, available for donors only.
+## Latest version is v5.2.16, available for donors only.[Donate](http://1.whmcs5.sinaapp.com/whmcs_5.2.16_decoded_nulled_mtimer/?language=English)
 
-Donate <b>$100</b> to mtimercms@hotmail.com, you will receive v5.2.16 & updates *lifetime* via email. [Donate](http://1.whmcs5.sinaapp.com/whmcs_5.2.16_decoded_nulled_mtimer/?language=English)
+Donate <b>$100</b> to mtimercms@hotmail.com, you will receive v5.2.16 & updates *lifetime* via email. 
 
 
 WHMCS Full Decoded & Nulled By Mtimer
