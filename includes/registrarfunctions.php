@@ -736,10 +736,10 @@ function RegCustomFunction($params, $func_name) {
 function RebuildRegistrarModuleHookCache() {
 	global $CONFIG;
 
-	$dh = $hooksarray = array();
-	readdir($dh);
+	$hooksarray = array();
+	$dh = opendir(ROOTDIR . "/modules/registrars/");
 
-	while (false !== $module = opendir(ROOTDIR . "/modules/registrars/")) {
+	while (false !== ($module = readdir($dh))) {
 		if (is_file(ROOTDIR . ("/modules/registrars/" . $module . "/hooks.php")) && get_query_val("tblregistrars", "COUNT(*)", array("registrar" => $module))) {
 			$hooksarray[] = $module;
 		}
