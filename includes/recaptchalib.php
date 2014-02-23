@@ -11,8 +11,8 @@
  **/
 
 class ReCaptchaResponse {
-	var $is_valid = null;
-	var $error = null;
+	var $is_valid;
+	var $error;
 }
 
 /**
@@ -40,22 +40,16 @@ function _recaptcha_qsencode($data) {
  */
 function _recaptcha_http_post($host, $path, $data, $port = 80) {
 	$req = _recaptcha_qsencode($data);
-	$http_request = "POST " . $path . " HTTP/1.0
-";
-	$http_request .= (("Host: " . $host . "
-") . "\r\n");
-	$http_request .= "Content-Type: application/x-www-form-urlencoded;
-";
-	$http_request .= "Content-Length: " . strlen($req) . "
-";
-	$http_request .= "User-Agent: reCAPTCHA/PHP
-";
-	$http_request .= "
-";
+	$http_request = "POST " . $path . " HTTP/1.0\r\n";
+	$http_request .= "Host: " . $host . "\r\n" . "\r\n";
+	$http_request .= "Content-Type: application/x-www-form-urlencoded;\r\n";
+	$http_request .= "Content-Length: " . strlen($req) . "\r\n";
+	$http_request .= "User-Agent: reCAPTCHA/PHP\r\n";
+	$http_request .= "\r\n";
 	$http_request .= $req;
 	$response = "";
 
-	if (false == $fs = @fsockopen($host, $port, $errno, $errstr, 10)) {
+	if (false == ($fs = @fsockopen($host, $port, $errno, $errstr, 10))) {
 		exit("reCAPTCHA Error: Could not open socket");
 	}
 
@@ -66,10 +60,7 @@ function _recaptcha_http_post($host, $path, $data, $port = 80) {
 	}
 
 	fclose($fs);
-	explode("
-
-", $response, 2);
-	$response = "";
+	$response = explode("\r\n\r\n", $response, 2);
 	return $response;
 }
 
@@ -80,7 +71,6 @@ function _recaptcha_http_post($host, $path, $data, $port = 80) {
  * @param string $pubkey A public key for reCAPTCHA
  * @param string $error The error given by reCAPTCHA (optional, default is null)
  * @param boolean $use_ssl Should the request be made over ssl? (optional, default is false)
-
  * @return string - The HTML to be embedded in the user"s form.
  */
 function recaptcha_get_html($pubkey, $error = null, $use_ssl = false) {
@@ -135,7 +125,7 @@ function recaptcha_check_answer($privkey, $remoteip, $challenge, $response, $ext
 	}
 
 
-	if ((($challenge == null || strlen($challenge) == 0) || $response == null) || strlen($response) == 0) {
+	if ($challenge == null || strlen($challenge) == 0 || $response == null || strlen($response) == 0) {
 		$recaptcha_response = new ReCaptchaResponse();
 		$recaptcha_response->is_valid = false;
 		$recaptcha_response->error = "incorrect-captcha-sol";
@@ -183,7 +173,7 @@ function _recaptcha_aes_encrypt($val, $ky) {
 	$mode = MCRYPT_MODE_CBC;
 	$enc = MCRYPT_RIJNDAEL_128;
 	$val = _recaptcha_aes_pad($val);
-	return mcrypt_encrypt($enc, $ky, $val, $mode, "");
+	return mcrypt_encrypt($enc, $ky, $val, $mode, "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0");
 }
 
 function _recaptcha_mailhide_urlbase64($x) {
@@ -191,7 +181,7 @@ function _recaptcha_mailhide_urlbase64($x) {
 }
 
 function recaptcha_mailhide_url($pubkey, $privkey, $email) {
-	if ((($pubkey == "" || $pubkey == null) || $privkey == "") || $privkey == null) {
+	if ($pubkey == "" || $pubkey == null || $privkey == "" || $privkey == null) {
 		exit("reCAPTCHA Error: To use reCAPTCHA Mailhide, you have to sign up for a public and private key, " . "you can do so at <a href='http://www.google.com/recaptcha/mailhide/apikey'>http://www.google.com/recaptcha/mailhide/apikey</a>");
 	}
 
