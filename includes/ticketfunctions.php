@@ -836,13 +836,13 @@ function genTicketMask($id = "") {
 function ticketMessageFormat($message) {
 	$message = strip_tags($message);
 	$message = preg_replace('/\[div="(.*?)"\]/', '<div class="$1">', $message);
+	$replacetags = array("b" => "strong", "i" => "em", "u" => "ul", "div" => "div");
 	foreach ($replacetags as $k => $v) {
 		$message = str_replace("[" . $k . "]", "<" . $k . ">", $message);
 		$message = str_replace("[/" . $k . "]", "</" . $k . ">", $message);
 	}
 
 	$message = nl2br($message);
-	$replacetags = array("b" => "strong", "i" => "em", "u" => "ul", "div" => "div");
 	$message = ticketAutoHyperlinks($message);
 	return $message;
 }
