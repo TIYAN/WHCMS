@@ -49,25 +49,21 @@ if (!$filename) {
 
 $size = getimagesize($filename);
 switch ($size['mime']) {
-case "image/jpeg": {
+	case "image/jpeg":
 		$img = imagecreatefromjpeg($filename);
 		break;
-	}
 
-case "image/gif": {
+	case "image/gif":
 		$img = imagecreatefromgif($filename);
 		break;
-	}
 
-case "image/png": {
+	case "image/png":
 		$img = imagecreatefrompng($filename);
 		break;
-	}
 
-default: {
+	default:
 		$img = false;
 		break;
-	}
 }
 
 $thumbWidth = 200;
