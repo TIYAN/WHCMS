@@ -15,6 +15,8 @@ class WHMCS_Domains {
 	private $data = array();
 	private $moduleresults = array();
 
+	const ACTIVE_STATUS = "Active";
+
 	public function __construct() {
 	}
 
@@ -46,7 +48,7 @@ class WHMCS_Domains {
 	}
 
 	public function isActive() {
-		if (is_array($this->data) && $this->data['status'] == ACTIVE_STATUS) {
+		if (is_array($this->data) && $this->data['status'] == self::ACTIVE_STATUS) {
 			return true;
 		}
 

@@ -28,6 +28,8 @@ class iDEAL_Payment {
 	private $api_host = "ssl://secure.mollie.nl";
 	private $api_port = 443;
 
+	const MIN_TRANS_AMOUNT = 118;
+
 	function __construct($partner_id, $api_host = "ssl://secure.mollie.nl", $api_port = 443) {
 		$this->partner_id = $partner_id;
 		$this->api_host = $api_host;
@@ -121,7 +123,7 @@ class iDEAL_Payment {
 
 	function CreatePaymentLink($description, $amount) {
 		if (!$this->setDescription( $description ) || !$this->setAmount( $amount )) {
-			$this->error_message = "U moet een omschrijving Žn bedrag (in centen) opgeven voor de iDEAL link. Tevens moet het bedrag minstens " . MIN_TRANS_AMOUNT . " eurocent zijn. U gaf " . (int)$amount . " cent op.";
+			$this->error_message = "U moet een omschrijving Žn bedrag (in centen) opgeven voor de iDEAL link. Tevens moet het bedrag minstens " . slef::MIN_TRANS_AMOUNT . " eurocent zijn. U gaf " . (int)$amount . " cent op.";
 			return false;
 		}
 
@@ -244,7 +246,7 @@ class iDEAL_Payment {
 		}
 
 
-		if ($amount < MIN_TRANS_AMOUNT) {
+		if ($amount < self::MIN_TRANS_AMOUNT) {
 			return false;
 		}
 

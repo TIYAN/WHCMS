@@ -11,7 +11,21 @@
  * */
 
 class WHMCS_DuoSecurity {
-	function sign_vals($key, $vals, $prefix, $expire) {
+
+    const DUO_PREFIX = "TX";
+    const APP_PREFIX = "APP";
+    const AUTH_PREFIX = "AUTH";
+    const DUO_EXPIRE = 300;
+    const APP_EXPIRE = 3600;
+    const IKEY_LEN = 20;
+    const SKEY_LEN = 40;
+    const AKEY_LEN = 40;
+    const ERR_USER = "ERR|The username passed to sign_request() is invalid.";
+    const ERR_IKEY = "ERR|The Duo integration key passed to sign_request() is invalid.";
+    const ERR_SKEY = "ERR|The Duo secret key passed to sign_request() is invalid.";
+    const ERR_AKEY = "ERR|The application secret key passed to sign_request() must be at least 40 characters.";
+    
+	private static function sign_vals($key, $vals, $prefix, $expire) {
 		$exp = time() + $expire;
 		$val = $vals . "|" . $exp;
 		$b64 = base64_encode( $val );
@@ -21,7 +35,7 @@ class WHMCS_DuoSecurity {
 	}
 
 
-	function parse_vals($key, $val, $prefix) {
+	private static function parse_vals($key, $val, $prefix) {
 		$ts = time();
 		list($u_prefix,$u_b64,$u_sig) = explode( "|", $val );
 		$sig = hash_hmac( "sha1", $u_prefix . "|" . $u_b64, $key );
@@ -45,37 +59,37 @@ class WHMCS_DuoSecurity {
 	}
 
 
-	function signRequest($ikey, $skey, $akey, $username) {
+	public static function signRequest($ikey, $skey, $akey, $username) {
 		if (!isset( $username ) || strlen( $username ) == 0) {
-			return ERR_USER;
+			return self::ERR_USER;
 		}
 
 
-		if (!isset( $ikey ) || strlen( $ikey ) != IKEY_LEN) {
-			return ERR_IKEY;
+		if (!isset( $ikey ) || strlen( $ikey ) != self::IKEY_LEN) {
+			return self::ERR_IKEY;
 		}
 
 
-		if (!isset( $skey ) || strlen( $skey ) != SKEY_LEN) {
-			return ERR_SKEY;
+		if (!isset( $skey ) || strlen( $skey ) != self::SKEY_LEN) {
+			return self::ERR_SKEY;
 		}
 
 
-		if (!isset( $akey ) || strlen( $akey ) < AKEY_LEN) {
-			return ERR_AKEY;
+		if (!isset( $akey ) || strlen( $akey ) < self::AKEY_LEN) {
+			return self::ERR_AKEY;
 		}
 
 		$vals = $username . "|" . $ikey;
-		$duo_sig = self::sign_vals( $skey, $vals, DUO_PREFIX, DUO_EXPIRE );
-		$app_sig = self::sign_vals( $akey, $vals, APP_PREFIX, APP_EXPIRE );
+		$duo_sig = self::sign_vals( $skey, $vals, self::DUO_PREFIX, self::DUO_EXPIRE );
+		$app_sig = self::sign_vals( $akey, $vals, self::APP_PREFIX, self::APP_EXPIRE );
 		return $duo_sig . ":" . $app_sig;
 	}
 
 
-	function verifyResponse($ikey, $skey, $akey, $sig_response) {
+	public static function verifyResponse($ikey, $skey, $akey, $sig_response) {
 		list($auth_sig, $app_sig) = explode(':', $sig_response);
-		$auth_user = self::parse_vals( $skey, $auth_sig, AUTH_PREFIX );
-		$app_user = self::parse_vals( $akey, $app_sig, APP_PREFIX );
+		$auth_user = self::parse_vals( $skey, $auth_sig, self::AUTH_PREFIX );
+		$app_user = self::parse_vals( $akey, $app_sig, self::APP_PREFIX );
 
 		if ($auth_user != $app_user) {
 			return null;

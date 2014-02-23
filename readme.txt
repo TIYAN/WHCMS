@@ -12,7 +12,7 @@ http://www.mtimer.cn/release/25-whmcs.html
 
 
 更新记录：
-2014-02-23 修复 recaptchalib, registrafunctions
+2014-02-23 修复 recaptchalib, registrafunctions, ticketfunctions, duosecurity, missing const
 2014-02-22 修复模块 globalsignvouchers, globalsignssl, enomssl, google analytics
 2014-02-21 修复 supportdownloads, project management
 2014-02-20 修复 clientsprofile taxindex, configadminroles
