@@ -981,7 +981,7 @@ else {
             $moduletemplatefile = "/modules/servers/".$service->getModule()."/".$data['templatefile'].".tpl";
           }
         } else {
-          $moduleclientarea = ($data != FUNCTIONDOESNTEXIST ? $data: "");
+          $moduleclientarea = ($data != WHMCS_Module::FUNCTIONDOESNTEXIST ? $data: "");
         }
 
         if (!$moduletemplatefile && file_exists(ROOTDIR."/modules/servers/".$service->getModule()."/clientarea.tpl")) {

@@ -103,7 +103,7 @@ class WHMCS_Domains {
 		$params = $this->buildParams($vars);
 		$results = $mod->call($function, $params);
 
-		if ($results === FUNCTIONDOESNTEXIST) {
+		if ($results === WHMCS_Module::FUNCTIONDOESNTEXIST) {
 			$this->moduleresults = array("error" => "Function not found");
 			return false;
 		}
