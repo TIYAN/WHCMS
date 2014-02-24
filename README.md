@@ -64,7 +64,7 @@ http://1.whmcs5.sinaapp.com/whmcs_5.2.16_decoded_nulled_mtimer/
 
 ## 三、如何下载
 
-	git clone git@gitshell.com:Mtimer_CMS/whmcs52_latest_decoded_nulled_mtimer.git
+	git clone https://gitshell.com/Mtimer_CMS/whmcs52_latest_decoded_nulled_mtimer.git
 
 
 
