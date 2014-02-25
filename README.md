@@ -24,13 +24,13 @@ WHMCS Full Decoded & Nulled By Mtimer
 
 2014-02-23 修复 recaptchalib, registrafunctions, ticketfunctions, duosecurity, missing const
 
-2014-02-22. 修复模块 globalsignvouchers, globalsignssl, enomssl, google analytics
+2014-02-22 修复模块 globalsignvouchers, globalsignssl, enomssl, google analytics
 
-2014-02-21. 修复 supportdownloads, project management
+2014-02-21 修复 supportdownloads, project management
 
-2014-02-20. 修复 clientsprofile taxindex, configadminroles
+2014-02-20 修复 clientsprofile taxindex, configadminroles
 
-2014-01-31. 捐助优惠期结束
+2014-01-31 捐助优惠期结束
 
 ```
 修复文件: domainsync.php,class.upgrade.php
@@ -38,19 +38,19 @@ WHMCS Full Decoded & Nulled By Mtimer
 修复网关: myideal,inpay,libertyreserve
 ```
 
-2014-01-26. 修复 register.php
+2014-01-26 修复 register.php
 
-2014-01-22. 更新至5.2.16，安全版本捐助后下载，公平点，花不了多少;)
+2014-01-22 更新至5.2.16，安全版本捐助后下载，公平点，花不了多少;)
 
-2013-12-24. 更新至5.2.15，这是最后一版免费
+2013-12-24 更新至5.2.15，这是最后一版免费
 
-2013-11-28. 更新至5.2.14
+2013-11-28 更新至5.2.14
 
-2013-11-25. 更新至5.2.13
+2013-11-25 更新至5.2.13
 
-2013-10-25. 更新至5.2.12
+2013-10-25 更新至5.2.12
 
-2013-10-21. 更新至5.2.10
+2013-10-21 更新至5.2.10
 
 5.2.16 官方原版：http://pan.baidu.com/s/1ntwNU3n
 
