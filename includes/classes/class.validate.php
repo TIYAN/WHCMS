@@ -208,6 +208,7 @@ class WHMCS_Validate {
             	{
                 	$where['id'] = array("sqltype" => "NEQ", "value" => $field2[0]);
             	}
+            	$clientexists = select_query("tblcontacts", "", $where);
             	if ($clientexists)
             	{
                 	return false;
@@ -217,6 +218,7 @@ class WHMCS_Validate {
             	{
                 	$where['id'] = array("sqltype" => "NEQ", "value" => $field2[1]);
             	}
+            	$subaccexists = select_query("tblcontacts", "", $where);
             	if ($subaccexists)
             	{
                 	return false;

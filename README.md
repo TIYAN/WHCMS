@@ -20,6 +20,8 @@ WHMCS Full Decoded & Nulled By Mtimer
 
 ## 一、更新记录
 
+2014-02-25 修复 uniqueemail
+
 2014-02-23 修复 recaptchalib, registrafunctions, ticketfunctions, duosecurity, missing const
 
 2014-02-22. 修复模块 globalsignvouchers, globalsignssl, enomssl, google analytics
