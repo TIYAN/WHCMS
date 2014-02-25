@@ -106,7 +106,7 @@ SAE特别版下载：http://www.mtimer.cn/release/25-whmcs-sae.html
 
 1. WHMCS v5.2.15 is the last release for free.
 
-2. Donate <b>$100</b> to mtimercms@hotmail.com, you will receive v5.2.16 & updates *lifetime* via email.[Last chance]
+2. Donate <b>$30</b> to mtimercms@hotmail.com, you will receive v5.2.16 & updates *lifetime* via email.[Last chance]
 
 
 ## Contact & Donate
