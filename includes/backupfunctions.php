@@ -133,8 +133,8 @@ function get_structure($db) {
 		}
 		$insert_sql = "";
 		$d = mysql_fetch_array($r);
-		$d[9] .= ";";
-		$sql[] = str_replace("\r\n", "", $d[1]);
+		$d[1] .= ";";
+		$sql[] = str_replace("\n", "", $d[1]);
 		$table_query = full_query('' . "SELECT * FROM `" . $table . "`");
 		$num_fields = mysql_num_fields($table_query);
 		while ($fetch_row = mysql_fetch_array($table_query))
@@ -150,14 +150,14 @@ function get_structure($db) {
 			}
 			$insert_sql = substr($insert_sql, 0, 0 - 2);
 			
-			$insert_sql .= ");\r\n";
+			$insert_sql .= ");\n";
 		}
 
-	$sql[] = $insert_sql . "\r\n";
+	$sql[] = $insert_sql . "\n";
 	}
 
 
-		return implode( "\r\n", $sql );
+		return implode( "\r", $sql );
 }
 
 	function generateBackup() {
