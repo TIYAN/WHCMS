@@ -7,11 +7,11 @@ WHMCS 5.2系列 完全解码破解版 —— 真正的开心版
 
 ## This is WHMCS v5.2.15 (Last release for free).
 
-## WHMCS v5.3.5 Full Decoded Nulled Released. [(Check it out)](http://www.mtimer.cn/release/34-whmcs.html)
+## WHMCS v5.3.5 Full Decoded Nulled Released. [(Check this out & Donate $30)](http://www.mtimer.cn/release/34-whmcs.html)
 
 ## WHMCS v5.2.16 is available for donors only.[Donate](http://1.whmcs5.sinaapp.com/whmcs_5.2.16_decoded_nulled_mtimer/?language=English)
 
-Donate <b>$30</b> to mtimercms@hotmail.com, you will receive v5.2.16 & updates *lifetime* via email. 
+Donate <b>$20</b> to mtimercms@hotmail.com, you will receive v5.2.16 & updates *lifetime* via email. 
 
 
 WHMCS Full Decoded & Nulled By Mtimer
@@ -22,29 +22,9 @@ WHMCS Full Decoded & Nulled By Mtimer
 
 ## 一、更新记录
 
-2014-02-26 修复 backup function
+2014-03-03 修复 5.2.16 版本所有模块错误
 
-2014-02-25 修复 uniqueemail
-
-2014-02-23 修复 recaptchalib, registrafunctions, ticketfunctions, duosecurity, missing const
-
-2014-02-22 修复模块 globalsignvouchers, globalsignssl, enomssl, google analytics
-
-2014-02-21 修复 supportdownloads, project management
-
-2014-02-20 修复 clientsprofile taxindex, configadminroles
-
-2014-01-31 捐助优惠期结束
-
-```
-修复文件: domainsync.php,class.upgrade.php
-修复模块: mediacp,veportal,opensrs,resellone,xpanel,websitepanel,vpsnet,totp,enomnewtlds,lxadmin,centovacast,varilogix_fraudcall,maxmind
-修复网关: myideal,inpay,libertyreserve
-```
-
-2014-01-26 修复 register.php
-
-2014-01-22 更新至5.2.16，安全版本捐助后下载，公平点，花不了多少;)
+2014-01-22 更新至5.2.16
 
 2013-12-24 更新至5.2.15，这是最后一版免费
 

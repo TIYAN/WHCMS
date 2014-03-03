@@ -1,5 +1,12 @@
+Attention: WHMCS v5.3.5 Full Decoded Nulled Released.
+Donate $30 to get WHMCS v5.3.X & updates *lifetime* via email.
+
+Donate paypal: mtimercms@hotmail.com 
+Donate Webmoney: Z369907552397  R374005435218
+
+
 This is Chinese Version,for English version
-Donate $100 to mtimercms@hotmail.com.You will receive v5.2.16 & updates lifetime.[Last chance ;)]
+Donate $20 to mtimercms@hotmail.com.You will receive v5.2.16 & updates lifetime.[Last chance ;)]
 
 
 这是 WHMCS 5.2.15 完全解码破解版 —— 开心版
@@ -12,6 +19,7 @@ http://www.mtimer.cn/release/25-whmcs.html
 
 
 更新记录：
+2014-03-03 修复 5.2.16 版本所有模块
 2014-02-26 修复 backup function
 2014-02-25 修复 uniqueemail
 2014-02-23 修复 recaptchalib, registrafunctions, ticketfunctions, duosecurity, missing const
@@ -45,7 +53,7 @@ http://www.mtimer.cn/release/25-whmcs.html
 仅供学习参考。
 
 时光人社区维护 www.mtimer.cn
-			—— 2014.02.20
+			—— 2014.03.03
 
 
 WHMCS v5.2.16 Full Decoded & Nulled By Mtimer
