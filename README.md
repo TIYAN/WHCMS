@@ -5,7 +5,7 @@ WHMCS 5.2系列 完全解码破解版 —— 真正的开心版
 
 ![whmcs52_latest_decoded_nulled_mtimer](http://api.mtimer.net/whmcs/whmcs5216nulled.png)
 
-## This is WHMCS v5.2.15 (Last release for free).
+## This is Free WHMCS v5.2.15 (Last release for free).
 
 ## WHMCS v5.3.5 Full Decoded Nulled Released. [(Check this out & Donate $30)](http://www.mtimer.cn/release/34-whmcs.html)
 
