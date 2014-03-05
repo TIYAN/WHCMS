@@ -1,21 +1,50 @@
 Attention: WHMCS v5.3.5 Full Decoded Nulled Released.
-Donate $30 to get WHMCS v5.3.X & updates *lifetime* via email.
+Donate $40 to get WHMCS v5.3.X & v5.3.X updates *lifetime* via email.
+OR
+Donate $20 to get receive v5.2.16 & v5.2.X updates *lifetime* via email.
 
 Donate paypal: mtimercms@hotmail.com 
 Donate Webmoney: Z369907552397  R374005435218
 
 
-This is Chinese Version,for English version
-Donate $20 to mtimercms@hotmail.com.You will receive v5.2.16 & updates lifetime.[Last chance ;)]
+updates for v5.2.X:
+2014-03-03. fix all modules errors for v5.2.16, not this free version
+2014-01-22. update to v5.2.16
+2013-12-24. update to v5.2.15
+
+
+Bonus:
+If you don't want to connect to mtimer license server,
+download class.license.php & replace /includes/classes/class.license.php :
+http://1.mtimer.sinaapp.com/go/dropbox.php?file=class.license.php
+
+download index.php & replace /admin/index.php :
+http://1.mtimer.sinaapp.com/go/dropbox.php?file=index.php
+
+
+
+FAQ :
+1.Log out automatically sometimes.
+WHMCS check your IP while checking sessions, 
+If you use dynamic IP, disable it in adminpanel.(I have done it for you)
+
+
+Decoded & Nulled By Mtimer
+
+----------
 
 
 这是 WHMCS 5.2.15 完全解码破解版 —— 开心版
 
 
 需要最新版 5.2.16 的：
-最新版 & 捐助 地址：【最后机会！】
+最新版 & 捐助 地址：
 http://www.mtimer.cn/release/25-whmcs.html
 
+
+需要最新版 5.3.5 的：
+最新版 & 捐助 地址：
+http://www.mtimer.cn/release/34-whmcs.html
 
 
 更新记录：
@@ -54,13 +83,6 @@ http://www.mtimer.cn/release/25-whmcs.html
 
 时光人社区维护 www.mtimer.cn
 			—— 2014.03.03
-
-
-WHMCS v5.2.16 Full Decoded & Nulled By Mtimer
-Donate to get updates *lifetime* via email.
-
-Donate paypal: mtimercms@hotmail.com 
-Donate Webmoney: Z369907552397  R374005435218
 
 
 Decoded & Nulled By Mtimer

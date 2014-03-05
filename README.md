@@ -7,17 +7,27 @@ WHMCS 5.2系列 完全解码破解版 —— 真正的开心版
 
 ## This is Free WHMCS v5.2.15 (Last release for free).
 
-## WHMCS v5.3.5 Full Decoded Nulled Released. [(Check this out & Donate $30)](http://www.mtimer.cn/release/34-whmcs.html)
+---------------
 
-## WHMCS v5.2.16 is available for donors only.[Donate](http://1.whmcs5.sinaapp.com/whmcs_5.2.16_decoded_nulled_mtimer/?language=English)
+## WHMCS v5.3.5 Full Decoded Nulled Released. [(Check this out)](http://www.mtimer.cn/release/34-whmcs-full-decoded-nulled.html)
 
-Donate <b>$20</b> to mtimercms@hotmail.com, you will receive v5.2.16 & v5.2.X updates *lifetime* via email. 
+## WHMCS v5.2.16 is available for donors only.[(Also Check this)](http://www.mtimer.cn/release/25-whmcs-full-decoded-nulled.html)
+
+---------------
+
+## Donate & Get Latest Version
+
+> Donate <b>$40</b> to get receive v5.3.5 & v5.3.X updates *lifetime* via email.
+> OR
+> Donate <b>$20</b> to get receive v5.2.16 & v5.2.X updates *lifetime* via email.
+> Payment Methods: 
+> paypal: mtimercms#hotmail.com 
+> Webmoney: Z369907552397  R374005435218
 
 
 WHMCS Full Decoded & Nulled By Mtimer
 ---------------
 
-Donate & get v5.2.16 ：http://www.mtimer.cn/release/25-whmcs-nulled.html
 
 ## 1、Updates:
 
@@ -63,12 +73,11 @@ OR download package http://yadi.sk/d/1K2C-yn5GXD6L
 ## About WHMCS Full Decoded Nulled English version [Download](http://1.whmcs5.sinaapp.com/whmcs_5.2.16_decoded_nulled_mtimer/?language=English)
 
 
-## Contact & Donate
+## Contact
 
 > Email: [mtimercms#hotmail.com](mtimercms#hotmail.com) (Recommend)  
 > Home page: [Mtimer CMS](http://www.mtimer.net/)  
-> Twitter：[@...](http://#)  
-> Donate <b>$20</b>: paypal: mtimercms#hotmail.com Webmoney: Z369907552397  R374005435218,you will receive v5.2.16 & v5.2.X updates *lifetime* via email.
+> Twitter：[@...](http://#)
 
 
 ## BIG Thanks to All donors. You make this project awesome!
