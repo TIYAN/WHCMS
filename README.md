@@ -54,6 +54,7 @@ OR check http://bestblackhatforum.com/Thread-GET-WHMCS-5-2-16-FULL-DECODED-NULLE
 
 <ul>
 <li><strong>Full Open Source:</strong> Change  <em>whatever</em> you want.</li>
+<li><strong>No need Ioncube:</strong> Install whmcs <em>anywhere</em> you want.</li>
 <li><strong>Remove callbacks:</strong> 100% clean.</li>
 <li><strong>Lifetime updates:</strong> Only for <em>donors</em>.</li>
 </ul>
