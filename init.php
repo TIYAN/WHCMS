@@ -27,7 +27,7 @@ error_reporting(0);
 include dirname(__FILE__) . "/includes/classes/class.init.php";
 
 if (!class_exists("WHMCS_Init")) {
-	echo "<div style=\"border: 1px dashed #cc0000;font-family:Tahoma;background-color:#FBEEEB;width:100%;padding:10px;color:#cc0000;\"><strong>维护中 (Err 1)</strong><br>网站升级中... 请稍后访问...</div>";
+	echo "<div style=\"border: 1px dashed #cc0000;font-family:Tahoma;background-color:#FBEEEB;width:100%;padding:10px;color:#cc0000;\"><strong>Down for Maintenance (Err 1)</strong><br>An upgrade is currently in progress... Please come back soon...</div>";
 	exit();
 }
 
@@ -46,19 +46,19 @@ if ($CONFIG['Version'] != "5.2.15") {
 		exit();
 	}
 
-	echo "<div style=\"border: 1px dashed #cc0000;font-family:Tahoma;background-color:#FBEEEB;width:100%;padding:10px;color:#cc0000;\"><strong>维护中 (Err 2)</strong><br>网站升级中... 请稍后访问...</div>";
+	echo "<div style=\"border: 1px dashed #cc0000;font-family:Tahoma;background-color:#FBEEEB;width:100%;padding:10px;color:#cc0000;\"><strong>Down for Maintenance (Err 2)</strong><br>An upgrade is currently in progress... Please come back soon...</div>";
 	exit();
 }
 
 
 if (file_exists(ROOTDIR . "/install/install.php")) {
-	echo "<div style=\"border: 1px dashed #cc0000;font-family:Tahoma;background-color:#FBEEEB;width:100%;padding:10px;color:#cc0000;\"><strong>安全提醒</strong><br>你必须删除 install 目录才能继续使用 WHMCS</div>";
+	echo "<div style=\"border: 1px dashed #cc0000;font-family:Tahoma;background-color:#FBEEEB;width:100%;padding:10px;color:#cc0000;\"><strong>Security Warning</strong><br>The install folder needs to be deleted for security reasons before using WHMCS</div>";
 	exit();
 }
 
 
 if (!$whmcs->check_template_cache_writeable()) {
-	exit("<div style=\"border: 1px dashed #cc0000;font-family:Tahoma;background-color:#FBEEEB;width:100%;padding:10px;color:#cc0000;\"><strong>权限错误</strong><br>The 模版缓存目录 '" . $whmcs->get_template_compiledir_name() . "' 必须设置为可写 (CHMOD 777) 才能继续。<br>如果此路径错误, 请在 configuration.php file 中修正。</div>");
+	exit("<div style=\"border: 1px dashed #cc0000;font-family:Tahoma;background-color:#FBEEEB;width:100%;padding:10px;color:#cc0000;\"><strong>Permissions Error</strong><br>The templates compiling directory '" . $whmcs->get_template_compiledir_name() . "' must be writeable (CHMOD 777) before you can continue.<br>If the path shown is incorrect, you can update it in the configuration.php file.</div>");
 }
 
 
@@ -68,7 +68,7 @@ if ((defined("CLIENTAREA") && $CONFIG['MaintenanceMode']) && !$_SESSION['adminid
 		exit();
 	}
 
-	echo "<div style=\"border: 1px dashed #cc0000;font-family:Tahoma;background-color:#FBEEEB;width:100%;padding:10px;color:#cc0000;\"><strong>维护中 (Err 3)</strong><br>" . $CONFIG['MaintenanceModeMessage'] . "</div>";
+	echo "<div style=\"border: 1px dashed #cc0000;font-family:Tahoma;background-color:#FBEEEB;width:100%;padding:10px;color:#cc0000;\"><strong>Down for Maintenance (Err 3)</strong><br>" . $CONFIG['MaintenanceModeMessage'] . "</div>";
 	exit();
 }
 

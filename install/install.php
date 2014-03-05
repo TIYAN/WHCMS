@@ -6,7 +6,7 @@
  * @ Version  : 5.2.15
  * @ Author   : MTIMER
  * @ Release on : 2013-12-24
- * @ Website  : http://www.mtimer.cn
+ * @ Website  : http://www.mtimer.net
  *
  * */
 
@@ -14,9 +14,9 @@ error_reporting(0);
 @set_time_limit(0);
 define("ROOTDIR", dirname(__FILE__) . "/../");
 $latestversion = "5.2.15";
-echo "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\n\t<html xmlns=\"http://www.w3.org/1999/xhtml\">\n<head>\n<title>WHMCS 5.2.15 时光人破解版 安装/升级</title>\n<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">\n<meta name=\"description\" content=\"WHMCS 5.2.15 完全解码破解 \" />\n<meta name=\"keywords\" content=\"whmcs,破解,解码,解密,时光人,系统,免费,安装,下载,5.2.15,中文版\" />\n<meta name=\"generator\" content=\"Mtimer CMS (http://www.mtimer.cn)\" />\n<script type=\"text/javascript\" src=\"../includes/jscript/jquery.js\"></script>\n<script>\nfunction showloading() {\n    \$(\"#submitbtn\").attr(\"disabled\",\"disabled\");\n    \$(\".loading\").fadeIn();\n}\n</script>\n<style>\nbody {\n    background-color: #efefef;\n    margin: 25px;\n}\na {\n    color: #0000ff;\n}\nbody,td {\n    font-family: Tahoma;\n    font-size: 12px;\n}\ninput {\n    font-family: Tahoma;\n    font-size: 16px;\n    padding: 2px 10px;\n}\nh1 {\n    font-size: 18px;\n    font-family: Arial;\n    color: #294A87;\n    padding-bottom: 10px;\n    border-bottom: 1px dashed #ccc;\n    margin-bottom: 30px;\n}\nh2 {\n    font-size: 16px;\n    font-family: Arial;\n    color: #000;\n}\n.wrapper {\n    margin: 0 auto;\n    background-color: #fff;\n    width: 740px;\n    padding: 10px 30px 30px 30px;\n    -moz-border-radius: 10px;\n    -webkit-border-radius: 10px;\n    -o-border-radius: 10px;\n    border-radius: 10px;\n}\n.version {\n    float: right;\n    margin: 30px 10px;\n    padding: 10px 20px;\n    background-color: #294A87;\n    color: #fff;\n    font-family: Verdana;\n    font-size: 40px;\n    -moz-border-radius: 10px;\n    -webkit-border-radius: 10px;\n    -o-border-radius: 10px;\n    border-radius: 10px;\n}\n.errorbox {\n\tmargin: 15px auto 0 auto;\n\tpadding: 10px;\n    width: 90%;\n\tborder: 1px solid #A89824;\n    font-size: 14px;\n\tbackground-color: #EEE7B0;\n\ttext-align: left;\n\tcolor: #706518;\n}\n.loading {\n    display: none;\n    margin: 0 auto;\n    padding: 20px;\n    width: 400px;\n    font-size: 18px;\n    text-align: center;\n}\n</style>\n</head>\n<body>\n\n<div class=\"wrapper\">\n\n<div class=\"version\">V";
+echo "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\n\t<html xmlns=\"http://www.w3.org/1999/xhtml\">\n<head>\n<title>WHMCS Install/Upgrade Process</title>\n<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">\n<script type=\"text/javascript\" src=\"../includes/jscript/jquery.js\"></script>\n<script>\nfunction showloading() {\n    \$(\"#submitbtn\").attr(\"disabled\",\"disabled\");\n    \$(\".loading\").fadeIn();\n}\n</script>\n<style>\nbody {\n    background-color: #efefef;\n    margin: 25px;\n}\na {\n    color: #0000ff;\n}\nbody,td {\n    font-family: Tahoma;\n    font-size: 12px;\n}\ninput {\n    font-family: Tahoma;\n    font-size: 16px;\n    padding: 2px 10px;\n}\nh1 {\n    font-size: 18px;\n    font-family: Arial;\n    color: #294A87;\n    padding-bottom: 10px;\n    border-bottom: 1px dashed #ccc;\n    margin-bottom: 30px;\n}\nh2 {\n    font-size: 16px;\n    font-family: Arial;\n    color: #000;\n}\n.wrapper {\n    margin: 0 auto;\n    background-color: #fff;\n    width: 740px;\n    padding: 10px 30px 30px 30px;\n    -moz-border-radius: 10px;\n    -webkit-border-radius: 10px;\n    -o-border-radius: 10px;\n    border-radius: 10px;\n}\n.version {\n    float: right;\n    margin: 30px 10px;\n    padding: 10px 20px;\n    background-color: #294A87;\n    color: #fff;\n    font-family: Verdana;\n    font-size: 40px;\n    -moz-border-radius: 10px;\n    -webkit-border-radius: 10px;\n    -o-border-radius: 10px;\n    border-radius: 10px;\n}\n.errorbox {\n\tmargin: 15px auto 0 auto;\n\tpadding: 10px;\n    width: 90%;\n\tborder: 1px solid #A89824;\n    font-size: 14px;\n\tbackground-color: #EEE7B0;\n\ttext-align: left;\n\tcolor: #706518;\n}\n.loading {\n    display: none;\n    margin: 0 auto;\n    padding: 20px;\n    width: 400px;\n    font-size: 18px;\n    text-align: center;\n}\n</style>\n</head>\n<body>\n\n<div class=\"wrapper\">\n\n<div class=\"version\">V";
 echo substr($latestversion, 0, 0 - 2);
-echo "</div>\n\n<div style=\"margin:30px;\"><a href=\"http://www.mtimer.cn/\" target=\"_blank\"><img src=\"http://api.mtimer.cn/whmcs/images/logo.png\" alt=\"WHMCS - The Complete Client Management, Billing & Support Solution\" border=\"0\" /></a></div>\n\n<br />\n\n";
+echo "</div>\n\n<div style=\"margin:30px;\"><a href=\"http://www.whmcs.com/\" target=\"_blank\"><img src=\"http://api.mtimer.net/whmcs/images/logo.png\" alt=\"WHMCS - The Complete Client Management, Billing & Support Solution\" border=\"0\" /></a></div>\n\n<br />\n\n";
 $step = $_REQUEST["step"];
 $type = $_REQUEST["type"];
 $version = $_REQUEST["version"];
@@ -65,7 +65,7 @@ if( $step == "5" )
 
 if( $step == "" ) 
 {
-    echo "\n<h1>用户许可协议</h1>\n<p>本系统由 <a href=\"http://www.mtimer.cn/\" target=\"_blank\">时光人社区</a> 发布，捐助后获得永久更新。 捐助方式：<a href=\"http://t.cn/8FwJr5Z\" target=\"_blank\">点此捐助</a> 通过邮件获得今后更新，金额不限。</p>\n<p align=\"center\"><textarea style=\"width:700px;font-family:Tahoma;font-size:10px;color:#666666\" rows=\"25\" readonly>\n为什么要用WHMCS时光人破解版?\n\n如果你曾用过官方版本或者其他破解版的话你肯定知道什么叫 ( \"痛苦\")\n\n1.价格贵\n\n一次去版权的费用是324.95$,是美刀！坑爹的是只有1年的免费更新！1年后想用新版本还得年付45刀！\n\n2. 代码加密,用的是Ioncube加密,服务器没装Ioncube就没法用。而且想改文件是非常不容易。\n\n3. 无法完全汉化\n\n因为代码加密所有你没办法修改php文件，自然也无法完全汉化。\n\n4. 安全性:\n\n代码加密谈何安全？\n\n网上泛滥的其他所谓破解版 没有完全解码文件，你能保证没有后门？\n\n5. 怎么办？\n\nWHMCS 5.2.15 时光人完全解码破解版助你解脱！\n\n</textarea></p>\n\n<p align=center><input type=\"submit\" value=\"我同意\" class=\"button\" onClick=\"window.location='install.php?step=2'\"> <input type=\"button\" value=\"我反对\" class=\"button\" onClick=\"window.location='install.php'\">\n\n";
+    echo "\n<h1>End User License Agreement</h1>\n<p>Please review the license terms before installing/upgrading WHMCS.  By installing, copying, or otherwise using the software, you are agreeing to be bound by the terms of the EULA.</p><form action=\"https://www.paypal.com/cgi-bin/webscr\" method=\"post\" target=\"_blank\" style=\"margin-top:10px;margin-bottom:5px;\"><input type=\"hidden\" name=\"cmd\" value=\"_s-xclick\"><input type=\"hidden\" name=\"hosted_button_id\" value=\"N3T56B5LHAGBS\"><input type=\"image\" src=\"https://www.paypal.com/en_US/i/btn/btn_donate_LG.gif\" border=\"0\" name=\"submit\" alt=\"PayPal - The safer, easier way to pay online!\" style=\"margin-bottom:-5px;\"><p style=\"display:inline;margin-left:10px;\"> & get updates lifetime via email :) It doesn't cost much ~</p></form>\n<p align=\"center\"><textarea style=\"width:700px;font-family:Tahoma;font-size:10px;color:#666666\" rows=\"25\" readonly>\nWHMCS Software License Agreement\n\nPlease read this End-User License Agreement (the \"EULA\")\n\nIMPORTANT --- READ CAREFULLY. By installing, copying, or otherwise using the Software, you are agreeing to be bound by the terms of this EULA, including the WARRANTY DISCLAIMERS, LIMITATIONS OF LIABILITY, and TERMINATION PROVISIONS. If you do not agree to the terms of this EULA do not install or use the Software.\n\nLICENSE TERMS\n\n1. The Software is supplied by WHMCS Limited and is licensed, not sold, under the terms of this EULA and WHMCS reserves all rights not expressly granted to you. WHMCS Limited retains the ownership of the Software.\n\n2. Software License:\n\na. WHMCS Limited grants you a license to use one copy of the Software. You may not modify or disable any licensing or control features of the Software.\n\nb. This Software is licensed to operate on only one domain.\n\nc. The Software is licensed only to you. You may not rent, lease, sub-license, sell, assign, pledge, transfer or otherwise dispose of the Software, on a temporary or permanent basis, without the prior written consent of WHMCS Limited. (For the avoidance of doubt, this licence is only granted to one person/company and if more than one person/company wishes to use the Software, each company must purchase a separate license).\n\n3. License Restrictions:\n\na. By accepting this EULA you are agreeing not to reverse engineer, decompile, or disassemble the Software Application, except and only to the extent that such activity is expressly permitted by applicable law notwithstanding this limitation.\n\nb. You are the exclusive licensee of the Software and sharing any source code of the Software with any individual or entity is a violation of copyright laws and international treaties and cause for license termination.\n\nc. Modifying any portion of the Software source code or asking any individual or entity to modify the Software source code other than WHMCS Limited is a violation of copyright laws and international treaties and cause for license termination.\n\nd. If you upgrade the Software to a higher version of the Software, this EULA is terminated and your rights shall be limited to the EULA associated with the higher version.\n\n4. Proprietary Rights: All title and copyrights in and to the Software (including, without limitation, any images, photographs, animations, video, audio, music, text, and \"applets\" incorporated into the Software Application), the accompanying media and printed materials, and any copies of the Software are owned by WHMCS Limited. The Software is protected by copyright laws and international treaty provisions. Therefore, you must treat the Software like any other copyrighted material, subject to the provisions of this EULA.\n\n5. Termination Rights:\n\na. Without prejudice to any other rights, WHMCS Limited may terminate this EULA if you fail to comply with the terms and conditions of this EULA. In such event, you must destroy all copies of the Software and all of its component parts, and WHMCS Limited may suspend or deactivate your use of the Software with or without notice.\n\nb. WHMCS Limited may terminate this EULA if you become subject to an administration order; a receiver or administrative receiver or similar is appointed over, or an encumbrancer takes possession of, any of your property or assets; you enter into an arrangement or composition with your creditors, you cease or threaten to cease to carry on business, you become insolvent or bankrupt, or cease to be able to pay your debts as they fall due;\n\nc. WHMCS Limited may terminate this EULA if you fail to pay your monthly fee to WHMCS and WHMCS files a final written notice on you and the outstanding sums due under this EULA still remain unpaid 5 days after the service of the notice.\n\n6. Export Control: You may not export or re-export the Software or any copy or adaptation of the Software in violation of any applicable laws or regulations.\n\n7. WHMCS Limited does not warrant that the operation of WHMCS Software will be uninterrupted or error free. WHMCS Software may contain third-party functions or may have been subject to incidental use.\n\n8. LIMIT of Liability:\n\na. WHMCS Limited is not responsible for problems resulting from improper or inadequate maintenance or configuration; software or interface routines or functions NOT developed by WHMCS; unauthorized specifications for the Software; improper site preparation or maintenance; Beta Software; encryption mechanisms or routines.\n\nb. Good data processing procedure dictates that any program be thoroughly tested with non-critical data before relying on it. You must assume the entire risk of using the Software. IN NO EVENT WILL WHMCS LIMITED OR ITS SUPPLIERS BE LIABLE FOR DIRECT, SPECIAL, INCIDENTAL, CONSEQUENTIAL (INCLUDING LOST PROFIT OR LOST SAVINGS) OR OTHER DAMAGE WHETHER BASED IN CONTRACT, TORT, OR OTHERWISE EVEN IF A WHMCS REPRESENTATIVE HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES, OR FOR ANY CLAIM BY ANY THIRD PARTY.\n\n9. If the above clause 8 is deemed to be unenforceable by a court or other body of competent jurisdiction and WHMCS Limited is found to be liable to you for direct losses under this EULA, then WHMCS Limited’s liability shall be limited to £20,000 for any one event or a series of connected events.\n\n10. Submissions: Should you decide to transmit to WHMCS Limited by any means or by any media any information (including, without limitation, ideas, concepts, or techniques for new or improved services and products), whether as information, feedback, data, questions, comments, suggestions, or the like, you agree such submissions are unrestricted and shall be deemed non-confidential and you automatically grant WHMCS Limited and its assigns a non-exclusive, royalty-free, worldwide, perpetual, irrevocable license, with the right to sublicense, to use, copy, transmit, distribute, create derivative works of, display, and perform the same.\n\n11. Distribution and Backups:\n\na. DISTRIBUTION OF THE REGISTERED VERSION OF THE Software IS STRICTLY PROHIBITED and is a violation of copyright laws and international treaties punishable by severe criminal and civil penalties.\n\nb. You may make copies of the Registered Version of the Software for backup purposes only. All backup copies must be an exact copy of the original Software.\n\n12. Refunds Policy: Refunds are only issued for software failure. Refunds are not issued for server failure/issues, lack of features or if your server does not meet the Software Requirements. Refunds are determined on individual circumstances and only issued once our technical staff determine that WHMCS has a fault causing it to not run on your server. Installation charges are not refundable under any circumstances. Refunds are not available after 1 month from purchase date.\n\n13. If any provision of this EULA shall be prohibited by law or adjudged by a court to be unlawful, void or unenforceable such provision shall to the extent required be severed from this EULA and rendered ineffective as far as possible without modifying the remaining provisions of this EULA and shall not in any way affect any other circumstances of or the validity or enforcement of this EULA.\n\n14. WHMCS Limited undertakes to comply with the provisions of the Data Protection Act 1998 and any related legislation in so far as the same relates to the provision of the Software and related support services by WHMCS Limited to you.\n\nYour name, address and other personal information as well as any personal data you supply to WHMCS Limited in order for WHMCS to provide the Software and related services related to you will be stored by WHMCS Limited on its computer system and may be made available to WHMCS staff and related third parties as required to allow the provision of support and any related services to be completed. Any third party that receives personal data from WHMCS Limited is under an obligation to process such personal data in line with the Data Protection Act 1998.\n\n15. Each party irrevocably agrees that the courts of the country of England shall have exclusive jurisdiction to resolve any controversy or claim of whatever nature arising out of or in relation to this EULA and the place of performance of this EULA shall be England and that the laws of that country shall govern such controversy or claim.\n</textarea></p>\n\n<p align=center><input type=\"submit\" value=\"I AGREE\" class=\"button\" onClick=\"window.location='install.php?step=2'\"> <input type=\"button\" value=\"I DISAGREE\" class=\"button\" onClick=\"window.location='install.php'\">\n\n";
 }
 else
 {
@@ -82,7 +82,7 @@ else
             {
                 $setting = $data["setting"];
                 $value = $data["value"];
-                $CONFIG["" . $setting] = "" . $value;
+                $CONFIG[$setting] = $value;
             }
         }
 
@@ -128,50 +128,50 @@ else
         }
         else
         {
-            echo "\n<h1>系统要求检查</h1>\n<div style=\"font-size: 16px;\">\n&raquo; PHP 版本 .......... ";
+            echo "\n<h1>System Requirements Checks</h1>\n<div style=\"font-size: 16px;\">\n&raquo; PHP Version .......... ";
             if( "5.0.0" <= phpversion() ) 
             {
-                echo "<font color=#99cc00><B>通过</B></font>";
+                echo "<font color=#99cc00><B>Passed</B></font>";
             }
             else
             {
-                echo "<font color=#cc0000><B>Failed</B></font><div class=\"errorbox\">你的 PHP 版本必须升到 V5.0 以上才能安装 WHMCS</div>";
+                echo "<font color=#cc0000><B>Failed</B></font><div class=\"errorbox\">Your PHP version needs to be upgraded to at least V5.0 for WHMCS</div>";
                 $error = "1";
             }
 
             echo "<br>\n&raquo; MySQL .......... ";
             if( function_exists("mysql_connect") ) 
             {
-                echo "<font color=#99cc00><B>通过</B></font>";
+                echo "<font color=#99cc00><B>Passed</B></font>";
             }
             else
             {
-                echo "<font color=#cc0000><B>失败</B></font><div class=\"errorbox\">没有检测到 MySQL 。你需要安装完 MYSQL 才能继续。</div>";
+                echo "<font color=#cc0000><B>Failed</B></font><div class=\"errorbox\">MySQL support doesn't appear to be available in this PHP installation. You will need to install MySQL before you can continue.</div>";
                 $error = "1";
             }
 
             echo "<br>\n&raquo; CURL .......... ";
             if( function_exists("curl_init") ) 
             {
-                echo "<font color=#99cc00><B>通过</B></font>";
+                echo "<font color=#99cc00><B>Passed</B></font>";
             }
             else
             {
-                echo "<font color=#cc0000><B>失败</B></font><div class=\"errorbox\">你需要安装完 CURL 才能继续。</div>";
+                echo "<font color=#cc0000><B>Failed</B></font><div class=\"errorbox\">CURL is required in order for WHMCS to function so you will need to recompile PHP with the CURL libraries included before you can continue.</div>";
                 $error = "1";
             }
 
-            echo "</div>\n<br />\n<h1>权限检查</h1>\n<div style=\"font-size: 16px;\">\n&raquo; 设置文件 .......... ";
+            echo "</div>\n<br />\n<h1>Permissions Checks</h1>\n<div style=\"font-size: 16px;\">\n&raquo; Configuration File .......... ";
             if( is_writable("../configuration.php") ) 
             {
-                echo "<font color=#99cc00><B>通过</B></font>";
+                echo "<font color=#99cc00><B>Passed</B></font>";
             }
             else
             {
-                echo "<font color=#cc0000><B>失败</B></font>";
+                echo "<font color=#cc0000><B>Failed</B></font>";
                 if( !is_file("../configuration.php") ) 
                 {
-                    echo "<div class=\"errorbox\">没有找到此文件 \"configuration.php\" 。 请先在根目录新建此文件并赋予 读写 权限，然后继续。</div>";
+                    echo "<div class=\"errorbox\">The file \"configuration.php\" cannot be found. Please create an empty file in the folder above the install directory with writeable permissions to continue.</div>";
                 }
                 else
                 {
@@ -181,61 +181,61 @@ else
                 $error = "1";
             }
 
-            echo "<br>\n&raquo; 附件目录 .......... ";
+            echo "<br>\n&raquo; Attachments Folder .......... ";
             if( is_writable("../attachments/") ) 
             {
-                echo "<font color=#99cc00><B>通过</B></font>";
+                echo "<font color=#99cc00><B>Passed</B></font>";
             }
             else
             {
-                echo "<font color=#cc0000><B>失败</B></font>";
+                echo "<font color=#cc0000><B>Failed</B></font>";
                 if( !is_dir("../attachments") ) 
                 {
-                    echo "<div class=\"errorbox\">你必须新建 \"attachments\" 目录才能继续。</div>";
+                    echo "<div class=\"errorbox\">You must create a directory named \"attachments\" before you can continue</div>";
                 }
                 else
                 {
-                    echo "<div class=\"errorbox\">你必须赋予目录 \"attachments\" 读写( 755 或 777) 权限才能继续。</div>";
+                    echo "<div class=\"errorbox\">You must apply writeable permissions (CHMOD 755 or 777) to the \"attachments\" directory before you can continue</div>";
                 }
 
                 $error = "1";
             }
 
-            echo "<br>\n&raquo; 下载目录 .......... ";
+            echo "<br>\n&raquo; Downloads Folder .......... ";
             if( is_writable("../downloads/") ) 
             {
-                echo "<font color=#99cc00><B>通过</B></font>";
+                echo "<font color=#99cc00><B>Passed</B></font>";
             }
             else
             {
-                echo "<font color=#cc0000><B>失败</B></font>";
+                echo "<font color=#cc0000><B>Failed</B></font>";
                 if( !is_dir("../downloads") ) 
                 {
-                    echo "<div class=\"errorbox\">你必须新建 \"downloads\" 目录才能继续。</div>";
+                    echo "<div class=\"errorbox\">You must create a directory named \"downloads\" before you can continue</div>";
                 }
                 else
                 {
-                    echo "<div class=\"errorbox\">你必须赋予目录 \"downloads\" 读写( 755 或 777) 权限才能继续。</div>";
+                    echo "<div class=\"errorbox\">You must apply writeable permissions (CHMOD 755 or 777) to the \"downloads\" directory before you can continue</div>";
                 }
 
                 $error = "1";
             }
 
-            echo "<br>\n&raquo; 模版缓存目录 .......... ";
+            echo "<br>\n&raquo; Templates Cache Folder .......... ";
             if( is_writable("../templates_c/") ) 
             {
-                echo "<font color=#99cc00><B>通过</B></font>";
+                echo "<font color=#99cc00><B>Passed</B></font>";
             }
             else
             {
-                echo "<font color=#cc0000><B>失败</B></font>";
+                echo "<font color=#cc0000><B>Failed</B></font>";
                 if( !is_dir("../templates_c") ) 
                 {
-                    echo "<div class=\"errorbox\">你必须新建 \"templates_c\" 目录才能继续。</div>";
+                    echo "<div class=\"errorbox\">You must create a directory named \"templates_c\" before you can continue</div>";
                 }
                 else
                 {
-                    echo "<div class=\"errorbox\">你必须赋予目录 \"templates_c\" 读写( 755 或 777) 权限才能继续。</div>";
+                    echo "<div class=\"errorbox\">You must apply writeable permissions (CHMOD 755 or 777) to the \"templates_c\" directory before you can continue</div>";
                 }
 
                 $error = "1";
@@ -244,11 +244,11 @@ else
             echo "</div>\n<br />\n";
             if( $error == "1" ) 
             {
-                echo "<p align=\"center\" style=\"font-size:16px;color:#cc0000;\"><b>安装检查失败</b><br />请更正以上错误并点击重试按钮...</p>\n<p align=\"center\"><input type=\"button\" value=\"重新检查\" onClick=\"location.reload(true);\"></p>\n";
+                echo "<p align=\"center\" style=\"font-size:16px;color:#cc0000;\"><b>Pre-Installation Checks Failure</b><br />Please correct the problems listed above and then recheck the requirements to continue...</p>\n<p align=\"center\"><input type=\"button\" value=\"Recheck Requirements\" onClick=\"location.reload(true);\"></p>\n";
             }
             else
             {
-                echo "<p align=\"center\" style=\"font-size:16px;color:#7BA400;\"><b>安装检查成功</b><br />一切就绪点击下面的按钮开始安装...</p>\n<form method=\"post\" action=\"install.php?step=3\">\n<p align=\"center\"><input type=\"submit\" value=\"继续 &raquo;\" class=\"button\" /></p>\n</form>\n";
+                echo "<p align=\"center\" style=\"font-size:16px;color:#7BA400;\"><b>Pre-Installation Checks Success</b><br />Everything seems to be ok so please continue below to begin the installation...</p>\n<form method=\"post\" action=\"install.php?step=3\">\n<p align=\"center\"><input type=\"submit\" value=\"Continue &raquo;\" class=\"button\" /></p>\n</form>\n";
             }
 
             echo "\n";
@@ -259,7 +259,7 @@ else
     {
         if( $step == "3" ) 
         {
-            echo "\n<form method=\"post\" action=\"install.php?step=4\" onsubmit=\"showloading()\">\n\n<h1>填写数据库信息</h1>\n<p>你必须有个 MySQL 数据库才能安装 WHMCS 。你可以询问你的主机商。</p>\n<table>\n<tr><td width=120>数据库地址</td><td><input type=\"text\" name=\"dbhost\" size=\"20\" value=\"localhost\"></td></tr>\n<tr><td>数据库用户名</td><td><input type=\"text\" name=\"dbusername\" size=\"20\" value=\"\"></td></tr>\n<tr><td>数据库密码</td><td><input type=\"text\" name=\"dbpassword\" size=\"20\" value=\"\"></td></tr>\n<tr><td>数据库名称</td><td><input type=\"text\" name=\"dbname\" size=\"20\" value=\"\"></td></tr>\n</table>\n<p align=\"center\"><input type=\"submit\" value=\"继续 &raquo;\" class=\"button\" id=\"submitbtn\" /></p>\n<div class=\"loading\">安装数据库中... 请稍等...<br /><img src=\"../images/loading.gif\" /></div>\n</form>\n\n";
+            echo "\n<form method=\"post\" action=\"install.php?step=4\" onsubmit=\"showloading()\">\n\n<h1>Database Connection Details</h1>\n<p>You must now create a MySQL database for WHMCS to use inside your hosting control panel.  Once created, and a user assigned, enter the connection details below.</p>\n<table>\n<tr><td width=120>Database Host</td><td><input type=\"text\" name=\"dbhost\" size=\"20\" value=\"localhost\"></td></tr>\n<tr><td>Database Username</td><td><input type=\"text\" name=\"dbusername\" size=\"20\" value=\"\"></td></tr>\n<tr><td>Database Password</td><td><input type=\"text\" name=\"dbpassword\" size=\"20\" value=\"\"></td></tr>\n<tr><td>Database Name</td><td><input type=\"text\" name=\"dbname\" size=\"20\" value=\"\"></td></tr>\n</table>\n<p align=\"center\"><input type=\"submit\" value=\"Continue &raquo;\" class=\"button\" id=\"submitbtn\" /></p>\n<div class=\"loading\">Initialising Database... Please Wait...<br /><img src=\"../images/loading.gif\" /></div>\n</form>\n\n";
         }
         else
         {
@@ -302,29 +302,29 @@ else
 
                     include("../configuration.php");
                     $link = mysql_connect($db_host, $db_username, $db_password);
-                    mysql_select_db($db_name) or exit( "无法连接数据库 - 请检查输入是否有误。" );
+                    mysql_select_db($db_name) or exit( "Could not connect to the database - check the database connection details you entered and go back and correct them if necessary" );
                     mysql_query("SET NAMES 'utf8'");
                     mysql_import_file("install.sql");
                     mysql_import_file("emailtemplates.sql");
                 }
                 else
                 {
-                    echo "" . "<div class=\"errorbox\">" . $error . "</div>";
+                    echo "<div class=\"errorbox\">" . $error . "</div>";
                 }
 
-                echo "\n<h1>设置管理员账户</h1>\n<form method=\"post\" action=\"install.php?step=5\" onsubmit=\"showloading()\">\n<p>你现在需要设置你的管理员账户。</p>\n<table>\n<tr><td width=120>姓:</td><td><input type=\"text\" name=\"firstname\" size=\"30\" value=\"";
+                echo "\n<h1>Setup Administrator Account</h1>\n<form method=\"post\" action=\"install.php?step=5\" onsubmit=\"showloading()\">\n<p>You now need to setup your administrator account.</p>\n<table>\n<tr><td width=120>First Name:</td><td><input type=\"text\" name=\"firstname\" size=\"30\" value=\"";
                 echo $firstname;
-                echo "\"></td></tr>\n<tr><td>名:</td><td><input type=\"text\" name=\"lastname\" size=\"30\" value=\"";
+                echo "\"></td></tr>\n<tr><td>Last Name:</td><td><input type=\"text\" name=\"lastname\" size=\"30\" value=\"";
                 echo $lastname;
-                echo "\"></td></tr>\n<tr><td>邮箱:</td><td><input type=\"text\" name=\"email\" size=\"50\" value=\"";
+                echo "\"></td></tr>\n<tr><td>Email:</td><td><input type=\"text\" name=\"email\" size=\"50\" value=\"";
                 echo $email;
-                echo "\"></td></tr>\n<tr><td>登录名:</td><td><input type=\"text\" name=\"username\" size=\"20\" value=\"";
+                echo "\"></td></tr>\n<tr><td>Username:</td><td><input type=\"text\" name=\"username\" size=\"20\" value=\"";
                 echo $username;
-                echo "\"></td></tr>\n<tr><td>密码:</td><td><input type=\"password\" name=\"password\" size=\"20\" value=\"";
+                echo "\"></td></tr>\n<tr><td>Password:</td><td><input type=\"password\" name=\"password\" size=\"20\" value=\"";
                 echo $password;
-                echo "\"></td></tr>\n<tr><td>重复密码:</td><td><input type=\"password\" name=\"confirmpassword\" size=\"20\" value=\"";
+                echo "\"></td></tr>\n<tr><td>Confirm Password:</td><td><input type=\"password\" name=\"confirmpassword\" size=\"20\" value=\"";
                 echo $confirmpassword;
-                echo "\"></td></tr>\n</table>\n<p align=\"center\"><input type=\"submit\" value=\"完成安装 &raquo;\" class=\"button\" id=\"submitbtn\" /></p>\n<div class=\"loading\">设置系统中... 请稍等...<br /><img src=\"../images/loading.gif\" /></div>\n</form>\n\n";
+                echo "\"></td></tr>\n</table>\n<p align=\"center\"><input type=\"submit\" value=\"Complete Setup &raquo;\" class=\"button\" id=\"submitbtn\" /></p>\n<div class=\"loading\">Setting Up System for First Use... Please Wait...<br /><img src=\"../images/loading.gif\" /></div>\n</form>\n\n";
             }
             else
             {
@@ -332,10 +332,10 @@ else
                 {
                     include("../configuration.php");
                     $link = mysql_connect($db_host, $db_username, $db_password);
-                    mysql_select_db($db_name) or exit( "无法连接数据库 - 请检查输入是否有误。" );
+                    mysql_select_db($db_name) or exit( "Could not connect to the database - check the database connection details you entered and go back and correct them if necessary" );
                     mysql_query("SET NAMES 'utf8'");
-                    $result = mysql_query("INSERT INTO `tbladmins` ( `username` , `password` , `firstname` , `lastname` , `email` , `userlevel` , `signature` , `notes` , `supportdepts` ) VALUES ('" . $_REQUEST["username"] . "', '" . md5($_REQUEST["password"]) . "', '" . $_REQUEST["firstname"] . "', '" . $_REQUEST["lastname"] . "', '" . $_REQUEST["email"] . "', '3', '', '欢迎来到 WHMCS 5.2.15 时光人破解版!  安装后请在cPanel建立定时任务(cron job)。', ',')");
-                    echo "<h1>安装完成</h1>";
+                    mysql_query("INSERT INTO `tbladmins` ( `username` , `password` , `firstname` , `lastname` , `email` , `userlevel` , `signature` , `notes` , `supportdepts` ) VALUES ('" . $_REQUEST["username"] . "', '" . md5($_REQUEST["password"]) . "', '" . $_REQUEST["firstname"] . "', '" . $_REQUEST["lastname"] . "', '" . $_REQUEST["email"] . "', '3', '', 'Welcome to WHMCS 5.2.15 Full Decoded && Nulled By Mtimer!  Please ensure you have setup the cron job in cPanel to automate tasks', ',')");
+                    echo "<h1>Installation Complete</h1>";
                     v321Upgrade();
                     v322Upgrade();
                     v323Upgrade();
@@ -391,13 +391,13 @@ else
                     v5213Upgrade();
                     v5214Upgrade();
                     v5215Upgrade();
-                    echo "\n<p>你现在要做的:</p>\n\n<p><b>1. 删除安装目录</b></p>\n<p>你需要从你服务器上删除 <b><i>install</i></b> 目录。</p>\n\n<p><b>2. 移动可写文件夹</b></p>\n<p>建议您移动 attachments, downloads 和 templates_c 目录(必须可写) 到用户无法直接访问的位置。  请参考官方文档 @ <a href=\"http://docs.whmcs.com/Further_Security_Steps\" target=\"_blank\">进一步安全保障</a></p>\n\n<p><b>3. 设置每天定时任务(Cron Job)</b></p>\n<p>你可以在面板里设置每天执行一次下面的命令:<br>\n<div align=\"center\"><input type=\"text\" value=\"php -q ";
+                    echo "\n<p>Here's what you should do next:</p>\n\n<p><b>1. Delete the Install Folder</b></p>\n<p>You should now delete the <b><i>install</i></b> directory from your web server.</p>\n\n<p><b>2. Secure the Writeable Directories</b></p>\n<p>It is advisable to move the attachments, downloads & templates_c directories (which need to be writeable for WHMCS to function) outside of the publically accessible folder tree.  Instructions for how to do this can be found in our documentation @ <a href=\"http://docs.whmcs.com/Further_Security_Steps\" target=\"_blank\">Further Security Steps</a></p>\n\n<p><b>3. Setup the Daily Cron Job</b></p>\n<p>You should setup a cron job in your control panel to run using the following command once per day:<br>\n<div align=\"center\"><input type=\"text\" value=\"php -q ";
                     $pos = strrpos($_SERVER["SCRIPT_FILENAME"], "/");
                     $filename = substr($_SERVER["SCRIPT_FILENAME"], 0, $pos);
                     $pos = strrpos($filename, "/");
                     $filename = substr($filename, 0, $pos);
                     echo $filename;
-                    echo "/admin/cron.php\" style=\"width:90%;\" readonly=\"true\"></div></p>\n\n<p><b>4. 设置 WHMCS</b></p>\n<p>现在可以设置 WHMCS 了。<br /><br />我们有很多 <b>帮助资料 & 向导</b> ，您可以参阅 @ <a href=\"http://docs.whmcs.com/\" target=\"_blank\">http://docs.whmcs.com/</a> (在后台可以在 帮助 > 帮助文档 访问)</p>\n\n<br />\n\n<p align=\"center\" style=\"font-size:16px;\"><a href=\"../admin/\">点此前往后台管理面板 &raquo;</a></p>\n\n<br />\n\n<h2>感谢您使用 WHMCS 时光人完全解码破解版!</h2> <a href=\"https://me.alipay.com/whmcs5\" target=\"_blank\"></a>\n\n";
+                    echo "/admin/cron.php\" style=\"width:90%;\" readonly=\"true\"></div></p>\n\n<p><b>4. Configure WHMCS</b></p>\n<p>Now it's time to configure your WHMCS installation.<br /><br />We have lots of <b>helpful resources & guides</b> available to assist you in setting up & using your new WHMCS system in our comprehensive online documentation located @ <a href=\"http://docs.whmcs.com/\" target=\"_blank\">http://docs.whmcs.com/</a> (you can access the docs at any time by going to Help > Documentation or using the handy Help shortcuts available from most setup pages within the admin area)</p>\n\n<br />\n\n<p align=\"center\" style=\"font-size:16px;\"><a href=\"../admin/\">Click here to go to the admin area now &raquo;</a></p>\n\n<br />\n\n<h2>Thank you for choosing WHMCS!</h2>\n<form action=\"https://www.paypal.com/cgi-bin/webscr\" method=\"post\" target=\"_blank\" style=\"margin-top:10px;margin-bottom:5px;\"><input type=\"hidden\" name=\"cmd\" value=\"_s-xclick\"><input type=\"hidden\" name=\"hosted_button_id\" value=\"N3T56B5LHAGBS\"><input type=\"image\" src=\"https://www.paypal.com/en_US/i/btn/btn_donate_LG.gif\" border=\"0\" name=\"submit\" alt=\"PayPal - The safer, easier way to pay online!\" style=\"margin-bottom:-5px;\"><p style=\"display:inline;margin-left:10px;\">to get updates lifetime via email :) Don't miss it~</p></form>\n\n";
                 }
                 else
                 {
@@ -732,6 +732,7 @@ else
                                     if ($revision_version < 15) {
                                         v5215Upgrade();
                                     }
+
                                 }
 
                             }
@@ -750,9 +751,9 @@ else
                                 v5215Upgrade();
                             }
 
-                            echo "\n<p>你现在需要从你的服务器上删除install目录。</p>\n\n<p align=\"center\" style=\"font-size:16px;\"><a href=\"../";
+                            echo "\n<p>You should now delete the install folder from your web server.</p>\n\n<p align=\"center\" style=\"font-size:16px;\"><a href=\"../";
                             echo $customadminpath;
-                            echo "/\">点击这里前往后台管理面板 &raquo;</a></p>\n\n<h2>感谢您使用 WHMCS 时光人完全解码破解版!</h2>\n\n";
+                            echo "/\">Click here to go to the admin area now &raquo;</a></p>\n\n<h2>Thank you for choosing WHMCS!</h2>\n\n";
                         }
 
                     }
@@ -767,9 +768,9 @@ else
 
 }
 
-echo "\n<br />\n<br />\n<br />\n\n<div align=\"center\">Copyright &copy; WHMCS 5.2.15 时光人破解版 ";
+echo "\n<br />\n<br />\n<br />\n\n<div align=\"center\">Copyright &copy; WHMCS 2005-";
 echo date("Y");
-echo "<br /><a href=\"http://www.whmcs.com/\" target=\"_blank\">我要买正版</a></div>\n\n</div>\n\n</body>\n</html>\n";
+echo " NULLED BY MTIMER<br /><a href=\"http://www.whmcs.com/\" target=\"_blank\">www.whmcs.com</a></div>\n\n</div>\n\n</body>\n</html>\n";
 
 
 function mysql_import_file($filename)
@@ -779,7 +780,7 @@ function mysql_import_file($filename)
     $lines = file($filename);
     if( !$lines ) 
     {
-        $errmsg = "" . "cannot open file " . $filename;
+        $errmsg = "cannot open file " . $filename;
         return false;
     }
 
@@ -805,13 +806,13 @@ function mysql_import_file($filename)
 
         if( !mysql_query($query) ) 
         {
-            $queryerrors .= "" . "Line " . $querycount . " - " . mysql_error() . "<br>";
+            $queryerrors .= "Line " . $querycount . " - " . mysql_error() . "<br>";
         }
 
     }
     if( $queryerrors ) 
     {
-        echo "" . "<b>Errors Occurred</b><br><br>Please open a ticket with the debug information below for support<br><br>File: " . $filename . "<br>" . $queryerrors;
+        echo "<b>Errors Occurred</b><br><br>Please open a ticket with the debug information below for support<br><br>File: " . $filename . "<br>" . $queryerrors;
     }
 
     return true;
@@ -836,7 +837,7 @@ function v330Upgrade()
 {
     mysql_import_file("upgrade330.sql");
     include("../configuration.php");
-    $query = "" . "SELECT id,AES_DECRYPT(cardnum,'" . $cc_encryption_hash . "') as cardnum,AES_DECRYPT(expdate,'" . $cc_encryption_hash . "') as expdate,AES_DECRYPT(issuenumber,'" . $cc_encryption_hash . "') as issuenumber,AES_DECRYPT(startdate,'" . $cc_encryption_hash . "') as startdate FROM tblclients";
+    $query = "SELECT id,AES_DECRYPT(cardnum,'" . $cc_encryption_hash . "') as cardnum,AES_DECRYPT(expdate,'" . $cc_encryption_hash . "') as expdate,AES_DECRYPT(issuenumber,'" . $cc_encryption_hash . "') as issuenumber,AES_DECRYPT(startdate,'" . $cc_encryption_hash . "') as startdate FROM tblclients";
     $result = mysql_query($query);
     while( $row = mysql_fetch_array($result) ) 
     {
@@ -845,17 +846,17 @@ function v330Upgrade()
         $cardexp = $row["expdate"];
         $cardissuenum = $row["issuenumber"];
         $cardstart = $row["startdate"];
-        $query2 = "" . "UPDATE tblclients SET cardnum=AES_ENCRYPT('" . $cardnum . "','54X6zoYZZnS35o6m5gEwGmYC6" . $cc_encryption_hash . "'),expdate=AES_ENCRYPT('" . $cardexp . "','54X6zoYZZnS35o6m5gEwGmYC6" . $cc_encryption_hash . "'),startdate=AES_ENCRYPT('" . $cardstart . "','54X6zoYZZnS35o6m5gEwGmYC6" . $cc_encryption_hash . "'),issuenumber=AES_ENCRYPT('" . $cardissuenum . "','54X6zoYZZnS35o6m5gEwGmYC6" . $cc_encryption_hash . "') WHERE id='" . $id . "'";
-        $result2 = mysql_query($query2);
+        $query2 = "UPDATE tblclients SET cardnum=AES_ENCRYPT('" . $cardnum . "','54X6zoYZZnS35o6m5gEwGmYC6" . $cc_encryption_hash . "'),expdate=AES_ENCRYPT('" . $cardexp . "','54X6zoYZZnS35o6m5gEwGmYC6" . $cc_encryption_hash . "'),startdate=AES_ENCRYPT('" . $cardstart . "','54X6zoYZZnS35o6m5gEwGmYC6" . $cc_encryption_hash . "'),issuenumber=AES_ENCRYPT('" . $cardissuenum . "','54X6zoYZZnS35o6m5gEwGmYC6" . $cc_encryption_hash . "') WHERE id='" . $id . "'";
+        mysql_query($query2);
     }
 }
 
 function v340Upgrade()
 {
     mysql_import_file("upgrade340.sql");
-    $result = mysql_query("UPDATE tblhosting SET nextinvoicedate = nextduedate");
-    $result = mysql_query("UPDATE tbldomains SET nextinvoicedate = nextduedate");
-    $result = mysql_query("UPDATE tblhostingaddons SET nextinvoicedate = nextduedate");
+    mysql_query("UPDATE tblhosting SET nextinvoicedate = nextduedate");
+    mysql_query("UPDATE tbldomains SET nextinvoicedate = nextduedate");
+    mysql_query("UPDATE tblhostingaddons SET nextinvoicedate = nextduedate");
 }
 
 function v341Upgrade()
@@ -866,7 +867,7 @@ function v341Upgrade()
 function v350Upgrade()
 {
     $query = "ALTER TABLE tblupgrades ADD `orderid` INT( 1 ) NOT NULL AFTER `id`";
-    $result = mysql_query($query);
+    mysql_query($query);
     $query = "SELECT * FROM tblorders WHERE upgradeids!=''";
     $result = mysql_query($query);
     while( $data = mysql_fetch_array($result) ) 
@@ -878,8 +879,8 @@ function v350Upgrade()
         {
             if( $upgradeid ) 
             {
-                $query2 = "" . "UPDATE tblupgrades SET orderid='" . $orderid . "' WHERE id='" . $upgradeid . "'";
-                $result2 = mysql_query($query2);
+                $query2 = "UPDATE tblupgrades SET orderid='" . $orderid . "' WHERE id='" . $upgradeid . "'";
+                mysql_query($query2);
             }
 
         }
@@ -902,7 +903,7 @@ function v360Upgrade()
     if( $paypalenabled ) 
     {
         $query = "INSERT INTO `tblpaymentgateways` (`id`, `gateway`, `type`, `setting`, `value`, `name`, `size`, `notes`, `description`, `order`) VALUES('', 'paypal', 'yesno', 'forceonetime', '', 'Force One Time Payments', 0, '', 'Tick this box to never show the subscription payment button', 0)";
-        $result = mysql_query($query);
+        mysql_query($query);
     }
 
 }
@@ -918,8 +919,8 @@ function v361Upgrade()
         $id = $row["id"];
         $value = $row["value"];
         $value = encrypt($value);
-        $query2 = "" . "UPDATE tblregistrars SET value='" . $value . "' WHERE id='" . $id . "'";
-        $result2 = mysql_query($query2);
+        $query2 = "UPDATE tblregistrars SET value='" . $value . "' WHERE id='" . $id . "'";
+        mysql_query($query2);
     }
 }
 
@@ -944,14 +945,14 @@ function v362Upgrade()
             }
 
         }
-        $query2 = "" . "UPDATE tbladmins SET supportdepts='" . $newsupportdepts . "' WHERE id='" . $adminid . "'";
-        $result2 = mysql_query($query2);
+        $query2 = "UPDATE tbladmins SET supportdepts='" . $newsupportdepts . "' WHERE id='" . $adminid . "'";
+        mysql_query($query2);
     }
 }
 
 function v370UpgradeX($string)
 {
-    $key = "" . "5a8ej8WndK\$3#9Ua425!hg741KknN";
+    $key = "5a8ej8WndK\$3#9Ua425!hg741KknN";
     $result = "";
     $string = base64_decode($string);
     for( $i = 0; $i < strlen($string); $i++ ) 
@@ -975,10 +976,10 @@ function v370Upgrade()
     {
         $id = $row[0];
         $value = $row[1];
-        $value = v370upgradex($value);
+        $value = v370UpgradeX($value);
         $value = encrypt($value);
-        $query2 = "" . "UPDATE tblclients SET password='" . $value . "' WHERE id='" . $id . "'";
-        $result2 = mysql_query($query2);
+        $query2 = "UPDATE tblclients SET password='" . $value . "' WHERE id='" . $id . "'";
+        mysql_query($query2);
     }
     $query = "SELECT id,password FROM tblhosting";
     $result = mysql_query($query);
@@ -986,10 +987,10 @@ function v370Upgrade()
     {
         $id = $row[0];
         $value = $row[1];
-        $value = v370upgradex($value);
+        $value = v370UpgradeX($value);
         $value = encrypt($value);
-        $query2 = "" . "UPDATE tblhosting SET password='" . $value . "' WHERE id='" . $id . "'";
-        $result2 = mysql_query($query2);
+        $query2 = "UPDATE tblhosting SET password='" . $value . "' WHERE id='" . $id . "'";
+        mysql_query($query2);
     }
     $query = "SELECT id,value FROM tblregistrars";
     $result = mysql_query($query);
@@ -997,10 +998,10 @@ function v370Upgrade()
     {
         $id = $row[0];
         $value = $row[1];
-        $value = v370upgradex($value);
+        $value = v370UpgradeX($value);
         $value = encrypt($value);
-        $query2 = "" . "UPDATE tblregistrars SET value='" . $value . "' WHERE id='" . $id . "'";
-        $result2 = mysql_query($query2);
+        $query2 = "UPDATE tblregistrars SET value='" . $value . "' WHERE id='" . $id . "'";
+        mysql_query($query2);
     }
     $query = "SELECT id,password FROM tblservers";
     $result = mysql_query($query);
@@ -1008,10 +1009,10 @@ function v370Upgrade()
     {
         $id = $row[0];
         $value = $row[1];
-        $value = v370upgradex($value);
+        $value = v370UpgradeX($value);
         $value = encrypt($value);
-        $query2 = "" . "UPDATE tblservers SET password='" . $value . "' WHERE id='" . $id . "'";
-        $result2 = mysql_query($query2);
+        $query2 = "UPDATE tblservers SET password='" . $value . "' WHERE id='" . $id . "'";
+        mysql_query($query2);
     }
     $general_email_merge_fields = array(  );
     $general_email_merge_fields["CustomerID"] = "client_id";
@@ -1080,8 +1081,8 @@ function v370Upgrade()
             $email_subject = str_replace("[" . $old_email_merge_fields . "]", "{\$" . $new_email_merge_fields . "}", $email_subject);
             $email_message = str_replace("[" . $old_email_merge_fields . "]", "{\$" . $new_email_merge_fields . "}", $email_message);
         }
-        $query = "UPDATE tblemailtemplates SET subject='" . mysql_real_escape_string($email_subject) . "',message='" . mysql_real_escape_string($email_message) . "" . "' WHERE id='" . $email_id . "'";
-        $result2 = mysql_query($query);
+        $query = "UPDATE tblemailtemplates SET subject='" . mysql_real_escape_string($email_subject) . "',message='" . mysql_real_escape_string($email_message) . "' WHERE id='" . $email_id . "'";
+        mysql_query($query);
     }
     $email_merge_fields = array(  );
     $email_merge_fields["OrderID"] = "domain_order_id";
@@ -1113,8 +1114,8 @@ function v370Upgrade()
             $email_subject = str_replace("[" . $old_email_merge_fields . "]", "{\$" . $new_email_merge_fields . "}", $email_subject);
             $email_message = str_replace("[" . $old_email_merge_fields . "]", "{\$" . $new_email_merge_fields . "}", $email_message);
         }
-        $query = "UPDATE tblemailtemplates SET subject='" . mysql_real_escape_string($email_subject) . "',message='" . mysql_real_escape_string($email_message) . "" . "' WHERE id='" . $email_id . "'";
-        $result2 = mysql_query($query);
+        $query = "UPDATE tblemailtemplates SET subject='" . mysql_real_escape_string($email_subject) . "',message='" . mysql_real_escape_string($email_message) . "' WHERE id='" . $email_id . "'";
+        mysql_query($query);
     }
     $email_merge_fields = array(  );
     $email_merge_fields["Name"] = "client_name";
@@ -1145,8 +1146,8 @@ function v370Upgrade()
             $email_subject = str_replace("[" . $old_email_merge_fields . "]", "{\$" . $new_email_merge_fields . "}", $email_subject);
             $email_message = str_replace("[" . $old_email_merge_fields . "]", "{\$" . $new_email_merge_fields . "}", $email_message);
         }
-        $query = "UPDATE tblemailtemplates SET subject='" . mysql_real_escape_string($email_subject) . "',message='" . mysql_real_escape_string($email_message) . "" . "' WHERE id='" . $email_id . "'";
-        $result2 = mysql_query($query);
+        $query = "UPDATE tblemailtemplates SET subject='" . mysql_real_escape_string($email_subject) . "',message='" . mysql_real_escape_string($email_message) . "' WHERE id='" . $email_id . "'";
+        mysql_query($query);
     }
     $email_merge_fields = array(  );
     $email_merge_fields["OrderID"] = "service_order_id";
@@ -1203,8 +1204,8 @@ function v370Upgrade()
             $email_subject = str_replace("[" . $old_email_merge_fields . "]", "{\$" . $new_email_merge_fields . "}", $email_subject);
             $email_message = str_replace("[" . $old_email_merge_fields . "]", "{\$" . $new_email_merge_fields . "}", $email_message);
         }
-        $query = "UPDATE tblemailtemplates SET subject='" . mysql_real_escape_string($email_subject) . "',message='" . mysql_real_escape_string($email_message) . "" . "' WHERE id='" . $email_id . "'";
-        $result2 = mysql_query($query);
+        $query = "UPDATE tblemailtemplates SET subject='" . mysql_real_escape_string($email_subject) . "',message='" . mysql_real_escape_string($email_message) . "' WHERE id='" . $email_id . "'";
+        mysql_query($query);
     }
     $email_merge_fields = array(  );
     $email_merge_fields["TotalVisitors"] = "affiliate_total_visits";
@@ -1229,8 +1230,8 @@ function v370Upgrade()
             $email_subject = str_replace("[" . $old_email_merge_fields . "]", "{\$" . $new_email_merge_fields . "}", $email_subject);
             $email_message = str_replace("[" . $old_email_merge_fields . "]", "{\$" . $new_email_merge_fields . "}", $email_message);
         }
-        $query = "UPDATE tblemailtemplates SET subject='" . mysql_real_escape_string($email_subject) . "',message='" . mysql_real_escape_string($email_message) . "" . "' WHERE id='" . $email_id . "'";
-        $result2 = mysql_query($query);
+        $query = "UPDATE tblemailtemplates SET subject='" . mysql_real_escape_string($email_subject) . "',message='" . mysql_real_escape_string($email_message) . "' WHERE id='" . $email_id . "'";
+        mysql_query($query);
     }
     $query = "SELECT * FROM tblemailtemplates WHERE type='general'";
     $result = mysql_query($query);
@@ -1244,8 +1245,8 @@ function v370Upgrade()
             $email_subject = str_replace("[" . $old_email_merge_fields . "]", "{\$" . $new_email_merge_fields . "}", $email_subject);
             $email_message = str_replace("[" . $old_email_merge_fields . "]", "{\$" . $new_email_merge_fields . "}", $email_message);
         }
-        $query = "UPDATE tblemailtemplates SET subject='" . mysql_real_escape_string($email_subject) . "',message='" . mysql_real_escape_string($email_message) . "" . "' WHERE id='" . $email_id . "'";
-        $result2 = mysql_query($query);
+        $query = "UPDATE tblemailtemplates SET subject='" . mysql_real_escape_string($email_subject) . "',message='" . mysql_real_escape_string($email_message) . "' WHERE id='" . $email_id . "'";
+        mysql_query($query);
     }
 }
 
@@ -1262,7 +1263,7 @@ function v372Upgrade()
 function v380Upgrade()
 {
     $query = "ALTER TABLE `tblcustomfields` DROP `num` ;";
-    $result = mysql_query($query);
+    mysql_query($query);
     mysql_query("INSERT INTO `tblconfiguration` (`setting`, `value`) VALUES ('EmailCSS', 'body,td { font-family: verdana; font-size: 11px; font-weight: normal; }\na { color: #0000ff; }')");
     mysql_import_file("upgrade380.sql");
     $query = "SELECT DISTINCT gid FROM tblproductconfigoptions";
@@ -1270,10 +1271,10 @@ function v380Upgrade()
     while( $data = mysql_fetch_array($result) ) 
     {
         $productconfigoptionspid = $data["gid"];
-        $query = "" . "INSERT INTO tblproductconfiggroups (id,name,description) VALUES ('" . $productconfigoptionspid . "','Default Options','For product ID " . $productconfigoptionspid . " - created by upgrade script')";
-        $result2 = mysql_query($query);
-        $query = "" . "INSERT INTO tblproductconfiglinks (gid,pid) VALUES ('" . $productconfigoptionspid . "','" . $productconfigoptionspid . "')";
-        $result2 = mysql_query($query);
+        $query = "INSERT INTO tblproductconfiggroups (id,name,description) VALUES ('" . $productconfigoptionspid . "','Default Options','For product ID " . $productconfigoptionspid . " - created by upgrade script')";
+        mysql_query($query);
+        $query = "INSERT INTO tblproductconfiglinks (gid,pid) VALUES ('" . $productconfigoptionspid . "','" . $productconfigoptionspid . "')";
+        mysql_query($query);
     }
 }
 
@@ -1335,7 +1336,7 @@ function v400Upgrade()
     {
         $id = $data["id"];
         $category = $data["category"];
-        $query = "" . "INSERT INTO tblknowledgebaselinks (categoryid,articleid) VALUES ('" . $category . "','" . $id . "')";
+        $query = "INSERT INTO tblknowledgebaselinks (categoryid,articleid) VALUES ('" . $category . "','" . $id . "')";
         mysql_query($query);
     }
     mysql_query("ALTER TABLE `tblknowledgebase` DROP `category`");
@@ -1397,7 +1398,7 @@ function v400Upgrade()
 
         }
 
-        $query = "" . "INSERT INTO tblpricing (type,currency,relid,msetupfee,qsetupfee,ssetupfee,asetupfee,bsetupfee,monthly,quarterly,semiannually,annually,biennially) VALUES ('product','1','" . $id . "','" . $msetupfee . "','" . $qsetupfee . "','" . $ssetupfee . "','" . $asetupfee . "','" . $bsetupfee . "','" . $monthly . "','" . $quarterly . "','" . $semiannual . "','" . $annual . "','" . $biennial . "')";
+        $query = "INSERT INTO tblpricing (type,currency,relid,msetupfee,qsetupfee,ssetupfee,asetupfee,bsetupfee,monthly,quarterly,semiannually,annually,biennially) VALUES ('product','1','" . $id . "','" . $msetupfee . "','" . $qsetupfee . "','" . $ssetupfee . "','" . $asetupfee . "','" . $bsetupfee . "','" . $monthly . "','" . $quarterly . "','" . $semiannual . "','" . $annual . "','" . $biennial . "')";
         mysql_query($query);
     }
     $query = "SELECT * FROM tblproductconfigoptionssub ORDER BY id ASC";
@@ -1411,7 +1412,7 @@ function v400Upgrade()
         $semiannual = $data["semiannual"];
         $annual = $data["annual"];
         $biennial = $data["biennial"];
-        $query = "" . "INSERT INTO tblpricing (type,currency,relid,msetupfee,qsetupfee,ssetupfee,asetupfee,bsetupfee,monthly,quarterly,semiannually,annually,biennially) VALUES ('configoptions','1','" . $id . "','" . $setup . "','" . $setup . "','" . $setup . "','" . $setup . "','" . $setup . "','" . $monthly . "','" . $quarterly . "','" . $semiannual . "','" . $annual . "','" . $biennial . "')";
+        $query = "INSERT INTO tblpricing (type,currency,relid,msetupfee,qsetupfee,ssetupfee,asetupfee,bsetupfee,monthly,quarterly,semiannually,annually,biennially) VALUES ('configoptions','1','" . $id . "','" . $setup . "','" . $setup . "','" . $setup . "','" . $setup . "','" . $setup . "','" . $monthly . "','" . $quarterly . "','" . $semiannual . "','" . $annual . "','" . $biennial . "')";
         mysql_query($query);
     }
     $query = "SELECT * FROM tbladdons ORDER BY id ASC";
@@ -1421,7 +1422,7 @@ function v400Upgrade()
         $id = $data["id"];
         $setupfee = $data["setupfee"];
         $recurring = $data["recurring"];
-        $query = "" . "INSERT INTO tblpricing (type,currency,relid,msetupfee,qsetupfee,ssetupfee,asetupfee,bsetupfee,monthly,quarterly,semiannually,annually,biennially) VALUES ('addon','1','" . $id . "','" . $setupfee . "','0','0','0','0','" . $recurring . "','0','0','0','0')";
+        $query = "INSERT INTO tblpricing (type,currency,relid,msetupfee,qsetupfee,ssetupfee,asetupfee,bsetupfee,monthly,quarterly,semiannually,annually,biennially) VALUES ('addon','1','" . $id . "','" . $setupfee . "','0','0','0','0','" . $recurring . "','0','0','0','0')";
         mysql_query($query);
     }
     $domainpricing = array(  );
@@ -1450,11 +1451,11 @@ function v400Upgrade()
     while( $data = mysql_fetch_assoc($result) ) 
     {
         $extension = $data["extension"];
-        $query = "" . "SELECT id FROM tbldomainpricing WHERE extension='" . $extension . "' ORDER BY registrationperiod ASC";
+        $query = "SELECT id FROM tbldomainpricing WHERE extension='" . $extension . "' ORDER BY registrationperiod ASC";
         $result2 = mysql_query($query);
         $data = mysql_fetch_assoc($result2);
         $id = $data["id"];
-        $query = "" . "DELETE FROM tbldomainpricing WHERE extension='" . $extension . "' AND id!='" . $id . "'";
+        $query = "DELETE FROM tbldomainpricing WHERE extension='" . $extension . "' AND id!='" . $id . "'";
         mysql_query($query);
     }
     $query = "SELECT * FROM tbldomainpricing ORDER BY id ASC";
@@ -1464,13 +1465,13 @@ function v400Upgrade()
         $id = $data["id"];
         $extension = $data["extension"];
         $inserttype = "register";
-        $query = "INSERT INTO tblpricing (type,currency,relid,msetupfee,qsetupfee,ssetupfee,asetupfee,bsetupfee,monthly,quarterly,semiannually,annually,biennially) VALUES ('domain" . $inserttype . "" . "','1','" . $id . "','" . $domainpricing[$extension][1][$inserttype] . "','" . $domainpricing[$extension][2][$inserttype] . "','" . $domainpricing[$extension][3][$inserttype] . "','" . $domainpricing[$extension][4][$inserttype] . "','" . $domainpricing[$extension][5][$inserttype] . "','" . $domainpricing[$extension][6][$inserttype] . "','" . $domainpricing[$extension][7][$inserttype] . "','" . $domainpricing[$extension][8][$inserttype] . "','" . $domainpricing[$extension][9][$inserttype] . "','" . $domainpricing[$extension][10][$inserttype] . "')";
+        $query = "INSERT INTO tblpricing (type,currency,relid,msetupfee,qsetupfee,ssetupfee,asetupfee,bsetupfee,monthly,quarterly,semiannually,annually,biennially) VALUES ('domain" . $inserttype . "','1','" . $id . "','" . $domainpricing[$extension][1][$inserttype] . "','" . $domainpricing[$extension][2][$inserttype] . "','" . $domainpricing[$extension][3][$inserttype] . "','" . $domainpricing[$extension][4][$inserttype] . "','" . $domainpricing[$extension][5][$inserttype] . "','" . $domainpricing[$extension][6][$inserttype] . "','" . $domainpricing[$extension][7][$inserttype] . "','" . $domainpricing[$extension][8][$inserttype] . "','" . $domainpricing[$extension][9][$inserttype] . "','" . $domainpricing[$extension][10][$inserttype] . "')";
         mysql_query($query);
         $inserttype = "transfer";
-        $query = "INSERT INTO tblpricing (type,currency,relid,msetupfee,qsetupfee,ssetupfee,asetupfee,bsetupfee,monthly,quarterly,semiannually,annually,biennially) VALUES ('domain" . $inserttype . "" . "','1','" . $id . "','" . $domainpricing[$extension][1][$inserttype] . "','" . $domainpricing[$extension][2][$inserttype] . "','" . $domainpricing[$extension][3][$inserttype] . "','" . $domainpricing[$extension][4][$inserttype] . "','" . $domainpricing[$extension][5][$inserttype] . "','" . $domainpricing[$extension][6][$inserttype] . "','" . $domainpricing[$extension][7][$inserttype] . "','" . $domainpricing[$extension][8][$inserttype] . "','" . $domainpricing[$extension][9][$inserttype] . "','" . $domainpricing[$extension][10][$inserttype] . "')";
+        $query = "INSERT INTO tblpricing (type,currency,relid,msetupfee,qsetupfee,ssetupfee,asetupfee,bsetupfee,monthly,quarterly,semiannually,annually,biennially) VALUES ('domain" . $inserttype . "','1','" . $id . "','" . $domainpricing[$extension][1][$inserttype] . "','" . $domainpricing[$extension][2][$inserttype] . "','" . $domainpricing[$extension][3][$inserttype] . "','" . $domainpricing[$extension][4][$inserttype] . "','" . $domainpricing[$extension][5][$inserttype] . "','" . $domainpricing[$extension][6][$inserttype] . "','" . $domainpricing[$extension][7][$inserttype] . "','" . $domainpricing[$extension][8][$inserttype] . "','" . $domainpricing[$extension][9][$inserttype] . "','" . $domainpricing[$extension][10][$inserttype] . "')";
         mysql_query($query);
         $inserttype = "renew";
-        $query = "INSERT INTO tblpricing (type,currency,relid,msetupfee,qsetupfee,ssetupfee,asetupfee,bsetupfee,monthly,quarterly,semiannually,annually,biennially) VALUES ('domain" . $inserttype . "" . "','1','" . $id . "','" . $domainpricing[$extension][1][$inserttype] . "','" . $domainpricing[$extension][2][$inserttype] . "','" . $domainpricing[$extension][3][$inserttype] . "','" . $domainpricing[$extension][4][$inserttype] . "','" . $domainpricing[$extension][5][$inserttype] . "','" . $domainpricing[$extension][6][$inserttype] . "','" . $domainpricing[$extension][7][$inserttype] . "','" . $domainpricing[$extension][8][$inserttype] . "','" . $domainpricing[$extension][9][$inserttype] . "','" . $domainpricing[$extension][10][$inserttype] . "')";
+        $query = "INSERT INTO tblpricing (type,currency,relid,msetupfee,qsetupfee,ssetupfee,asetupfee,bsetupfee,monthly,quarterly,semiannually,annually,biennially) VALUES ('domain" . $inserttype . "','1','" . $id . "','" . $domainpricing[$extension][1][$inserttype] . "','" . $domainpricing[$extension][2][$inserttype] . "','" . $domainpricing[$extension][3][$inserttype] . "','" . $domainpricing[$extension][4][$inserttype] . "','" . $domainpricing[$extension][5][$inserttype] . "','" . $domainpricing[$extension][6][$inserttype] . "','" . $domainpricing[$extension][7][$inserttype] . "','" . $domainpricing[$extension][8][$inserttype] . "','" . $domainpricing[$extension][9][$inserttype] . "','" . $domainpricing[$extension][10][$inserttype] . "')";
         mysql_query($query);
     }
     mysql_query("ALTER TABLE `tblproducts` DROP `msetupfee`,DROP `qsetupfee`,DROP `ssetupfee`,DROP `asetupfee`,DROP `bsetupfee`,DROP `monthly`,DROP `quarterly`,DROP `semiannual`,DROP `annual`,DROP `biennial`");
@@ -1495,7 +1496,7 @@ function v410Upgrade()
 {
     mysql_import_file("upgrade410.sql");
     include("../configuration.php");
-    $query = "" . "SELECT id,AES_DECRYPT(cardnum,'54X6zoYZZnS35o6m5gEwGmYC6" . $cc_encryption_hash . "') as cardnum,AES_DECRYPT(expdate,'54X6zoYZZnS35o6m5gEwGmYC6" . $cc_encryption_hash . "') as expdate,AES_DECRYPT(issuenumber,'54X6zoYZZnS35o6m5gEwGmYC6" . $cc_encryption_hash . "') as issuenumber,AES_DECRYPT(startdate,'54X6zoYZZnS35o6m5gEwGmYC6" . $cc_encryption_hash . "') as startdate FROM tblclients WHERE cardnum!=''";
+    $query = "SELECT id,AES_DECRYPT(cardnum,'54X6zoYZZnS35o6m5gEwGmYC6" . $cc_encryption_hash . "') as cardnum,AES_DECRYPT(expdate,'54X6zoYZZnS35o6m5gEwGmYC6" . $cc_encryption_hash . "') as expdate,AES_DECRYPT(issuenumber,'54X6zoYZZnS35o6m5gEwGmYC6" . $cc_encryption_hash . "') as issuenumber,AES_DECRYPT(startdate,'54X6zoYZZnS35o6m5gEwGmYC6" . $cc_encryption_hash . "') as startdate FROM tblclients WHERE cardnum!=''";
     $result = mysql_query($query);
     while( $row = mysql_fetch_array($result) ) 
     {
@@ -1506,8 +1507,8 @@ function v410Upgrade()
         $cardstart = $row["startdate"];
         $cardlastfour = substr($cardnum, 0 - 4);
         $cchash = md5($cc_encryption_hash . $userid);
-        $query2 = "" . "UPDATE tblclients SET cardlastfour='" . $cardlastfour . "',cardnum=AES_ENCRYPT('" . $cardnum . "','" . $cchash . "'),expdate=AES_ENCRYPT('" . $cardexp . "','" . $cchash . "'),startdate=AES_ENCRYPT('" . $cardstart . "','" . $cchash . "'),issuenumber=AES_ENCRYPT('" . $cardissuenum . "','" . $cchash . "') WHERE id='" . $userid . "'";
-        $result2 = mysql_query($query2);
+        $query2 = "UPDATE tblclients SET cardlastfour='" . $cardlastfour . "',cardnum=AES_ENCRYPT('" . $cardnum . "','" . $cchash . "'),expdate=AES_ENCRYPT('" . $cardexp . "','" . $cchash . "'),startdate=AES_ENCRYPT('" . $cardstart . "','" . $cchash . "'),issuenumber=AES_ENCRYPT('" . $cardissuenum . "','" . $cchash . "') WHERE id='" . $userid . "'";
+        mysql_query($query2);
     }
 }
 
@@ -1621,15 +1622,15 @@ function v510Upgrade()
     $futurepayfid = $data[0];
     if( $futurepayfid ) 
     {
-        $result = mysql_query("" . "SELECT relid,value FROM tblcustomfieldsvalues WHERE fieldid=" . $futurepayfid);
+        $result = mysql_query("SELECT relid,value FROM tblcustomfieldsvalues WHERE fieldid=" . $futurepayfid);
         while( $data = mysql_fetch_array($result) ) 
         {
             $userid = $data[0];
             $fpid = $data[1];
-            mysql_query("" . "UPDATE tblclients SET gatewayid='" . $fpid . "' WHERE id=" . $userid . " AND gatewayid=''");
-            mysql_query("" . "DELETE FROM tblcustomfieldsvalues WHERE fieldid=" . $futurepayfid . " AND relid=" . $userid);
+            mysql_query("UPDATE tblclients SET gatewayid='" . $fpid . "' WHERE id=" . $userid . " AND gatewayid=''");
+            mysql_query("DELETE FROM tblcustomfieldsvalues WHERE fieldid=" . $futurepayfid . " AND relid=" . $userid);
         }
-        mysql_query("" . "DELETE FROM tblcustomfields WHERE id=" . $futurepayfid);
+        mysql_query("DELETE FROM tblcustomfields WHERE id=" . $futurepayfid);
     }
 
     mysql_query("ALTER TABLE  `tblcalendar` ADD  `start` INT( 10 ) NOT NULL AFTER  `desc` , ADD  `end` INT( 10 ) NOT NULL AFTER  `start`, ADD  `allday` INT( 1 ) NOT NULL AFTER  `end`, ADD  `recurid` INT( 10 ) NOT NULL AFTER  `adminid`");
@@ -1646,7 +1647,7 @@ function v510Upgrade()
         $endt2 = $data["endt2"];
         $start = mktime($startt1, $startt2, 0, $month, $day, $year);
         $end = $endt1 && $endt2 ? mktime($endt1, $endt2, 0, $month, $day, $year) : "0";
-        mysql_query("" . "UPDATE tblcalendar SET start='" . $start . "',end='" . $end . "' WHERE id=" . $id);
+        mysql_query("UPDATE tblcalendar SET start='" . $start . "',end='" . $end . "' WHERE id=" . $id);
     }
     mysql_query("ALTER TABLE `tblcalendar` DROP `day`,DROP `month`,DROP `year`,DROP `startt1`,DROP `startt2`,DROP `endt1`,DROP `endt2`");
 }
@@ -1668,7 +1669,7 @@ function v511Upgrade()
         $endt2 = $data["endt2"];
         $start = mktime($startt1, $startt2, 0, $month, $day, $year);
         $end = $endt1 && $endt2 ? mktime($endt1, $endt2, 0, $month, $day, $year) : "0";
-        mysql_query("" . "UPDATE tblcalendar SET start='" . $start . "',end='" . $end . "' WHERE id=" . $id);
+        mysql_query("UPDATE tblcalendar SET start='" . $start . "',end='" . $end . "' WHERE id=" . $id);
     }
     mysql_query("ALTER TABLE `tblcalendar` DROP `day`,DROP `month`,DROP `year`,DROP `startt1`,DROP `startt2`,DROP `endt1`,DROP `endt2`");
     mysql_query("ALTER TABLE  `tblpromotions` ADD `lifetimepromo` INT(1) NOT NULL AFTER `uses`");
@@ -1698,7 +1699,7 @@ function v520Upgrade()
         $newips[] = array( "ip" => trim($ip), "note" => "" );
     }
     $query = "UPDATE tblconfiguration SET value='" . mysql_real_escape_string(serialize($newips)) . "' WHERE setting='APIAllowedIPs'";
-    $result = mysql_query($query);
+    mysql_query($query);
     $query = "SELECT value FROM tblconfiguration WHERE setting='SystemURL'";
     $result = mysql_query($query);
     $data = mysql_fetch_array($result);
@@ -1711,7 +1712,7 @@ function v520Upgrade()
         $sysurl = str_replace("?step=5", "", $sysurl);
         $sysurl = str_replace("install/install.php", "", $sysurl);
         $query = "UPDATE tblconfiguration SET value='" . mysql_real_escape_string($sysurl) . "' WHERE setting='SystemURL'";
-        $result = mysql_query($query);
+        mysql_query($query);
     }
 
     $query = "SELECT id,password FROM tblticketdepartments";
@@ -1720,21 +1721,21 @@ function v520Upgrade()
     {
         $id = $row["id"];
         $value = encrypt($row["password"]);
-        $query2 = "" . "UPDATE tblticketdepartments SET password='" . $value . "' WHERE id='" . $id . "'";
-        $result2 = mysql_query($query2);
+        $query2 = "UPDATE tblticketdepartments SET password='" . $value . "' WHERE id='" . $id . "'";
+        mysql_query($query2);
     }
     $query = "SELECT value FROM tblconfiguration WHERE setting='FTPBackupPassword'";
     $result = mysql_query($query);
     $data = mysql_fetch_array($result);
     $ftppass = encrypt($data["value"]);
-    $query = "" . "UPDATE tblconfiguration SET value='" . $ftppass . "' WHERE setting='FTPBackupPassword'";
-    $result = mysql_query($query);
+    $query = "UPDATE tblconfiguration SET value='" . $ftppass . "' WHERE setting='FTPBackupPassword'";
+    mysql_query($query);
     $query = "SELECT value FROM tblconfiguration WHERE setting='SMTPPassword'";
     $result = mysql_query($query);
     $data = mysql_fetch_array($result);
     $smtppass = encrypt($data["value"]);
-    $query = "" . "UPDATE tblconfiguration SET value='" . $smtppass . "' WHERE setting='SMTPPassword'";
-    $result = mysql_query($query);
+    $query = "UPDATE tblconfiguration SET value='" . $smtppass . "' WHERE setting='SMTPPassword'";
+    mysql_query($query);
 }
 
 function v521Upgrade()
@@ -1760,59 +1761,59 @@ function v524Upgrade()
 function v525Upgrade()
 {
     $query = "UPDATE tblconfiguration SET value='5.2.5' WHERE setting='Version'";
-    $result = mysql_query($query);
+    mysql_query($query);
 }
 
 function v526Upgrade()
 {
     $query = "UPDATE tblconfiguration SET value='5.2.6' WHERE setting='Version'";
-    $result = mysql_query($query);
+    mysql_query($query);
 }
 
 function v527Upgrade()
 {
     $query = "UPDATE tblconfiguration SET value='5.2.7' WHERE setting='Version'";
-    $result = mysql_query($query);
+    mysql_query($query);
 }
 
 function v528Upgrade() {
     $query = "UPDATE tblconfiguration SET value='5.2.8' WHERE setting='Version'";
-    $result = mysql_query($query);
+    mysql_query($query);
 }
 
 function v529Upgrade() {
     $query = "UPDATE tblconfiguration SET value='5.2.9' WHERE setting='Version'";
-    $result = mysql_query($query);
+    mysql_query($query);
 }
 
 function v5210Upgrade() {
     $query = "UPDATE tblconfiguration SET value='5.2.10' WHERE setting='Version'";
-    $result = mysql_query($query);
+    mysql_query($query);
 }
 
 function v5211Upgrade() {
     $query = "UPDATE tblconfiguration SET value='5.2.11' WHERE setting='Version'";
-    $result = mysql_query($query);
+    mysql_query($query);
 }
 
 function v5212Upgrade() {
     $query = "UPDATE tblconfiguration SET value='5.2.12' WHERE setting='Version'";
-    $result = mysql_query($query);
+    mysql_query($query);
 }
 
 function v5213Upgrade() {
     $query = "UPDATE tblconfiguration SET value='5.2.13' WHERE setting='Version'";
-    $result = mysql_query($query);
+    mysql_query($query);
 }
 
 function v5214Upgrade() {
     $query = "UPDATE tblconfiguration SET value='5.2.14' WHERE setting='Version'";
-    $result = mysql_query($query);
+    mysql_query($query);
 }
 
 function v5215Upgrade() {
     $query = "UPDATE tblconfiguration SET value='5.2.15' WHERE setting='Version'";
-    $result = mysql_query($query);
+    mysql_query($query);
 }
 
 function v530PreReleaseDowngradeSqlFor52($maj_min_version, $revision_version)

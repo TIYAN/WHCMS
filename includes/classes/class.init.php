@@ -81,12 +81,12 @@ class WHMCS_Init {
 		$this->register_globals();
 
 		if (!$this->load_config_file()) {
-			exit( "<head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" /><title>WHMCS 5.2.15 时光人破解版安装</title><meta name=\"description\" content=\"WHMCS 5.2.15 完全解码破解 \" /><meta name=\"keywords\" content=\"whmcs,破解,解码,解密,时光人,系统,免费,安装,下载,5.2.15,中文版\" /><meta name=\"generator\" content=\"Mtimer CMS (http://www.mtimer.cn)\" /></head><div style=\"border: 1px dashed #cc0000;font-family:Tahoma;background-color:#FBEEEB;width:100%;padding:10px;color:#cc0000;\"><strong>欢迎来到 WHMCS 5.2.15 时光人破解版!</strong> <a href=\"http://www.mtimer.cn/?donate\" target=\"_blank\">捐助</a> 并通过邮件获得今后更新。<br>安装后才能使用。 <a href=\"" . (file_exists( "install/install.php" ) ? "" : "../") . "install/install.php\" style=\"color:#000;\">点此开始安装 ...</a></div>" );
+			exit( "<div style=\"border: 1px dashed #cc0000;font-family:Tahoma;background-color:#FBEEEB;width:100%;padding:10px;color:#cc0000;\"><strong>Welcome to WHMCS 5.2.15 FULL DECODED && NULLED BY MTIMER!</strong><a></a><br>Before you can begin using WHMCS you need to perform the installation procedure. <a href=\"" . (file_exists( "install/install.php" ) ? "" : "../") . "install/install.php\" style=\"color:#000;\">Click here to begin ...</a><form action=\"https://www.paypal.com/cgi-bin/webscr\" method=\"post\" target=\"_blank\" style=\"margin-top:10px;margin-bottom:5px;\"><input type=\"hidden\" name=\"cmd\" value=\"_s-xclick\"><input type=\"hidden\" name=\"hosted_button_id\" value=\"N3T56B5LHAGBS\"><input type=\"image\" src=\"https://www.paypal.com/en_US/i/btn/btn_donate_LG.gif\" border=\"0\" name=\"submit\" alt=\"Donate to get updates lifetime!\" style=\"margin-bottom:-5px;\"><p style=\"display:inline;margin-left:10px;\"> to get v5.2.16 & updates lifetime via email. Be fair and support this project. It doesn't cost much :) ~</p></form></div>" );
 		}
 
 
 		if (!$this->database_connect()) {
-			exit("<div style=\"border: 1px dashed #cc0000;font-family:Tahoma;background-color:#FBEEEB;width:100%;padding:10px;color:#cc0000;\"><strong>发生错误</strong><br>无法连接数据库</div>");
+			exit("<div style=\"border: 1px dashed #cc0000;font-family:Tahoma;background-color:#FBEEEB;width:100%;padding:10px;color:#cc0000;\"><strong>Critical Error</strong><br>Could not connect to the database</div>");
 		}
 
 		$this->sanitize_db_vars();
