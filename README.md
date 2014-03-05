@@ -47,7 +47,7 @@ http://1.whmcs5.sinaapp.com/whmcs_5.2.16_decoded_nulled_mtimer/?language=English
 
 	git clone https://gitshell.com/Mtimer_CMS/whmcs52_latest_decoded_nulled_mtimer.git
 
-OR check http://bestblackhatforum.com/Thread-GET-WHMCS-5-2-16-FULL-DECODED-NULLED-BY-MTIMER
+OR download package http://yadi.sk/d/1K2C-yn5GXD6L
 
 
 ## 4、Advantages
@@ -111,6 +111,7 @@ http://1.whmcs5.sinaapp.com/whmcs_5.2.16_decoded_nulled_mtimer/
 
 	git clone https://gitshell.com/Mtimer_CMS/whmcs52_latest_decoded_nulled_mtimer.git
 
+或者下载打包文件 http://yadi.sk/d/1K2C-yn5GXD6L
 
 
 ## 四、此开心版优势
