@@ -1162,7 +1162,7 @@ CREATE TABLE IF NOT EXISTS `tblwhoislog` (
 
 -- --------------------------------------------------------
 
-INSERT INTO `tblconfiguration` VALUES ('Language', 'Chinese');
+INSERT INTO `tblconfiguration` VALUES ('Language', 'English');
 INSERT INTO `tblconfiguration` VALUES ('CompanyName', 'Company Name');
 INSERT INTO `tblconfiguration` VALUES ('Email', 'changeme@changeme.com');
 INSERT INTO `tblconfiguration` VALUES ('Domain', 'http://www.yourdomain.com/');
@@ -1223,7 +1223,7 @@ INSERT INTO `tblconfiguration` VALUES ('RegistrarAdminAddress1', '');
 INSERT INTO `tblconfiguration` VALUES ('RegistrarAdminAddress2', '');
 INSERT INTO `tblconfiguration` VALUES ('RegistrarAdminCity', '');
 INSERT INTO `tblconfiguration` VALUES ('RegistrarAdminStateProvince', '');
-INSERT INTO `tblconfiguration` VALUES ('RegistrarAdminCountry', 'CN');
+INSERT INTO `tblconfiguration` VALUES ('RegistrarAdminCountry', 'US');
 INSERT INTO `tblconfiguration` VALUES ('RegistrarAdminPostalCode', '');
 INSERT INTO `tblconfiguration` VALUES ('RegistrarAdminPhone', '');
 INSERT INTO `tblconfiguration` VALUES ('RegistrarAdminFax', '');
@@ -1237,7 +1237,7 @@ INSERT INTO `tblconfiguration` VALUES ('OrderFormTemplate', 'modern');
 INSERT INTO `tblconfiguration` VALUES ('AllowDomainsTwice', 'on');
 INSERT INTO `tblconfiguration` VALUES ('AddLateFeeDays', '5');
 INSERT INTO `tblconfiguration` VALUES ('TaxEnabled', '');
-INSERT INTO `tblconfiguration` VALUES ('DefaultCountry', 'CN');
+INSERT INTO `tblconfiguration` VALUES ('DefaultCountry', 'US');
 INSERT INTO `tblconfiguration` VALUES ('AllowTicketsRegisteredClientsOnly', '');
 INSERT INTO `tblconfiguration` VALUES ('AutoRedirectoInvoice', 'gateway');
 INSERT INTO `tblconfiguration` VALUES ('EnablePDFInvoices', 'on');

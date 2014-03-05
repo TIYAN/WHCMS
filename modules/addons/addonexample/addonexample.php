@@ -22,7 +22,7 @@ function addonexample_config() {
     "description" => "This is an open source addon module sample that can be used as a starting point for custom modules - has no function by default",
     "version" => "1.0",
     "author" => "WHMCS",
-    "language" => "chinese",
+    "language" => "english",
     "fields" => array(
         "option1" => array ("FriendlyName" => "Option1", "Type" => "text", "Size" => "25", "Description" => "Textbox", "Default" => "Example", ),
         "option2" => array ("FriendlyName" => "Option2", "Type" => "password", "Size" => "25", "Description" => "Password", ),

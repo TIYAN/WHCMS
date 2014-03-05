@@ -29,7 +29,7 @@ class WHMCS_Admin {
     public $inClientsProfile = false;
     public $adminTemplate = "blend";
     public $exitmsg = "";
-    public $language = "chinese";
+    public $language = "english";
     public $extrajscode = array();
     public $headOutput = array();
     public $chartFunctions = array();

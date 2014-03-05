@@ -11,10 +11,68 @@ WHMCS 5.2系列 完全解码破解版 —— 真正的开心版
 
 ## WHMCS v5.2.16 is available for donors only.[Donate](http://1.whmcs5.sinaapp.com/whmcs_5.2.16_decoded_nulled_mtimer/?language=English)
 
-Donate <b>$20</b> to mtimercms@hotmail.com, you will receive v5.2.16 & updates *lifetime* via email. 
+Donate <b>$20</b> to mtimercms@hotmail.com, you will receive v5.2.16 & v5.2.X updates *lifetime* via email. 
 
 
 WHMCS Full Decoded & Nulled By Mtimer
+---------------
+
+Donate & get v5.2.16 ：http://www.mtimer.cn/release/25-whmcs-nulled.html
+
+## 1、Updates:
+
+2014-03-03 fix all modules errors for v5.2.16，not this free version
+
+2014-01-22 update to 5.2.16
+
+2013-12-24 update to 5.2.15
+
+2013-11-28 update to 5.2.14
+
+2013-11-25 update to 5.2.13
+
+2013-10-25 update to 5.2.12
+
+2013-10-21 update to 5.2.10
+
+
+
+## 2、DEMO
+
+http://1.whmcs5.sinaapp.com/whmcs_5.2.16_decoded_nulled_mtimer/?language=English
+
+
+
+## 3、How to download
+
+	git clone https://gitshell.com/Mtimer_CMS/whmcs52_latest_decoded_nulled_mtimer.git
+
+OR check http://bestblackhatforum.com/Thread-GET-WHMCS-5-2-16-FULL-DECODED-NULLED-BY-MTIMER
+
+
+## 4、Advantages
+
+<ul>
+<li><strong>Full Open Source:</strong> Change  <em>whatever</em> you want.</li>
+<li><strong>Remove callbacks:</strong> 100% clean.</li>
+<li><strong>Lifetime updates:</strong> Only for <em>donors</em>.</li>
+</ul>
+
+
+## About WHMCS Full Decoded Nulled English version [Download](http://1.whmcs5.sinaapp.com/whmcs_5.2.16_decoded_nulled_mtimer/?language=English)
+
+
+## Contact & Donate
+
+> Email: [mtimercms#hotmail.com](mtimercms#hotmail.com) (Recommend)  
+> Home page: [Mtimer CMS](http://www.mtimer.net/)  
+> Twitter：[@...](http://#)  
+> Donate <b>$20</b>: paypal: mtimercms#hotmail.com Webmoney: Z369907552397  R374005435218,you will receive v5.2.16 & v5.2.X updates *lifetime* via email.
+
+
+## BIG Thanks to All donors. You make this project awesome!
+
+
 ---------------
 
 捐助及最新版 v5.2.16 下载地址：http://www.mtimer.cn/release/25-whmcs-nulled.html 
@@ -66,11 +124,11 @@ http://1.whmcs5.sinaapp.com/whmcs_5.2.16_decoded_nulled_mtimer/
 </ul>
 
 
-## 五、新浪SAE特别版[2014.01.31更新]
+## 五、新浪SAE特别版
 
 教程：http://www.mtimer.cn/lessons/28-whmcs-sae.html
 
-SAE特别版下载：http://www.mtimer.cn/release/25-whmcs-sae.html
+初学者不建议用SAE。
 
 ## 六、联系方式及捐助
 
@@ -86,21 +144,3 @@ SAE特别版下载：http://www.mtimer.cn/release/25-whmcs-sae.html
 1. WHMCS 5.2.15 是最后一版免费版
 
 2. 捐助者将会通过邮件持续收到今后更新，大概在官方更新24小时内就能收到
-
-
-## About WHMCS Full Decoded Nulled English version [Download](http://1.whmcs5.sinaapp.com/whmcs_5.2.16_decoded_nulled_mtimer/?language=English)
-
-1. This is WHMCS v5.2.15 for free.
-
-2. Donate <b>$20</b> to mtimercms@hotmail.com, you will receive v5.2.16 & v5.2.X updates *lifetime* via email.[Last chance]
-
-
-## Contact & Donate
-
-> Email: [mtimercms#hotmail.com](mtimercms#hotmail.com) (Recommend)  
-> Home page: [Mtimer CMS](http://www.mtimer.net/)  
-> Twitter：[@...](http://#)  
-> Donate: paypal: mtimercms#hotmail.com Webmoney: Z369907552397  R374005435218
-
-
-## BIG Thanks to All donors. You make this project awesome!

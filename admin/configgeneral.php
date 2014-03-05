@@ -128,7 +128,7 @@ if ($action == "save") {
 		$affiliatepayout = number_format($affiliatepayout, 2, ".", "");
 
 		if (!$language) {
-			$language = "chinese";
+			$language = "english";
 		}
 
 
