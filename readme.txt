@@ -1,7 +1,7 @@
 Attention: WHMCS v5.3.5 Full Decoded Nulled Released.
-Donate $40 to get WHMCS v5.3.X & v5.3.X updates *lifetime* via email.
+Donate $80 to get WHMCS v5.3.X & v5.3.X updates *lifetime* via email.
 OR
-Donate $20 to get receive v5.2.16 & v5.2.X updates *lifetime* via email.
+Donate $40 to get receive v5.2.16 & v5.2.X updates *lifetime* via email.
 
 Donate paypal: mtimercms@hotmail.com 
 Donate Webmoney: Z369907552397  R374005435218

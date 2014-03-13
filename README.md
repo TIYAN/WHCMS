@@ -17,9 +17,9 @@ WHMCS 5.2系列 完全解码破解版 —— 真正的开心版
 
 ## Donate & Get Latest Version
 
-> Donate <b>$40</b> to get receive v5.3.5 & v5.3.X updates *lifetime* via email.  
+> Donate <b>$80</b> to get receive v5.3.5 & v5.3.X updates *lifetime* via email.  
 > OR  
-> Donate <b>$20</b> to get receive v5.2.16 & v5.2.X updates *lifetime* via email.  
+> Donate <b>$40</b> to get receive v5.2.16 & v5.2.X updates *lifetime* via email.  
 > Payment Methods:  
 > paypal: mtimercms#hotmail.com  
 > Webmoney: Z369907552397  R374005435218
