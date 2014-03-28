@@ -1,3 +1,6 @@
+Free version BY MTimer.
+This version has many errors. For preview purposes only.
+
 Attention: WHMCS v5.3.6 Full Decoded Nulled Released.
 Donate $80 to get WHMCS v5.3.X & v5.3.X updates *lifetime* via email.
 OR
