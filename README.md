@@ -1,6 +1,6 @@
 WHMCS 5.2系列 完全解码破解版 —— 真正的开心版
 
-这里是免费的 v5.2.15 (最后一版免费) , 当前最新开心版是 v5.2.16, 只提供捐助者。
+这里是免费的 v5.2.15 (最后一版免费) , 当前最新开心版是 v5.2.17, 只提供捐助者。
 ========================
 
 ![whmcs52_latest_decoded_nulled_mtimer](http://api.mtimer.net/whmcs/whmcs5216nulled.png)
@@ -9,17 +9,17 @@ WHMCS 5.2系列 完全解码破解版 —— 真正的开心版
 
 ---------------
 
-## WHMCS v5.3.5 Full Decoded Nulled Released. [(Check this out)](http://www.mtimer.cn/release/34-whmcs-full-decoded-nulled.html)
+## WHMCS v5.3.6 Full Decoded Nulled Released. [(Check this out)](http://www.mtimer.cn/release/34-whmcs-full-decoded-nulled.html)
 
-## WHMCS v5.2.16 is available for donors only.[(Also Check this)](http://www.mtimer.cn/release/25-whmcs-full-decoded-nulled.html)
+## WHMCS v5.2.17 is available for donors only.[(Also Check this)](http://www.mtimer.cn/release/25-whmcs-full-decoded-nulled.html)
 
 ---------------
 
 ## Donate & Get Latest Version
 
-> Donate <b>$80</b> to get receive v5.3.5 & v5.3.X updates *lifetime* via email.  
+> Donate <b>$80</b> to get receive v5.3.6 & v5.3.X updates *lifetime* via email.  
 > OR  
-> Donate <b>$40</b> to get receive v5.2.16 & v5.2.X updates *lifetime* via email.  
+> Donate <b>$40</b> to get receive v5.2.17 & v5.2.X updates *lifetime* via email.  
 > Payment Methods:  
 > paypal: mtimercms#hotmail.com  
 > Webmoney: Z369907552397  R374005435218
@@ -30,6 +30,8 @@ WHMCS Full Decoded & Nulled By Mtimer
 
 
 ## 1、Updates:
+
+2014-03-26 update to 5.2.17
 
 2014-03-03 fix all modules errors for v5.2.16，not this free version
 
@@ -49,21 +51,19 @@ WHMCS Full Decoded & Nulled By Mtimer
 
 ## 2、DEMO
 
-WHMCS v5.3.5:
+WHMCS v5.3.6:
 
-http://1.whmcs53nulled.sinaapp.com/whmcs_v5.3.5_full_decoded_nulled/?language=English
-
-
-WHMCS v5.2.16:
-
-http://1.whmcs5.sinaapp.com/whmcs_5.2.16_decoded_nulled_mtimer/?language=English
+http://1.whmcs53nulled.sinaapp.com/whmcs_v5.3.6_full_decoded_nulled/?language=English
 
 
-## 3、How to download
+WHMCS v5.2.17:
 
-	git clone https://gitshell.com/Mtimer_CMS/whmcs52_latest_decoded_nulled_mtimer.git
+http://1.whmcs5.sinaapp.com/whmcs_5.2.17_decoded_nulled_mtimer/?language=English
 
-OR download package http://yadi.sk/d/1K2C-yn5GXD6L
+
+## 3、Download Free Version
+
+	http://yadi.sk/d/1K2C-yn5GXD6L
 
 
 ## 4、Advantages
@@ -91,10 +91,12 @@ OR download package http://yadi.sk/d/1K2C-yn5GXD6L
 
 ---------------
 
-捐助及最新版 v5.2.16 下载地址：http://www.mtimer.cn/release/25-whmcs-nulled.html 
+捐助及最新版 v5.2.17 下载地址：http://www.mtimer.cn/release/25-whmcs-nulled.html 
 
 
 ## 一、更新记录
+
+2014-03-26 更新至5.2.17
 
 2014-03-03 修复 5.2.16 版本所有模块错误
 
@@ -110,27 +112,25 @@ OR download package http://yadi.sk/d/1K2C-yn5GXD6L
 
 2013-10-21 更新至5.2.10
 
-5.2.16 官方原版：http://pan.baidu.com/s/1ntwNU3n
+5.2.17 官方原版：http://yadi.sk/d/amM5p2Y3LH9ri
 
 
 
 ## 二、演示
 
-v5.3.5:
+v5.3.6:
 
-http://1.whmcs53nulled.sinaapp.com/whmcs_v5.3.5_full_decoded_nulled/
+http://1.whmcs53nulled.sinaapp.com/whmcs_v5.3.6_full_decoded_nulled/
 
-v5.2.16:
+v5.2.17:
 
-http://1.whmcs5.sinaapp.com/whmcs_5.2.16_decoded_nulled_mtimer/
+http://1.whmcs5.sinaapp.com/whmcs_5.2.17_decoded_nulled_mtimer/
 
 
 
-## 三、如何下载
+## 三、如何下载免费版
 
-	git clone https://gitshell.com/Mtimer_CMS/whmcs52_latest_decoded_nulled_mtimer.git
-
-或者下载打包文件 http://yadi.sk/d/1K2C-yn5GXD6L
+	下载打包文件 http://yadi.sk/d/1K2C-yn5GXD6L
 
 
 

@@ -1,32 +1,26 @@
-Attention: WHMCS v5.3.5 Full Decoded Nulled Released.
+Attention: WHMCS v5.3.6 Full Decoded Nulled Released.
 Donate $80 to get WHMCS v5.3.X & v5.3.X updates *lifetime* via email.
 OR
-Donate $40 to get receive v5.2.16 & v5.2.X updates *lifetime* via email.
+Donate $40 to get receive v5.2.17 & v5.2.X updates *lifetime* via email.
 
 Donate paypal: mtimercms@hotmail.com 
 Donate Webmoney: Z369907552397  R374005435218
 
 
 updates for v5.2.X:
-2014-03-03. fix all modules errors for v5.2.16, not this free version
+2014-03-27. v5.2.17 Released.
+2014-03-03. fix all modules errors for v5.2.16
 2014-01-22. update to v5.2.16
 2013-12-24. update to v5.2.15
 
 
-Bonus:
-If you don't want to connect to mtimer license server,
-download class.license.php & replace /includes/classes/class.license.php :
-http://1.mtimer.sinaapp.com/go/dropbox.php?file=class.license.php
-
-download index.php & replace /admin/index.php :
-http://1.mtimer.sinaapp.com/go/dropbox.php?file=index.php
-
-
 
 FAQ :
-1.Log out automatically sometimes.
+1. Log out automatically sometimes.
 WHMCS check your IP while checking sessions, 
 If you use dynamic IP, disable it in adminpanel.(I have done it for you)
+2. License no connection
+Enable CURL & Disable IPV6
 
 
 Decoded & Nulled By Mtimer
@@ -34,20 +28,21 @@ Decoded & Nulled By Mtimer
 ----------
 
 
-这是 WHMCS 5.2.15 完全解码破解版 —— 开心版
+这是 WHMCS 5.2.17 完全解码破解版 —— 开心版
 
 
-需要最新版 5.2.16 的：
+需要最新版 5.2.17 的：
 最新版 & 捐助 地址：
 http://www.mtimer.cn/release/25-whmcs.html
 
 
-需要最新版 5.3.5 的：
+需要最新版 5.3.6 的：
 最新版 & 捐助 地址：
 http://www.mtimer.cn/release/34-whmcs.html
 
 
-更新记录：
+v5.2.X 更新记录：
+2014-03-27 发布 v5.2.17
 2014-03-03 修复 5.2.16 版本所有模块
 2014-02-26 修复 backup function
 2014-02-25 修复 uniqueemail
@@ -71,18 +66,19 @@ http://www.mtimer.cn/release/34-whmcs.html
 
 
 常见问题:
-1.为什么有时候后台会自动退出重新登陆？
+1. 为什么有时候后台会自动退出重新登陆？
 因为你的IP是动态IP, WHMCS 默认检查Session时会一并检查IP
 你可以在后台关闭此功能：
 常规设置 — 安全 - 禁用会话的IP检查 勾选并保存
-
+2. License no connection
+开启 CURL，禁用IPV6
 
 
 
 仅供学习参考。
 
 时光人社区维护 www.mtimer.cn
-			—— 2014.03.03
+			—— 2014.03.26
 
 
 Decoded & Nulled By Mtimer
