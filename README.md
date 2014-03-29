@@ -126,7 +126,7 @@ http://1.whmcs5.sinaapp.com/whmcs_5.2.17_decoded_nulled_mtimer/
 
 
 
-## 三、如何下载免费开心版
+## 三、如何下载免费开心版 - 有bug,仅供预览
 
 下载打包文件 [http://yadi.sk/d/1K2C-yn5GXD6L](http://yadi.sk/d/1K2C-yn5GXD6L)
 
