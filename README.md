@@ -91,8 +91,6 @@ http://1.whmcs5.sinaapp.com/whmcs_5.2.17_decoded_nulled_mtimer/?language=English
 
 ---------------
 
-捐助及最新版 v5.2.17 下载地址：http://www.mtimer.cn/release/25-whmcs-nulled.html 
-
 
 ## 一、更新记录
 
@@ -128,13 +126,21 @@ http://1.whmcs5.sinaapp.com/whmcs_5.2.17_decoded_nulled_mtimer/
 
 
 
-## 三、如何下载免费版
+## 三、如何下载免费开心版
 
-	下载打包文件 http://yadi.sk/d/1K2C-yn5GXD6L
+下载打包文件 [http://yadi.sk/d/1K2C-yn5GXD6L](http://yadi.sk/d/1K2C-yn5GXD6L)
 
 
 
-## 四、此开心版优势
+## 四、如何获取最新付费开心版
+
+捐助并下载最新版 v5.3.6 [下载地址](http://www.mtimer.cn/release/34-whmcs-full-decoded-nulled-by-mtimer.html)
+
+捐助并下载最新版 v5.2.17 [下载地址](http://www.mtimer.cn/release/25-whmcs-full-decoded-nulled-by-mtimer.html)
+
+
+
+## 五、此开心版优势
 
 <ul>
 <li><strong>完全解码:</strong> 所有PHP均已 <em>解码</em> 你可以定制你的 私人WHMCS版。</li>
@@ -147,15 +153,15 @@ http://1.whmcs5.sinaapp.com/whmcs_5.2.17_decoded_nulled_mtimer/
 
 
 
-## 五、新浪SAE特别版
+## 六、新浪SAE特别版
 
-教程：http://www.mtimer.cn/lessons/28-whmcs-sae.html
+教程：http://www.mtimer.cn/lessons/28-install-whmcs-on-sae.html
 
 初学者不建议用SAE。
 
 
 
-## 六、联系方式及捐助
+## 七、联系方式及捐助
 
 > Email: [mtimercms#hotmail.com](mtimercms#hotmail.com) （推荐）  
 > 社区: [时光人社区](http://www.mtimer.cn/)  
@@ -165,8 +171,8 @@ http://1.whmcs5.sinaapp.com/whmcs_5.2.17_decoded_nulled_mtimer/
 
 
 
-## 七、关于更新
+## 八、关于更新
 
-1. WHMCS 5.2.15 是最后一版免费版
+1. 免费版无更新
 
 2. 捐助者将会通过邮件持续收到今后更新，大概在官方更新24小时内就能收到
