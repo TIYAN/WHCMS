@@ -63,7 +63,7 @@ http://1.whmcs5.sinaapp.com/whmcs_5.2.17_decoded_nulled_mtimer/?language=English
 
 ## 3、Download Free Version
 
-	http://yadi.sk/d/1K2C-yn5GXD6L
+[http://yadi.sk/d/1K2C-yn5GXD6L](http://yadi.sk/d/1K2C-yn5GXD6L)
 
 
 ## 4、Advantages
@@ -76,7 +76,7 @@ http://1.whmcs5.sinaapp.com/whmcs_5.2.17_decoded_nulled_mtimer/?language=English
 </ul>
 
 
-## Updates will be sent to donors via email, always check your emmail.
+## Updates will be sent to donors via email, always check your email.
 
 
 ## Contact
@@ -134,9 +134,9 @@ http://1.whmcs5.sinaapp.com/whmcs_5.2.17_decoded_nulled_mtimer/
 
 ## 四、如何获取最新付费开心版
 
-捐助并下载最新版 v5.3.6 [下载地址](http://www.mtimer.cn/release/34-whmcs-full-decoded-nulled-by-mtimer.html)
+v5.3.X 系列 => 捐助并下载最新版 v5.3.6 [下载地址](http://www.mtimer.cn/release/34-whmcs-full-decoded-nulled-by-mtimer.html)
 
-捐助并下载最新版 v5.2.17 [下载地址](http://www.mtimer.cn/release/25-whmcs-full-decoded-nulled-by-mtimer.html)
+v5.2.X 系列 => 捐助并下载最新版 v5.2.17 [下载地址](http://www.mtimer.cn/release/25-whmcs-full-decoded-nulled-by-mtimer.html)
 
 
 
