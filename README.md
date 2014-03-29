@@ -5,13 +5,13 @@ WHMCS 5.2系列 完全解码破解版 —— 真正的开心版
 
 ![whmcs52_latest_decoded_nulled_mtimer](http://www.mtimer.cn/uploads/posts/2014-03/1395885564_whmcs5217nulled.png)
 
-## This is Free WHMCS v5.2.15 (Last release for free).
+## WHMCS v5.2.15 Full Decoded Nulled BY MTimer Free Download
 
 ---------------
 
-## WHMCS v5.3.6 Full Decoded Nulled Released. [(Check this out)](http://www.mtimer.cn/release/34-whmcs-full-decoded-nulled.html)
+## [GET WHMCS v5.3.6 Full Decoded Nulled](http://www.mtimer.cn/release/34-whmcs-full-decoded-nulled.html) - Latest!
 
-## WHMCS v5.2.17 is available for donors only.[(Also Check this)](http://www.mtimer.cn/release/25-whmcs-full-decoded-nulled.html)
+## [GET WHMCS v5.2.17 Full Decoded Nulled](http://www.mtimer.cn/release/25-whmcs-full-decoded-nulled.html) - Latest!
 
 ---------------
 
@@ -61,7 +61,7 @@ WHMCS v5.2.17:
 http://1.whmcs5.sinaapp.com/whmcs_5.2.17_decoded_nulled_mtimer/?language=English
 
 
-## 3、Download Free Version
+## 3、Download Free Version - Preview purpose only
 
 [http://yadi.sk/d/1K2C-yn5GXD6L](http://yadi.sk/d/1K2C-yn5GXD6L)
 
@@ -82,7 +82,7 @@ http://1.whmcs5.sinaapp.com/whmcs_5.2.17_decoded_nulled_mtimer/?language=English
 ## Contact
 
 > Email: [mtimercms#hotmail.com](mtimercms#hotmail.com) (Recommend)  
-> Home page: [Mtimer CMS](http://www.mtimer.net/)  
+> Home page: [MTimer CMS](http://www.mtimer.net/)  
 > Twitter：[@...](http://#)
 
 
