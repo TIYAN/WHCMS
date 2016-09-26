@@ -3,10 +3,10 @@
  *
  * @ WHMCS FULL DECODED & NULLED
  *
- * @ Version  : 5.2.15
- * @ Author   : MTIMER
- * @ Release on : 2013-12-24
- * @ Website  : http://www.mtimer.cn
+ * @ Version  : 20.1.1
+ * @ Author   : TIYAN
+ * @ Release on : 2016-12-24
+ * @ Website  : https://hostinger-indonesia.blogspot.co.id/
  *
  **/
 
@@ -56,7 +56,7 @@ function eu_vat_output($vars) {
 		redir("module=eu_vat");
 	}
 
-	$countries = array(AT, BE, BG, CY, CZ, DE, DK, EE, ES, FI, FR, GB, GR, HU, IE, IT, LT, LU, LV, MT, NL, PL, PT, RO, SE, SI, SK);
+	$countries = array(ID ,AT, BE, BG, CY, CZ, DE, DK, EE, ES, FI, FR, GB, GR, HU, IE, IT, LT, LU, LV, MT, NL, PL, PT, RO, SE, SI, SK);
 
 	if ($_REQUEST['action'] == "setupvat") {
 		full_query("TRUNCATE tbltax");
